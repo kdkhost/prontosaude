@@ -17,12 +17,12 @@ class CheckInstalled
         $installedFile = storage_path('app/installed.lock');
 
         // Se o sistema NÃO está instalado e o usuário NÃO está na rota de instalação
-        if (!file_exists($installedFile) && !$request->is('install*')) {
+        if (!file_exists($installedFile) && !$request->routeIs('install.*')) {
             return redirect()->route('install.index');
         }
 
         // Se o sistema JÁ está instalado e o usuário tenta acessar o instalador
-        if (file_exists($installedFile) && $request->is('install*')) {
+        if (file_exists($installedFile) && $request->routeIs('install.*')) {
             return redirect()->route('frontend.home');
         }
 
