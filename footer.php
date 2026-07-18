@@ -70,11 +70,10 @@
 					<div class="col-sm-6 col-md-3 col-lg-3 footer-col">
 						<h3>Últimas Notícias</h3>
 						<?php
-						$statement = $pdo->prepare("SELECT * FROM tbl_news ORDER BY news_id DESC LIMIT ?");
-						$statement->execute(array($total_recent_news_footer));
+						$statement = $pdo->prepare("SELECT * FROM tbl_news ORDER BY news_id DESC LIMIT " . (int)$total_recent_news_footer);
+						$statement->execute();
 						$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 						foreach ($result as $row) {
-							?>
 							?>
 							<div class="news-item">
 								<div class="news-title">
@@ -90,11 +89,10 @@
 					<div class="col-sm-6 col-md-3 col-lg-3 footer-col">
 						<h3>Notícias Populares</h3>
 						<?php
-						$statement = $pdo->prepare("SELECT * FROM tbl_news ORDER BY total_view DESC LIMIT ?");
-						$statement->execute(array($total_popular_news_footer));
+						$statement = $pdo->prepare("SELECT * FROM tbl_news ORDER BY total_view DESC LIMIT " . (int)$total_popular_news_footer);
+						$statement->execute();
 						$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 						foreach ($result as $row) {
-							?>
 							?>
 							<div class="news-item">
 								<div class="news-title">
