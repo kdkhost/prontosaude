@@ -25,7 +25,7 @@
                 <ul class="navbar-nav ms-auto">
                     <!-- Configurações PWA e Módulos -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#" title="Configurações PWA">
+                        <a class="nav-link" href="{{ route('settings.edit') }}" title="Configurações PWA">
                             <i class="fas fa-mobile-alt"></i> PWA
                         </a>
                     </li>
@@ -88,9 +88,9 @@
                         
                         <li class="nav-header">SISTEMA</li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('settings.edit') }}" class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-cogs"></i>
-                                <p>Configurações</p>
+                                <p>Configurações & PWA</p>
                             </a>
                         </li>
                         <li class="nav-item">

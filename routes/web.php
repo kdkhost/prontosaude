@@ -26,6 +26,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // CRUD de Médicos
     Route::resource('/admin/doctors', DoctorController::class);
+    
+    // Configurações e PWA
+    Route::get('/admin/settings', [SettingController::class, 'edit'])->name('settings.edit');
+    Route::put('/admin/settings', [SettingController::class, 'update'])->name('settings.update');
 });
 
 Route::middleware('auth')->group(function () {
