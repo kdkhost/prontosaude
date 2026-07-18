@@ -1,0 +1,54 @@
+<?php 
+    include_once 'header.php'; 
+    
+    $filename = BASE_URL . 'assets/uploads/privacidade/' . $banner;
+
+        //if (file_exists($filename)) {
+        //  "O arquivo $filename existe";
+        //} else {
+        //   "O arquivo $filename não existe";
+        //}
+?>
+
+<!-- Banner Start -->
+<div class="page-banner" style="background-image: url(
+        <?php 
+            if(isset($banner)){
+                echo BASE_URL . 'assets/uploads/privacidade/' . $banner;
+            }else{
+                echo BASE_URL . 'assets/uploads/images/no-image-found.png';
+            }
+        ?>
+    )">
+	<div class="overlay"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="banner-text">
+					<h1>
+					    <?= $titulo; ?>
+					</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Banner End -->
+
+<!-- Service Start -->
+<section class="about-v2">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<?= $detalhes ;?>
+				<p>
+				    Esta Política de Privacidade foi Atualizada em nossos websites em 
+				    <?= ucfirst(strftime('%B de %Y', strtotime($atualizado))) ;?>.
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Service End -->
+
+<?php include_once 'footer.php'; ?>

@@ -1,0 +1,30 @@
+[03-Feb-2024 04:30:04 UTC] PHP Warning:  Undefined variable $pdo in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
+[03-Feb-2024 04:30:04 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/prontosaude/public_html/assets/PHPmailer/email.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
+[11-Mar-2024 00:56:19 UTC] PHP Warning:  Undefined variable $pdo in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
+[11-Mar-2024 00:56:19 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/prontosaude/public_html/assets/PHPmailer/email.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
+[10-Apr-2024 18:58:25 UTC] PHP Warning:  Undefined variable $pdo in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
+[10-Apr-2024 18:58:25 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/prontosaude/public_html/assets/PHPmailer/email.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
+[30-Dec-2024 15:26:28 UTC] PHP Warning:  Undefined variable $pdo in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
+[30-Dec-2024 15:26:28 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/prontosaude/public_html/assets/PHPmailer/email.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
+[01-Jan-2025 20:39:56 UTC] PHP Warning:  Undefined variable $pdo in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
+[01-Jan-2025 20:39:56 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/prontosaude/public_html/assets/PHPmailer/email.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
+[01-Jan-2025 23:27:26 UTC] PHP Warning:  Undefined variable $pdo in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
+[01-Jan-2025 23:27:26 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/prontosaude/public_html/assets/PHPmailer/email.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/prontosaude/public_html/assets/PHPmailer/email.php on line 3
