@@ -1,0 +1,17 @@
+/* AdminLTE Styles */
+@import 'admin-lte/dist/css/adminlte.min.css';
+/* Bootstrap */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+/* FontAwesome */
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+/* SweetAlert2 */
+@import 'sweetalert2/dist/sweetalert2.min.css';
+/* Toastr */
+@import 'toastr/build/toastr.min.css';
+/* Dropzone */
+@import 'dropzone/dist/dropzone.css';
+
+/* Custom Admin Styles */
+body {
+    font-family: 'Inter', sans-serif;
+}

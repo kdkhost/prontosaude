@@ -1,53 +1,58 @@
-# Pronto Saúde
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-Sistema web completo para gestão e apresentação institucional de clínicas médicas, laboratórios e redes de saúde. O projeto é composto por um portal público (frontend) e um painel administrativo (backend) robusto, permitindo o gerenciamento dinâmico de todos os conteúdos.
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-## 🚀 Funcionalidades Principais
+## About Laravel
 
-### Portal Público (Frontend)
-- **Home Dinâmica:** Exibição de banners (sliders), serviços, clínicas/departamentos, equipe médica, planos e preços, depoimentos e notícias mais recentes.
-- **Departamentos:** Seção detalhada das especialidades e infraestrutura das clínicas.
-- **Corpo Clínico:** Busca e perfil detalhado dos médicos, com suporte a mídias sociais.
-- **Trabalhe Conosco:** Divulgação de vagas de emprego, requisitos, salários e formulário integrado ao WhatsApp.
-- **Planos e Preços:** Sistema de fidelidade, planos corporativos e tabelas de preços dos serviços dentários/médicos.
-- **Blog/Notícias:** Sistema de categorias, artigos, contagem de visualizações (notícias populares) e barra lateral com anúncios.
-- **Seção Institucional:** Páginas de FAQ, parceiros institucionais e páginas estáticas (ex.: Política de Privacidade e Termos de Uso).
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-### Painel Administrativo
-- **Dashboard:** Contadores estatísticos em tempo real de cadastros, notícias, médicos (ativos/inativos), etc.
-- **Gestão de Usuários:** Múltiplos níveis de permissão (Super Admin, Admin, Publisher).
-- **Gestão de Conteúdo (CMS):** Criação/Edição/Exclusão de categorias, notícias, banners, depoimentos, fotos e vídeos.
-- **Configurações do Site:** Atualização de logotipo, favicon, paleta de cores primárias, contatos (e-mail, endereço, redes sociais) e configurações de SEO.
-- **Controle Dinâmico da Home:** Liga/desliga seções (ex.: mostrar ou ocultar depoimentos) diretamente no painel.
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-## 🛠️ Tecnologias e Linguagens
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-- **Backend:** PHP 7+ (PDO)
-- **Banco de Dados:** MySQL/MariaDB
-- **Frontend (Público):** HTML5, CSS3, JavaScript (jQuery), Bootstrap, Owl Carousel, bxSlider
-- **Frontend (Admin):** AdminLTE, Bootstrap, FontAwesome, CKEditor/Summernote
-- **Integração:** API de compartilhamento social (ShareThis), WhatsApp dinâmico.
+## Learning Laravel
 
-## ⚙️ Configuração e Instalação
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-1. Clone o repositório ou faça o upload dos arquivos para o diretório web (`public_html` ou similar).
-2. Configure o banco de dados:
-   - Importe o arquivo `.sql` (disponível no diretório `backup` se aplicável).
-3. Conecte o banco de dados:
-   - Edite o arquivo `admin/config.php` informando `$dbhost`, `$dbname`, `$dbuser` e `$dbpass`.
-4. Ajuste de fuso horário:
-   - O projeto está configurado para `America/Sao_Paulo`.
-5. Ajuste de charset:
-   - O banco foi ajustado para rodar nativamente com `utf8mb4`.
+In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## 🔒 Segurança
+You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
 
-- Senhas geradas/armazenadas em Hash MD5.
-- Conexão PDO segura (evita ataques tradicionais de SQL Injection).
-- Proteção XSS básica nas páginas de busca pública com `htmlspecialchars()`.
+## Agentic Development
 
-## 👨‍💻 Boas Práticas (Desenvolvimento)
+Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
 
-- Sempre utilizar `charset=utf8mb4` para o MySQL evitar problemas com acentuação nas postagens do blog ( emojis e afins ).
-- Evite criar páginas `.php` separadas caso a funcionalidade se aplique perfeitamente aos módulos pré-existentes no painel.
-- Respeitar a sintaxe PSR básica no PHP e a hierarquia do CSS para componentes do frontend.
+```bash
+composer require laravel/boost --dev
+
+php artisan boost:install
+```
+
+Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+
+## Contributing
+
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+
+## Code of Conduct
+
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
