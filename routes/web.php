@@ -23,6 +23,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // CRUD de Serviços
     Route::resource('/admin/services', ServiceController::class);
+    
+    // CRUD de Médicos
+    Route::resource('/admin/doctors', DoctorController::class);
 });
 
 Route::middleware('auth')->group(function () {
