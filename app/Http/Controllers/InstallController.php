@@ -64,31 +64,23 @@ class InstallController extends Controller
             return back()->withErrors(['db_connection' => 'Falha na conexão com o MariaDB: ' . $e->getMessage()])->withInput();
         }
 
-        // Cria o arquivo .env a partir do .env.example se ele não existir
-        if (!File::exists(base_path('.env')) && File::exists(base_path('.env.example'))) {
-            File::copy(base_path('.env.example'), base_path('.env'));
-            Artisan::call('key:generate', ['--force' => true]);
-        }
-
-        // Atualiza o arquivo .env com as credenciais fornecidas
-        $this->updateEnv([
-            'DB_CONNECTION' => 'mariadb',
-            'DB_HOST' => $request->db_host,
-            'DB_PORT' => $request->db_port,
-            'DB_DATABASE' => $request->db_database,
-            'DB_USERNAME' => $request->db_username,
-            'DB_PASSWORD' => $request->db_password ?? '',
-            'APP_URL' => url('/'),
+        // Passa no teste! Salva na sessão temporária, NÃO cria o .env ainda
+        $request->session()->put('install_db', [
+            'host' => $request->db_host,
+            'port' => $request->db_port,
+            'database' => $request->db_database,
+            'username' => $request->db_username,
+            'password' => $request->db_password ?? '',
         ]);
-
-        // Limpa o cache de config para que o Laravel releia o .env no próximo request
-        Artisan::call('config:clear');
 
         return redirect()->route('install.admin');
     }
 
-    public function admin()
+    public function admin(Request $request)
     {
+        if (!$request->session()->has('install_db')) {
+            return redirect()->route('install.database')->withErrors(['db_connection' => 'Por favor, configure o banco de dados primeiro.']);
+        }
         return view('install.admin');
     }
 
@@ -100,7 +92,40 @@ class InstallController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        // Roda as migrations no banco MariaDB informado
+        $db = $request->session()->get('install_db');
+        if (!$db) {
+            return redirect()->route('install.database')->withErrors(['db_connection' => 'Dados do banco expiraram. Preencha novamente.']);
+        }
+
+        // AQUI SIM: Instalação final aprovada! Criamos o .env
+        if (!File::exists(base_path('.env')) && File::exists(base_path('.env.example'))) {
+            File::copy(base_path('.env.example'), base_path('.env'));
+            Artisan::call('key:generate', ['--force' => true]);
+        }
+
+        $this->updateEnv([
+            'DB_CONNECTION' => 'mariadb',
+            'DB_HOST' => $db['host'],
+            'DB_PORT' => $db['port'],
+            'DB_DATABASE' => $db['database'],
+            'DB_USERNAME' => $db['username'],
+            'DB_PASSWORD' => $db['password'],
+            'APP_URL' => url('/'),
+        ]);
+
+        // Força o Laravel a usar a nova conexão MariaDB agora, em memória, para rodar as migrations 
+        config([
+            'database.connections.mariadb.host' => $db['host'],
+            'database.connections.mariadb.port' => $db['port'],
+            'database.connections.mariadb.database' => $db['database'],
+            'database.connections.mariadb.username' => $db['username'],
+            'database.connections.mariadb.password' => $db['password'],
+            'database.default' => 'mariadb'
+        ]);
+        DB::purge('mariadb'); // Limpa qualquer conexão anterior
+        DB::reconnect('mariadb');
+
+        // Roda as migrations no banco
         try {
             Artisan::call('migrate', ['--force' => true]);
         } catch (\Exception $e) {
@@ -121,7 +146,10 @@ class InstallController extends Controller
             'version' => '2.0.0',
         ]));
 
-        // Limpa e otimiza o cache
+        // Limpa a sessão
+        $request->session()->forget('install_db');
+
+        // Limpa e otimiza o cache para o próximo request rodar 100% no .env
         Artisan::call('config:clear');
         Artisan::call('route:clear');
         Artisan::call('view:clear');
