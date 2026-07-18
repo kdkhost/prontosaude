@@ -74,7 +74,7 @@
 
                         <li class="nav-header">MÓDULOS (FRONTEND)</li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('services.index') }}" class="nav-link {{ request()->routeIs('services.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-stethoscope"></i>
                                 <p>Serviços</p>
                             </a>
