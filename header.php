@@ -27,57 +27,54 @@ foreach ($result as $row) {
 $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
 $statement->execute();
 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-$settings_data = $result[0] ?? [];
-foreach ($result as $row) {
-    $logo = $row['logo'];
-    $favicon = $row['favicon'];
-    $contact_email = $row['contact_email'];
-    $contact_phone = $row['contact_phone'];
-    $color = $row['color'];
-    $preloader  =   $row['preloader'];
-    $footer_about                = $row['footer_about'];
-    $footer_copyright            = $row['footer_copyright'];
-    $contact_address             = $row['contact_address'];
-    $contact_fax                 = $row['contact_fax'];
-    $total_recent_news_footer    = $row['total_recent_news_footer'];
-    $total_popular_news_footer   = $row['total_popular_news_footer'];
-    $total_recent_news_sidebar   = $row['total_recent_news_sidebar'];
-    $total_popular_news_sidebar  = $row['total_popular_news_sidebar'];
-    $total_recent_news_home_page = $row['total_recent_news_home_page'];
-    $meta_description_home       = $row['meta_description_home'] ?? '';
-    $meta_keyword_home           = $row['meta_keyword_home'] ?? '';
-    $meta_title_home             = $row['meta_title_home'] ?? '';
-    $home_title_service          = $row['home_title_service'] ?? '';
-    $home_subtitle_service       = $row['home_subtitle_service'] ?? '';
-    $home_status_service         = $row['home_status_service'] ?? 0;
-    $home_title_department       = $row['home_title_department'] ?? '';
-    $home_subtitle_department    = $row['home_subtitle_department'] ?? '';
-    $home_status_department      = $row['home_status_department'] ?? 0;
-    $home_title_doctor           = $row['home_title_doctor'] ?? '';
-    $home_subtitle_doctor        = $row['home_subtitle_doctor'] ?? '';
-    $home_status_doctor          = $row['home_status_doctor'] ?? 0;
-    $home_title_pricing          = $row['home_title_pricing'] ?? '';
-    $home_subtitle_pricing       = $row['home_subtitle_pricing'] ?? '';
-    $home_status_pricing         = $row['home_status_pricing'] ?? 0;
-    $home_title_testimonial      = $row['home_title_testimonial'] ?? '';
-    $home_subtitle_testimonial   = $row['home_subtitle_testimonial'] ?? '';
-    $home_status_testimonial     = $row['home_status_testimonial'] ?? 0;
-    $home_title_news             = $row['home_title_news'] ?? '';
-    $home_subtitle_news          = $row['home_subtitle_news'] ?? '';
-    $home_status_news            = $row['home_status_news'] ?? 0;
-    $home_title_partner          = $row['home_title_partner'] ?? '';
-    $home_subtitle_partner       = $row['home_subtitle_partner'] ?? '';
-    $home_status_partner         = $row['home_status_partner'] ?? 0;
-}
+$row = $result[0] ?? [];
+$logo = $row['logo'] ?? '';
+$favicon = $row['favicon'] ?? '';
+$contact_email = $row['contact_email'] ?? '';
+$contact_phone = $row['contact_phone'] ?? '';
+$color = $row['color'] ?? '';
+$preloader  =   $row['preloader'] ?? 0;
+$footer_about                = $row['footer_about'] ?? '';
+$footer_copyright            = $row['footer_copyright'] ?? '';
+$contact_address             = $row['contact_address'] ?? '';
+$contact_fax                 = $row['contact_fax'] ?? '';
+$total_recent_news_footer    = $row['total_recent_news_footer'] ?? 3;
+$total_popular_news_footer   = $row['total_popular_news_footer'] ?? 3;
+$total_recent_news_sidebar   = $row['total_recent_news_sidebar'] ?? 3;
+$total_popular_news_sidebar  = $row['total_popular_news_sidebar'] ?? 3;
+$total_recent_news_home_page = $row['total_recent_news_home_page'] ?? 3;
+$meta_description_home       = $row['meta_description_home'] ?? '';
+$meta_keyword_home           = $row['meta_keyword_home'] ?? '';
+$meta_title_home             = $row['meta_title_home'] ?? '';
+$home_title_service          = $row['home_title_service'] ?? '';
+$home_subtitle_service       = $row['home_subtitle_service'] ?? '';
+$home_status_service         = $row['home_status_service'] ?? 0;
+$home_title_department       = $row['home_title_department'] ?? '';
+$home_subtitle_department    = $row['home_subtitle_department'] ?? '';
+$home_status_department      = $row['home_status_department'] ?? 0;
+$home_title_doctor           = $row['home_title_doctor'] ?? '';
+$home_subtitle_doctor        = $row['home_subtitle_doctor'] ?? '';
+$home_status_doctor          = $row['home_status_doctor'] ?? 0;
+$home_title_pricing          = $row['home_title_pricing'] ?? '';
+$home_subtitle_pricing       = $row['home_subtitle_pricing'] ?? '';
+$home_status_pricing         = $row['home_status_pricing'] ?? 0;
+$home_title_testimonial      = $row['home_title_testimonial'] ?? '';
+$home_subtitle_testimonial   = $row['home_subtitle_testimonial'] ?? '';
+$home_status_testimonial     = $row['home_status_testimonial'] ?? 0;
+$home_title_news             = $row['home_title_news'] ?? '';
+$home_subtitle_news          = $row['home_subtitle_news'] ?? '';
+$home_status_news            = $row['home_status_news'] ?? 0;
+$home_title_partner          = $row['home_title_partner'] ?? '';
+$home_subtitle_partner       = $row['home_subtitle_partner'] ?? '';
+$home_status_partner         = $row['home_status_partner'] ?? 0;
 
 // Getting the basic data for the website from database
 $statement = $pdo->prepare("SELECT * FROM tbl_department WHERE dep_id=1");
 $statement->execute();
 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-foreach ($result as $row){
-    $clinica = $row['dep_name'];
-    $email   = $row['dep_email'];
-}
+$row2 = $result[0] ?? [];
+$clinica = $row2['dep_name'] ?? '';
+$email   = $row2['dep_email'] ?? '';
 
 ?>
 <!DOCTYPE html>
