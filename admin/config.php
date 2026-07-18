@@ -28,10 +28,10 @@ define("BASE_URL", $url);
 define("ADMIN_URL", BASE_URL . "admin" . "/");
 
 try {
-	$pdo = new PDO("mysql:host={$dbhost};dbname={$dbname};charset=latin1", $dbuser, $dbpass, [
+	$pdo = new PDO("mysql:host={$dbhost};dbname={$dbname};charset=utf8mb4", $dbuser, $dbpass, [
 		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 		PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-		PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES latin1"
+		PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
 	]);
 }
 catch( PDOException $exception ) {
