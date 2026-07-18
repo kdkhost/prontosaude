@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
+            $table->string('patient_name');
+            $table->string('patient_email')->nullable();
+            $table->string('patient_phone');
+            $table->unsignedBigInteger('doctor_id')->nullable();
+            $table->string('type'); // Consulta ou Exame
+            $table->dateTime('appointment_date');
+            $table->text('notes')->nullable();
+            $table->enum('status', ['Pendente', 'Confirmado', 'Cancelado', 'Realizado'])->default('Pendente');
             $table->timestamps();
         });
     }

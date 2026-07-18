@@ -5,11 +5,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\DoctorController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\InstallController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Rota principal do Frontend
+Route::get('/', [MainController::class, 'index'])->name('frontend.home');
+Route::post('/book', [MainController::class, 'book'])->name('frontend.book');
 
 Route::get('/install', [InstallController::class, 'index'])->name('install');
 
@@ -30,6 +34,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Configurações e PWA
     Route::get('/admin/settings', [SettingController::class, 'edit'])->name('settings.edit');
     Route::put('/admin/settings', [SettingController::class, 'update'])->name('settings.update');
+
+    // Agendamentos (Kanban e FullCalendar)
+    Route::get('/admin/appointments/calendar', [AppointmentController::class, 'calendar'])->name('appointments.calendar');
+    Route::get('/admin/appointments/kanban', [AppointmentController::class, 'kanban'])->name('appointments.kanban');
+    Route::get('/admin/appointments/feed', [AppointmentController::class, 'feed'])->name('appointments.feed');
+    Route::post('/admin/appointments/update-date', [AppointmentController::class, 'updateDate'])->name('appointments.update-date');
+    Route::post('/admin/appointments/update-status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
 });
 
 Route::middleware('auth')->group(function () {

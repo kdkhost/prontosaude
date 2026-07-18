@@ -60,13 +60,13 @@
                         
                         <li class="nav-header">AGENDAMENTOS</li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('appointments.calendar') }}" class="nav-link {{ request()->routeIs('appointments.calendar') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-calendar-alt"></i>
                                 <p>Calendário</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('appointments.kanban') }}" class="nav-link {{ request()->routeIs('appointments.kanban') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-columns"></i>
                                 <p>Kanban</p>
                             </a>
