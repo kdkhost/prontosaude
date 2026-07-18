@@ -1,4 +1,16 @@
 <IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
     RewriteEngine On
-    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Bloqueia acesso direto ao arquivo .env e outros arquivos sensíveis
+    RewriteRule ^\.env - [F,L,NC]
+    RewriteRule ^storage/app/installed\.lock - [F,L,NC]
+
+    # Redireciona tudo silenciosamente para a pasta public/
+    # (A inteligência de saber se está instalado ou não foi embutida no public/index.php para maior precisão)
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L,QSA]
 </IfModule>
