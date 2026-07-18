@@ -15,7 +15,15 @@ use App\Http\Controllers\InstallController;
 Route::get('/', [MainController::class, 'index'])->name('frontend.home');
 Route::post('/book', [MainController::class, 'book'])->name('frontend.book');
 
-Route::get('/install', [InstallController::class, 'index'])->name('install');
+// Rotas do Instalador (Wizard)
+Route::prefix('install')->group(function () {
+    Route::get('/', [InstallController::class, 'index'])->name('install.index');
+    Route::get('/database', [InstallController::class, 'database'])->name('install.database');
+    Route::post('/database', [InstallController::class, 'setupDatabase'])->name('install.setup-database');
+    Route::get('/admin', [InstallController::class, 'admin'])->name('install.admin');
+    Route::post('/admin', [InstallController::class, 'setupAdmin'])->name('install.setup-admin');
+    Route::get('/complete', [InstallController::class, 'complete'])->name('install.complete');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
