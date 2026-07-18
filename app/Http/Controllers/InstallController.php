@@ -64,6 +64,12 @@ class InstallController extends Controller
             return back()->withErrors(['db_connection' => 'Falha na conexão com o MariaDB: ' . $e->getMessage()])->withInput();
         }
 
+        // Cria o arquivo .env a partir do .env.example se ele não existir
+        if (!File::exists(base_path('.env')) && File::exists(base_path('.env.example'))) {
+            File::copy(base_path('.env.example'), base_path('.env'));
+            Artisan::call('key:generate', ['--force' => true]);
+        }
+
         // Atualiza o arquivo .env com as credenciais fornecidas
         $this->updateEnv([
             'DB_CONNECTION' => 'mariadb',
@@ -72,9 +78,10 @@ class InstallController extends Controller
             'DB_DATABASE' => $request->db_database,
             'DB_USERNAME' => $request->db_username,
             'DB_PASSWORD' => $request->db_password ?? '',
+            'APP_URL' => url('/'),
         ]);
 
-        // Limpa o cache de config para que o Laravel releia o .env
+        // Limpa o cache de config para que o Laravel releia o .env no próximo request
         Artisan::call('config:clear');
 
         return redirect()->route('install.admin');
