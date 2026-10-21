@@ -108,28 +108,30 @@
 
     // C. Summernote Global
     if (window.jQuery && jQuery.fn.summernote) {
-      const editorSelector = '.summernote, #1, #2, #3, textarea.editor, textarea#editor1, textarea[name="content"], textarea[name="news_content"], textarea[name="page_content"], textarea[name="description"], textarea[name="detail"], textarea[name="detalhes"], textarea[name="requisitos"], textarea[name="beneficios"], textarea[name="faq_content"], textarea[name="comment"]';
-      const editors = container.querySelectorAll(editorSelector);
-      editors.forEach(ed => {
-        try {
-          if (!jQuery(ed).next().hasClass('note-editor')) {
-            jQuery(ed).summernote({
-              tabsize: 2,
-              height: 220,
-              lang: 'pt-BR',
-              toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'italic', 'underline', 'clear']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen', 'codeview']]
-              ]
-            });
-          }
-        } catch (e) {}
-      });
+      try {
+        const editorSelector = '.summernote, [id="1"], [id="2"], [id="3"], textarea.editor, textarea#editor1, textarea[name="content"], textarea[name="news_content"], textarea[name="page_content"], textarea[name="description"], textarea[name="detail"], textarea[name="detalhes"], textarea[name="requisitos"], textarea[name="beneficios"], textarea[name="faq_content"], textarea[name="comment"]';
+        const editors = container.querySelectorAll(editorSelector);
+        editors.forEach(ed => {
+          try {
+            if (!jQuery(ed).next().hasClass('note-editor')) {
+              jQuery(ed).summernote({
+                tabsize: 2,
+                height: 220,
+                lang: 'pt-BR',
+                toolbar: [
+                  ['style', ['style']],
+                  ['font', ['bold', 'italic', 'underline', 'clear']],
+                  ['color', ['color']],
+                  ['para', ['ul', 'ol', 'paragraph']],
+                  ['table', ['table']],
+                  ['insert', ['link', 'picture', 'video']],
+                  ['view', ['fullscreen', 'codeview']]
+                ]
+              });
+            }
+          } catch (e) {}
+        });
+      } catch (e) {}
     }
 
     // D. Select2
