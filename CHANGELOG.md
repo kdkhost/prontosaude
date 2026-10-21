@@ -4,6 +4,34 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-10-21
+
+### Adicionado
+- **Migração Completa para o AdminLTE 4**:
+  - Painel administrativo totalmente atualizado para a versão mais recente do **AdminLTE 4**, baseada em **Bootstrap 5.3**, **Bootstrap Icons**, **FontAwesome 6** e **OverlayScrollbars**.
+  - Novo cabeçalho e rodapé estruturados segundo as diretrizes de design do AdminLTE 4 (`.app-wrapper`, `.app-header`, `.app-sidebar`, `.app-main`, `.app-footer`).
+  - Suporte nativo a **Modo Escuro (Dark Mode)**, **Modo Claro (Light Mode)** e **Automático (Auto)** com alternador dinâmico na navbar e persistência no `localStorage`.
+- **Dashboard com KPIs Modernos e Interativos (`admin/index.php`)**:
+  - Nova grade de cartões de KPI com gradientes modernos (Teal, Emerald, Blue, Amber, Cyan, Indigo, Purple, Rose), ícones translúcidos e contadores de alto impacto visual.
+  - Integração de gráficos interativos com **ApexCharts**:
+    - Gráfico de barras moderno: Distribuição de cadastros em todos os módulos assistenciais e editoriais.
+    - Gráfico Donut de saúde: Proporção dinâmica dos recursos médicos, odontológicos, clínicos e vagas de emprego.
+    - Sincronização automática dos gráficos com o tema (Dark / Light) ativo.
+  - Painel de Ações Rápidas (Quick Actions) para criação de médicos, notícias, vagas, clínicas e configurações.
+  - Cards de suporte técnico atualizados com acionamento direto e feedback via Toastr.
+- **Camada Universal de Compatibilidade CSS (`admin/css/adminlte4-compat.css`)**:
+  - Mapeamento automático dos componentes clássicos (`.box`, `.box-header`, `.box-body`, `.callout`, etc.) para os novos cartões e alertas do Bootstrap 5, assegurando que todas as mais de 60 telas do painel permaneçam belas e 100% funcionais.
+- **Tela de Login Modernizada (`admin/login.php`)**:
+  - Interface com design em glassmorphism, floating labels, validação integrada e feedback de erro humanizado via SweetAlert2.
+
+### Alterado
+- **Padronização Global de Notificações e Confirmações**:
+  - Configuração refinada do **Toastr** com barra de progresso, posição superior direita e animação suave em todo o sistema.
+  - Confirmações de exclusão e logout rigorosamente padronizadas com diálogos interativos do **SweetAlert2** em português brasileiro.
+  - Interceptação global de `window.alert()` nativo do navegador, convertendo para modais do SweetAlert2.
+
+---
+
 ## [2.1.0] - 2026-10-21
 
 ### Adicionado

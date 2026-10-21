@@ -1,6 +1,6 @@
 # Pronto Saúde
 
-Sistema web completo para gestão e apresentação institucional de clínicas médicas, laboratórios e redes de saúde. O projeto é composto por um portal público (frontend) e um painel administrativo (backend) robusto, permitindo o gerenciamento dinâmico de todos os conteúdos.
+Sistema web completo para gestão e apresentação institucional de clínicas médicas, laboratórios e redes de saúde. O projeto é composto por um portal público (frontend) e um painel administrativo moderno de alta performance baseado em **AdminLTE 4** (backend), permitindo o gerenciamento dinâmico de todos os conteúdos.
 
 ## 🚀 Funcionalidades Principais
 
@@ -14,20 +14,25 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - **Seção Institucional:** Páginas de FAQ, parceiros institucionais e páginas estáticas (Política de Privacidade e Termos de Uso).
 - **Interface e Feedback:** Notificações flutuantes com **Toastr** e caixas de diálogo elegantes com **SweetAlert2** substituindo qualquer alerta nativo de navegador.
 
-### Painel Administrativo
-- **Dashboard:** Contadores estatísticos em tempo real com consultas otimizadas `COUNT(*)` de cadastros, notícias, médicos e departamentos.
-- **Gestão de Usuários:** Múltiplos níveis de permissão (Super Admin, Admin, Publisher).
-- **Gestão de Conteúdo (CMS):** Criação, edição e exclusão de categorias, notícias, banners, depoimentos, fotos e vídeos com confirmações personalizadas via SweetAlert2.
-- **Configurações do Site:** Atualização de logotipo, favicon, paleta de cores primárias, contatos (e-mail, endereço, redes sociais) e configurações de SEO.
-- **Controle Dinâmico da Home:** Ativação/desativação de seções diretamente pelo painel administrativo.
+### Painel Administrativo Moderno (AdminLTE 4)
+- **Design de Última Geração:** Construído sobre o **AdminLTE 4** e **Bootstrap 5.3**, com layout fixo responsivo (`app-wrapper`, `app-header`, `app-sidebar`, `app-main`, `app-footer`).
+- **Suporte Nativo a Modo Escuro / Claro:** Alternador dinâmico de tema (Claro / Escuro / Automático) na barra superior, persistido no navegador.
+- **KPIs Modernos e Interativos:**
+  - 8 Cards de métricas com gradientes elegantes e contadores em tempo real.
+  - Gráficos analíticos interativos via **ApexCharts** (Distribuição de Módulos e Gráfico Donut de Serviços de Saúde), sincronizados com o modo Dark/Light.
+  - Painel de Ações Rápidas (Quick Actions) para acesso imediato ao cadastro de médicos, notícias, vagas e departamentos.
+  - Cards de suporte técnico direto (Remoto, Telefone e WhatsApp) com notificações via Toastr.
+- **Gestão de Usuários e Permissões:** Perfis diferenciados (Super Admin, Admin, Publisher) com menu lateral categorizado e controle rigoroso de acesso.
+- **CMS Integrado:** Criação, edição e exclusão de categorias, notícias, banners, depoimentos, fotos e vídeos com confirmações personalizadas via **SweetAlert2**.
+- **Configurações do Site:** Atualização de logotipo, favicon, paleta de cores primárias, contatos e configurações de SEO.
 
 ## 🛠️ Tecnologias e Linguagens
 
-- **Backend:** PHP 8.4 (PDO nativo com prepared statements reais)
+- **Backend:** PHP 8.4 (PDO nativo com prepared statements reais e timezone configurado)
 - **Banco de Dados:** MySQL/MariaDB (`utf8mb4_unicode_ci` e timezone `-03:00`)
-- **Notificações & Alertas:** SweetAlert2 e Toastr integrados globalmente
-- **Frontend (Público):** HTML5 semântico, CSS3, JavaScript (jQuery 2.2.4), Bootstrap, Owl Carousel, bxSlider
-- **Frontend (Admin):** AdminLTE, Bootstrap, FontAwesome, CKEditor e Summernote
+- **Painel Administrativo:** AdminLTE 4, Bootstrap 5.3, Bootstrap Icons, FontAwesome 6, ApexCharts, OverlayScrollbars
+- **Notificações & Confirmações:** SweetAlert2 e Toastr integrados globalmente (sem alerts ou confirms nativos)
+- **Frontend (Público):** HTML5 semântico, CSS3, JavaScript (jQuery), Bootstrap, Owl Carousel, bxSlider
 - **Integração:** API de compartilhamento social (ShareThis), WhatsApp dinâmico.
 
 ## ⚙️ Configuração e Instalação
@@ -49,11 +54,11 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - Conexão PDO segura com desativação de emulação (`PDO::ATTR_EMULATE_PREPARES => false`), prevenindo SQL Injection.
 - Proteção XSS aplicada em saídas dinâmicas com `htmlspecialchars()`.
 - Consultas otimizadas com comandos atômicos e consultas indexadas, evitando loops N+1.
-- Tratamento rigoroso de variáveis e chaves de arrays para compatibilidade estrita com **PHP 8.4**.
+- Compatibilidade estrita e testada com **PHP 8.4**.
 
 ## 👨‍💻 Boas Práticas (Desenvolvimento)
 
 - Sempre utilizar `charset=utf8mb4` no MySQL para suportar caracteres especiais e acentuação da língua portuguesa.
-- Nunca utilizar o `alert()` padrão do navegador; utilizar o utilitário global `window.notificar` (Toastr) ou `Swal.fire` (SweetAlert2).
+- Nunca utilizar o `alert()` ou `confirm()` padrão do navegador; utilizar o utilitário global `window.notificar` (Toastr) ou `Swal.fire` (SweetAlert2).
 - Toda comunicação, commits e documentação devem ser mantidos em português brasileiro.
 - Manter o arquivo `CHANGELOG.md` atualizado com o histórico de versões mais recente no topo.
