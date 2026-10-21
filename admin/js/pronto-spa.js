@@ -163,13 +163,18 @@
       window.initSlugAutoGenerator(container);
     }
 
-    // H. ApexCharts (se estiver na página inicial/dashboard)
+    // H. Máscaras Universais e ViaCEP com Autofocus
+    if (window.initUniversalMasks) {
+      window.initUniversalMasks(container);
+    }
+
+    // I. ApexCharts (se estiver na página inicial/dashboard)
     if (container.querySelector('#chart-indicadores') && window.renderDashboardCharts) {
       const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
       window.renderDashboardCharts(isDark);
     }
 
-    // H. Notificações Toastr a partir de Callouts
+    // J. Notificações Toastr a partir de Callouts
     const callouts = container.querySelectorAll('.callout');
     callouts.forEach(c => {
       const txt = c.innerText.trim();
@@ -186,18 +191,35 @@
 
   window.reinitAllComponents = reinitAllComponents;
 
-  // 3. ATUALIZAÇÃO DO MENU LATERAL ATIVO
+  // 3. ATUALIZAÇÃO DO MENU LATERAL ATIVO COM MAPEAMENTO TREEVIEW
   function updateActiveSidebar(url) {
     const filename = url.split('/').pop().split('?')[0];
+
+    // Mapeia páginas de adição/edição para o arquivo base da sidebar
+    let targetFile = filename;
+    if (targetFile.includes('-add.php') || targetFile.includes('-edit.php')) {
+      targetFile = targetFile.replace('-add.php', '.php').replace('-edit.php', '.php');
+    }
+    if (targetFile === 'vagas.php') {
+      targetFile = 'trabalhe-conosco.php';
+    }
+
     const sidebarLinks = document.querySelectorAll('.sidebar-menu a.nav-link');
+
+    // Remove active anterior
+    sidebarLinks.forEach(link => link.classList.remove('active'));
+    document.querySelectorAll('.sidebar-menu .nav-item.menu-open').forEach(item => {
+      item.classList.remove('menu-open');
+    });
 
     sidebarLinks.forEach(link => {
       const href = link.getAttribute('href') || '';
       const linkFilename = href.split('/').pop().split('?')[0];
 
-      if (linkFilename && linkFilename === filename) {
+      if (linkFilename && (linkFilename === filename || linkFilename === targetFile)) {
         link.classList.add('active');
-        // Abre o menu pai se estiver dentro de um treeview
+
+        // Se estiver dentro de um treeview, abre o treeview e ativa o menu pai
         const parentTreeview = link.closest('.nav-treeview');
         if (parentTreeview) {
           const parentNavItem = parentTreeview.closest('.nav-item');
@@ -207,13 +229,20 @@
             if (parentLink) parentLink.classList.add('active');
           }
         }
-      } else if (!link.closest('.nav-treeview')) {
-        link.classList.remove('active');
-      } else {
-        link.classList.remove('active');
       }
     });
   }
+
+  // Suporte ao clique manual para alternar menus treeview
+  document.addEventListener('click', function(e) {
+    const treeviewToggle = e.target.closest('.sidebar-menu .nav-item > a.nav-link[href="#"]');
+    if (!treeviewToggle) return;
+    e.preventDefault();
+    const parentNavItem = treeviewToggle.closest('.nav-item');
+    if (parentNavItem) {
+      parentNavItem.classList.toggle('menu-open');
+    }
+  });
 
   // 4. CARREGADOR DE PÁGINA SPA VIA AJAX
   function loadPageSPA(url, pushState = true) {

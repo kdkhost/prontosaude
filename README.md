@@ -32,7 +32,17 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - **Páginas Personalizadas de Manutenção e Erros:**
   - `manutencao.php`: Página de manutenção programada (HTTP 503) com canais de emergência, ativável diretamente pelo painel.
   - `404.php`, `500.php`, `403.php`: Páginas de erro humanizadas e estilizadas no padrão hospitalar Pronto Saúde.
-- **Design de Última Geração e Modo Escuro/Claro:** Construído sobre o **AdminLTE 4** e **Bootstrap 5.3**, com alternador dinâmico de tema (Claro / Escuro / Automático) na barra superior.
+- **Design de Última Geração e Modo Escuro/Claro:** Construído sobre o **AdminLTE 4** e **Bootstrap 5.3**, com alternador dinâmico de tema (Claro / Escuro / Automático) na barra superior, tipografia nativa **Source Sans 3** e espaçamentos padronizados sem estilos legados.
+- **Cabeçalho Fixo e Sidebar com Menu Treeview:**
+  - Barra de navegação superior fixa (`sticky-top`) com efeito de desfoque de fundo (`backdrop-filter`).
+  - Menu lateral dinâmico com abertura automática de seções treeview e marcação de página ativa inclusive em rotas filhas de adição e edição.
+- **Sistema Universal de Máscaras de Entrada (`admin/js/pronto-masks.js`):**
+  - Formatação em tempo real para Telefone/WhatsApp, CEP, CPF, CNPJ, Documento Dinâmico, Data, Hora e Moeda Brasileira (R$).
+- **Preenchimento Automático via CEP com Auto Focus no Número:**
+  - Integração assíncrona automática com a API pública ViaCEP durante a digitação de 8 dígitos de CEP.
+  - Posicionamento automático com seleção imediata no campo de Número (`#numero_endereco`) assim que os dados do endereço são preenchidos.
+- **Correção Abrangente de Acentuação e Encoding:**
+  - Banco de dados e arquivos 100% saneados em UTF-8 (`utf8mb4`), eliminando caracteres corrompidos (`?`) e garantindo ortografia correta da língua portuguesa.
 - **KPIs Modernos e Interativos:**
   - 8 Cards de métricas com gradientes elegantes e contadores em tempo real.
   - Gráficos analíticos interativos via **ApexCharts** sincronizados com o tema Dark/Light.

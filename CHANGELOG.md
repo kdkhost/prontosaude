@@ -4,6 +4,33 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2026-10-21
+
+### Adicionado
+- **Sistema Universal de Máscaras de Entrada (`admin/js/pronto-masks.js`)**:
+  - Máscaras automáticas e flexíveis para Telefone fixo e Celular/WhatsApp (`(00) 00000-0000` ou `(00) 0000-0000`), CEP (`00000-000`), CPF (`000.000.000-00`), CNPJ (`00.000.000/0000-00`), Documento Dinâmico, Data (`00/00/0000`), Hora (`00:00`) e Moeda (`R$ 0,00`).
+  - Aplicação universal automática por classes CSS (`.mask-phone`, `.mask-cep`, `.mask-cpf`, `.mask-cnpj`, `.mask-money`, etc.) e por detecção de atributos de nome/id em todos os formulários.
+- **Preenchimento Automático via CEP com Auto Focus no Número**:
+  - Consulta assíncrona automática à API pública ViaCEP durante a digitação de 8 dígitos de CEP sem necessidade de clicar em botões.
+  - Preenchimento inteligente de logradouro, bairro, cidade e estado em formulários com campos separados ou consolidados.
+  - Foco imediato automático com seleção no campo de Número (`#numero_endereco`) assim que a localização do endereço é concluída.
+  - Sincronização em tempo real do número digitado no campo consolidado de endereço.
+- **Cabeçalho Fixo (Sticky Header)**:
+  - Fixação da barra de navegação superior (`.app-header.sticky-top`) com efeito translúcido `backdrop-filter: blur(8px)`, permanecendo sempre visível e acessível durante a rolagem de páginas extensas.
+- **Sidebar com Menu Treeview Reativo e Marcação de Página Ativa**:
+  - Organização do menu lateral com marcação de página ativa inclusive para subpáginas de cadastro e edição (`-add.php` e `-edit.php`), garantindo que o módulo pai permaneça com a classe `.active` e o submenu com a classe `.menu-open`.
+  - Suporte a abertura/fechamento manual de seções treeview com transição suave.
+
+### Alterado
+- **Padronização Visual e Tipográfica Idêntica ao AdminLTE 4 Original**:
+  - Eliminação de regras legadas herdadas do AdminLTE 2 (`admin/style.css` que impunham fonte `verdana 12px`).
+  - Padronização em fonte `Source Sans 3` (300, 400, 600, 700), tamanhos proporcionais de `1rem` (15px/16px) e espaçamentos padronizados do Bootstrap 5.3.
+- **Correção Geral de Acentuação e Codificação do Sistema**:
+  - Identificação e reparo de 257 registros com acentuação corrompida (`?` literal) em tabelas do banco de dados (`tbl_settings`, `tbl_department`, `tbl_service`, `tbl_trabalhe`, `tbl_doctor`, `tbl_pricing_plan`, `tbl_slider`, etc.).
+  - Padronização do portal público e administrativo sem caracteres corrompidos, exibindo acentuação ortográfica brasileira impecável.
+
+---
+
 ## [2.4.0] - 2026-10-21
 
 ### Adicionado

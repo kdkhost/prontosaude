@@ -273,6 +273,25 @@ if(isset($_POST['form1'])) {
 								<input type="text" autocomplete="off" class="form-control" name="flickr" value="<?php if(isset($_POST['flickr'])){echo $_POST['flickr'];} ?>">
 							</div>
 						</div>
+						<div class="form-group mb-3">
+							<label for="" class="col-sm-2 control-label">Buscar por CEP </label>
+							<div class="col-sm-6">
+								<div class="row g-2">
+									<div class="col-7">
+										<div class="input-group">
+											<span class="input-group-text bg-body-tertiary"><i class="bi bi-geo-alt-fill text-primary"></i></span>
+											<input type="text" class="form-control mask-cep" id="busca_cep" placeholder="00000-000" maxlength="9">
+										</div>
+									</div>
+									<div class="col-5">
+										<input type="text" class="form-control" id="numero_endereco" placeholder="Nº (auto focus)">
+									</div>
+								</div>
+								<div class="form-text small text-body-secondary mt-1">
+									<i class="bi bi-info-circle text-primary me-1"></i>Digite o CEP para autocompletar o endereço. O cursor focará no número assim que localizado.
+								</div>
+							</div>
+						</div>
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Endereço </label>
 							<div class="col-sm-6">

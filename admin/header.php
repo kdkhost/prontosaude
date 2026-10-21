@@ -101,8 +101,8 @@ $logo = $row['logo'] ?? '';
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
 	<div class="app-wrapper">
 
-		<!-- Barra de Navegação Superior (Header / Navbar) -->
-		<nav class="app-header navbar navbar-expand bg-body shadow-sm">
+		<!-- Barra de Navegação Superior (Header / Navbar) Fixa -->
+		<nav class="app-header navbar navbar-expand bg-body shadow-sm sticky-top">
 			<div class="container-fluid">
 				<!-- Lado Esquerdo: Toggle de Sidebar e Título -->
 				<ul class="navbar-nav align-items-center">
