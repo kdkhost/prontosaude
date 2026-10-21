@@ -49,27 +49,29 @@
 	                        <a href="#" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#confirm-delete-<?= $row['pricing_plan_id']; ?>">Deletar</a>
 	                    </td>
 	                </tr>
-	                <div class="modal fade" id="confirm-delete-<?= $row['pricing_plan_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title" id="myModalLabel">Confirmar Exclusão</h4>
-                                </div>
-                                <div class="modal-body">
-                                    Tem certeza de que deseja excluir o plano <b><?= $row['pricing_plan_name']; ?></b>?<br>
-                                    Tome cuidado! Todos os dados de itens de preços sob este plano também serão excluídos.
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <a href="pricing-plan-delete.php?id=<?= $row['pricing_plan_id']; ?>" class="btn btn-danger btn-ok">Deletar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 	                <?php }?>
             </tbody>
           </table>
+          <?php foreach ($result as $row) { ?>
+          <div class="modal fade" id="confirm-delete-<?= $row['pricing_plan_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                          <h4 class="modal-title" id="myModalLabel">Confirmar Exclusão</h4>
+                      </div>
+                      <div class="modal-body">
+                          Tem certeza de que deseja excluir o plano <b><?= $row['pricing_plan_name']; ?></b>?<br>
+                          Tome cuidado! Todos os dados de itens de preços sob este plano também serão excluídos.
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                          <a href="pricing-plan-delete.php?id=<?= $row['pricing_plan_id']; ?>" class="btn btn-danger btn-ok">Deletar</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <?php } ?>
         </div>
       </div>
 </section>

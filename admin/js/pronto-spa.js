@@ -71,7 +71,7 @@
 
     // B. DataTables em Português com Extensão Responsiva (Estilo AdminLTE 3 / 4)
     if (window.jQuery && jQuery.fn.dataTable) {
-      const tables = container.querySelectorAll('table.table:not(.dataTable):not(.no-datatable), #example1, #example2');
+      const tables = container.querySelectorAll('table.table:not(.dataTable):not(.no-datatable), #example1, #example2, table.table-bordered, table.table-striped, table.table-datatable');
       tables.forEach(tbl => {
         try {
           if (!jQuery.fn.DataTable.isDataTable(tbl)) {
@@ -81,7 +81,8 @@
             // Permite ao DataTables Responsive acionar os breakpoints sem corte de scroll
             const parentResponsive = tbl.closest('.table-responsive');
             if (parentResponsive) {
-              parentResponsive.style.overflowX = 'visible';
+              parentResponsive.style.overflowX = 'clip';
+              parentResponsive.style.overflowY = 'visible';
             }
 
             const dtInstance = jQuery(tbl).DataTable({
@@ -112,12 +113,11 @@
               ordering: true,
               info: true,
               autoWidth: false,
-              responsive: {
-                details: {
-                  type: 'inline',
-                  target: 'tr'
-                }
-              }
+              responsive: true,
+              columnDefs: [
+                { responsivePriority: 1, targets: 0 },
+                { responsivePriority: 2, targets: -1 }
+              ]
             });
 
             setTimeout(() => {

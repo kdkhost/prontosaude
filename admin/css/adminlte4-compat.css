@@ -240,7 +240,7 @@ body {
   color: var(--bs-secondary-color, #475569);
   border-bottom: 2px solid var(--bs-border-color, #cbd5e1);
   padding: 0.75rem 0.85rem;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 .table tbody td {
   padding: 0.75rem 0.85rem;
@@ -252,11 +252,22 @@ body {
   background-color: rgba(10, 107, 116, 0.03);
 }
 
+/* Forçar nowrap em DataTables para acionar o recolhimento responsivo em telas menores */
+table.dataTable th,
+table.dataTable td,
+table.dataTable.nowrap th,
+table.dataTable.nowrap td,
+.table-responsive table.dataTable th,
+.table-responsive table.dataTable td {
+  white-space: nowrap !important;
+}
+
 /* Permitir que o DataTables Responsive acione os breakpoints em telas menores */
 .table-responsive,
 .box-body.table-responsive,
 .card-body.table-responsive {
   overflow-x: clip !important;
+  overflow-y: visible !important;
   width: 100% !important;
   max-width: 100% !important;
   padding: 1.25rem;
@@ -325,6 +336,7 @@ table.dataTable > tbody > tr.child:hover {
 }
 table.dataTable > tbody > tr.child td.child {
   padding: 0.85rem 1.25rem !important;
+  white-space: normal !important;
 }
 table.dataTable > tbody > tr.child ul.dtr-details {
   display: flex;
@@ -342,6 +354,7 @@ table.dataTable > tbody > tr.child ul.dtr-details > li {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
+  white-space: normal !important;
 }
 table.dataTable > tbody > tr.child ul.dtr-details > li:last-child {
   border-bottom: none;
@@ -353,12 +366,15 @@ table.dataTable > tbody > tr.child span.dtr-title {
   text-transform: uppercase;
   letter-spacing: 0.03em;
   min-width: 140px;
+  white-space: nowrap !important;
 }
 table.dataTable > tbody > tr.child span.dtr-data {
   font-size: 0.875rem;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  white-space: normal !important;
+  word-break: break-word !important;
 }
 
 /* ==========================================================================
@@ -548,11 +564,29 @@ table td a.btn-info:not(:has(i))::before {
 .form-group {
   margin-bottom: 1.25rem;
 }
+.form-horizontal .form-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
 .control-label {
   font-weight: 600;
   font-size: 0.875rem;
   margin-bottom: 0.35rem;
   color: var(--bs-body-color);
+}
+.form-horizontal .control-label {
+  text-align: right;
+  margin-bottom: 0;
+  padding-right: 0.75rem;
+}
+@media (max-width: 767.98px) {
+  .form-horizontal .control-label {
+    text-align: left;
+    margin-bottom: 0.35rem;
+    padding-right: 0;
+  }
 }
 .control-label span {
   color: var(--bs-danger);

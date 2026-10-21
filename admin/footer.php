@@ -52,10 +52,13 @@
 	$(function () {
 		// Inicialização de Tabelas DataTables em Português
 		if ($.fn.dataTable) {
-			$('#example1, #example2, table.table-datatable').each(function() {
-				if (!$.fn.DataTable.isDataTable(this)) {
+			$('#example1, #example2, table.table-bordered, table.table-striped, table.table-datatable').each(function() {
+				if (!$.fn.DataTable.isDataTable(this) && !$(this).hasClass('no-datatable')) {
 					$(this).addClass('dt-responsive nowrap');
-					$(this).closest('.table-responsive').css('overflow-x', 'visible');
+					$(this).closest('.table-responsive').css({
+						'overflow-x': 'clip',
+						'overflow-y': 'visible'
+					});
 					$(this).DataTable({
 						"language": {
 							"sEmptyTable": "Nenhum registro encontrado",
@@ -85,12 +88,11 @@
 						"ordering": true,
 						"info": true,
 						"autoWidth": false,
-						"responsive": {
-							"details": {
-								"type": "inline",
-								"target": "tr"
-							}
-						}
+						"responsive": true,
+						"columnDefs": [
+							{ responsivePriority: 1, targets: 0 },
+							{ responsivePriority: 2, targets: -1 }
+						]
 					});
 				}
 			});
