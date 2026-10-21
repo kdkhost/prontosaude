@@ -24,7 +24,7 @@
 			    <tr>
 			        <th>ID</th>
 			        <th>Título</th>
-			        <th style="width:300px;">Codigo (iframe)</th>
+			        <th style="width:300px;">Código (iframe)</th>
 			        <th>Categoria</th>
 			        <th>Ação</th>
 			    </tr>

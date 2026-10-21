@@ -4,6 +4,19 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0] - 2026-10-21
+
+### Corrigido & Aprimorado
+- **Correção Integral e Profunda de Acentuação Ortográfica no Sistema e Banco de Dados MariaDB**:
+  - Varredura exaustiva e sanitização gramatical completa de todas as tabelas textuais de produção (`tbl_settings`, `tbl_service`, `tbl_privacidade`, `tbl_termos`, `tbl_department`, `tbl_designation`, etc.).
+  - Eliminação definitiva de interrogações anômalas (`?`) residuais de migrações anteriores que substituíam vogais acentuadas e artigos/preposições (ex: conversão de sentenças quebradas para `... Pronto Saúde é reconhecida...`, `... nosso corpo clínico é criteriosamente selecionado...`, `... Conformidade à Privacidade...`, `... destinados à prevenção...`).
+  - Restauração de termos médicos e institucionais sem acento para suas grafias oficiais na língua portuguesa: `Clínica Médica`, `Clínica Odontológica`, `Gardênia`, `Pronto Saúde`, `Serviço`, `Diagnóstico`, `Endereço`, `Número`, `Página`, `Usuário`, `Módulo`, `Configuração`, `Relatório`, `Histórico`, `Código`.
+  - Correção pontual no cabeçalho de tabelas do painel administrativo (`admin/video.php: Código (iframe)`).
+  - Preservação estrita de pontuação de interrogações legítimas em títulos e parágrafos de perguntas frequentes e termos médicos.
+  - Alinhamento total com `SET NAMES utf8mb4` e integridade semântica em todo o portal público e painel administrativo.
+
+---
+
 ## [2.6.0] - 2026-10-21
 
 ### Adicionado
