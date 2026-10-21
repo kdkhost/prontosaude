@@ -420,8 +420,8 @@ if (!defined('PRONTO_SECURITY_LOADED')) {
 
         // Regex de Path Traversal e LFI
         $pathTraversalPatterns = [
-            '/(\.\.\/|\.\.\\\\){2,}/' => 'Directory Path Traversal (../)',
-            '/(\/etc\/passwd|\/etc\/shadow|\/proc\/self|c:\\\\windows|c:\\\\boot\.ini|win\.ini)/i' => 'System File Path Disclosure'
+            '#(\.\./|\.\.\\\\)#' => 'Directory Path Traversal (../)',
+            '#(/etc/(passwd|shadow)|/proc/self|[a-zA-Z]:[\\\\/](windows|boot\.ini)|win\.ini)#i' => 'System File Path Disclosure'
         ];
 
         // Regex de Execução Remota de Código (RCE) / Web Shells
@@ -450,7 +450,7 @@ if (!defined('PRONTO_SECURITY_LOADED')) {
             // 1. Anti-SQL Injection
             if (!empty($settings['block_sql_injection'])) {
                 foreach ($sqliPatterns as $regex => $desc) {
-                    if (preg_match($regex, $inputValue)) {
+                    if (@preg_match($regex, $inputValue)) {
                         $incId = pronto_security_log_incident($pdo, $ip, 'SQL_INJECTION', 'CRITICA', "[$inputKey] $inputValue");
                         pronto_security_render_blocked_screen("Injeção SQL detectada ($desc).", 'SQL_INJECTION', $incId, $ip);
                     }
@@ -461,7 +461,7 @@ if (!defined('PRONTO_SECURITY_LOADED')) {
             if (!empty($settings['block_xss'])) {
                 foreach ($xssPatterns as $regex => $desc) {
                     // Para Summernote, permitimos tags HTML válidas mas nunca <script>, onerror=, javascript: ou document.cookie
-                    if (preg_match($regex, $inputValue)) {
+                    if (@preg_match($regex, $inputValue)) {
                         $incId = pronto_security_log_incident($pdo, $ip, 'XSS_ATTACK', 'ALTA', "[$inputKey] $inputValue");
                         pronto_security_render_blocked_screen("Script malicioso detectado ($desc).", 'XSS_ATTACK', $incId, $ip);
                     }
@@ -470,8 +470,12 @@ if (!defined('PRONTO_SECURITY_LOADED')) {
 
             // 3. Anti-Path Traversal
             if (!empty($settings['block_path_traversal'])) {
+                if (strpos($inputValue, '../') !== false || strpos($inputValue, '..\\') !== false) {
+                    $incId = pronto_security_log_incident($pdo, $ip, 'PATH_TRAVERSAL', 'CRITICA', "[$inputKey] $inputValue");
+                    pronto_security_render_blocked_screen("Tentativa de travessia de diretório detectada (Directory Path Traversal).", 'PATH_TRAVERSAL', $incId, $ip);
+                }
                 foreach ($pathTraversalPatterns as $regex => $desc) {
-                    if (preg_match($regex, $inputValue)) {
+                    if (@preg_match($regex, $inputValue)) {
                         $incId = pronto_security_log_incident($pdo, $ip, 'PATH_TRAVERSAL', 'CRITICA', "[$inputKey] $inputValue");
                         pronto_security_render_blocked_screen("Tentativa de travessia de diretório detectada ($desc).", 'PATH_TRAVERSAL', $incId, $ip);
                     }
@@ -481,7 +485,7 @@ if (!defined('PRONTO_SECURITY_LOADED')) {
             // 4. Anti-RCE
             if (!empty($settings['block_rce'])) {
                 foreach ($rcePatterns as $regex => $desc) {
-                    if (preg_match($regex, $inputValue)) {
+                    if (@preg_match($regex, $inputValue)) {
                         $incId = pronto_security_log_incident($pdo, $ip, 'RCE_ATTACK', 'CRITICA', "[$inputKey] $inputValue");
                         pronto_security_render_blocked_screen("Execução remota de código / comando shell detectada ($desc).", 'RCE_ATTACK', $incId, $ip);
                     }
