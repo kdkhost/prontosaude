@@ -1,5 +1,10 @@
 RewriteEngine On    # Turn on the rewriting engine
 
+# Páginas de Erro Personalizadas Pronto Saúde
+ErrorDocument 403 /403.php
+ErrorDocument 404 /404.php
+ErrorDocument 500 /500.php
+
 # not rewrite css, js and images
 RewriteCond %{REQUEST_URI} !\.(?:css|js|jpg|gif|png)$ [NC]
 
@@ -92,9 +97,9 @@ Header unset X-UA-Compatible
 
 
 # php -- BEGIN cPanel-generated handler, do not edit
-# Defina o pacote “ea-php56” como a linguagem padrão de programação “PHP”.
+# Defina o pacote “ea-php84” como a linguagem padrão de programação “PHP”.
 <IfModule mime_module>
-  AddHandler application/x-httpd-ea-php56 .php .php5 .phtml
+  AddHandler application/x-httpd-ea-php84 .php .php8 .phtml
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
 
@@ -102,7 +107,7 @@ Header unset X-UA-Compatible
 # Manual editing of this file may result in unexpected behavior.
 # To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
 # For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
-<IfModule php5_module>
+<IfModule php8_module>
    php_flag display_errors On
    php_value max_execution_time 90
    php_value max_input_time 60
@@ -110,7 +115,7 @@ Header unset X-UA-Compatible
    php_value memory_limit -1
    php_value post_max_size 128M
    php_value session.gc_maxlifetime 1440
-   php_value session.save_path "/var/cpanel/php/sessions/ea-php56"
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php84"
    php_value upload_max_filesize 128M
    php_flag zlib.output_compression On
 </IfModule>
@@ -122,8 +127,9 @@ Header unset X-UA-Compatible
    php_value memory_limit -1
    php_value post_max_size 128M
    php_value session.gc_maxlifetime 1440
-   php_value session.save_path "/var/cpanel/php/sessions/ea-php56"
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php84"
    php_value upload_max_filesize 128M
    php_flag zlib.output_compression On
 </IfModule>
 # END cPanel-generated php ini directives, do not edit
+

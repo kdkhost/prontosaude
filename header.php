@@ -20,6 +20,23 @@ $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 $row = $result[0] ?? [];
 $logo = $row['logo'] ?? '';
 $favicon = $row['favicon'] ?? '';
+
+// Checagem de Modo de Manutenção
+$is_maintenance = false;
+if (file_exists(__DIR__ . '/.maintenance')) {
+    $is_maintenance = true;
+} elseif (!empty($row['maintenance_mode']) && $row['maintenance_mode'] == 1) {
+    $is_maintenance = true;
+}
+
+if ($is_maintenance && empty($_SESSION['user'])) {
+    $current_script = basename($_SERVER['SCRIPT_NAME'] ?? '');
+    if ($current_script !== 'manutencao.php' && $current_script !== 'login.php') {
+        header('Location: ' . BASE_URL . 'manutencao.php');
+        exit;
+    }
+}
+
 $contact_email = $row['contact_email'] ?? '';
 $contact_phone = $row['contact_phone'] ?? '';
 $color = $row['color'] ?? '';

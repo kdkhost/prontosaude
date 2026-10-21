@@ -40,6 +40,8 @@
 
 	<!-- Utilitário Global Pronto Saúde (SweetAlert2, Toastr, DarkMode, Confirmações) -->
 	<script src="js/pronto-global.js"></script>
+	<script src="js/pronto-uploader.js"></script>
+	<script src="js/pronto-spa.js"></script>
 
 	<script>
 	$(function () {
@@ -96,20 +98,25 @@
 			});
 		}
 
-		// Inicialização do Summernote
+		// Inicialização Global do Summernote
 		if ($.fn.summernote) {
-			$('#1, #2, #3, .summernote').summernote({
-				tabsize: 2,
-				height: 200,
-				toolbar: [
-					['style', ['style']],
-					['font', ['bold', 'italic', 'underline', 'clear']],
-					['color', ['color']],
-					['para', ['ul', 'ol', 'paragraph']],
-					['table', ['table']],
-					['insert', ['link', 'picture', 'video']],
-					['view', ['fullscreen', 'codeview']]
-				]
+			const editorSelector = '.summernote, #1, #2, #3, textarea.editor, textarea#editor1, textarea[name="content"], textarea[name="news_content"], textarea[name="page_content"], textarea[name="description"], textarea[name="detail"], textarea[name="detalhes"], textarea[name="requisitos"], textarea[name="beneficios"], textarea[name="faq_content"], textarea[name="comment"]';
+			$(editorSelector).each(function () {
+				if (!$(this).next().hasClass('note-editor')) {
+					$(this).summernote({
+						tabsize: 2,
+						height: 200,
+						toolbar: [
+							['style', ['style']],
+							['font', ['bold', 'italic', 'underline', 'clear']],
+							['color', ['color']],
+							['para', ['ul', 'ol', 'paragraph']],
+							['table', ['table']],
+							['insert', ['link', 'picture', 'video']],
+							['view', ['fullscreen', 'codeview']]
+						]
+					});
+				}
 			});
 		}
 	});

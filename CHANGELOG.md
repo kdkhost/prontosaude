@@ -4,6 +4,39 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-10-21
+
+### Adicionado
+- **Painel Desacoplado via Motor SPA (Single Page Application)**:
+  - Arquitetura desacoplada onde cabeçalho, sidebar, navbar e rodapé permanecem fixos enquanto o conteúdo é atualizado via AJAX sem refresh de página e sem piscar a tela (`admin/js/pronto-spa.js`).
+  - Barra de progresso animada no topo durante requisições assíncronas.
+  - Interceptação automática de cliques em links internos e envio de formulários via `FormData` assíncrono.
+  - Integração com `history.pushState` e `popstate` para navegação fluida pelos botões voltar/avançar do navegador.
+  - Re-inicialização automática pós-AJAX de Tooltips do Bootstrap 5, DataTables em português, Select2, Datepicker e ApexCharts.
+- **Upload de Imagens Drag & Drop com Preview em Tempo Real**:
+  - Componente universal `admin/js/pronto-uploader.js` que transforma todos os inputs de imagens em áreas modernas de arrastar e soltar (drag & drop).
+  - Preview imediato no navegador utilizando `FileReader`, com exibição do tamanho em KB e nome do arquivo selecionado.
+  - Botão de remoção rápida e sincronização total com o envio de formulários via AJAX.
+- **Editor de Texto Online Summernote Global**:
+  - Editor rico **Summernote** padronizado e ativo globalmente em todos os textareas de conteúdo do painel administrativo.
+  - Sincronização automática do HTML gerado pelo Summernote no `FormData` do formulário antes do disparo da requisição AJAX.
+- **Controle Individual de Seções da Home via AJAX**:
+  - Nova tela `admin/secoes.php` e endpoint `admin/secoes-ajax.php` com switches visuais para ativar/desativar cada seção da página inicial de forma individual (Serviços, Clínicas, Médicos, Preços, Depoimentos, Notícias, Parceiros).
+  - Atualização instantânea no banco de dados via AJAX com feedback flutuante Toastr, sem recarregar a página.
+- **Página de Manutenção Personalizada (`manutencao.php`)**:
+  - Tela responsiva moderna com resposta HTTP 503, informando manutenções programadas com horário de Brasília e canais de emergência (WhatsApp e telefone).
+  - Ativação direta no painel administrativo via switch, bloqueando visitantes públicos no `header.php` enquanto permite acesso normal aos administradores autenticados.
+- **Páginas de Erro Personalizadas (`404.php`, `500.php`, `403.php`)**:
+  - Interfaces amigáveis com design hospitalar, ilustrações SVG, canais de suporte e retorno rápido à página inicial.
+  - Configuração no `.htaccess` com diretivas `ErrorDocument 403`, `ErrorDocument 404` e `ErrorDocument 500`.
+
+### Alterado
+- **Sincronização de Handlers do Apache**:
+  - Arquivo `.htaccess` local padronizado com o ambiente de produção do cPanel para `ea-php84` e `php8_module`.
+  - Eliminação de qualquer chamada direta a `alert()` nativo em novos scripts, assegurando o uso exclusivo de SweetAlert2 e Toastr.
+
+---
+
 ## [2.2.0] - 2026-10-21
 
 ### Adicionado

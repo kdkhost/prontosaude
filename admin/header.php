@@ -227,6 +227,13 @@ $logo = $row['logo'] ?? '';
 						</li>
 
 						<li class="nav-item">
+							<a href="secoes.php" class="nav-link <?php if($cur_page == 'secoes.php') {echo 'active';} ?>">
+								<i class="nav-icon bi bi-toggles text-success"></i>
+								<p>Controle de Seções</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
 							<a href="page.php" class="nav-link <?php if( in_array($cur_page, ['page.php', 'page-add.php', 'page-edit.php']) ) {echo 'active';} ?>">
 								<i class="nav-icon bi bi-file-earmark-text-fill text-warning"></i>
 								<p>Gestor de Páginas</p>

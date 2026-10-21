@@ -14,17 +14,28 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - **Seção Institucional:** Páginas de FAQ, parceiros institucionais e páginas estáticas (Política de Privacidade e Termos de Uso).
 - **Interface e Feedback:** Notificações flutuantes com **Toastr** e caixas de diálogo elegantes com **SweetAlert2** substituindo qualquer alerta nativo de navegador.
 
-### Painel Administrativo Moderno (AdminLTE 4)
-- **Design de Última Geração:** Construído sobre o **AdminLTE 4** e **Bootstrap 5.3**, com layout fixo responsivo (`app-wrapper`, `app-header`, `app-sidebar`, `app-main`, `app-footer`).
-- **Suporte Nativo a Modo Escuro / Claro:** Alternador dinâmico de tema (Claro / Escuro / Automático) na barra superior, persistido no navegador.
+### Painel Administrativo Moderno e Desacoplado (AdminLTE 4 + SPA)
+- **Painel Totalmente Desacoplado via AJAX (SPA):**
+  - Navegação fluida entre rotas sem refresh de página e sem cintilação (`admin/js/pronto-spa.js`).
+  - Cabeçalho, menu lateral (sidebar), navbar e rodapé desacoplados, com transições instantâneas e barra de progresso no topo.
+  - Submissão de formulários e uploads via `FormData` e `fetch` assíncrono.
+  - Re-inicialização automática de tooltips, tabelas DataTables, Summernote, seletores e gráficos.
+- **Upload Drag & Drop com Preview em Tempo Real:**
+  - Utilitário universal (`admin/js/pronto-uploader.js`) que transforma todos os campos de imagem em zonas modernas de arrastar e soltar com preview visual instantâneo e informações do arquivo.
+- **Editor Rico Summernote Global:**
+  - Integrado globalmente em todas as áreas de texto do painel administrativo, com sincronização automática pré-envio.
+- **Controle Individual de Seções via AJAX (`admin/secoes.php`):**
+  - Painel exclusivo com switches interativos para ativar ou desativar em tempo real qualquer seção da página inicial (Serviços, Clínicas, Médicos, Preços, Depoimentos, Notícias, Parceiros) sem recarregar a tela.
+- **Páginas Personalizadas de Manutenção e Erros:**
+  - `manutencao.php`: Página de manutenção programada (HTTP 503) com canais de emergência, ativável diretamente pelo painel.
+  - `404.php`, `500.php`, `403.php`: Páginas de erro humanizadas e estilizadas no padrão hospitalar Pronto Saúde.
+- **Design de Última Geração e Modo Escuro/Claro:** Construído sobre o **AdminLTE 4** e **Bootstrap 5.3**, com alternador dinâmico de tema (Claro / Escuro / Automático) na barra superior.
 - **KPIs Modernos e Interativos:**
   - 8 Cards de métricas com gradientes elegantes e contadores em tempo real.
-  - Gráficos analíticos interativos via **ApexCharts** (Distribuição de Módulos e Gráfico Donut de Serviços de Saúde), sincronizados com o modo Dark/Light.
-  - Painel de Ações Rápidas (Quick Actions) para acesso imediato ao cadastro de médicos, notícias, vagas e departamentos.
-  - Cards de suporte técnico direto (Remoto, Telefone e WhatsApp) com notificações via Toastr.
-- **Gestão de Usuários e Permissões:** Perfis diferenciados (Super Admin, Admin, Publisher) com menu lateral categorizado e controle rigoroso de acesso.
-- **CMS Integrado:** Criação, edição e exclusão de categorias, notícias, banners, depoimentos, fotos e vídeos com confirmações personalizadas via **SweetAlert2**.
-- **Configurações do Site:** Atualização de logotipo, favicon, paleta de cores primárias, contatos e configurações de SEO.
+  - Gráficos analíticos interativos via **ApexCharts** sincronizados com o tema Dark/Light.
+  - Painel de Ações Rápidas (Quick Actions) para acesso imediato a cadastros e suporte técnico.
+- **Gestão de Usuários e Permissões:** Perfis diferenciados (Super Admin, Admin, Publisher) com menu lateral categorizado e controle de acesso.
+- **CMS Integrado:** Gestão completa de notícias, banners, depoimentos, fotos e vídeos com confirmações personalizadas via **SweetAlert2**.
 
 ## 🛠️ Tecnologias e Linguagens
 
