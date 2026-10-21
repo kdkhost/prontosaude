@@ -301,7 +301,7 @@ if(isset($_POST['BtnPreloader'])){
 <section class="content" style="min-height:auto;margin-bottom: -30px;">
 	<div class="row">
 		<div class="col-md-12">
-			<?php if($error_message): ?>
+			<?php if(!empty($error_message)): ?>
 			<div class="callout callout-danger">
 			
 			<p>
@@ -310,7 +310,7 @@ if(isset($_POST['BtnPreloader'])){
 			</div>
 			<?php endif; ?>
 
-			<?php if($success_message): ?>
+			<?php if(!empty($success_message)): ?>
 			<div class="callout callout-success">
     			<p>
     			    <?php echo $success_message; unset($success_message); ?>
@@ -318,7 +318,7 @@ if(isset($_POST['BtnPreloader'])){
 			</div>
 			<?php endif; ?>
 			
-			<?php if($success_message2): ?>
+			<?php if(!empty($success_message2)): ?>
 			<div class="callout callout-warning">
     			<p>
     			    <?php echo $success_message2; unset($success_message2); ?>

@@ -6,6 +6,7 @@ $error_message = '';
 $success_message = '';
 $error_message1 = '';
 $success_message1 = '';
+$success_message2 = '';
 
 // Check if the user is logged in or not
 if(!isset($_SESSION['user'])) {
