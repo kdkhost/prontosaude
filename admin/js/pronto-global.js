@@ -107,8 +107,21 @@
       hideMethod: 'fadeOut'
     };
 
+    let lastNotifKey = '';
+    let lastNotifTime = 0;
+
     window.notificar = function (tipo, mensagem, titulo) {
       titulo = titulo || '';
+      const now = Date.now();
+      const currentKey = `${tipo}|${titulo}|${mensagem}`;
+
+      // Suprime notificações duplicadas disparadas dentro de 1.5s
+      if (lastNotifKey === currentKey && (now - lastNotifTime) < 1500) {
+        return;
+      }
+      lastNotifKey = currentKey;
+      lastNotifTime = now;
+
       switch (tipo) {
         case 'success':
         case 'sucesso':

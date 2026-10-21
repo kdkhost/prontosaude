@@ -179,19 +179,25 @@
       window.renderDashboardCharts(isDark);
     }
 
-    // J. Notificações Toastr a partir de Callouts
-    const callouts = container.querySelectorAll('.callout');
+    // K. Notificações Toastr a partir de Callouts (Converte qualquer mensagem em Toastr e remove da tela)
+    let hadCalloutNotification = false;
+    const callouts = container.querySelectorAll('.callout, .alert:not(.alert-keep):not(.alert-info)');
     callouts.forEach(c => {
       const txt = c.innerText.trim();
-      if (!txt) return;
-      if (c.classList.contains('callout-success')) {
-        window.notificar && window.notificar('success', txt, 'Operação Concluída');
-      } else if (c.classList.contains('callout-danger')) {
-        window.notificar && window.notificar('error', txt, 'Atenção');
-      } else if (c.classList.contains('callout-warning')) {
-        window.notificar && window.notificar('warning', txt, 'Alerta');
+      if (txt) {
+        hadCalloutNotification = true;
+        if (c.classList.contains('callout-success') || c.classList.contains('alert-success')) {
+          window.notificar && window.notificar('success', txt, 'Sucesso!');
+        } else if (c.classList.contains('callout-danger') || c.classList.contains('alert-danger')) {
+          window.notificar && window.notificar('error', txt, 'Atenção!');
+        } else if (c.classList.contains('callout-warning') || c.classList.contains('alert-warning')) {
+          window.notificar && window.notificar('warning', txt, 'Alerta');
+        }
       }
+      // Remove o elemento visual da página para não duplicar na tela
+      c.remove();
     });
+    return hadCalloutNotification;
   }
 
   window.reinitAllComponents = reinitAllComponents;
@@ -429,13 +435,23 @@
 
         window.history.pushState({ url: finalUrl }, newTitle, finalUrl);
         updateActiveSidebar(finalUrl);
-        reinitAllComponents(mainContainer);
+        const hadCallout = reinitAllComponents(mainContainer);
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
         finishProgress();
 
-        if (window.notificar) {
-          window.notificar('success', 'Dados atualizados com sucesso!', 'Salvo');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          if (submitBtn.tagName === 'INPUT') {
+            submitBtn.value = originalBtnHtml;
+          } else {
+            submitBtn.innerHTML = originalBtnHtml;
+          }
+        }
+
+        // Se nenhum callout específico foi retornado pelo backend, emite notificação padrão
+        if (!hadCallout && window.notificar) {
+          window.notificar('success', 'Dados atualizados com sucesso!', 'Salvo!');
         }
       })
       .catch(err => {

@@ -420,8 +420,8 @@ if (!defined('PRONTO_SECURITY_LOADED')) {
 
         // Regex de Path Traversal e LFI
         $pathTraversalPatterns = [
-            '/(\.\.\/|\.\.\\){2,}/' => 'Directory Path Traversal (../)',
-            '/(\/etc\/passwd|\/etc\/shadow|\/proc\/self|c:\\windows|c:\\boot\.ini|win\.ini)/i' => 'System File Path Disclosure'
+            '/(\.\.\/|\.\.\\\\){2,}/' => 'Directory Path Traversal (../)',
+            '/(\/etc\/passwd|\/etc\/shadow|\/proc\/self|c:\\\\windows|c:\\\\boot\.ini|win\.ini)/i' => 'System File Path Disclosure'
         ];
 
         // Regex de Execução Remota de Código (RCE) / Web Shells

@@ -430,3 +430,14 @@ body {
   border: 0;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
+
+/* Ocultação de alerts e callouts estáticos na tela para manter exclusivamente notificações Toastr */
+.callout.callout-success,
+.callout.callout-danger,
+.callout.callout-warning,
+.alert.alert-success:not(.alert-keep),
+.alert.alert-danger:not(.alert-keep),
+.alert.alert-warning:not(.alert-keep) {
+  display: none !important;
+}
+
