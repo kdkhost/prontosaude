@@ -41,6 +41,7 @@
 	<!-- Utilitário Global Pronto Saúde (SweetAlert2, Toastr, DarkMode, Confirmações) -->
 	<script src="js/pronto-global.js"></script>
 	<script src="js/pronto-uploader.js"></script>
+	<script src="js/pronto-slug.js"></script>
 	<script src="js/pronto-spa.js"></script>
 
 	<script>

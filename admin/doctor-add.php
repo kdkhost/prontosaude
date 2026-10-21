@@ -161,7 +161,10 @@ if(isset($_POST['form1'])) {
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Slug </label>
 							<div class="col-sm-6">
-								<input type="text" autocomplete="off" class="form-control" name="slug" value="<?php if(isset($_POST['slug'])){echo $_POST['slug'];} ?>">
+								<input type="text" autocomplete="off" class="form-control ps-slug-locked" name="slug" placeholder="Gerado automaticamente..." value="<?php if(isset($_POST['slug'])){echo $_POST['slug'];} ?>" readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
+								<div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
+									<i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada)
+								</div>
 							</div>
 						</div>
 						

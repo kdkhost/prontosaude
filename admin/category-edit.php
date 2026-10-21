@@ -124,9 +124,12 @@ foreach ($result as $row) {
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="" class="col-sm-2 control-label">Category Slug</label>
+                    <label for="" class="col-sm-2 control-label">Slug da Categoria</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" name="category_slug" value="<?php echo $category_slug; ?>">
+                        <input type="text" class="form-control ps-slug-locked" name="category_slug" value="<?php echo $category_slug; ?>" readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
+                        <div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
+                            <i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada)
+                        </div>
                     </div>
                 </div>
                 <h3 class="seo-info">SEO Information</h3>

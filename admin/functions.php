@@ -26,3 +26,31 @@ if (!function_exists('sanitize_output')) {
         return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8');
     }
 }
+
+if (!function_exists('gerar_slug')) {
+    /**
+     * Gera slug limpo e amigável em português para URLs (compatível com PHP 8.4+)
+     */
+    function gerar_slug($texto) {
+        if (empty($texto)) return '';
+        // Converte acentos
+        if (function_exists('transliterator_transliterate')) {
+            $trans = transliterator_transliterate('Any-Latin; Latin-ASCII; Lower()', (string)$texto);
+            if ($trans !== false) {
+                $texto = $trans;
+            }
+        }
+        $texto = preg_replace('~[^\pL\d]+~u', '-', (string)$texto);
+        if (function_exists('iconv')) {
+            $conv = @iconv('utf-8', 'us-ascii//TRANSLIT//IGNORE', $texto);
+            if ($conv !== false) {
+                $texto = $conv;
+            }
+        }
+        $texto = preg_replace('~[^-\w]+~', '', $texto);
+        $texto = trim($texto, '-');
+        $texto = preg_replace('~-+~', '-', $texto);
+        $texto = strtolower($texto);
+        return $texto ?: 'item-' . time();
+    }
+}

@@ -158,7 +158,12 @@
       window.initImageDropzones(container);
     }
 
-    // G. ApexCharts (se estiver na página inicial/dashboard)
+    // G. Gerador Automático de Slugs com Bloqueio Manual
+    if (window.initSlugAutoGenerator) {
+      window.initSlugAutoGenerator(container);
+    }
+
+    // H. ApexCharts (se estiver na página inicial/dashboard)
     if (container.querySelector('#chart-indicadores') && window.renderDashboardCharts) {
       const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
       window.renderDashboardCharts(isDark);

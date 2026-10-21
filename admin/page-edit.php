@@ -155,7 +155,10 @@ foreach ($result as $row) {
                 <div class="form-group">
                     <label for="" class="col-sm-2 control-label">Slug da Página </label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" name="page_slug" value="<?php echo $page_slug; ?>">
+                        <input type="text" class="form-control ps-slug-locked" name="page_slug" value="<?php echo $page_slug; ?>" readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
+                        <div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
+                            <i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada)
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">

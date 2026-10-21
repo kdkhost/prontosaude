@@ -24,6 +24,9 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - Utilitário universal (`admin/js/pronto-uploader.js`) que transforma todos os campos de imagem em zonas modernas de arrastar e soltar com preview visual instantâneo e informações do arquivo.
 - **Editor Rico Summernote Global:**
   - Integrado globalmente em todas as áreas de texto do painel administrativo, com sincronização automática pré-envio.
+- **Geração Automática de Slugs em Tempo Real:**
+  - Digitação automática de URLs amigáveis conforme títulos e nomes são digitados nos módulos de Clínicas, Páginas, Notícias, Categorias, Serviços e Médicos.
+  - Bloqueio de ajuste manual (`readonly`) para prevenir inconsistências, acentos inválidos e quebra de rotas no sistema.
 - **Controle Individual de Seções via AJAX (`admin/secoes.php`):**
   - Painel exclusivo com switches interativos para ativar ou desativar em tempo real qualquer seção da página inicial (Serviços, Clínicas, Médicos, Preços, Depoimentos, Notícias, Parceiros) sem recarregar a tela.
 - **Páginas Personalizadas de Manutenção e Erros:**

@@ -4,6 +4,18 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-10-21
+
+### Adicionado
+- **Geração Automática de Slugs em Tempo Real (`admin/js/pronto-slug.js`)**:
+  - Motor de slugificação instantânea ativado em todos os formulários de cadastro e edição (Departamentos/Clínicas, Páginas, Notícias, Categorias, Serviços e Corpo Clínico).
+  - Ao digitar ou alterar títulos e nomes, o campo de slug é preenchido sozinho em tempo real com caracteres minúsculos, sem acentuação e separados por traço simples.
+  - Bloqueio completo da digitação manual através do atributo `readonly`, prevenindo inserção de caracteres inválidos, acentos indevidos, espaços ou quebra de URLs amigáveis no sistema.
+  - Estilização visual dos campos de slug bloqueados com borda tracejada e aviso explicativo em português.
+  - Função nativa `gerar_slug()` adicionada a `admin/functions.php` para higienização e sanitização segura no backend em PHP 8.4+.
+
+---
+
 ## [2.3.0] - 2026-10-21
 
 ### Adicionado

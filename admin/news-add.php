@@ -163,9 +163,12 @@ if(isset($_POST['form1'])) {
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Slug  de notícias </label>
+							<label for="" class="col-sm-2 control-label">Slug de Notícias </label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="news_slug" placeholder="Exemplo: manchete-de-noticias">
+								<input type="text" class="form-control ps-slug-locked" name="news_slug" placeholder="Gerado automaticamente..." readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
+								<div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
+									<i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada)
+								</div>
 							</div>
 						</div>
 						<div class="form-group">
