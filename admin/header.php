@@ -96,6 +96,7 @@ $logo = $row['logo'] ?? '';
 	<!-- DataTables & DataTables Responsive (AdminLTE 3/4 Style) -->
 	<link rel="stylesheet" href="css/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="css/responsive.bootstrap4.min.css">
+	<link rel="stylesheet" href="css/responsive.dataTables.min.css">
 	
 	<!-- Folha de Estilos de Compatibilidade e Customizações AdminLTE 4 -->
 	<link rel="stylesheet" href="css/adminlte4-compat.css">

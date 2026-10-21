@@ -75,7 +75,7 @@
       tables.forEach(tbl => {
         try {
           if (!jQuery.fn.DataTable.isDataTable(tbl)) {
-            tbl.classList.add('dt-responsive');
+            tbl.classList.add('dt-responsive', 'nowrap');
             tbl.style.width = '100%';
 
             // Permite ao DataTables Responsive acionar os breakpoints sem corte de scroll
@@ -112,7 +112,12 @@
               ordering: true,
               info: true,
               autoWidth: false,
-              responsive: true
+              responsive: {
+                details: {
+                  type: 'inline',
+                  target: 'tr'
+                }
+              }
             });
 
             setTimeout(() => {

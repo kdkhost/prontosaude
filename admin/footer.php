@@ -54,6 +54,8 @@
 		if ($.fn.dataTable) {
 			$('#example1, #example2, table.table-datatable').each(function() {
 				if (!$.fn.DataTable.isDataTable(this)) {
+					$(this).addClass('dt-responsive nowrap');
+					$(this).closest('.table-responsive').css('overflow-x', 'visible');
 					$(this).DataTable({
 						"language": {
 							"sEmptyTable": "Nenhum registro encontrado",
@@ -83,8 +85,21 @@
 						"ordering": true,
 						"info": true,
 						"autoWidth": false,
-						"responsive": true
+						"responsive": {
+							"details": {
+								"type": "inline",
+								"target": "tr"
+							}
+						}
 					});
+				}
+			});
+
+			$(window).on('resize.dtResp orientationchange.dtResp', function() {
+				if ($.fn.dataTable) {
+					try {
+						$($.fn.dataTable.tables(true)).DataTable().columns.adjust().responsive.recalc();
+					} catch(e) {}
 				}
 			});
 		}
