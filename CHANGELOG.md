@@ -4,6 +4,31 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] - 2026-10-21
+
+### Adicionado
+- **Escudo de Segurança de Padrão Militar & Firewall WAF Integrado (`admin/inc/security_guard.php`)**:
+  - Motor universal de inspeção profunda de pacotes (Deep Packet Inspection) ativo globalmente em todas as requisições (`$_GET`, `$_POST`, `$_COOKIE`, `$_SERVER['REQUEST_URI']`).
+  - **Anti-SQL Injection (SQLi):** Neutralização imediata de ataques UNION SELECT, blind timing injections, dumps de tabelas, injeções booleanas e comandos DDL (`DROP`, `TRUNCATE`, `ALTER`).
+  - **Anti-Cross Site Scripting (XSS):** Bloqueio estrito de tags `<script>`, esquemas `javascript:`, atributos de manipulação de eventos DOM (`onerror`, `onload`) e tentativas de roubo de cookies.
+  - **Anti-Path Traversal (LFI/RFI):** Bloqueio de sequências de escape de diretórios (`../`, `..\`) e acesso não autorizado a arquivos confidenciais do servidor (`/etc/passwd`, `win.ini`).
+  - **Anti-Remote Code Execution (RCE) / Web Shells:** Prevenção contra execução de funções de sistema (`passthru`, `shell_exec`, `system`) e injeções de código PHP em streams.
+  - **Bloqueio de Scanners e Bad Bots:** Detecção de assinaturas de ferramentas automatizadas hostis (SQLMap, Nikto, WPScan, Acunetix, Nmap, etc.).
+- **Defesa Ativa contra Força Bruta & Ataques de Dicionário em Logins**:
+  - Mecanismo de bloqueio temporário (Lockout) por IP e por e-mail após exceder o limite de tentativas inválidas (`tbl_login_attempts`).
+  - Regeneração atômica do ID da sessão (`session_regenerate_id(true)`) no login para neutralizar ataques de fixação de sessão.
+  - Armadilha invisível **Honeypot Anti-Robô** em formulários de login e contato, desmascarando bots automatizados instantaneamente.
+- **Headers HTTP de Máxima Segurança & Prevenção de Vazamento**:
+  - Implementação de `Strict-Transport-Security (HSTS)`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN` (anti-clickjacking), `X-XSS-Protection` e `Referrer-Policy`.
+  - Ocultação da assinatura e versão do PHP (`X-Powered-By`) para prevenção de fingerprinting e reconhecimento por atacantes.
+- **Painel Central de Gestão de Segurança (`admin/seguranca.php` e `admin/seguranca-ajax.php`)**:
+  - 4 Cards de KPIs em tempo real: Status do WAF, Ameaças Bloqueadas, Invasões Neutralizadas e Força Bruta Contida.
+  - Painel dividido em 5 abas interativas com switches assíncronos via AJAX (WAF, Força Bruta, Headers HTTP, Gestão de IPs e Auditoria).
+  - Tabela dinâmica de IPs em quarentena com botão de desbloqueio instantâneo via SweetAlert2.
+  - Log de auditoria em tempo real (`tbl_security_logs`) com classificação de severidade (`CRÍTICA`, `ALTA`, `MÉDIA`, `BAIXA`), amostras de payload e ação tomada.
+
+---
+
 ## [2.5.0] - 2026-10-21
 
 ### Adicionado

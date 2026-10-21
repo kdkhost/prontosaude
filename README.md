@@ -32,6 +32,13 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - **Páginas Personalizadas de Manutenção e Erros:**
   - `manutencao.php`: Página de manutenção programada (HTTP 503) com canais de emergência, ativável diretamente pelo painel.
   - `404.php`, `500.php`, `403.php`: Páginas de erro humanizadas e estilizadas no padrão hospitalar Pronto Saúde.
+- **Segurança de Padrão Militar & Firewall WAF Integrado (`admin/seguranca.php`):**
+  - **Firewall de Aplicação Web (WAF):** Inspeção profunda e em tempo real de requisições contra injeção SQL (SQLi), Cross-Site Scripting (XSS), travessia de diretórios (Path Traversal/LFI) e execução remota de código (RCE).
+  - **Defesa Ativa contra Força Bruta:** Bloqueio temporário (lockout) automático de IPs e contas após sucessivas tentativas incorretas de login, com tempo de suspensão ajustável e regeneração de sessão contra fixação.
+  - **Armadilha Honeypot:** Campos invisíveis anti-robô que detectam e bloqueiam preenchimentos automatizados de formulários por scripts hostis.
+  - **Headers de Alta Segurança & Anti-Vazamento:** Políticas estritas de HSTS, X-Content-Type-Options (nosniff), X-Frame-Options (anti-clickjacking), Referrer-Policy e ocultação total da assinatura do PHP.
+  - **Controle de Acesso por IP & Quarentena Dinâmica:** Gestão integrada de Lista Branca (Whitelist), Lista Negra (Blacklist) e desbloqueio imediato de IPs bloqueados via painel administrativo.
+  - **Auditoria e Logs em Tempo Real:** Registro detalhado de todos os incidentes com identificação de IP, endpoint atacado, severidade da ameaça e payload interceptado.
 - **Design de Última Geração e Modo Escuro/Claro:** Construído sobre o **AdminLTE 4** e **Bootstrap 5.3**, com alternador dinâmico de tema (Claro / Escuro / Automático) na barra superior, tipografia nativa **Source Sans 3** e espaçamentos padronizados sem estilos legados.
 - **Cabeçalho Fixo e Sidebar com Menu Treeview:**
   - Barra de navegação superior fixa (`sticky-top`) com efeito de desfoque de fundo (`backdrop-filter`).

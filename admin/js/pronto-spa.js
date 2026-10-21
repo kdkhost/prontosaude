@@ -168,7 +168,12 @@
       window.initUniversalMasks(container);
     }
 
-    // I. ApexCharts (se estiver na página inicial/dashboard)
+    // I. Painel de Segurança e WAF
+    if (window.initSecurityPanel) {
+      window.initSecurityPanel(container);
+    }
+
+    // J. ApexCharts (se estiver na página inicial/dashboard)
     if (container.querySelector('#chart-indicadores') && window.renderDashboardCharts) {
       const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
       window.renderDashboardCharts(isDark);

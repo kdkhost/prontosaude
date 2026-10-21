@@ -43,6 +43,7 @@
 	<script src="js/pronto-uploader.js"></script>
 	<script src="js/pronto-slug.js"></script>
 	<script src="js/pronto-masks.js"></script>
+	<script src="js/pronto-security.js"></script>
 	<script src="js/pronto-spa.js"></script>
 
 	<script>

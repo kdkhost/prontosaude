@@ -41,3 +41,10 @@ try {
     echo "Erro ao conectar com o banco de dados. Por favor, tente novamente mais tarde.";
     exit();
 }
+
+// Inicialização do Escudo de Segurança de Padrão Militar e WAF
+$security_guard_file = __DIR__ . '/inc/security_guard.php';
+if (file_exists($security_guard_file)) {
+    require_once($security_guard_file);
+    pronto_security_inspect_request($pdo);
+}

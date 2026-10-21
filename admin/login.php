@@ -5,19 +5,31 @@ include("config.php");
 $error_message = '';
 
 if(isset($_POST['form1'])) {
-    if(empty($_POST['email']) || empty($_POST['password'])) {
+    $client_ip = pronto_security_get_ip();
+    $email_input = trim($_POST['email'] ?? '');
+
+    // 1. Verifica bloqueio ativo por força bruta (Lockout)
+    $lockout = pronto_security_check_login_lockout($pdo, $client_ip, $email_input);
+    if ($lockout['locked']) {
+        $error_message = "Acesso temporariamente bloqueado por segurança devido a excesso de tentativas inválidas. Por favor, tente novamente em {$lockout['minutes_left']} minuto(s).";
+    } elseif(empty($_POST['email']) || empty($_POST['password'])) {
         $error_message = 'E-mail e/ou senha não podem estar vazios.';
     } else {
     	$statement = $pdo->prepare("SELECT * FROM tbl_user WHERE email=? AND status=?");
-    	$statement->execute(array($_POST['email'],'Active'));
+    	$statement->execute(array($email_input, 'Active'));
     	$total = $statement->rowCount();    
         $row = $statement->fetch(PDO::FETCH_ASSOC);    
         if($total == 0 || !$row) {
+            pronto_security_record_login_failure($pdo, $client_ip, $email_input);
             $error_message = 'Endereço de e-mail não encontrado ou usuário inativo.';
         } else {       
             if($row['password'] !== md5($_POST['password'])) {
+                pronto_security_record_login_failure($pdo, $client_ip, $email_input);
                 $error_message = 'Senha incorreta. Verifique suas credenciais.';
             } else {       
+                // Sucesso: limpa tentativas e regenera sessão contra fixação
+                pronto_security_record_login_success($pdo, $client_ip, $email_input);
+                session_regenerate_id(true);
 				$_SESSION['user'] = $row;
                 header("location: index.php");
                 exit;
@@ -25,6 +37,7 @@ if(isset($_POST['form1'])) {
         }
     }
 }
+
 
 // Configurações Básicas
 $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
@@ -130,6 +143,7 @@ $logo = $config['logo'] ?? '';
 			</div>
 
 			<form method="post" action="">
+				<?= pronto_security_honeypot_field(); ?>
 				<div class="form-floating mb-3">
 					<input type="email" class="form-control rounded-3" id="email" name="email" placeholder="nome@exemplo.com" required autofocus>
 					<label for="email"><i class="bi bi-envelope me-1"></i> Endereço de E-mail</label>

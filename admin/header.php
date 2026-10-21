@@ -227,6 +227,13 @@ $logo = $row['logo'] ?? '';
 						</li>
 
 						<li class="nav-item">
+							<a href="seguranca.php" class="nav-link <?php if($cur_page == 'seguranca.php') {echo 'active';} ?>">
+								<i class="nav-icon bi bi-shield-check text-danger"></i>
+								<p>Segurança & WAF</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
 							<a href="secoes.php" class="nav-link <?php if($cur_page == 'secoes.php') {echo 'active';} ?>">
 								<i class="nav-icon bi bi-toggles text-success"></i>
 								<p>Controle de Seções</p>
