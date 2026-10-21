@@ -10,6 +10,27 @@
     const panel = container.querySelector('#securityTabsContent');
     if (!panel) return;
 
+    // 0. Suporte Robusto para Troca Suave de Abas
+    const tabButtons = container.querySelectorAll('#securityTabs button[data-bs-toggle="pill"], #securityTabs button[data-bs-toggle="tab"]');
+    tabButtons.forEach(btn => {
+      if (btn.dataset.tabBound === 'true') return;
+      btn.dataset.tabBound = 'true';
+
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        tabButtons.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const targetSelector = this.getAttribute('data-bs-target');
+        const targetPane = container.querySelector(targetSelector);
+        if (targetPane) {
+          container.querySelectorAll('#securityTabsContent .tab-pane').forEach(p => {
+            p.classList.remove('show', 'active');
+          });
+          targetPane.classList.add('show', 'active');
+        }
+      });
+    });
+
     // 1. Alternador Instantâneo via AJAX para os Switches de Segurança
     const toggles = container.querySelectorAll('.sec-toggle');
     toggles.forEach(toggle => {

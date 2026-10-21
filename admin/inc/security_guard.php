@@ -96,6 +96,7 @@ if (!defined('PRONTO_SECURITY_LOADED')) {
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
             ");
             $stmt->execute([$ip, $userAgent, $eventType, $threatLevel, $uri, $method, $sample, $action]);
+            $lastId = (int)$pdo->lastInsertId();
 
             // Se auto-ban estiver ativo e reincidência for detectada
             $settings = pronto_security_get_settings($pdo);
@@ -116,10 +117,10 @@ if (!defined('PRONTO_SECURITY_LOADED')) {
                 }
             }
 
-            return $pdo->lastInsertId();
+            return $lastId ?: time();
         } catch (Exception $e) {
             error_log("Erro ao registrar log de segurança: " . $e->getMessage());
-            return 0;
+            return time();
         }
     }
 
