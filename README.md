@@ -48,6 +48,11 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - **Preenchimento Automático via CEP com Auto Focus no Número:**
   - Integração assíncrona automática com a API pública ViaCEP durante a digitação de 8 dígitos de CEP.
   - Posicionamento automático com seleção imediata no campo de Número (`#numero_endereco`) assim que os dados do endereço são preenchidos.
+- **DataTables Responsive no Padrão AdminLTE 3 / 4:**
+  - Tabelas totalmente responsivas com recolhimento inteligente de colunas em telas menores ou dispositivos móveis.
+  - Botão circular expansível com ícone verde de sinal de mais (`+`) e sinal de menos (`-`) em vermelho ao expandir a linha filha com todos os dados e detalhes estruturados.
+- **Padronização Visual Completa e Alinhamento de Botões:**
+  - Tipografia unificada estritamente em 14px (`Source Sans 3`), alinhamento automático de botões de ação nas tabelas (Editar, Deletar, Visualizar) lado a lado sem quebra feia, cabeçalhos de página proporcionais e grid de formulários perfeitamente alinhado.
 - **Correção Abrangente de Acentuação e Encoding:**
   - Banco de dados e arquivos 100% saneados em UTF-8 (`utf8mb4`), eliminando caracteres corrompidos (`?`) e garantindo ortografia correta da língua portuguesa.
 - **KPIs Modernos e Interativos:**

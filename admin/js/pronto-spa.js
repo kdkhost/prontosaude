@@ -69,19 +69,28 @@
       });
     }
 
-    // B. DataTables em Português
+    // B. DataTables em Português com Extensão Responsiva (Estilo AdminLTE 3 / 4)
     if (window.jQuery && jQuery.fn.dataTable) {
       const tables = container.querySelectorAll('table.table:not(.dataTable):not(.no-datatable), #example1, #example2');
       tables.forEach(tbl => {
         try {
           if (!jQuery.fn.DataTable.isDataTable(tbl)) {
-            jQuery(tbl).DataTable({
+            tbl.classList.add('dt-responsive');
+            tbl.style.width = '100%';
+
+            // Permite ao DataTables Responsive acionar os breakpoints sem corte de scroll
+            const parentResponsive = tbl.closest('.table-responsive');
+            if (parentResponsive) {
+              parentResponsive.style.overflowX = 'visible';
+            }
+
+            const dtInstance = jQuery(tbl).DataTable({
               language: {
                 sEmptyTable: "Nenhum registro encontrado",
                 sInfo: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
                 sInfoEmpty: "Mostrando 0 até 0 de 0 registros",
                 sInfoFiltered: "(Filtrados de _MAX_ registros)",
-                sLengthMenu: "_MENU_ resultados por página",
+                sLengthMenu: "_MENU_ registros por página",
                 sLoadingRecords: "Carregando...",
                 sProcessing: "Processando...",
                 sZeroRecords: "Nenhum registro encontrado",
@@ -91,6 +100,10 @@
                   sPrevious: "Anterior",
                   sFirst: "Primeiro",
                   sLast: "Último"
+                },
+                oAria: {
+                  sSortAscending: ": Ordenar colunas de forma ascendente",
+                  sSortDescending: ": Ordenar colunas de forma descendente"
                 }
               },
               paging: true,
@@ -101,6 +114,10 @@
               autoWidth: false,
               responsive: true
             });
+
+            setTimeout(() => {
+              try { dtInstance.columns.adjust().responsive.recalc(); } catch (e) {}
+            }, 120);
           }
         } catch (e) {}
       });

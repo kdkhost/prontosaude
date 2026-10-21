@@ -93,6 +93,10 @@ $logo = $row['logo'] ?? '';
 	<link rel="stylesheet" href="css/on-off-switch.css">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
 	
+	<!-- DataTables & DataTables Responsive (AdminLTE 3/4 Style) -->
+	<link rel="stylesheet" href="css/dataTables.bootstrap.css">
+	<link rel="stylesheet" href="css/responsive.bootstrap4.min.css">
+	
 	<!-- Folha de Estilos de Compatibilidade e Customizações AdminLTE 4 -->
 	<link rel="stylesheet" href="css/adminlte4-compat.css">
 	<link rel="stylesheet" href="style.css">

@@ -30,6 +30,8 @@
 	<!-- Plugins de Formulários e Tabelas -->
 	<script src="js/jquery.dataTables.min.js"></script>
 	<script src="js/dataTables.bootstrap.min.js"></script>
+	<script src="js/dataTables.responsive.min.js"></script>
+	<script src="js/responsive.bootstrap4.min.js"></script>
 	<script src="js/select2.full.min.js"></script>
 	<script src="js/moment.min.js"></script>
 	<script src="js/bootstrap-datepicker.js"></script>
@@ -50,37 +52,40 @@
 	$(function () {
 		// Inicialização de Tabelas DataTables em Português
 		if ($.fn.dataTable) {
-			$('#example1, #example2').DataTable({
-				"language": {
-					"sEmptyTable": "Nenhum registro encontrado",
-					"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-					"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-					"sInfoFiltered": "(Filtrados de _MAX_ registros)",
-					"sInfoPostFix": "",
-					"sInfoThousands": ".",
-					"sLengthMenu": "_MENU_ resultados por página",
-					"sLoadingRecords": "Carregando...",
-					"sProcessing": "Processando...",
-					"sZeroRecords": "Nenhum registro encontrado",
-					"sSearch": "Pesquisar:",
-					"oPaginate": {
-						"sNext": "Próximo",
-						"sPrevious": "Anterior",
-						"sFirst": "Primeiro",
-						"sLast": "Último"
-					},
-					"oAria": {
-						"sSortAscending": ": Ordenar colunas de forma ascendente",
-						"sSortDescending": ": Ordenar colunas de forma descendente"
-					}
-				},
-				"paging": true,
-				"lengthChange": true,
-				"searching": true,
-				"ordering": true,
-				"info": true,
-				"autoWidth": false,
-				"responsive": true
+			$('#example1, #example2, table.table-datatable').each(function() {
+				if (!$.fn.DataTable.isDataTable(this)) {
+					$(this).DataTable({
+						"language": {
+							"sEmptyTable": "Nenhum registro encontrado",
+							"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+							"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+							"sInfoFiltered": "(Filtrados de _MAX_ registros)",
+							"sInfoThousands": ".",
+							"sLengthMenu": "_MENU_ registros por página",
+							"sLoadingRecords": "Carregando...",
+							"sProcessing": "Processando...",
+							"sZeroRecords": "Nenhum registro encontrado",
+							"sSearch": "Pesquisar:",
+							"oPaginate": {
+								"sNext": "Próximo",
+								"sPrevious": "Anterior",
+								"sFirst": "Primeiro",
+								"sLast": "Último"
+							},
+							"oAria": {
+								"sSortAscending": ": Ordenar colunas de forma ascendente",
+								"sSortDescending": ": Ordenar colunas de forma descendente"
+							}
+						},
+						"paging": true,
+						"lengthChange": true,
+						"searching": true,
+						"ordering": true,
+						"info": true,
+						"autoWidth": false,
+						"responsive": true
+					});
+				}
 			});
 		}
 

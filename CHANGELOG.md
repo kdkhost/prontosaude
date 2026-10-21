@@ -4,6 +4,26 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2026-10-21
+
+### Adicionado & Aprimorado
+- **DataTables Responsive Integrado no Padrão Oficial AdminLTE 3 / 4**:
+  - Inclusão dos módulos oficiais `dataTables.responsive.min.js`, `responsive.bootstrap4.min.js` e folhas de estilo CSS correspondentes diretamente na base local do projeto.
+  - Implementação do controle circular expansível com **ícone verde de sinal de mais (`+`)** na primeira coluna ao abrir em telas menores ou dispositivos móveis.
+  - Alternância interativa para **sinal de menos (`-`)** com fundo vermelho ao abrir a linha filha detalhada (`child row`).
+  - Renderização organizada de colunas ocultas em lista estruturada com títulos em destaque (`dtr-title`) e dados correspondentes (`dtr-data`).
+  - Remoção de `overflow-x` impeditivo em containers `.table-responsive` para cálculo instantâneo e dinâmico dos breakpoints em tempo real via SPA.
+- **Padronização Visual Completa de Todas as Páginas e Tipografia do Sistema**:
+  - Escala de fontes padronizada estritamente em **0.875rem (14px)** para todo o painel, tabelas, formulários e inputs, alinhada à especificação oficial do AdminLTE 4 e Bootstrap 5.3.
+  - Cabeçalhos de página (`.content-header`) refinados com alinhamento flexível, espaçamento proporcional e títulos sem sobreposições.
+  - Cards (`.card` e `.box`) padronizados com bordas sutis, cantos arredondados (`0.75rem`), sombra moderna e padding uniforme.
+- **Padronização e Alinhamento Preciso de Todos os Botões**:
+  - Botões de cabeçalho ("Adicionar Novo", "Voltar") estilizados com altura consistente, tipografia seminegrito e ícones automáticos (`bi-plus-lg`, `bi-list-ul`).
+  - Botões de ação em tabelas ("Editar", "Deletar", "Visualizar") alinhados lado a lado sem quebra feia (`white-space: nowrap`), tamanho `btn-xs` / `btn-sm` (28px de altura) e ícones padronizados (`bi-pencil-square`, `bi-trash3`).
+  - Botões de formulário alinhados no grid do formulário (`.col-sm-offset-2` / `.offset-sm-2`) e no rodapé dos cards (`.card-footer`).
+
+---
+
 ## [2.7.0] - 2026-10-21
 
 ### Corrigido & Aprimorado

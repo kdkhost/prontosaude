@@ -221,69 +221,341 @@ body {
   color: #664d03;
 }
 
-/* Tabelas DataTables no estilo AdminLTE 4 */
+/* ==========================================================================
+   Tabelas DataTables no Estilo AdminLTE 3 / 4 (com Suporte Total a Responsive)
+   ========================================================================== */
 .table {
   width: 100% !important;
   margin-bottom: 1rem;
   vertical-align: middle;
+  border-collapse: separate !important;
+  border-spacing: 0;
 }
 .table thead th {
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: rgba(0, 0, 0, 0.035);
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.785rem;
+  font-size: 0.8125rem;
   letter-spacing: 0.04em;
-  color: var(--bs-secondary-color, #64748b);
-  border-bottom: 2px solid var(--bs-border-color);
+  color: var(--bs-secondary-color, #475569);
+  border-bottom: 2px solid var(--bs-border-color, #cbd5e1);
   padding: 0.75rem 0.85rem;
+  white-space: nowrap;
 }
 .table tbody td {
   padding: 0.75rem 0.85rem;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-color, #e2e8f0);
+  font-size: 0.875rem;
+  vertical-align: middle;
 }
 .table tbody tr:hover {
   background-color: rgba(10, 107, 116, 0.03);
 }
 
-/* Botões modernos */
+/* Permitir que o DataTables Responsive acione os breakpoints em telas menores */
+.box-body.table-responsive,
+.card-body.table-responsive {
+  overflow-x: visible !important;
+  padding: 1.25rem;
+}
+@media (max-width: 767.98px) {
+  .box-body.table-responsive,
+  .card-body.table-responsive {
+    padding: 0.75rem;
+  }
+}
+
+/* ==========================================================================
+   DataTables Responsive - Estilo Oficial AdminLTE 3 / 4 (Botão Circular + / -)
+   ========================================================================== */
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
+  position: relative;
+  padding-left: 32px !important;
+  cursor: pointer;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
+  top: 50%;
+  left: 8px;
+  height: 16px;
+  width: 16px;
+  margin-top: -9px;
+  display: block;
+  position: absolute;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.35);
+  box-sizing: content-box;
+  text-align: center;
+  text-indent: 0 !important;
+  font-family: monospace, -apple-system, sans-serif;
+  line-height: 15px;
+  content: "+";
+  background-color: #28a745 !important; /* Verde Oficial do AdminLTE 3 */
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Quando expandido: botão fica vermelho com sinal de menos */
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.dtr-control:before {
+  content: "-";
+  background-color: #dc3545 !important; /* Vermelho Oficial ao expandir */
+}
+
+/* Linha Filha de Detalhes Expandidos (Child Row) */
+table.dataTable > tbody > tr.child {
+  padding: 0.5rem 1rem;
+  background-color: rgba(10, 107, 116, 0.02) !important;
+}
+table.dataTable > tbody > tr.child:hover {
+  background-color: rgba(10, 107, 116, 0.04) !important;
+}
+table.dataTable > tbody > tr.child td.child {
+  padding: 0.85rem 1.25rem !important;
+}
+table.dataTable > tbody > tr.child ul.dtr-details {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+table.dataTable > tbody > tr.child ul.dtr-details > li {
+  border-bottom: 1px dashed var(--bs-border-color, #e2e8f0);
+  padding: 0.6rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+table.dataTable > tbody > tr.child ul.dtr-details > li:last-child {
+  border-bottom: none;
+}
+table.dataTable > tbody > tr.child span.dtr-title {
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--bs-heading-color, #1e293b);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  min-width: 140px;
+}
+table.dataTable > tbody > tr.child span.dtr-data {
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* ==========================================================================
+   Controles do DataTables (Busca, Tamanho da Página, Paginação e Informações)
+   ========================================================================== */
+.dataTables_wrapper {
+  font-size: 0.875rem;
+}
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+  margin-bottom: 1rem;
+}
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--bs-body-color);
+}
+.dataTables_wrapper .dataTables_length select {
+  border-radius: 0.4rem;
+  padding: 0.35rem 1.75rem 0.35rem 0.65rem;
+  border: 1px solid var(--bs-border-color, #cbd5e1);
+  font-size: 0.875rem;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+.dataTables_wrapper .dataTables_filter input {
+  border-radius: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--bs-border-color, #cbd5e1);
+  font-size: 0.875rem;
+  margin-left: 0.25rem;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.dataTables_wrapper .dataTables_filter input:focus {
+  border-color: var(--ps-primary);
+  box-shadow: 0 0 0 0.2rem rgba(10, 107, 116, 0.15);
+}
+.dataTables_wrapper .dataTables_info {
+  font-size: 0.8125rem;
+  color: var(--bs-secondary-color, #64748b);
+  padding-top: 0.85rem;
+}
+.dataTables_wrapper .dataTables_paginate {
+  padding-top: 0.65rem;
+}
+.dataTables_wrapper .dataTables_paginate .pagination {
+  margin: 0;
+  font-size: 0.8125rem;
+}
+.dataTables_wrapper .dataTables_paginate .page-item .page-link {
+  border-radius: 0.35rem;
+  margin: 0 0.15rem;
+  padding: 0.35rem 0.75rem;
+  color: var(--ps-primary);
+}
+.dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
+  background-color: var(--ps-primary);
+  border-color: var(--ps-primary);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   Padronização e Alinhamento de Todos os Botões do Sistema
+   ========================================================================== */
 .btn {
   border-radius: 0.5rem;
   font-weight: 500;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  line-height: 1.4;
+  vertical-align: middle;
 }
-.btn-xs {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  border-radius: 0.35rem;
+.btn:hover {
+  transform: translateY(-1px);
 }
+
+/* Botões Pequenos (btn-sm / btn-xs) para Tabelas e Ações */
+.btn-sm, .btn-xs {
+  padding: 0.3rem 0.65rem !important;
+  font-size: 0.8125rem !important;
+  border-radius: 0.4rem !important;
+  font-weight: 500 !important;
+  gap: 0.35rem !important;
+  line-height: 1.4 !important;
+}
+
+/* Botões Primários e de Destaque */
 .btn-primary {
   background-color: var(--ps-primary) !important;
   border-color: var(--ps-primary) !important;
+  color: #ffffff !important;
 }
 .btn-primary:hover {
   background-color: var(--ps-primary-hover) !important;
   border-color: var(--ps-primary-hover) !important;
+  color: #ffffff !important;
+}
+.btn-success {
+  background-color: var(--ps-success) !important;
+  border-color: var(--ps-success) !important;
+  color: #ffffff !important;
+}
+.btn-danger {
+  background-color: var(--ps-danger) !important;
+  border-color: var(--ps-danger) !important;
+  color: #ffffff !important;
+}
+.btn-secondary, .btn-default {
+  background-color: #64748b !important;
+  border-color: #64748b !important;
+  color: #ffffff !important;
+}
+.btn-secondary:hover, .btn-default:hover {
+  background-color: #475569 !important;
+  border-color: #475569 !important;
+  color: #ffffff !important;
 }
 
-/* Formulários */
+/* Alinhamento de Botões na Última Coluna (Ações) das Tabelas */
+table td:last-child {
+  white-space: nowrap !important;
+  text-align: center;
+}
+table td:last-child .btn,
+table td.action-cell .btn {
+  margin: 0.1rem 0.15rem !important;
+}
+
+/* Ícones Automáticos Padronizados em Botões de Tabela */
+table td a[href*="-edit.php"]:not(:has(i))::before,
+table td a.btn-primary:not(:has(i))::before {
+  content: "\F4CB"; /* bi-pencil-square */
+  font-family: "bootstrap-icons";
+  font-size: 0.85rem;
+}
+table td a[data-toggle="modal"]:not(:has(i))::before,
+table td a.btn-danger:not(:has(i))::before {
+  content: "\F5DE"; /* bi-trash3 */
+  font-family: "bootstrap-icons";
+  font-size: 0.85rem;
+}
+table td a.btn-info:not(:has(i))::before {
+  content: "\F341"; /* bi-eye */
+  font-family: "bootstrap-icons";
+  font-size: 0.85rem;
+}
+
+/* Botões do Cabeçalho da Página */
+.content-header-right a.btn {
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  padding: 0.5rem 1rem !important;
+  box-shadow: 0 2px 6px rgba(10, 107, 116, 0.25) !important;
+}
+.content-header-right a.btn:not(:has(i))::before {
+  content: "\F4FE"; /* bi-plus-lg */
+  font-family: "bootstrap-icons";
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   Formulários e Alinhamento de Grid
+   ========================================================================== */
 .form-control, .form-select {
   border-radius: 0.5rem;
   border: 1px solid var(--bs-border-color, #cbd5e1);
-  padding: 0.55rem 0.85rem;
-  font-size: 0.9rem;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.875rem;
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
 }
 .form-control:focus, .form-select:focus {
   border-color: var(--ps-primary);
   box-shadow: 0 0 0 0.25rem rgba(10, 107, 116, 0.15);
 }
+.form-group {
+  margin-bottom: 1.25rem;
+}
 .control-label {
   font-weight: 600;
+  font-size: 0.875rem;
   margin-bottom: 0.35rem;
   color: var(--bs-body-color);
 }
 .control-label span {
   color: var(--bs-danger);
   margin-left: 0.2rem;
+}
+
+/* Compatibilidade do grid de formulários horizontais legados (col-sm-offset-2) */
+@media (min-width: 768px) {
+  .col-sm-offset-2, .offset-sm-2 {
+    margin-left: 16.666667% !important;
+  }
 }
 
 /* KPI Widgets Modernos */
