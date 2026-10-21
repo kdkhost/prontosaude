@@ -10,7 +10,7 @@
 </section>
 
 <section class="content">
-    <?php if($_SESSION['msg']): ?>
+    <?php if(!empty($_SESSION['msg'])): ?>
     <div class="callout callout-success">
     	<p><?= $_SESSION['msg']; ?></p>
     	<?php unset($_SESSION['msg']);?>

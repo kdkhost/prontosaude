@@ -38,33 +38,27 @@ if(isset($_POST['form1'])) {
     	// Getting the basic data for the website from database
         $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
         $statement->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($result as $config) {
-        	$favicon = $config['favicon'];
-        	$empresa = $config['empresa'];
-        	$cor = $config['color'];
-        	$logo = $config['logo'];
-        }
+        $config = $statement->fetch(PDO::FETCH_ASSOC) ?: [];
+        $favicon = $config['favicon'] ?? 'favicon.png';
+        $empresa = $config['empresa'] ?? 'Pronto Saúde';
+        $cor = !empty($config['color']) ? ltrim($config['color'], '#') : '0A6B74';
+        $logo = $config['logo'] ?? 'logo.png';
 	?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Login - <?=$empresa?></title>
+	<title>Login - <?= htmlspecialchars($empresa) ?></title>
 
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<!-- Favicon -->
-	<link href="<?php echo BASE_URL; ?>assets/uploads/<?php echo $favicon; ?>" rel="shortcut icon" type="image/png">
-
+	<link href="<?php echo BASE_URL; ?>assets/uploads/<?php echo htmlspecialchars($favicon); ?>" rel="shortcut icon" type="image/png">
 
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/ionicons.min.css">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-
+	<link rel="stylesheet" href="css/toastr.min.css">
 	<link rel="stylesheet" href="style.css">
 	<style>
 	b {
@@ -112,22 +106,22 @@ if(isset($_POST['form1'])) {
                             
                             <form class="form" method="post" action="">
                                 <div class="form-group col-md-6 mt-4 mb-4">
-                                    <img style="max-width:280px;" src="../assets/uploads/<?=$logo?>" alt="Painel Administrativo" />
+                                    <img style="max-width:280px;" src="../assets/uploads/<?= htmlspecialchars($logo) ?>" alt="Painel Administrativo" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="email" class="text-white">usuário</label><br>
-                                    <input class="form-control" placeholder="Email" name="email" type="email" autocomplete="on" autofocus>
+                                    <label for="email" class="text-white">Usuário</label><br>
+                                    <input class="form-control" placeholder="Email" name="email" type="email" autocomplete="on" autofocus required>
                                 </div>
                                 <div class="form-group">
                                     <label for="password" class="text-white">Senha</label><br>
-                                    <input class="form-control" placeholder="Senha" name="password" type="password" autocomplete="off" value="">
+                                    <input class="form-control" placeholder="Senha" name="password" type="password" autocomplete="off" value="" required>
                                 </div>
                                 <div class="form-group">
                                     <input type="submit" class="btn btn-primary btn-block btn-flat login-button" name="form1" value="Acessar">
                                 </div>
                                 <?php 
                         	        if( (isset($error_message)) && ($error_message!='') ):
-                        	            echo '<div class="error">'.$error_message.'</div>';
+                        	            echo '<div class="alert alert-danger">'.$error_message.'</div>';
                         	        endif;
                         	    ?>
                             </form>
@@ -136,5 +130,26 @@ if(isset($_POST['form1'])) {
                 </div>
             </div>
         </div>
+
+        <script src="js/jquery-2.2.4.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="js/sweetalert2.all.min.js"></script>
+        <script src="js/toastr.min.js"></script>
+        <script src="js/pronto-global.js"></script>
+        <?php if (!empty($error_message)): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Falha no Login',
+                        html: '<?= addslashes(str_replace('<br>', '<br/>', $error_message)) ?>',
+                        confirmButtonText: 'Tentar novamente',
+                        confirmButtonColor: '#0A6B74'
+                    });
+                }
+            });
+        </script>
+        <?php endif; ?>
     </body>
 </html>

@@ -1,21 +1,29 @@
 <?php require_once('header.php'); ?>
 
-<?php							
+<?php
+if(!isset($_REQUEST['ide']) || !is_numeric($_REQUEST['ide'])) {
+	header('location: extra.php');
+	exit;
+}
+
+$ide = (int)$_REQUEST['ide'];
 
 $compare = $pdo->prepare("SELECT * FROM tbl_doctor AS m 
                                 INNER JOIN tbl_designation AS f 
                                 INNER JOIN tbl_especialidade AS e 
                                 INNER JOIN tbl_department_openning_hour AS d 
                           WHERE m.id = e.medico AND d.oh_id = e.semana AND f.designation_id = e.funcao AND e.ide = ?");
-$compare->execute(array($_REQUEST['ide']));
-	            	$resultado = $compare->fetchAll(PDO::FETCH_ASSOC);
-	            	foreach ($resultado as $funcao){
-	            	    
-	            	}
-?>
+$compare->execute(array($ide));
+$funcao = $compare->fetch(PDO::FETCH_ASSOC);
 
+if(!$funcao) {
+	header('location: extra.php');
+	exit;
+}
 
-<?php
+$error_message = '';
+$success_message = '';
+
 if(isset($_POST['form1'])) {
 	$valid = 1;
 	
@@ -31,34 +39,22 @@ if(isset($_POST['form1'])) {
         
     if($valid == 1) {
     	// updating into the database
-		$data = $pdo->prepare("UPDATE tbl_especialidade SET inicio=?, fim=?, semana=?, funcao=?, clinica=? WHERE ide={$_REQUEST['ide']}");
-		$data->execute(array($_POST['inicio'], $_POST['fim'], $_POST['semana'], $_POST['funcao'], $_POST['clinica']));
+		$data = $pdo->prepare("UPDATE tbl_especialidade SET inicio=?, fim=?, semana=?, funcao=?, clinica=? WHERE ide=?");
+		$data->execute(array($_POST['inicio'], $_POST['fim'], $_POST['semana'], $_POST['funcao'], $_POST['clinica'], $ide));
     	    	
-    	$success_message = 'A Função de <b>' . $funcao['name'] . '</b> foi Atualizada com Sucesso.';
+    	$success_message = 'A Função de <b>' . htmlspecialchars($funcao['name'] ?? '', ENT_QUOTES, 'UTF-8') . '</b> foi Atualizada com Sucesso.';
+		$funcao['inicio'] = $_POST['inicio'];
+		$funcao['fim'] = $_POST['fim'];
+		$funcao['semana'] = $_POST['semana'];
+		$funcao['funcao'] = $_POST['funcao'];
+		$funcao['clinica'] = $_POST['clinica'];
     }
-}
-?>
-
-<?php
-if(!isset($_REQUEST['ide'])) {
-	header('location: logout.php');
-	exit;
-} else {
-	// Check the id is valid or not
-	$statement = $pdo->prepare("SELECT * FROM tbl_especialidade WHERE ide=?");
-	$statement->execute(array($_REQUEST['ide']));
-	$total = $statement->rowCount();
-	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
-	if( $total == 0 ) {
-		header('location: logout.php');
-		exit;
-	}
 }
 ?>
 
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Editar Especialidade de <?php if($funcao['medico'] == $funcao['id']){ echo $funcao['name'];} ?></h1>
+		<h1>Editar Especialidade de <?php echo htmlspecialchars($funcao['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?></h1>
 	</div>
 	<div class="content-header-right">
 		<a href="extra.php" class="btn btn-primary btn-sm">Visualizar Todas</a>
@@ -107,11 +103,10 @@ if(!isset($_REQUEST['ide'])) {
 									<?php
 									$eth = $pdo->prepare("SELECT * FROM tbl_department_openning_hour ORDER BY oh_id ASC");
 									$eth->execute();
-									$resy = $eth->fetchAll();							
-									foreach ($resy as $r) {
-									foreach ($resultado as $funcao){?>
-										<option value="<?=$r['oh_id']?>" <?php if($r['oh_id'] == $funcao['semana']){echo 'selected';} ?>><?=$r['oh_day']?></option>
-									<?php }}?>
+									$resy = $eth->fetchAll(PDO::FETCH_ASSOC);							
+									foreach ($resy as $r) { ?>
+										<option value="<?=$r['oh_id']?>" <?php if($r['oh_id'] == ($funcao['semana'] ?? '')){echo 'selected';} ?>><?=$r['oh_day']?></option>
+									<?php }?>
 								</select>
 							</div>
 						</div>

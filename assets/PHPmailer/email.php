@@ -1,16 +1,37 @@
 <?php
+if (!isset($pdo)) {
+    require_once __DIR__ . '/../../admin/config.php';
+}
 
-$statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
+$receive_email = '';
+$logo = '';
+$color_email = '#0A6B74';
+$footer_copyright = '';
+$social_facebook = '#';
+$social_twitter = '#';
+
+try {
+    $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
     $statement->execute();
-    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($result as $row) {
-        $receive_email = $row['receive_email'];
-		$logo = $row['logo'];
-		$color_email = $row['color_email'];
-        $footer_copyright = $row['footer_copyright'];
-    	$social_facebook = $row['social_facebook'];
-    	$social_twitter = $row['social_twitter'];
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    if ($result) {
+        $receive_email = $result['receive_email'] ?? '';
+        $logo = $result['logo'] ?? '';
+        $color_email = !empty($result['color']) ? '#' . ltrim($result['color'], '#') : '#0A6B74';
+        $footer_copyright = $result['footer_copyright'] ?? '';
     }
+
+    $stmt_social = $pdo->query("SELECT social_name, social_url FROM tbl_social");
+    while ($srow = $stmt_social->fetch(PDO::FETCH_ASSOC)) {
+        if (stripos($srow['social_name'] ?? '', 'facebook') !== false) {
+            $social_facebook = $srow['social_url'] ?? '#';
+        } elseif (stripos($srow['social_name'] ?? '', 'twitter') !== false) {
+            $social_twitter = $srow['social_url'] ?? '#';
+        }
+    }
+} catch (Exception $e) {
+    // Falha silenciosa com valores padrão
+}
 
 define('HEADER', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

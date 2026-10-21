@@ -1,0 +1,8 @@
+error_log
+*/error_log
+*/*/error_log
+*.log
+.user.ini
+php.ini
+.DS_Store
+Thumbs.db

@@ -198,6 +198,9 @@
 	<script src="<?php echo BASE_URL; ?>assets/js/jquery.mixitup.min.js"></script>
 	<script src="<?php echo BASE_URL; ?>assets/js/jquery.magnific-popup.min.js"></script>
 	<script src="<?php echo BASE_URL; ?>assets/js/custom.js"></script>
+	<script src="<?php echo BASE_URL; ?>assets/js/sweetalert2.all.min.js"></script>
+	<script src="<?php echo BASE_URL; ?>assets/js/toastr.min.js"></script>
+	<script src="<?php echo BASE_URL; ?>assets/js/pronto-global.js"></script>
 
 	
 	<script>

@@ -17,11 +17,11 @@ require_once('header.php');
 			<div class="box box-info">
 				<div class="box-body table-responsive">
 				    
-				    <?php if($_SESSION['sucesso']){?>
+				    <?php if(!empty($_SESSION['sucesso'])){?>
 				    <div class="callout callout-success">
         			    <p><?= $_SESSION['sucesso']; ?></p>
         			</div>
-				    <?php unset($_SESSION['sucesso']); } if($_SESSION['erro']){ ?>
+				    <?php unset($_SESSION['sucesso']); } if(!empty($_SESSION['erro'])){ ?>
 				        <div class="callout callout-danger">
 				            <p><?= $_SESSION['erro']; ?></p>
         			    </div>

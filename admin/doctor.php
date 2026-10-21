@@ -14,11 +14,11 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="box box-info">
-			    <?php if($_SESSION['msg']){ ?>
+			    <?php if(!empty($_SESSION['msg'])){ ?>
 		            <div id="alert" class="callout callout-success">
 		                <?php echo $_SESSION['msg']; unset($_SESSION['msg']);?>
 		            </div>
-		        <?php }elseif($_SESSION['erro']){?>
+		        <?php }elseif(!empty($_SESSION['erro'])){?>
 		            <div id="alert" class="callout callout-danger">
 		                <?php echo $_SESSION['erro']; unset($_SESSION['erro']);?>
 		            </div>

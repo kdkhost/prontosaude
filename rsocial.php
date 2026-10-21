@@ -38,7 +38,7 @@
 				<?= $detalhes ;?>
 				<p>
 				    Estes Termos foram Atualizados em nossos websites em 
-				    <?= ucfirst(strftime('%B de %Y', strtotime($atualizado))) ;?>.
+				    <?= formata_mes_ano($atualizado ?? ''); ?>.
 				</p>
 			</div>
 		</div>

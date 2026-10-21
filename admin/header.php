@@ -57,18 +57,17 @@ if($_SESSION['user']['role']=='Publisher') {
     	// Getting the basic data for the website from database
         $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
         $statement->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($result as $row) {
-        	$favicon = $row['favicon'];
-        	$receive_email = $row['receive_email'];
-        }
+        $row = $statement->fetch(PDO::FETCH_ASSOC) ?: [];
+        $favicon = $row['favicon'] ?? 'favicon.png';
+        $receive_email = $row['receive_email'] ?? '';
+        $empresa = $row['empresa'] ?? 'Pronto Saúde';
 	?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Painel Admin | <?= $row['empresa']; ?></title>
+	<title>Painel Admin | <?= htmlspecialchars($empresa); ?></title>
 	
 	
 	<style>
@@ -109,8 +108,9 @@ if($_SESSION['user']['role']=='Publisher') {
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	
     <!-- Favicon -->
-	<link href="<?php echo BASE_URL; ?>assets/uploads/<?php echo $favicon; ?>" rel="shortcut icon" type="image/png">
+	<link href="<?php echo BASE_URL; ?>assets/uploads/<?php echo htmlspecialchars($favicon); ?>" rel="shortcut icon" type="image/png">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/toastr.min.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/ionicons.min.css">
 	<link rel="stylesheet" href="css/datepicker3.css">

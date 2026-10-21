@@ -2,59 +2,6 @@
 
 	</div>
 
-    <script>
-      $('#1').summernote({
-        placeholder: 'Descrição sobre o serviço',
-        tabsize: 2,
-        height: 120,
-        lang: 'pt-BR',
-        toolbar: [
-          ['font', ['bold', 'underline', 'clear']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['table', ['table']],
-          ['insert', ['link', 'picture', 'video']],
-          ['view', ['fullscreen', 'codeview']]
-        ]
-      });
-    </script>
-    
-    <script>
-      $('#2').summernote({
-        placeholder: 'Pequena Descrição sobre o serviço',
-        tabsize: 2,
-        lang: 'pt-BR',
-        toolbar: [
-          ['font', ['bold', 'underline', 'clear']],
-          ['color', ['color']],
-          ['para', ['paragraph']],
-          ['table', ['table']],
-          ['insert', ['link', 'picture', 'video']],
-          ['view', ['fullscreen', 'codeview']]
-        ]
-      });
-    </script>
-    
-    <script>
-      $('#3').summernote({
-        height: 450,
-        focus: false,
-        toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'italic', 'underline', 'clear']],
-                ['fontname', ['fontname']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['height', ['height']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'hr']],
-                ['color', ['color']],
-                ['view', ['fullscreen', 'codeview']]
-              ],
-        airMode: false
-      });
-      
-    </script>
-
 	<script src="js/jquery-2.2.4.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/jquery.dataTables.min.js"></script>
@@ -76,89 +23,163 @@
     <script src="js/on-off-switch-onload.js"></script>
 	<script src="ckeditor/ckeditor.js"></script>
 	<script src="js/demo.js"></script>
-	
-	
+	<script src="js/sweetalert2.all.min.js"></script>
+	<script src="js/toastr.min.js"></script>
+	<script src="js/pronto-global.js"></script>
 
 	<script>
 	  $(function () {
-	    //Initialize Select2 Elements
-	    $(".select2").select2();
+	    // Inicialização segura do Summernote
+	    if ($.fn.summernote) {
+	      $('#1').summernote({
+	        placeholder: 'Descrição sobre o serviço',
+	        tabsize: 2,
+	        height: 120,
+	        lang: 'pt-BR',
+	        toolbar: [
+	          ['font', ['bold', 'underline', 'clear']],
+	          ['color', ['color']],
+	          ['para', ['ul', 'ol', 'paragraph']],
+	          ['table', ['table']],
+	          ['insert', ['link', 'picture', 'video']],
+	          ['view', ['fullscreen', 'codeview']]
+	        ]
+	      });
 
-	    //Datemask dd/mm/yyyy
-	    $("#datemask").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
-	    //Datemask2 mm/dd/yyyy
-	    $("#datemask2").inputmask("mm-dd-yyyy", {"placeholder": "mm-dd-yyyy"});
-	    //Money Euro
-	    $("[data-mask]").inputmask();
+	      $('#2').summernote({
+	        placeholder: 'Pequena Descrição sobre o serviço',
+	        tabsize: 2,
+	        lang: 'pt-BR',
+	        toolbar: [
+	          ['font', ['bold', 'underline', 'clear']],
+	          ['color', ['color']],
+	          ['para', ['paragraph']],
+	          ['table', ['table']],
+	          ['insert', ['link', 'picture', 'video']],
+	          ['view', ['fullscreen', 'codeview']]
+	        ]
+	      });
 
-	    //Date picker
-	    $('#datepicker').datepicker({
-	      autoclose: true,
-	      format: 'dd-mm-yyyy',
-	      todayBtn: 'linked',
-	    });
+	      $('#3').summernote({
+	        height: 450,
+	        focus: false,
+	        toolbar: [
+	          ['style', ['style']],
+	          ['font', ['bold', 'italic', 'underline', 'clear']],
+	          ['fontname', ['fontname']],
+	          ['para', ['ul', 'ol', 'paragraph']],
+	          ['height', ['height']],
+	          ['table', ['table']],
+	          ['insert', ['link', 'picture', 'hr']],
+	          ['color', ['color']],
+	          ['view', ['fullscreen', 'codeview']]
+	        ],
+	        airMode: false
+	      });
+	    }
+
+	    // Initialize Select2 Elements
+	    if ($.fn.select2) {
+	      $(".select2").select2();
+	    }
+
+	    // Datemask dd/mm/yyyy
+	    if ($.fn.inputmask) {
+	      $("#datemask").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
+	      $("#datemask2").inputmask("mm-dd-yyyy", {"placeholder": "mm-dd-yyyy"});
+	      $("[data-mask]").inputmask();
+	    }
+
+	    // Date picker
+	    if ($.fn.datepicker) {
+	      $('#datepicker, #datepicker1').datepicker({
+	        autoclose: true,
+	        format: 'dd-mm-yyyy',
+	        todayBtn: 'linked'
+	      });
+	    }
 	    
-	    $('#prontosaude').datetimepicker({
+	    if ($.fn.datetimepicker) {
+	      $('#prontosaude').datetimepicker({
 	        format: 'yyyy-mm-dd hh:ii',
-            language : "pt-BR",
-        });
+	        language: "pt-BR"
+	      });
+	    }
 
-	    $('#datepicker1').datepicker({
-	      autoclose: true,
-	      format: 'dd-mm-yyyy',
-	      todayBtn: 'linked',
-	    });
+	    // iCheck
+	    if ($.fn.iCheck) {
+	      $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+	        checkboxClass: 'icheckbox_minimal-blue',
+	        radioClass: 'iradio_minimal-blue'
+	      });
+	      $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+	        checkboxClass: 'icheckbox_minimal-red',
+	        radioClass: 'iradio_minimal-red'
+	      });
+	      $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+	        checkboxClass: 'icheckbox_flat-green',
+	        radioClass: 'iradio_flat-green'
+	      });
+	    }
 
-	    //iCheck for checkbox and radio inputs
-	    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-	      checkboxClass: 'icheckbox_minimal-blue',
-	      radioClass: 'iradio_minimal-blue'
-	    });
-	    //Red color scheme for iCheck
-	    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-	      checkboxClass: 'icheckbox_minimal-red',
-	      radioClass: 'iradio_minimal-red'
-	    });
-	    //Flat red color scheme for iCheck
-	    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-	      checkboxClass: 'icheckbox_flat-green',
-	      radioClass: 'iradio_flat-green'
-	    });
+        if ($.fn.DataTable) {
+          if ($('#minhaTabela').length) {
+            $('#minhaTabela').DataTable({
+              "language": {
+                "lengthMenu": "Mostrando _MENU_ registros por página",
+                "zeroRecords": "Nada encontrado",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponível",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)"
+              }
+            });
+          }
 
-        $(document).ready(function(){
-              $('#minhaTabela').DataTable({
-                	"language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
-                    }
-                });
-          });
-         
+          if ($('#example1').length) {
+            $("#example1").DataTable();
+          }
 
-
-	    $("#example1").DataTable();
-	    $('#example2').DataTable({
-	      "paging": true,
-	      "lengthChange": false,
-	      "searching": false,
-	      "ordering": true,
-	      "info": true,
-	      "autoWidth": false
-	    });
+          if ($('#example2').length) {
+            $('#example2').DataTable({
+              "paging": true,
+              "lengthChange": false,
+              "searching": false,
+              "ordering": true,
+              "info": true,
+              "autoWidth": false
+            });
+          }
+        }
 
 	    $('#confirm-delete').on('show.bs.modal', function(e) {
 	      $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 	    });
- 
+
+        // Conversão automática de .callout alerts para notificações Toastr
+        $('.callout-success').each(function() {
+            var text = $(this).text().trim();
+            if (text && typeof toastr !== 'undefined') {
+                toastr.success(text, 'Sucesso');
+            }
+        });
+        $('.callout-danger').each(function() {
+            var text = $(this).text().trim();
+            if (text && typeof toastr !== 'undefined') {
+                toastr.error(text, 'Atenção');
+            }
+        });
+
+        // Efeito fade para callouts existentes
+        setTimeout(function () {
+          $(".callout").fadeOut();
+        }, 4000);
 	  });
 
 	  $(document).ready(function () {
-	    	CKEDITOR.replace( 'editor1' );
+	    if (typeof CKEDITOR !== 'undefined' && $('#editor1').length) {
+	      CKEDITOR.replace('editor1');
+	    }
 	  }); 
-
 	</script>
 
 	<script type="text/javascript">
@@ -188,76 +209,35 @@
 	</script>
 
 	<script type="text/javascript">
-
         $(document).ready(function () {
-
             $("#btnAddFaq").click(function () {
-
-                var trNew1 = "";
-
-                var fqTitle = '<input autocomplete="off" type="text" class="form-control" name="fq_title[]" style="width:100%">';
-				
-				var fqContent = '<textarea  class="form-control" cols="30" rows="10" name="fq_content[]" style="width:100%;height:50px;"></textarea>';
-
-                var fqDelete = '<a href="javascript:void()" class="Delete1 btn btn-danger btn-xs">X</a>';
-
-                trNew1 = trNew1 + '<tr> ';
-
-                trNew1 += '<td>' + fqTitle + '</td>';
-                trNew1 += '<td>' + fqContent + '</td>';
-                trNew1 += '<td>' + fqDelete + '</td>';
-
-                trNew1 = trNew1 + ' </tr>';
-
+                var trNew1 = '<tr>' +
+                    '<td><input autocomplete="off" type="text" class="form-control" name="fq_title[]" style="width:100%"></td>' +
+                    '<td><textarea class="form-control" cols="30" rows="10" name="fq_content[]" style="width:100%;height:50px;"></textarea></td>' +
+                    '<td><a href="javascript:void(0)" class="Delete1 btn btn-danger btn-xs">X</a></td>' +
+                    '</tr>';
                 $("#fqSection tbody").append(trNew1);
-
             });
 
             $('#fqSection').delegate('a.Delete1', 'click', function () {
-                $(this).parent().parent().fadeOut('slow').remove();
+                $(this).closest('tr').fadeOut('slow', function() { $(this).remove(); });
                 return false;
             });
 
-        });
-
-
-        $(document).ready(function () {
-
             $("#btnAddOpenningHour").click(function () {
-
-                var trNew1 = "";
-
-                var fqTitle = '<input autocomplete="off" type="text" class="form-control" name="oh_day[]" style="width:100%">';
-				
-				var fqContent = '<input autocomplete="off" type="text" class="form-control" name="oh_time[]" style="width:100%">';
-
-                var fqDelete = '<a href="javascript:void()" class="Delete1 btn btn-danger btn-xs">X</a>';
-
-                trNew1 = trNew1 + '<tr> ';
-
-                trNew1 += '<td>' + fqTitle + '</td>';
-                trNew1 += '<td>' + fqContent + '</td>';
-                trNew1 += '<td>' + fqDelete + '</td>';
-
-                trNew1 = trNew1 + ' </tr>';
-
+                var trNew1 = '<tr>' +
+                    '<td><input autocomplete="off" type="text" class="form-control" name="oh_day[]" style="width:100%"></td>' +
+                    '<td><input autocomplete="off" type="text" class="form-control" name="oh_time[]" style="width:100%"></td>' +
+                    '<td><a href="javascript:void(0)" class="Delete1 btn btn-danger btn-xs">X</a></td>' +
+                    '</tr>';
                 $("#ohSection tbody").append(trNew1);
-
             });
 
             $('#ohSection').delegate('a.Delete1', 'click', function () {
-                $(this).parent().parent().fadeOut('slow').remove();
+                $(this).closest('tr').fadeOut('slow', function() { $(this).remove(); });
                 return false;
             });
-
         });
-
-        $(".callout").show();
-        setTimeout(function () {
-          $(".callout").hide();
-        }, 3000);
-        
     </script>
-
 </body>
 </html>

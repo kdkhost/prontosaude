@@ -2,44 +2,30 @@
 require_once('header.php');
 
 // Preventing the direct access of this page.
-if(!isset($_REQUEST['slug']))
+$slug = trim($_REQUEST['slug'] ?? '');
+if(empty($slug))
 {
 	header('location: index.php');
 	exit;
-}
-else
-{
-	// Check the page slug is valid or not.
-	$statement = $pdo->prepare("SELECT * FROM tbl_page WHERE page_slug=? AND status=?");
-	$statement->execute(array($_REQUEST['slug'],'Active'));
-	$total = $statement->rowCount();
-	if( $total == 0 )
-	{
-		header('location: index.php');
-		exit;
-	}
 }
 
 // Getting the detailed data of a page from page slug
-$statement = $pdo->prepare("SELECT * FROM tbl_page WHERE page_slug=?");
-$statement->execute(array($_REQUEST['slug']));
-$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
-foreach ($result as $row) 
-{
-	$page_name    = $row['page_name'];
-	$page_slug    = $row['page_slug'];
-	$page_content = $row['page_content'];
-	$page_layout  = $row['page_layout'];
-	$banner       = $row['banner'];
-	$status       = $row['status'];
-}
+$statement = $pdo->prepare("SELECT * FROM tbl_page WHERE page_slug=? AND status=?");
+$statement->execute(array($slug, 'Active'));
+$row = $statement->fetch(PDO::FETCH_ASSOC);
 
-// If a page is not active, redirect the user while direct URL press
-if($status == 'Inactive')
+if (!$row)
 {
 	header('location: index.php');
 	exit;
 }
+
+$page_name    = $row['page_name'] ?? '';
+$page_slug    = $row['page_slug'] ?? '';
+$page_content = $row['page_content'] ?? '';
+$page_layout  = $row['page_layout'] ?? '';
+$banner       = $row['banner'] ?? '';
+$status       = $row['status'] ?? '';
 ?>
 		
 		
@@ -261,25 +247,16 @@ $visitor_email = $_POST['visitor_email'];
 				$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 				foreach ($result as $row) {
 					$i++;
-					?>
-					<?php
-					    $categoria = $pdo->prepare("SELECT * FROM tbl_faq WHERE faq_category_id=?");
-						$categoria->execute(array($row['faq_category_id']));
-						$res = $categoria->fetchAll(PDO::FETCH_ASSOC);
-					?>
-					<h1>
-					    <?php
-					        if($res[0]["faq_category_id"] != null){
-					            echo $row['faq_category_name'];
-					        }
-					    ?>
-					    
-					</h1>
+					$statement1 = $pdo->prepare("SELECT * FROM tbl_faq WHERE faq_category_id=?");
+					$statement1->execute(array($row['faq_category_id']));
+					$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);							
+					if (empty($result1)) {
+						continue;
+					}
+				?>
+				<h1><?php echo htmlspecialchars($row['faq_category_name'] ?? ''); ?></h1>
 					<div class="panel-group" id="accordion<?php echo $i; ?>" role="tablist" aria-multiselectable="true">
 						<?php
-						$statement1 = $pdo->prepare("SELECT * FROM tbl_faq WHERE faq_category_id=?");
-						$statement1->execute(array($row['faq_category_id']));
-						$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);							
 						foreach ($result1 as $row1) {
 							$j++;
 							?>

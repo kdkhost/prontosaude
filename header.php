@@ -7,21 +7,11 @@ $error_message = '';
 $success_message = '';
 ?>
 <?php
-// Delete all subscribers who did not confirm email within 1 day / 24 hours
-$statement = $pdo->prepare("SELECT * FROM tbl_subscriber WHERE subs_active=0");
-$statement->execute();
-$result = $statement->fetchAll(PDO::FETCH_ASSOC);
-foreach ($result as $row) {
-    $subs_date_time = $row['subs_date_time'];
-    $current_date_time = date('Y-m-d H:i:s');
-    $t1 = strtotime($subs_date_time);
-    $t2 = strtotime($current_date_time);
-    $diff = $t2 - $t1;
-    $res = floor($diff / (60));
-    if ($res > 1440) {
-        $statement1 = $pdo->prepare("DELETE FROM tbl_subscriber WHERE subs_id=?");
-        $statement1->execute(array($row['subs_id']));
-    }
+// Remove subscrições inativas com mais de 24 horas de forma otimizada
+try {
+    $pdo->exec("DELETE FROM tbl_subscriber WHERE subs_active=0 AND subs_date_time < NOW() - INTERVAL 1 DAY");
+} catch (Exception $e) {
+    // Falha silenciosa
 }
 // Getting the basic data for the website from database
 $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
@@ -94,77 +84,96 @@ $email   = $row2['dep_email'] ?? '';
         <?php
 // Getting the current page URL
         $cur_page = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], "/") + 1);
+        $req_slug = $_REQUEST['slug'] ?? '';
+
+        $og_photo = '';
+        $og_title = '';
+        $og_slug = '';
+        $og_description = '';
+        $titulo = $meta_title_home;
+        $detalhes = '';
+        $atualizado = date('Y-m-d');
+        $banner = '';
 
         if ($cur_page == 'news.php') {
-            $statement = $pdo->prepare("SELECT * FROM tbl_news WHERE news_slug=?");
-            $statement->execute(array($_REQUEST['slug']));
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-                $og_photo = $row['photo'];
-                $og_title = $row['news_title'];
-                $og_slug = $row['news_slug'];
-                $og_description = substr(strip_tags($row['news_content']), 0, 200) . '...';
-                echo '<meta name="description" content="' . $row['meta_description'] . '">';
-                echo '<meta name="keywords" content="' . $row['meta_keyword'] . '">';
-                echo '<title>' . $row['meta_title'] . '</title>';
-                echo '<meta property="og:type" content="article" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image:alt" content="'.$og_title.'" />
-                      <meta property="og:url" content="" />';
+            if (!empty($req_slug)) {
+                $statement = $pdo->prepare("SELECT * FROM tbl_news WHERE news_slug=?");
+                $statement->execute(array($req_slug));
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($result as $row) {
+                    $og_photo = $row['photo'] ?? '';
+                    $og_title = $row['news_title'] ?? '';
+                    $og_slug = $row['news_slug'] ?? '';
+                    $og_description = substr(strip_tags($row['news_content'] ?? ''), 0, 200) . '...';
+                    echo '<meta name="description" content="' . htmlspecialchars($row['meta_description'] ?? '') . '">';
+                    echo '<meta name="keywords" content="' . htmlspecialchars($row['meta_keyword'] ?? '') . '">';
+                    echo '<title>' . htmlspecialchars($row['meta_title'] ?? '') . '</title>';
+                    echo '<meta property="og:type" content="article" />
+                          <meta property="og:image" content="' . BASE_URL . 'assets/uploads/' . htmlspecialchars($og_photo) . '" />
+                          <meta property="og:image:alt" content="' . htmlspecialchars($og_title) . '" />
+                          <meta property="og:url" content="' . BASE_URL . 'news/' . htmlspecialchars($og_slug) . '" />';
+                }
+            }
+            if (empty($og_title)) {
+                echo '<title>Notícias | ' . htmlspecialchars($meta_title_home) . '</title>';
             }
         }
 
         if ($cur_page == 'page.php') {
-            $statement = $pdo->prepare("SELECT * FROM tbl_page WHERE page_slug=?");
-            $statement->execute(array($_REQUEST['slug']));
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-                echo '<meta name="description" content="' . $row['meta_description'] . '">';
-                echo '<meta name="keywords" content="' . $row['meta_keyword'] . '">';
-                echo '<title>' . $row['meta_title'] . '</title>';
+            if (!empty($req_slug)) {
+                $statement = $pdo->prepare("SELECT * FROM tbl_page WHERE page_slug=?");
+                $statement->execute(array($req_slug));
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($result as $row) {
+                    echo '<meta name="description" content="' . htmlspecialchars($row['meta_description'] ?? '') . '">';
+                    echo '<meta name="keywords" content="' . htmlspecialchars($row['meta_keyword'] ?? '') . '">';
+                    echo '<title>' . htmlspecialchars($row['meta_title'] ?? '') . '</title>';
+                }
             }
         }
 
         if ($cur_page == 'category.php') {
-            $statement = $pdo->prepare("SELECT * FROM tbl_category WHERE category_slug=?");
-            $statement->execute(array($_REQUEST['slug']));
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-                echo '<meta name="description" content="' . $row['meta_description'] . '">';
-                echo '<meta name="keywords" content="' . $row['meta_keyword'] . '">';
-                echo '<title>' . $row['meta_title'] . '</title>';
-                echo '<meta property="og:type" content="website" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image:alt" content="" />
-                      <meta property="og:url" content="" />';
+            if (!empty($req_slug)) {
+                $statement = $pdo->prepare("SELECT * FROM tbl_category WHERE category_slug=?");
+                $statement->execute(array($req_slug));
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($result as $row) {
+                    echo '<meta name="description" content="' . htmlspecialchars($row['meta_description'] ?? '') . '">';
+                    echo '<meta name="keywords" content="' . htmlspecialchars($row['meta_keyword'] ?? '') . '">';
+                    echo '<title>' . htmlspecialchars($row['meta_title'] ?? '') . '</title>';
+                    echo '<meta property="og:type" content="website" />
+                          <meta property="og:image" content="" />
+                          <meta property="og:image:alt" content="' . htmlspecialchars($row['category_name'] ?? '') . '" />
+                          <meta property="og:url" content="" />';
+                }
             }
         }
 
         if ($cur_page == 'index.php') {
-                echo '<meta name="description" content="' . $meta_description_home . '">';
-                echo '<meta name="keywords" content="' . $meta_keyword_home . '">';
-                echo '<title>' . $meta_title_home . '</title>';
+                echo '<meta name="description" content="' . htmlspecialchars($meta_description_home) . '">';
+                echo '<meta name="keywords" content="' . htmlspecialchars($meta_keyword_home) . '">';
+                echo '<title>' . htmlspecialchars($meta_title_home) . '</title>';
                 echo '<meta property="og:type" content="website" />
-                      <meta property="og:image" content="../assets/uploads/department-1.png" />
-                      <meta property="og:url" content=" " />
+                      <meta property="og:image" content="' . BASE_URL . 'assets/uploads/department-1.png" />
+                      <meta property="og:url" content="' . BASE_URL . '" />
                       <meta property="og:title" content="' . htmlspecialchars($meta_title_home) . '" />
                       <meta property="og:description" content="' . htmlspecialchars($meta_description_home) . '" />';
                 $titulo = $meta_title_home;
         }
         if ($cur_page == "service.php") {
-            $statement = $pdo->prepare("SELECT * FROM tbl_service WHERE slug=?");
-            $statement->execute(array($_REQUEST['slug']));
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-                echo '<meta name="description" content="">';
-                echo '<title>' . $row['name'] . '</title>';
-                echo '<meta property="og:type" content="website" />
-                      <meta property="og:image" content="'. BASE_URL . 'assets/uploads/'. $row['photo'] .'" />
-                      <meta property="og:url" content=" " />
-                      <meta property="og:title" content="' . $row['name'] . '" />
-                      <meta property="og:description" content="" />';
+            if (!empty($req_slug)) {
+                $statement = $pdo->prepare("SELECT * FROM tbl_service WHERE slug=?");
+                $statement->execute(array($req_slug));
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($result as $row) {
+                    echo '<meta name="description" content="">';
+                    echo '<title>' . htmlspecialchars($row['name'] ?? '') . '</title>';
+                    echo '<meta property="og:type" content="website" />
+                          <meta property="og:image" content="'. BASE_URL . 'assets/uploads/'. htmlspecialchars($row['photo'] ?? '') .'" />
+                          <meta property="og:url" content=" " />
+                          <meta property="og:title" content="' . htmlspecialchars($row['name'] ?? '') . '" />
+                          <meta property="og:description" content="" />';
+                }
             }
         }
         if ($cur_page == "odontologia.php") {
@@ -172,100 +181,89 @@ $email   = $row2['dep_email'] ?? '';
             echo "<meta name='description' content='Oferecemos tratamentos ortodônticos avançados, que corrigem a dentição, alinham a mordida e protegem os dentes. 
             Temos aparelhos que se encaixam perfeitamente ao seu estilo: colorido para quem quer causar ou estético para quem é mais discreto!'>";
             echo '<meta property="og:type" content="website" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image:alt" content="" />
-                      <meta property="og:url" content="" />';
-             }
+                  <meta property="og:image" content="" />
+                  <meta property="og:image:alt" content="Odontologia" />
+                  <meta property="og:url" content="" />';
+        }
         if($cur_page == "privacidade.php"){
-            // Getting the basic data for the website from database
             $statement = $pdo->prepare("SELECT * FROM tbl_privacidade WHERE status=1");
             $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
             foreach ($result as $row){
-                $titulo         = $row['titulo'];
-                $detalhes       = $row['detalhes'];
-                $atualizado     = $row['modificado'];
-                $banner         = $row['banner'];
+                $titulo         = $row['titulo'] ?? 'Política de Privacidade';
+                $detalhes       = $row['detalhes'] ?? '';
+                $atualizado     = $row['modificado'] ?? date('Y-m-d');
+                $banner         = $row['banner'] ?? '';
             }
             
-            echo '<title>' . $titulo . '</title>';
+            echo '<title>' . htmlspecialchars($titulo) . '</title>';
             echo '<meta property="og:type" content="website" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image:alt" content="' . $titulo . '" />
-                      <meta property="og:url" content="" />
-                      <meta property="og:title" content="' . $titulo . '" />
-                      <meta property="og:description" content="" />';
+                  <meta property="og:image" content="" />
+                  <meta property="og:image:alt" content="' . htmlspecialchars($titulo) . '" />
+                  <meta property="og:url" content="" />
+                  <meta property="og:title" content="' . htmlspecialchars($titulo) . '" />
+                  <meta property="og:description" content="" />';
         }
         if($cur_page == "rsocial.php"){
-            // Getting the basic data for the website from database
             $statement = $pdo->prepare("SELECT * FROM tbl_termos WHERE status=1");
             $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
             foreach ($result as $row){
-                $titulo         = $row['titulo'];
-                $detalhes       = $row['detalhes'];
-                $atualizado     = $row['modificado'];
-                $banner         = $row['banner'];
+                $titulo         = $row['titulo'] ?? 'Termos de Uso';
+                $detalhes       = $row['detalhes'] ?? '';
+                $atualizado     = $row['modificado'] ?? date('Y-m-d');
+                $banner         = $row['banner'] ?? '';
             }
             
-            echo '<title>' . $titulo . '</title>';
+            echo '<title>' . htmlspecialchars($titulo) . '</title>';
         }
         
         if($cur_page == "trabalhe-conosco.php"){
-            // Getting the basic data for the website from database
             $statement = $pdo->prepare("SELECT * FROM tbl_trabalhe WHERE status=1");
             $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
             foreach ($result as $row){
-                $titulo         = $row['titulo'];
-                $detalhes       = $row['detalhes'];
-                $atualizado     = $row['modificado'];
+                $titulo         = $row['titulo'] ?? 'Trabalhe Conosco';
+                $detalhes       = $row['detalhes'] ?? '';
+                $atualizado     = $row['modificado'] ?? date('Y-m-d');
             }
-            //var_dump($row);
             echo '<title>Trabalhe Conosco | Pronto Saúde</title>';
             echo "<meta name='description' content='Oferecemos vagas para diversos segmentos dentro da rede Pronto Saúde; 
             Vagas que podem mudar sua vida e ajudar no seu crescimento profissional e melhorias no seu estágio ...'>";
             echo '<meta property="og:type" content="website" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image:alt" content="" />
-                      <meta property="og:url" content="" />
-                      <meta property="og:description" content="" />';
+                  <meta property="og:image" content="" />
+                  <meta property="og:image:alt" content="Trabalhe Conosco" />
+                  <meta property="og:url" content="" />
+                  <meta property="og:description" content="" />';
         }
         
         if($cur_page == "convenio.php"){
-            // Getting the basic data for the website from database
             $statement = $pdo->prepare("SELECT * FROM tbl_convenio WHERE status=1");
             $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
             foreach ($result as $row){
-                $titulo         = $row['titulo'];
-                $detalhes       = $row['detalhes'];
-                $atualizado     = $row['modificado'];
+                $titulo         = $row['titulo'] ?? 'Convênio Livre Escolha';
+                $detalhes       = $row['detalhes'] ?? '';
+                $atualizado     = $row['modificado'] ?? date('Y-m-d');
             }
-            //var_dump($row);
             echo '<title>Convênio Livre Escolha | Pronto Saúde</title>';
-            echo "<meta name='description' content='Sistema de Livre escolha utilizado nos planos de saude. Neste tipo de contratação o plano de saude oferece ao consumidor a liberdade de escolher os profissionais ou os serviços que não pertençam à rede de prestadores de serviços da operadora.
-                A opção pela livre escolha é obrigatória em caso de seguros de saúde, mas não nos planos de saude.  ...'>";
+            echo "<meta name='description' content='Sistema de Livre escolha utilizado nos planos de saude. Neste tipo de contratação o plano de saude oferece ao consumidor a liberdade de escolher os profissionais ou os serviços que não pertençam à rede de prestadores de serviços da operadora.'>";
             echo '<meta property="og:type" content="website" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image:alt" content="Convênio Livre Escolha" />
-                      <meta property="og:url" content="" />
-                      <meta property="og:description" content="" />';
+                  <meta property="og:image" content="" />
+                  <meta property="og:image:alt" content="Convênio Livre Escolha" />
+                  <meta property="og:url" content="" />
+                  <meta property="og:description" content="" />';
         }
         
         if ($cur_page == "servicos.php") {
             echo '<title>Serviços | Pronto Saúde</title>';
             echo '<meta name="description" content="">';
             echo '<meta property="og:type" content="website" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image:alt" content="Serviços" />
-                      <meta property="og:url" content="" />
-                      <meta property="og:description" content="" />';
-            }
+                  <meta property="og:image" content="" />
+                  <meta property="og:image:alt" content="Serviços" />
+                  <meta property="og:url" content="" />
+                  <meta property="og:description" content="" />';
+        }
         
         if ($cur_page == "fidelidade.php") {
             echo '<title>Cartão Fidelidade | Pronto Saúde</title>';
@@ -289,6 +287,7 @@ $email   = $row2['dep_email'] ?? '';
         
         <!-- Stylesheets -->
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/toastr.min.css">
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/slicknav.css">
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/superfish.css">
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/animate.css">
@@ -300,12 +299,12 @@ $email   = $row2['dep_email'] ?? '';
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/responsive.css">
         <script src="<?= BASE_URL; ?>assets/js/modernizr.min.js"></script>
 
-        <?php if ($cur_page == 'news.php'): ?>
-            <meta property="og:title" content="<?= $og_title; ?>">
+        <?php if ($cur_page == 'news.php' && !empty($og_title)): ?>
+            <meta property="og:title" content="<?= htmlspecialchars($og_title); ?>">
             <meta property="og:type" content="website">
-            <meta property="og:url" content="<?= BASE_URL; ?>news/<?= $og_slug; ?>">
-            <meta property="og:description" content="<?= $og_description; ?>">
-            <meta property="og:image" content="<?= BASE_URL; ?>assets/uploads/<?= $og_photo; ?>">
+            <meta property="og:url" content="<?= BASE_URL; ?>news/<?= htmlspecialchars($og_slug); ?>">
+            <meta property="og:description" content="<?= htmlspecialchars($og_description); ?>">
+            <meta property="og:image" content="<?= BASE_URL; ?>assets/uploads/<?= htmlspecialchars($og_photo); ?>">
         <?php endif; ?>
 
         <style>

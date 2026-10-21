@@ -1,6 +1,9 @@
 <?php require_once('header.php'); ?>
 
 <?php
+$error_message = '';
+$success_message = '';
+
 if(isset($_POST['form1'])) {
 	$valid = 1;
 
@@ -86,7 +89,7 @@ if(isset($_POST['form1'])) {
 									$statement->execute();
 									$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 									foreach ($result as $row) { ?>
-										<option value="<?=$row['dep_id']?>" <?php if($row['dep_id'] == $_POST['clinica']){echo 'selected';} ?>><?=$row['dep_name']?></option>
+										<option value="<?=$row['dep_id']?>" <?php if(isset($_POST['clinica']) && $row['dep_id'] == $_POST['clinica']){echo 'selected';} ?>><?=$row['dep_name']?></option>
 									<?php }?>
 								</select>
 							</div>
@@ -101,7 +104,7 @@ if(isset($_POST['form1'])) {
 									$statement->execute();
 									$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 									foreach ($result as $row) { ?>
-										<option value="<?=$row['id']?>" <?php if($row['id'] == $_POST['medico']){echo 'selected';} ?>><?=$row['name']?></option>
+										<option value="<?=$row['id']?>" <?php if(isset($_POST['medico']) && $row['id'] == $_POST['medico']){echo 'selected';} ?>><?=$row['name']?></option>
 									<?php }?>
 								</select>
 							</div>
@@ -116,7 +119,7 @@ if(isset($_POST['form1'])) {
 									$statement->execute();
 									$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 									foreach ($result as $row) { ?>
-									<option value="<?=$row['oh_id'] ?>" <?php if($row['oh_id'] == $_POST['semana']){echo 'selected';} ?>><?=$row['oh_day'] ?></option>
+									<option value="<?=$row['oh_id'] ?>" <?php if(isset($_POST['semana']) && $row['oh_id'] == $_POST['semana']){echo 'selected';} ?>><?=$row['oh_day'] ?></option>
 									<?php } ?>
 								</select>
 							</div>
@@ -131,7 +134,7 @@ if(isset($_POST['form1'])) {
 									$statement->execute();
 									$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 									foreach ($result as $row) { ?>
-									<option value="<?=$row['designation_id'] ?>" <?php if($row['designation_id'] == $_POST['especialidade']){echo 'selected';} ?>><?=$row['designation_name'] ?></option>
+									<option value="<?=$row['designation_id'] ?>" <?php if(isset($_POST['especialidade']) && $row['designation_id'] == $_POST['especialidade']){echo 'selected';} ?>><?=$row['designation_name'] ?></option>
 									<?php } ?>
 								</select>
 							</div>
