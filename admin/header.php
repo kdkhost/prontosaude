@@ -13,6 +13,9 @@ if(!isset($_SESSION['user'])) {
 	header('location: login.php');
 	exit;
 }
+if(isset($_SESSION['user']['full_name'])) {
+	$_SESSION['user']['full_name'] = str_replace(['Pronto Sa?de', 'Sa?de'], ['Pronto Saúde', 'Saúde'], $_SESSION['user']['full_name']);
+}
 
 // Current Page Access Level check for all pages
 $cur_page = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);

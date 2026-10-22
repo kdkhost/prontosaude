@@ -11,16 +11,21 @@ O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0
   - Inclusão dos módulos oficiais `dataTables.responsive.min.js`, `responsive.bootstrap4.min.js` e folhas de estilo CSS correspondentes diretamente na base local do projeto.
   - Implementação do controle circular expansível com **ícone verde de sinal de mais (`+`)** na primeira coluna ao abrir em telas menores ou dispositivos móveis.
   - Alternância interativa para **sinal de menos (`-`)** com fundo vermelho ao abrir a linha filha detalhada (`child row`).
-  - Renderização organizada de colunas ocultas em lista estruturada com títulos em destaque (`dtr-title`) e dados correspondentes (`dtr-data`).
-  - Remoção de `overflow-x` impeditivo em containers `.table-responsive` para cálculo instantâneo e dinâmico dos breakpoints em tempo real via SPA.
+  - Renderização organizada de colunas ocultas em lista estruturada com títulos em destaque (`dtr-title`) e dados correspondentes (`dtr-data`) com quebra automática inteligente de linha (`word-break: break-word`).
+  - Regras de `white-space: nowrap !important` aplicadas nas colunas da tabela e remoção de `overflow-x` impeditivo em containers `.table-responsive` para acionamento imediato e dinâmico dos breakpoints em tempo real via SPA.
+  - Priorização semântica das colunas mantendo a coluna de identificação/controle e a coluna de ações sempre visíveis, colapsando as intermediárias no acordeão.
 - **Padronização Visual Completa de Todas as Páginas e Tipografia do Sistema**:
   - Escala de fontes padronizada estritamente em **0.875rem (14px)** para todo o painel, tabelas, formulários e inputs, alinhada à especificação oficial do AdminLTE 4 e Bootstrap 5.3.
   - Cabeçalhos de página (`.content-header`) refinados com alinhamento flexível, espaçamento proporcional e títulos sem sobreposições.
   - Cards (`.card` e `.box`) padronizados com bordas sutis, cantos arredondados (`0.75rem`), sombra moderna e padding uniforme.
-- **Padronização e Alinhamento Preciso de Todos os Botões**:
+- **Padronização e Alinhamento Preciso de Todos os Botões e Formulários**:
   - Botões de cabeçalho ("Adicionar Novo", "Voltar") estilizados com altura consistente, tipografia seminegrito e ícones automáticos (`bi-plus-lg`, `bi-list-ul`).
   - Botões de ação em tabelas ("Editar", "Deletar", "Visualizar") alinhados lado a lado sem quebra feia (`white-space: nowrap`), tamanho `btn-xs` / `btn-sm` (28px de altura) e ícones padronizados (`bi-pencil-square`, `bi-trash3`).
-  - Botões de formulário alinhados no grid do formulário (`.col-sm-offset-2` / `.offset-sm-2`) e no rodapé dos cards (`.card-footer`).
+  - Formulários horizontais legados modernizados com `display: flex` e alinhamento perfeito entre rótulos (`control-label`) e botões de submissão (`.btn-success`, `.btn-primary`).
+- **Compatibilidade e Estabilidade Global de Scripts**:
+  - Implementação de shim de compatibilidade de tooltips do Summernote para Bootstrap 5, eliminando exceções no console.
+  - Aplicação de parâmetros de versão dinâmicos (`cache-busting`) nos links de CSS e scripts JS, garantindo atualização instantânea para os usuários.
+  - Sanitização de entidades HTML e integridade de acentuação na exibição do perfil do usuário logado na barra de navegação.
 
 ---
 
