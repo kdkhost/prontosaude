@@ -4,6 +4,15 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.18.0] - 2026-10-22
+
+### Padronizado & Aprimorado
+- **Padronização Extrema de Menus e Submenus (Desktop & Mobile)**:
+  - **Dropdowns Desktop Sofisticados e Fluidos:** Menus pais com filhos (`Quem Somos`, `Especialidades`, `Outros`) agora possuem dropdowns suspensos com micro-animação suave (fade-in + elevação), chevrons que rotacionam 180°, ponte de hover invisível e marcadores visuais elegantes.
+  - **Sincronização Inteligente de Rotas Ativas:** Destaque ativo simultâneo no item pai e no submenu específico quando o paciente navega por páginas internas como FAQ, Galeria, Médicos, Serviços ou Contato.
+  - **Acordeão Mobile com Usabilidade Total:** Suporte a toque tanto no chevron quanto no texto de menus agregadores (`#`), abertura pré-expandida automática na página em que o usuário está e fechamento suave ao navegar para links finais.
+  - **Normalização e Blindagem de URLs:** Resolução robusta de links relativos (`../`), páginas institucionais, categorias e URLs absolutas sem risco de quebra em subpastas.
+
 ## [2.17.0] - 2026-10-22
 
 ### Adicionado & Reformulado

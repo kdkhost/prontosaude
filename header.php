@@ -750,6 +750,73 @@ $email   = $row2['dep_email'] ?? '';
                 }
                 return true;
             });
+
+            // Funções padronizadas para resolução de URLs e estado ativo de menus
+            if (!function_exists('pronto_resolve_menu_url')) {
+                function pronto_resolve_menu_url($item) {
+                    $type = $item['menu_type'] ?? '';
+                    $slug = trim($item['category_or_page_slug'] ?? '');
+                    $raw_url = trim($item['menu_url'] ?? '');
+
+                    if ($type === 'Category') {
+                        return BASE_URL . 'category/' . $slug;
+                    }
+                    if ($type === 'Page') {
+                        return BASE_URL . 'page/' . $slug;
+                    }
+                    if ($type === 'Other') {
+                        if ($raw_url === '#' || empty($raw_url)) {
+                            return '#';
+                        }
+                        if (preg_match('/^https?:\/\//i', $raw_url)) {
+                            return $raw_url;
+                        }
+                        if (strpos($raw_url, '../') === 0) {
+                            return BASE_URL . substr($raw_url, 3);
+                        }
+                        if (strpos($raw_url, '/') === 0) {
+                            return BASE_URL . ltrim($raw_url, '/');
+                        }
+                        return BASE_URL . $raw_url;
+                    }
+                    return BASE_URL;
+                }
+            }
+
+            if (!function_exists('pronto_is_menu_item_active')) {
+                function pronto_is_menu_item_active($item, $current_uri, $script_name) {
+                    $type = $item['menu_type'] ?? '';
+                    $slug = trim($item['category_or_page_slug'] ?? '');
+                    $raw_url = trim($item['menu_url'] ?? '');
+
+                    $is_home = ($current_uri === '/' || $current_uri === '' || $script_name === 'index.php');
+                    if ($is_home) {
+                        if ($slug === 'home' || $raw_url === '../' || $raw_url === './' || $raw_url === BASE_URL) {
+                            return true;
+                        }
+                    }
+
+                    if (!empty($slug)) {
+                        if (strpos($current_uri, '/' . $slug) !== false || $script_name === ($slug . '.php')) {
+                            return true;
+                        }
+                    }
+
+                    if ($type === 'Other' && !empty($raw_url) && $raw_url !== '#') {
+                        $clean_file = basename(parse_url($raw_url, PHP_URL_PATH));
+                        if (!empty($clean_file) && $clean_file !== '..' && $clean_file !== '.') {
+                            if ($script_name === $clean_file || strpos($current_uri, '/' . $clean_file) !== false) {
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                }
+            }
+
+            $current_req_uri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+            $current_script_file = basename($_SERVER['SCRIPT_NAME'] ?? '');
             ?>
 
             <!-- Drawer Deslizante da Esquerda para a Direita -->
@@ -777,22 +844,24 @@ $email   = $row2['dep_email'] ?? '';
                     <ul class="ps-drawer-menu">
                         <?php foreach ($parent_menus as $p_item): 
                             $has_subs = !empty($children_menus[$p_item['menu_id']]);
-                            $p_url = '#';
-                            if ($p_item['menu_type'] == 'Category') {
-                                $p_url = BASE_URL . 'category/' . $p_item['category_or_page_slug'];
-                            } elseif ($p_item['menu_type'] == 'Page') {
-                                $p_url = BASE_URL . 'page/' . $p_item['category_or_page_slug'];
-                            } elseif ($p_item['menu_type'] == 'Other') {
-                                $p_url = $p_item['menu_url'];
+                            $p_url = pronto_resolve_menu_url($p_item);
+                            $p_active = pronto_is_menu_item_active($p_item, $current_req_uri, $current_script_file);
+                            if (!$p_active && $has_subs) {
+                                foreach ($children_menus[$p_item['menu_id']] as $sub_chk) {
+                                    if (pronto_is_menu_item_active($sub_chk, $current_req_uri, $current_script_file)) {
+                                        $p_active = true;
+                                        break;
+                                    }
+                                }
                             }
                         ?>
-                        <li class="ps-drawer-item <?= $has_subs ? 'has-sub' : ''; ?>">
+                        <li class="ps-drawer-item <?= $has_subs ? 'has-sub' : ''; ?> <?= $p_active ? 'active' : ''; ?> <?= ($has_subs && $p_active) ? 'open' : ''; ?>">
                             <div class="ps-drawer-link-row">
-                                <a href="<?= $p_url; ?>" class="ps-drawer-link <?= $has_subs ? 'has-children' : ''; ?>">
+                                <a href="<?= $p_url; ?>" class="ps-drawer-link <?= $has_subs ? 'has-children' : ''; ?> <?= $p_active ? 'active' : ''; ?>">
                                     <?= htmlspecialchars($p_item['menu_name']); ?>
                                 </a>
                                 <?php if($has_subs): ?>
-                                <button class="ps-drawer-toggle-sub" type="button" aria-label="Expandir submenu">
+                                <button class="ps-drawer-toggle-sub" type="button" aria-label="Expandir submenu <?= htmlspecialchars($p_item['menu_name']); ?>">
                                     <i class="fa fa-chevron-down"></i>
                                 </button>
                                 <?php endif; ?>
@@ -801,18 +870,12 @@ $email   = $row2['dep_email'] ?? '';
                             <?php if($has_subs): ?>
                             <ul class="ps-drawer-submenu">
                                 <?php foreach ($children_menus[$p_item['menu_id']] as $sub_item): 
-                                    $s_url = '#';
-                                    if ($sub_item['menu_type'] == 'Category') {
-                                        $s_url = BASE_URL . 'category/' . $sub_item['category_or_page_slug'];
-                                    } elseif ($sub_item['menu_type'] == 'Page') {
-                                        $s_url = BASE_URL . 'page/' . $sub_item['category_or_page_slug'];
-                                    } elseif ($sub_item['menu_type'] == 'Other') {
-                                        $s_url = $sub_item['menu_url'];
-                                    }
+                                    $s_url = pronto_resolve_menu_url($sub_item);
+                                    $s_active = pronto_is_menu_item_active($sub_item, $current_req_uri, $current_script_file);
                                 ?>
-                                <li>
-                                    <a href="<?= $s_url; ?>" class="ps-drawer-sublink">
-                                        <i class="fa fa-angle-right"></i>
+                                <li class="<?= $s_active ? 'active' : ''; ?>">
+                                    <a href="<?= $s_url; ?>" class="ps-drawer-sublink <?= $s_active ? 'active' : ''; ?>">
+                                        <i class="fa fa-angle-right ps-drawer-subicon"></i>
                                         <span><?= htmlspecialchars($sub_item['menu_name']); ?></span>
                                     </a>
                                 </li>
@@ -914,28 +977,49 @@ $email   = $row2['dep_email'] ?? '';
                             </a>
                         </div>
 
-                        <!-- Menu Centralizado Foco7 -->
+                        <!-- Menu Centralizado Foco7 com Dropdown Padronizado ao Extremo -->
                         <nav class="hidden-xs hidden-sm">
                             <ul class="ps-nav-links">
                                 <?php 
-                                $current_url = $_SERVER['REQUEST_URI'] ?? '';
                                 foreach ($parent_menus as $row): 
                                     $has_sub = !empty($children_menus[$row['menu_id']]);
-                                    $m_url = '#';
-                                    if ($row['menu_type'] == 'Category') {
-                                        $m_url = BASE_URL . 'category/' . $row['category_or_page_slug'];
-                                    } elseif ($row['menu_type'] == 'Page') {
-                                        $m_url = BASE_URL . 'page/' . $row['category_or_page_slug'];
-                                    } elseif ($row['menu_type'] == 'Other') {
-                                        $m_url = $row['menu_url'];
+                                    $m_url = pronto_resolve_menu_url($row);
+                                    $is_active = pronto_is_menu_item_active($row, $current_req_uri, $current_script_file);
+                                    if (!$is_active && $has_sub) {
+                                        foreach ($children_menus[$row['menu_id']] as $sub_chk) {
+                                            if (pronto_is_menu_item_active($sub_chk, $current_req_uri, $current_script_file)) {
+                                                $is_active = true;
+                                                break;
+                                            }
+                                        }
                                     }
-                                    $is_active = (strpos($current_url, (string)$row['category_or_page_slug']) !== false && !empty($row['category_or_page_slug'])) 
-                                        || ($current_url == '/' && ($row['category_or_page_slug'] == 'home' || $m_url == BASE_URL));
                                 ?>
-                                <li class="<?= $is_active ? 'active' : ''; ?>">
+                                <li class="<?= $has_sub ? 'has-dropdown' : ''; ?> <?= $is_active ? 'active' : ''; ?>">
                                     <a href="<?= $m_url; ?>" class="<?= $is_active ? 'active' : ''; ?>">
-                                        <?= htmlspecialchars($row['menu_name']); ?>
+                                        <span><?= htmlspecialchars($row['menu_name']); ?></span>
+                                        <?php if ($has_sub): ?>
+                                            <i class="fa fa-angle-down ps-nav-chevron" aria-hidden="true"></i>
+                                        <?php endif; ?>
                                     </a>
+
+                                    <?php if ($has_sub): ?>
+                                    <ul class="ps-dropdown-menu" role="menu">
+                                        <?php foreach ($children_menus[$row['menu_id']] as $sub_row): 
+                                            $sub_url = pronto_resolve_menu_url($sub_row);
+                                            $sub_active = pronto_is_menu_item_active($sub_row, $current_req_uri, $current_script_file);
+                                        ?>
+                                        <li class="ps-dropdown-item-wrap <?= $sub_active ? 'active' : ''; ?>" role="none">
+                                            <a href="<?= $sub_url; ?>" class="ps-dropdown-link <?= $sub_active ? 'active' : ''; ?>" role="menuitem">
+                                                <span class="ps-dd-left">
+                                                    <span class="ps-dd-bullet" aria-hidden="true"></span>
+                                                    <span class="ps-dd-label"><?= htmlspecialchars($sub_row['menu_name']); ?></span>
+                                                </span>
+                                                <i class="fa fa-angle-right ps-dd-arrow" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                    <?php endif; ?>
                                 </li>
                                 <?php endforeach; ?>
                             </ul>

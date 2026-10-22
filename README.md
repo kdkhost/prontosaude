@@ -11,7 +11,7 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - Micro-animações e hover interativo em cards de serviços, médicos, planos e depoimentos.
 - **Topbar Ultra Clean & Navbar Sticky:**
   - Barra superior sutil com dados de atendimento (horários, telefone, WhatsApp oficial) e botão pílula de Área do Paciente.
-  - Barra de navegação branca flutuante/sticky (`.ps-foco-navbar`) com logotipo de alta definição, links centrados com indicadores dinâmicos e botões de chamada de ação (*Especialidades* e *Agendar Consulta*).
+  - Barra de navegação branca flutuante/sticky (`.ps-foco-navbar`) com logotipo de alta definição, **menus e submenus dropdown suspensos ultra padronizados**, chevrons interativos com rotação suave de 180°, ponte invisível de hover, detecção inteligente de rotas ativas no pai e no filho, e botões de chamada de ação (*Especialidades* e *Agendar Consulta*).
 - **Hero Section de Alto Impacto com Card de Agendamento Rápido em 1 Minuto:**
   - Hero com fundo escuro hospitalar premium (`#071822` / `#0e2b38`), badge brilhante de boas-vindas, chamada persuasiva e bullet points de diferenciais de atendimento.
   - **Card Flutuante de Agendamento em 1 Minuto (`.ps-quick-card`):** Grid interativo com seleção de Especialidade, Unidade Médica, Turno preferencial e direcionamento automático para confirmação via WhatsApp.

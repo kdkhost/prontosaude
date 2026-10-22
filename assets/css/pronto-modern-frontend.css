@@ -530,6 +530,16 @@ body.ps-drawer-open .ps-offcanvas-drawer {
     color: var(--ps-primary);
 }
 
+.ps-drawer-item.active > .ps-drawer-link-row {
+    background: rgba(10, 107, 116, 0.06);
+    border-left: 3px solid var(--ps-primary);
+}
+
+.ps-drawer-item.active > .ps-drawer-link-row .ps-drawer-link {
+    color: var(--ps-primary) !important;
+    font-weight: 700;
+}
+
 .ps-drawer-submenu {
     max-height: 0;
     overflow: hidden;
@@ -544,26 +554,44 @@ body.ps-drawer-open .ps-offcanvas-drawer {
 .ps-drawer-sublink {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 11px 20px 11px 34px;
-    color: var(--ps-body-text) !important;
+    gap: 10px;
+    padding: 12px 20px 12px 34px;
+    color: #475569 !important;
     text-decoration: none !important;
-    font-size: 0.92rem;
+    font-size: 0.925rem;
     font-weight: 500;
     border-left: 3px solid transparent;
-    transition: var(--ps-transition);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ps-drawer-sublink:hover {
     color: var(--ps-primary) !important;
-    background: var(--ps-primary-subtle);
+    background: rgba(10, 107, 116, 0.08);
     border-left-color: var(--ps-primary);
     padding-left: 38px;
 }
 
+.ps-drawer-submenu li.active > .ps-drawer-sublink,
+.ps-drawer-sublink.active {
+    color: var(--ps-primary) !important;
+    background: rgba(10, 107, 116, 0.1);
+    border-left-color: var(--ps-primary);
+    font-weight: 700;
+}
+
+.ps-drawer-subicon,
 .ps-drawer-sublink i {
-    font-size: 0.8rem;
-    color: var(--ps-light-muted);
+    font-size: 0.82rem;
+    color: #94a3b8;
+    transition: all 0.2s ease;
+}
+
+.ps-drawer-sublink:hover .ps-drawer-subicon,
+.ps-drawer-sublink:hover i,
+.ps-drawer-submenu li.active .ps-drawer-subicon,
+.ps-drawer-submenu li.active i {
+    color: var(--ps-primary);
+    transform: translateX(3px);
 }
 
 .ps-drawer-footer {
@@ -2821,25 +2849,32 @@ iframe[src*="google.com/maps"] {
 .ps-nav-links {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     list-style: none;
     margin: 0;
     padding: 0;
 }
-.ps-nav-links > li > a {
-    display: inline-block;
-    padding: 8px 14px;
-    font-size: 0.935rem;
-    font-weight: 600;
-    color: #334155;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+.ps-nav-links > li {
     position: relative;
+    list-style: none;
+}
+.ps-nav-links > li > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    font-size: 0.94rem;
+    font-weight: 600;
+    color: #1e293b;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    white-space: nowrap;
 }
 .ps-nav-links > li > a:hover {
     color: var(--ps-primary);
-    background: rgba(10, 107, 116, 0.05);
+    background: rgba(10, 107, 116, 0.06);
 }
 .ps-nav-links > li.active > a,
 .ps-nav-links > li > a.active {
@@ -2855,6 +2890,147 @@ iframe[src*="google.com/maps"] {
     height: 3px;
     background: var(--ps-primary);
     border-radius: 9999px;
+}
+
+/* Indicador Chevron de Submenu Desktop */
+.ps-nav-chevron {
+    font-size: 0.78rem;
+    color: #64748b;
+    transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+    margin-left: 2px;
+}
+.ps-nav-links > li:hover > a .ps-nav-chevron,
+.ps-nav-links > li.active > a .ps-nav-chevron {
+    color: var(--ps-primary);
+}
+.ps-nav-links > li.has-dropdown:hover > a .ps-nav-chevron {
+    transform: rotate(180deg);
+}
+
+/* Ponte invisível de hover para evitar perda de foco ao mover o cursor */
+.ps-nav-links > li.has-dropdown::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 14px;
+    z-index: 9998;
+    display: none;
+}
+.ps-nav-links > li.has-dropdown:hover::before {
+    display: block;
+}
+
+/* Container Dropdown Desktop */
+.ps-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 240px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 8px;
+    margin: 0;
+    list-style: none;
+    box-shadow: 0 16px 36px -4px rgba(7, 24, 34, 0.14), 0 4px 14px -2px rgba(10, 107, 116, 0.08);
+    border: 1px solid rgba(10, 107, 116, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(8px) scale(0.98);
+    transform-origin: top left;
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.22s;
+    z-index: 9999;
+}
+
+/* Abertura Suave no Hover ou Foco */
+.ps-nav-links > li.has-dropdown:hover > .ps-dropdown-menu,
+.ps-nav-links > li.has-dropdown:focus-within > .ps-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+/* Itens do Dropdown Desktop */
+.ps-dropdown-item-wrap {
+    list-style: none;
+    margin: 0 0 3px 0;
+}
+.ps-dropdown-item-wrap:last-child {
+    margin-bottom: 0;
+}
+.ps-dropdown-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: #334155;
+    font-size: 0.915rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+.ps-dd-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+.ps-dd-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+}
+.ps-dd-label {
+    line-height: 1.3;
+}
+.ps-dd-arrow {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Efeitos Hover e Ativo no Submenu */
+.ps-dropdown-link:hover {
+    color: var(--ps-primary);
+    background: rgba(10, 107, 116, 0.08);
+    transform: translateX(3px);
+}
+.ps-dropdown-link:hover .ps-dd-bullet {
+    background: var(--ps-primary);
+    transform: scale(1.3);
+}
+.ps-dropdown-link:hover .ps-dd-arrow {
+    opacity: 1;
+    color: var(--ps-primary);
+    transform: translateX(0);
+}
+.ps-dropdown-item-wrap.active > .ps-dropdown-link,
+.ps-dropdown-link.active {
+    color: var(--ps-primary);
+    background: rgba(10, 107, 116, 0.12);
+    font-weight: 700;
+}
+.ps-dropdown-item-wrap.active > .ps-dropdown-link .ps-dd-bullet,
+.ps-dropdown-link.active .ps-dd-bullet {
+    background: var(--ps-primary);
+    box-shadow: 0 0 0 3px rgba(10, 107, 116, 0.2);
+}
+.ps-dropdown-item-wrap.active > .ps-dropdown-link .ps-dd-arrow,
+.ps-dropdown-link.active .ps-dd-arrow {
+    opacity: 1;
+    color: var(--ps-primary);
+    transform: translateX(0);
 }
 .ps-navbar-actions {
     display: flex;

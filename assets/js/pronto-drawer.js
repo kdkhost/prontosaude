@@ -57,29 +57,44 @@
             }
         });
 
-        // Toggle de Submenus
+        function toggleSubmenuItem(parentItem) {
+            if (!parentItem) return;
+            var wasOpen = parentItem.classList.contains('open');
+            
+            // Fechar outros submenus abertos no mesmo nível (modo acordeão limpo)
+            var siblings = parentItem.parentElement.querySelectorAll('.ps-drawer-item.open');
+            siblings.forEach(function(sib) {
+                if (sib !== parentItem) {
+                    sib.classList.remove('open');
+                }
+            });
+
+            if (!wasOpen) {
+                parentItem.classList.add('open');
+            } else {
+                parentItem.classList.remove('open');
+            }
+        }
+
+        // Toggle de Submenus via Botão Chevron
         var subToggles = drawer.querySelectorAll('.ps-drawer-toggle-sub');
         subToggles.forEach(function(toggle) {
             toggle.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                var parentItem = this.closest('.ps-drawer-item');
-                if (parentItem) {
-                    var wasOpen = parentItem.classList.contains('open');
-                    
-                    // Fechar outros submenus abertos no mesmo nível (modo acordeão limpo)
-                    var siblings = parentItem.parentElement.querySelectorAll('.ps-drawer-item.open');
-                    siblings.forEach(function(sib) {
-                        if (sib !== parentItem) {
-                            sib.classList.remove('open');
-                        }
-                    });
+                toggleSubmenuItem(this.closest('.ps-drawer-item'));
+            });
+        });
 
-                    if (!wasOpen) {
-                        parentItem.classList.add('open');
-                    } else {
-                        parentItem.classList.remove('open');
-                    }
+        // Toggle de Submenus ao clicar no texto do link pai caso seja agregador (#)
+        var parentLinks = drawer.querySelectorAll('.ps-drawer-link.has-children');
+        parentLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                var href = this.getAttribute('href');
+                if (!href || href === '#' || href.indexOf('javascript:') === 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSubmenuItem(this.closest('.ps-drawer-item'));
                 }
             });
         });
