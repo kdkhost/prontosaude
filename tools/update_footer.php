@@ -1,5 +1,7 @@
 <?php
-// Script de geração segura do footer.php 100% no padrão Foco 7 (UTF-8 No BOM)
+// tools/update_footer.php
+// Script de geração segura do footer.php com paleta oficial Pronto Saúde e suporte a logo clara/escura
+
 $footer_file = __DIR__ . '/../footer.php';
 
 $footer_code = '<?php
@@ -12,18 +14,18 @@ if (strlen($whats_clean) <= 11) {
 ?>
 
 <!-- ==============================================================================
-     RODAPÉ OFICIAL PADRÃO FOCO 7 (DARK SLATE PREMIUM & TOTALMENTE RESPONSIVO)
+     RODAPÉ OFICIAL PRONTO SAÚDE (DARK SLATE HOSPITALAR & TOTALMENTE RESPONSIVO)
      ============================================================================== -->
 <footer class="foco-footer">
     <div class="container">
         <div class="row g-4 justify-content-between">
             <!-- Coluna 1: Marca & Apresentação -->
             <div class="col-lg-4 col-md-6">
-                <div class="d-flex align-items-center gap-2 mb-3">
+                <div class="d-flex align-items-center gap-2 mb-3 logo-on-dark">
                     <?php if(!empty($logo)): ?>
-                        <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" height="42" style="filter: brightness(0) invert(1);">
+                        <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" height="42" class="ps-logo ps-logo-light">
                     <?php else: ?>
-                        <h4 class="text-white fw-bold mb-0"><i class="fas fa-hospital-user text-danger me-2"></i> Pronto Saúde</h4>
+                        <h5 class="text-white fw-bold mb-0"><i class="fas fa-hospital-user me-2" style="color: var(--ps-accent);"></i> Pronto Saúde</h5>
                     <?php endif; ?>
                 </div>
                 <p class="small text-secondary mb-3 leading-relaxed">
@@ -44,122 +46,118 @@ if (strlen($whats_clean) <= 11) {
 
             <!-- Coluna 2: Especialidades -->
             <div class="col-lg-2 col-md-6 col-6">
-                <h5 class="text-white fw-bold mb-3">Especialidades</h5>
+                <h6 class="text-white fw-bold mb-3 foco-footer-title">Especialidades</h6>
                 <ul class="list-unstyled small">
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php" class="text-secondary text-decoration-none">Clínica Médica</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php" class="text-secondary text-decoration-none">Cardiologia</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php" class="text-secondary text-decoration-none">Odontologia</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php" class="text-secondary text-decoration-none">Exames de Sangue</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php" class="text-secondary text-decoration-none">Ultrassonografia</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php" class="text-danger fw-bold text-decoration-none"><i class="fas fa-th-large me-1"></i> Ver Todas</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php">Clínica Médica</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php">Cardiologia</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php">Odontologia</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php">Exames de Sangue</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php">Ultrassonografia</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php" style="color: var(--ps-accent); font-weight: 700;"><i class="fas fa-th-large me-1"></i> Ver Todas</a></li>
                 </ul>
             </div>
 
             <!-- Coluna 3: Links Rápidos -->
             <div class="col-lg-2 col-md-6 col-6">
-                <h5 class="text-white fw-bold mb-3">Links Rápidos</h5>
+                <h6 class="text-white fw-bold mb-3 foco-footer-title">Links Rápidos</h6>
                 <ul class="list-unstyled small">
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>#inicio" class="text-secondary text-decoration-none">Início</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>#sobre" class="text-secondary text-decoration-none">Sobre Nós</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>#planos" class="text-secondary text-decoration-none">Cartão Fidelidade</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>doctor.php" class="text-secondary text-decoration-none">Corpo Clínico</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>#faq" class="text-secondary text-decoration-none">Dúvidas Frequentes</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>privacidade.php" class="text-secondary text-decoration-none"><i class="fas fa-shield-alt text-danger me-1"></i> Privacidade</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>#inicio">Início</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>#sobre">Sobre Nós</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>#planos">Cartão Fidelidade</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>doctor.php">Corpo Clínico</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>#faq">Dúvidas Frequentes</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>privacidade.php"><i class="fas fa-shield-alt me-1" style="color: var(--ps-secondary);"></i> Privacidade</a></li>
                 </ul>
             </div>
 
-            <!-- Coluna 4: Onde Estamos -->
+            <!-- Coluna 4: Atendimento & Horários -->
             <div class="col-lg-3 col-md-6">
-                <h5 class="text-white fw-bold mb-3">Atendimento</h5>
+                <h6 class="text-white fw-bold mb-3 foco-footer-title">Atendimento</h6>
                 <div class="small text-secondary mb-2">
-                    <i class="fas fa-map-marker-alt text-danger me-2"></i> <?= htmlspecialchars($contact_address ?: \'Avenida Principal, Centro Médico\'); ?>
+                    <i class="fas fa-map-marker-alt me-2" style="color: var(--ps-accent);"></i> <?= htmlspecialchars($contact_address ?: \'Gardênia Azul, Jacarepaguá, RJ\'); ?>
                 </div>
                 <?php if(!empty($contact_phone)): ?>
                     <div class="small text-secondary mb-2">
-                        <i class="fas fa-phone-alt text-danger me-2"></i> <?= htmlspecialchars($contact_phone); ?>
+                        <i class="fas fa-phone-alt me-2" style="color: var(--ps-accent);"></i> <?= htmlspecialchars($contact_phone); ?>
                     </div>
                 <?php endif; ?>
                 <div class="small text-secondary mb-3">
-                    <i class="fas fa-clock text-danger me-2"></i> Seg a Sex: 07h às 19h | Sáb: 07h às 13h
+                    <i class="fas fa-clock me-2" style="color: var(--ps-accent);"></i> Seg a Sex: 07h às 19h | Sáb: 07h às 13h
                 </div>
-                <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar uma consulta na Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success w-100 fw-bold">
+                <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar uma consulta na Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm w-100 fw-bold" style="background: var(--ps-secondary); color: #fff;">
                     <i class="fab fa-whatsapp me-1"></i> Falar no WhatsApp
                 </a>
             </div>
         </div>
 
-        <div class="border-top border-secondary border-opacity-25 mt-5 pt-4 text-center small text-secondary">
+        <div class="border-top border-secondary border-opacity-25 mt-4 pt-3 text-center small text-secondary">
             <?= $footer_copyright ?: \'© \' . date(\'Y\') . \' Pronto Saúde - Centro Médico & Odontológico. Todos os direitos reservados.\'; ?> &bull; <a href="<?= BASE_URL; ?>privacidade.php" class="text-secondary text-decoration-underline ms-1">Termos &amp; LGPD</a>
         </div>
     </div>
 </footer>
 
-<!-- BOTÃO VOLTAR AO TOPO FLUTUANTE (ESTILO FOCO 7) -->
-<button type="button" id="btnVoltarAoTopo" class="foco-btn-topo scrollup" aria-label="Voltar ao início da página" title="Voltar ao Topo">
+<!-- BOTÃO VOLTAR AO TOPO FLUTUANTE -->
+<button type="button" id="btnVoltarAoTopo" class="btn-voltar-topo" aria-label="Voltar ao início da página" title="Voltar ao Topo">
     <i class="fas fa-arrow-up"></i>
 </button>
 
-<!-- BOTÃO FLUTUANTE DO WHATSAPP OFICIAL NA COR DA PALETA -->
-<button type="button" id="btnFocoWhatsappFloat" class="foco-whatsapp-float" aria-label="Abrir canais de atendimento Pronto Saúde pelo WhatsApp" title="Central de Atendimento pelo WhatsApp">
-    <span class="whatsapp-badge-pulse"></span>
-    <i class="fab fa-whatsapp"></i>
-    <span class="whatsapp-tooltip">Central WhatsApp</span>
-</button>
-
-<!-- BOX POP-UP MULTICANAIS DE SUPORTE FOCO 7 -->
-<div class="foco-support-popup shadow-lg" id="popupSupportWhatsapp" role="dialog" aria-modal="true" aria-labelledby="txtSupportTitle">
-    <div class="foco-support-header">
-        <button type="button" class="btn-close-support" id="btnCloseSupportPopup" aria-label="Fechar box">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="foco-support-online-badge">
-            <span class="support-pulse-dot"></span>
-            <span class="support-online-text">Online</span>
+<!-- BOTÃO WHATSAPP FLUTUANTE MULTICANAIS PRONTO SAÚDE -->
+<div class="foco-whatsapp-float">
+    <!-- Card Pop-up Multicanais -->
+    <div class="whatsapp-popup-card shadow-lg" id="popupSupportWhatsapp" role="dialog" aria-modal="true" aria-labelledby="txtSupportTitle">
+        <div class="whatsapp-popup-header">
+            <div>
+                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1 small" style="font-size: 0.7rem;">
+                    <span class="android-pulse-dot me-1"></span> Online
+                </span>
+                <h6 class="fw-bold mb-0 mt-1" id="txtSupportTitle" style="font-size: 0.95rem;">Pronto Saúde • Atendimento</h6>
+            </div>
+            <button type="button" class="btn-android-close" id="btnCloseSupportPopup" aria-label="Fechar canais">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <h6 class="foco-support-title" id="txtSupportTitle">Central de Atendimento Pronto Saúde</h6>
-        <small class="foco-support-subtitle">Atendimento Humanizado • Selecione o canal desejado:</small>
+        <div class="whatsapp-popup-body">
+            <p class="small text-muted mb-3" style="font-size: 0.8rem;">Selecione o canal para iniciar seu atendimento no WhatsApp:</p>
+
+            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar uma consulta médica na Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="whatsapp-channel-btn">
+                <i class="fas fa-calendar-check" style="color: var(--ps-primary); font-size: 1.1rem;"></i>
+                <div>
+                    <span class="d-block text-dark fw-bold">Consultas Médicas</span>
+                    <small class="text-muted" style="font-size: 0.72rem;">Clínica geral, cardiologia, ginecologia e mais</small>
+                </div>
+            </a>
+
+            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar exames laboratoriais / ultrassonografia na Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="whatsapp-channel-btn">
+                <i class="fas fa-flask" style="color: var(--ps-primary); font-size: 1.1rem;"></i>
+                <div>
+                    <span class="d-block text-dark fw-bold">Exames &amp; Diagnósticos</span>
+                    <small class="text-muted" style="font-size: 0.72rem;">Sangue, ultrassom e check-up com laudos ágeis</small>
+                </div>
+            </a>
+
+            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar atendimento odontológico na Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="whatsapp-channel-btn">
+                <i class="fas fa-tooth" style="color: var(--ps-primary); font-size: 1.1rem;"></i>
+                <div>
+                    <span class="d-block text-dark fw-bold">Centro Odontológico</span>
+                    <small class="text-muted" style="font-size: 0.72rem;">Limpeza, profilaxia, próteses e restaurações</small>
+                </div>
+            </a>
+
+            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Quero conhecer as vantagens do Cartão Fidelidade Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="whatsapp-channel-btn">
+                <i class="fas fa-id-card" style="color: var(--ps-secondary); font-size: 1.1rem;"></i>
+                <div>
+                    <span class="d-block text-dark fw-bold">Cartão Fidelidade</span>
+                    <small class="text-muted" style="font-size: 0.72rem;">Economize até 50% em consultas e exames</small>
+                </div>
+            </a>
+        </div>
     </div>
-    <div class="foco-support-body">
-        <!-- Canal 1: Agendamentos & Consultas -->
-        <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar uma consulta médica na Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="foco-channel-card">
-            <div class="foco-channel-icon ch-consulta"><i class="fas fa-calendar-check"></i></div>
-            <div class="foco-channel-info">
-                <p class="foco-channel-title">Consultas &amp; Especialidades</p>
-                <p class="foco-channel-desc">Agende com cardiologia, pediatria, ginecologia e mais</p>
-            </div>
-            <i class="fas fa-chevron-right foco-channel-arrow"></i>
-        </a>
 
-        <!-- Canal 2: Exames Laboratoriais & Ultrassom -->
-        <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de informações e agendamento de exames laboratoriais / ultrassonografia.\'); ?>" target="_blank" rel="noopener noreferrer" class="foco-channel-card">
-            <div class="foco-channel-icon ch-exames"><i class="fas fa-flask"></i></div>
-            <div class="foco-channel-info">
-                <p class="foco-channel-title">Exames &amp; Diagnósticos</p>
-                <p class="foco-channel-desc">Sangue, ultrassom, preventivo e check-up completo</p>
-            </div>
-            <i class="fas fa-chevron-right foco-channel-arrow"></i>
-        </a>
-
-        <!-- Canal 3: Odontologia -->
-        <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar uma avaliação odontológica na Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="foco-channel-card">
-            <div class="foco-channel-icon ch-odonto"><i class="fas fa-tooth"></i></div>
-            <div class="foco-channel-info">
-                <p class="foco-channel-title">Centro Odontológico</p>
-                <p class="foco-channel-desc">Clínica geral, próteses, clareamento e limpeza</p>
-            </div>
-            <i class="fas fa-chevron-right foco-channel-arrow"></i>
-        </a>
-
-        <!-- Canal 4: Cartão Fidelidade & Convênios -->
-        <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Quero conhecer as vantagens e contratar o Cartão Fidelidade Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="foco-channel-card">
-            <div class="foco-channel-icon ch-fidelidade"><i class="fas fa-id-card"></i></div>
-            <div class="foco-channel-info">
-                <p class="foco-channel-title">Cartão Fidelidade &amp; Planos</p>
-                <p class="foco-channel-desc">Economize até 50% em consultas e procedimentos</p>
-            </div>
-            <i class="fas fa-chevron-right foco-channel-arrow"></i>
-        </a>
-    </div>
+    <!-- Botão Pulsante do WhatsApp -->
+    <button type="button" class="btn-whatsapp-pulse" id="btnFocoWhatsappFloat" aria-label="Abrir canais de WhatsApp Pronto Saúde" title="Atendimento WhatsApp">
+        <span class="whatsapp-pulse-ring"></span>
+        <i class="fab fa-whatsapp"></i>
+    </button>
 </div>
 
 <!-- ==============================================================================
@@ -173,7 +171,7 @@ if (strlen($whats_clean) <= 11) {
 
 <script>
 $(function () {
-    // Configurações globais do Toastr
+    // Notificações Toastr Globais
     if (typeof toastr !== \'undefined\') {
         toastr.options = {
             closeButton: true,
@@ -221,9 +219,9 @@ $(function () {
     if ($btnTopo.length) {
         $(window).on(\'scroll\', function() {
             if ($(this).scrollTop() > 300) {
-                $btnTopo.addClass(\'show\');
+                $btnTopo.addClass(\'visible\');
             } else {
-                $btnTopo.removeClass(\'show\');
+                $btnTopo.removeClass(\'visible\');
             }
         });
 
@@ -291,7 +289,6 @@ $(function () {
             },
             error: function () {
                 $btn.prop(\'disabled\', false).html(originalBtn);
-                // Fallback amigável de sucesso
                 Swal.fire({
                     icon: \'success\',
                     title: \'Mensagem Registrada!\',
@@ -308,5 +305,10 @@ $(function () {
 </html>
 ';
 
+// Remove BOM se houver
+if (substr($footer_code, 0, 3) === "\xEF\xBB\xBF") {
+    $footer_code = substr($footer_code, 3);
+}
+
 file_put_contents($footer_file, $footer_code);
-echo "Sucesso: footer.php atualizado no padrão Foco 7 (" . strlen($footer_code) . " bytes).\n";
+echo "Sucesso: footer.php atualizado com paleta Pronto Saúde (" . strlen($footer_code) . " bytes).\n";

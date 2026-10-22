@@ -4,14 +4,15 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 
 ## 🚀 Funcionalidades Principais
 
-### Portal Público (Frontend Moderno & Responsivo - Estilo Foco7 com Identidade Pronto Saúde)
-- **Design System Premium (`assets/css/pronto-modern-frontend.css`):**
-  - Inspirado na arquitetura visual moderna e dinâmica da plataforma de referência Foco7, preservando integralmente a paleta e identidade visual médica da Pronto Saúde: Azul Petróleo/Teal (`#0a6b74`), Verde Esmeralda (`#10b981`), Dark Slate (`#071822` / `#0b1c24`) e Cyan (`#00b4d8`).
-  - Tipografia moderna **Plus Jakarta Sans** (Google Fonts) em todos os títulos, textos e elementos de navegação.
-  - Micro-animações e hover interativo em cards de serviços, médicos, planos e depoimentos.
-- **Topbar Ultra Clean & Navbar Sticky:**
-  - Barra superior sutil com dados de atendimento (horários, telefone, WhatsApp oficial) e botão pílula de Área do Paciente.
-  - Barra de navegação branca flutuante/sticky (`.ps-foco-navbar`) com logotipo de alta definição, **menus e submenus dropdown suspensos ultra padronizados**, chevrons interativos com rotação suave de 180°, ponte invisível de hover, detecção inteligente de rotas ativas no pai e no filho, e botões de chamada de ação (*Especialidades* e *Agendar Consulta*).
+### Portal Público (Frontend Moderno & Responsivo - Identidade Visual Pronto Saúde)
+- **Design System Tailored da Pronto Saúde (`assets/css/pronto-modern-frontend.css`):**
+  - Fidelidade absoluta à paleta oficial da Pronto Saúde: Teal Hospitalar (`#0a6b74`), Dark Teal (`#07474d`), Verde Esmeralda (`#10b981`), Menta (`#87cca4`), Dark Slate (`#071822`) e fundos suaves hospitalares (`#f0f9fa`). Nenhuma dependência de paletas externas.
+  - **Suporte Nativo a Logotipos Claro & Escuro:** Renderização inteligente de `logo.png` (clara, com texto branco) em superfícies escuras (navbar teal, rodapé dark slate e cabeçalho do drawer mobile) e `logo-dark.png` (escura, com tipografia `#0a6b74` e anti-aliasing preservado) para partes claras.
+  - **Arquitetura Densa, Funcional e sem Vãos em Branco:** Paddings de seção otimizados (45px a 50px no desktop e 34px no mobile), eliminando espaços ociosos e oferecendo navegação direta, encorpada e de alta conversão.
+  - Tipografia moderna **Plus Jakarta Sans** e **Outfit** (Google Fonts) em todos os títulos, textos e elementos de navegação.
+- **Topbar Hospitalar & Navbar Oficial Pronto Saúde:**
+  - Barra superior em Dark Teal (`#07474d`) com dados de atendimento (horários, telefone, WhatsApp oficial) e botão pílula de Área do Paciente.
+  - Barra de navegação em Teal Hospitalar (`#0a6b74`), links em alto contraste branco com hover suave em verde menta (`#87cca4`), dropdowns suspensos com submenus estruturados e botões de chamada de ação (*Especialidades* e *Agendar Consulta* em verde esmeralda).
 - **Hero Section de Alto Impacto com Card de Agendamento Rápido em 1 Minuto:**
   - Hero com fundo escuro hospitalar premium (`#071822` / `#0e2b38`), badge brilhante de boas-vindas, chamada persuasiva e bullet points de diferenciais de atendimento.
   - **Card Flutuante de Agendamento em 1 Minuto (`.ps-quick-card`):** Grid interativo com seleção de Especialidade, Unidade Médica, Turno preferencial e direcionamento automático para confirmação via WhatsApp.

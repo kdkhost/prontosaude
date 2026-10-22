@@ -1,223 +1,978 @@
 <?php
-// Converte site-foco7.css para pronto-modern-frontend.css sem BOM e adaptado à Pronto Saúde
-$src = 'C:/Users/marce/.gemini/antigravity-ide/brain/5ba01216-7003-49d3-b6f2-9ff8098f6d0b/scratch/foco7/public/css/site-foco7.css';
+// tools/convert_foco_css.php
+// Compila pronto-modern-frontend.css sem BOM com a Paleta Oficial da Pronto Saúde
+// Elimina o excesso de espaços em branco e garante navbar, cores e botões hospitalares
+
 $dest = __DIR__ . '/../assets/css/pronto-modern-frontend.css';
 
-if (!file_exists($src)) {
-    die("Erro: Arquivo fonte foco7 nao encontrado em: " . $src);
-}
-
-$css = file_get_contents($src);
-
-// Paleta Oficial Pronto Saúde (Substituições precisas de cores)
-$map = [
-    '#d90000' => '#0a6b74',
-    '#D90000' => '#0a6b74',
-    '#b30000' => '#075259',
-    '#B30000' => '#075259',
-    '#b80000' => '#075259',
-    '#ff2a2a' => '#0d838e',
-    '#FF2A2A' => '#0d838e',
-    '#ff3b3b' => '#0d838e',
-    '#dc2626' => '#0a6b74',
-    '#ef4444' => '#10b981',
-    '217, 0, 0' => '10, 107, 116',
-    '217,0,0' => '10,107,116',
-    '255, 42, 42' => '13, 131, 142',
-    '255,42,42' => '13,131,142',
-    'Foco 7' => 'Pronto Saúde',
-    'FOCO 7' => 'PRONTO SAÚDE',
-    'foco 7' => 'pronto saúde',
-];
-
-$css = str_replace(array_keys($map), array_values($map), $css);
-
-// Ajusta a tipografia padrão para Plus Jakarta Sans / Outfit médica
-$css = str_replace(
-    "font-family: 'Outfit', 'Roboto', sans-serif;",
-    "font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif !important;",
-    $css
-);
-
-// Adiciona regras específicas da Pronto Saúde (Corpo Clínico, etc.)
-$extra = "\n\n" . '/* ==============================================================================
-   REGRAS TAILORED DE DESIGN PRONTO SAÚDE (TEAL & VERDE ESMERALDA)
+$css = '/* ==============================================================================
+   PRONTO SAÚDE - FOLHA DE ESTILOS MODERNA (IDENTIDADE VISUAL OFICIAL)
+   Cores: Teal (#0a6b74), Dark Teal (#07474d), Verde Saúde (#10b981), Menta (#87cca4)
+   Tipografia: Plus Jakarta Sans / Outfit
+   Arquitetura: Densa, Robusta, sem espaços inflados em branco
    ============================================================================== */
+
 :root {
-    --foco-red: #0a6b74 !important;
-    --foco-red-hover: #075259 !important;
-    --foco-red-light: #0d838e !important;
-    --foco-red-subtle: rgba(10, 107, 116, 0.08) !important;
-    --foco-red-glow: rgba(10, 107, 116, 0.25) !important;
-    --bs-primary: #0a6b74 !important;
+    --ps-primary: #0a6b74;
+    --ps-primary-dark: #07474d;
+    --ps-primary-hover: #08585f;
+    --ps-primary-light: #0d838e;
+    --ps-primary-subtle: rgba(10, 107, 116, 0.08);
+    --ps-primary-glow: rgba(10, 107, 116, 0.25);
+    
+    --ps-secondary: #10b981;
+    --ps-secondary-hover: #059669;
+    --ps-accent: #87cca4;
+    
+    --ps-dark: #071822;
+    --ps-dark-card: #0c2331;
+    --ps-title: #0f2430;
+    --ps-text: #334155;
+    --ps-muted: #64748b;
+    --ps-light-bg: #f0f9fa;
+    --ps-border: #e2e8f0;
+    --ps-border-light: #edf2f7;
+    
+    --ps-shadow-sm: 0 2px 8px rgba(10, 107, 116, 0.06);
+    --ps-shadow-card: 0 6px 20px rgba(10, 107, 116, 0.09);
+    --ps-shadow-hover: 0 12px 30px rgba(10, 107, 116, 0.16);
+    --ps-transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    --bs-primary: #0a6b74;
 }
 
-/* Logo no Navbar Branco: converte imagem com texto branco para a cor Teal Hospitalar */
-.logo-foco7 {
-    filter: brightness(0) saturate(100%) invert(27%) sepia(85%) saturate(542%) hue-rotate(143deg) brightness(91%) contrast(93%);
-    height: 40px;
+/* Reset Global & Tipografia */
+body.ps-foco-body {
+    font-family: \'Plus Jakarta Sans\', \'Outfit\', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    color: var(--ps-text);
+    background-color: #ffffff;
+    line-height: 1.55;
+    overflow-x: hidden;
+    padding-top: 110px; /* Compensa Topbar + Navbar fixos */
+}
+
+@media (max-width: 991px) {
+    body.ps-foco-body {
+        padding-top: 68px; /* Topbar oculta no mobile */
+    }
+}
+
+/* ==============================================================================
+   1. CABEÇALHO GLOBAL (TOPBAR + NAVBAR IDENTIDADE VISUAL PRONTO SAÚDE)
+   ============================================================================== */
+.foco-header-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1040;
+    box-shadow: 0 4px 20px rgba(7, 24, 34, 0.12);
+}
+
+/* Topbar Escura Hospitalar */
+.foco-topbar {
+    background: #07474d;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.82rem;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.foco-topbar a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: var(--ps-transition);
+}
+.foco-topbar a:hover {
+    color: var(--ps-accent);
+}
+.foco-topbar .btn-cliente-topo {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff !important;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+.foco-topbar .btn-cliente-topo:hover {
+    background: var(--ps-secondary);
+    border-color: var(--ps-secondary);
+    color: #ffffff !important;
+}
+
+/* Navbar Principal: Fundo Teal Pronto Saúde (#0a6b74) com Alta Legibilidade */
+.foco-navbar {
+    background: #0a6b74;
+    padding: 10px 0;
+    transition: var(--ps-transition);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Tratamento Inteligente dos Logotipos: Claro para fundos escuros / Escuro para fundos claros */
+.ps-logo {
+    height: 42px;
     width: auto;
     object-fit: contain;
+    transition: var(--ps-transition);
+}
+/* Em partes escuras (como navbar teal #0a6b74 ou footer #071822) */
+.logo-on-dark .ps-logo-light {
+    display: inline-block !important;
+}
+.logo-on-dark .ps-logo-dark {
+    display: none !important;
+}
+/* Em partes claras */
+.logo-on-light .ps-logo-light {
+    display: none !important;
+}
+.logo-on-light .ps-logo-dark {
+    display: inline-block !important;
 }
 
-/* Botões com gradiente Hospitalar Teal */
+/* Itens de Navegação Desktop */
+.foco-navbar .nav-link {
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 8px 14px !important;
+    border-radius: 8px;
+    transition: var(--ps-transition);
+}
+.foco-navbar .nav-link:hover,
+.foco-navbar .nav-link.active {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Dropdown Menu Desktop */
+.foco-navbar .dropdown-menu {
+    background: #ffffff;
+    border: 1px solid var(--ps-border);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(7, 24, 34, 0.15);
+    padding: 8px;
+    min-width: 230px;
+    margin-top: 8px;
+}
+.foco-navbar .dropdown-item {
+    color: var(--ps-title) !important;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: var(--ps-transition);
+}
+.foco-navbar .dropdown-item:hover,
+.foco-navbar .dropdown-item.active {
+    background-color: var(--ps-light-bg);
+    color: var(--ps-primary) !important;
+    transform: translateX(3px);
+}
+.foco-navbar .dropdown-item i {
+    color: var(--ps-primary);
+}
+
+/* Botões do Navbar */
+.btn-nav-outline {
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: #ffffff !important;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: var(--ps-transition);
+}
+.btn-nav-outline:hover {
+    background: #ffffff;
+    color: var(--ps-primary) !important;
+    border-color: #ffffff;
+}
+
+.btn-nav-agendar {
+    background: var(--ps-secondary) !important;
+    color: #ffffff !important;
+    padding: 7px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    border: none;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: var(--ps-transition);
+}
+.btn-nav-agendar:hover {
+    background: var(--ps-secondary-hover) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+}
+
+/* Hambúrguer Mobile */
+.btn-android-burger {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    font-size: 1.25rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+.btn-android-burger:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+/* Drawer Android Mobile */
+.foco-android-drawer {
+    background-color: #ffffff;
+    width: 320px;
+}
+.android-drawer-header {
+    background: #07474d;
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.btn-android-close {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #ffffff;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.android-drawer-card-status {
+    background: var(--ps-light-bg);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--ps-border);
+}
+.android-pulse-dot {
+    width: 9px;
+    height: 9px;
+    background: var(--ps-secondary);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+}
+.android-nav-list {
+    padding: 10px 0;
+}
+.android-nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+    color: var(--ps-title);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.92rem;
+    border-bottom: 1px solid var(--ps-border-light);
+    transition: var(--ps-transition);
+}
+.android-nav-item:hover,
+.android-nav-item.active {
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    padding-left: 22px;
+}
+.android-item-icon {
+    width: 28px;
+    color: var(--ps-primary);
+}
+.android-item-arrow {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--ps-muted);
+}
+
+/* ==============================================================================
+   2. HERO CAROUSEL COMPACTO & ROBUSTO (ZERO VÃO EM BRANCO)
+   ============================================================================== */
+.hero-section {
+    min-height: 500px;
+    background-color: var(--ps-dark);
+    position: relative;
+    overflow: hidden;
+}
+@media (min-width: 992px) {
+    .hero-section {
+        min-height: 540px;
+    }
+}
+.hero-slide-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover !important;
+    background-position: center center !important;
+    transform: scale(1.02);
+    transition: transform 7s ease;
+}
+.carousel-item.active .hero-slide-bg {
+    transform: scale(1);
+}
+.hero-slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(7, 24, 34, 0.94) 0%, rgba(7, 24, 34, 0.85) 50%, rgba(7, 24, 34, 0.55) 85%, rgba(7, 24, 34, 0.35) 100%) !important;
+}
+.hero-slide-content {
+    position: relative;
+    z-index: 2;
+    padding: 42px 0;
+}
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(16, 185, 129, 0.18);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+}
+.hero-title {
+    font-size: clamp(1.8rem, 3.8vw, 2.75rem);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.18;
+    margin-bottom: 12px;
+}
+.hero-desc {
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 1rem;
+    max-width: 580px;
+    margin-bottom: 22px;
+    line-height: 1.5;
+}
+
+/* Card Agendamento Rápido no Hero */
+.card-simulacao-hero {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.btn-tipo-veiculo {
+    display: block;
+    background: var(--ps-light-bg);
+    border: 1px solid var(--ps-border);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-decoration: none;
+    color: var(--ps-title);
+    transition: var(--ps-transition);
+}
+.btn-tipo-veiculo:hover {
+    background: #ffffff;
+    border-color: var(--ps-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--ps-shadow-sm);
+    color: var(--ps-primary);
+}
+.btn-tipo-veiculo i {
+    color: var(--ps-primary);
+}
+
+/* ==============================================================================
+   3. BOTÕES GLOBAIS COM IDENTIDADE VISUAL PRONTO SAÚDE
+   ============================================================================== */
 .btn-foco-primary {
-    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
+    background: linear-gradient(135deg, #0a6b74 0%, #07474d 100%) !important;
     color: #ffffff !important;
     border: none !important;
-    box-shadow: 0 4px 18px rgba(10, 107, 116, 0.28) !important;
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(10, 107, 116, 0.28) !important;
+    transition: var(--ps-transition);
 }
 .btn-foco-primary:hover {
     background: linear-gradient(135deg, #0d838e 0%, #0a6b74 100%) !important;
     color: #ffffff !important;
-    box-shadow: 0 8px 25px rgba(10, 107, 116, 0.42) !important;
     transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(10, 107, 116, 0.4) !important;
+}
+
+.btn-foco-outline {
+    background: transparent !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.7) !important;
+    padding: 9px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: var(--ps-transition);
+}
+.btn-foco-outline:hover {
+    background: #ffffff !important;
+    color: var(--ps-primary) !important;
+    border-color: #ffffff !important;
 }
 
 .btn-outline-danger {
-    color: #0a6b74 !important;
-    border-color: #0a6b74 !important;
+    color: var(--ps-primary) !important;
+    border: 1.5px solid var(--ps-primary) !important;
+    background: transparent !important;
+    transition: var(--ps-transition);
 }
 .btn-outline-danger:hover {
-    background-color: #0a6b74 !important;
-    border-color: #0a6b74 !important;
-    color: #ffffff !important;
-}
-
-.text-danger {
-    color: #0a6b74 !important;
-}
-.bg-danger {
-    background-color: #0a6b74 !important;
-}
-
-.badge.bg-danger,
-.badge-estetica-topo,
-.tag-plano-destaque {
-    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
+    background: var(--ps-primary) !important;
     color: #ffffff !important;
 }
 
 .btn-agendar-estetica {
-    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
+    background: linear-gradient(135deg, #0a6b74 0%, #07474d 100%) !important;
     color: #ffffff !important;
     border: none !important;
     width: 100%;
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 0.9rem;
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.88rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: var(--foco-transition);
+    text-decoration: none;
+    transition: var(--ps-transition);
 }
 .btn-agendar-estetica:hover {
     background: linear-gradient(135deg, #0d838e 0%, #0a6b74 100%) !important;
     color: #ffffff !important;
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(10, 107, 116, 0.35);
+    box-shadow: 0 6px 16px rgba(10, 107, 116, 0.35);
 }
 
 /* ==============================================================================
-   SEÇÃO CORPO CLÍNICO & MÉDICOS ESPECIALISTAS (PRONTO SAÚDE)
+   4. SEÇÕES DENSO-FUNCIONAIS (ESPAÇOS EM BRANCO ENXUTOS: 45px - 50px)
    ============================================================================== */
-.section-medicos {
-    padding: 85px 0;
-    background: #f8fafc;
-    position: relative;
-}
-.card-medico {
+.section-risco {
+    padding: 48px 0;
     background: #ffffff;
-    border: 1px solid var(--foco-border);
+}
+.section-sobre {
+    padding: 48px 0;
+    background: var(--ps-light-bg);
+}
+.section-planos {
+    padding: 52px 0;
+    background: #ffffff;
+}
+.section-estetica {
+    padding: 48px 0;
+    background: var(--ps-light-bg);
+}
+.section-medicos {
+    padding: 48px 0;
+    background: #ffffff;
+}
+.section-depoimentos {
+    padding: 45px 0;
+    background: var(--ps-light-bg);
+}
+.section-convenios,
+.section-parceiros {
+    padding: 36px 0;
+    background: #ffffff;
+}
+.section-faq {
+    padding: 45px 0;
+    background: var(--ps-light-bg);
+}
+.section-contato {
+    padding: 48px 0;
+    background: #ffffff;
+}
+
+@media (max-width: 767px) {
+    .section-risco,
+    .section-sobre,
+    .section-planos,
+    .section-estetica,
+    .section-medicos,
+    .section-depoimentos,
+    .section-faq,
+    .section-contato {
+        padding: 34px 0;
+    }
+}
+
+/* Títulos das Seções Compactos */
+.max-w-700 {
+    max-width: 700px;
+}
+.max-w-800 {
+    max-width: 800px;
+}
+.section-header-compact {
+    margin-bottom: 28px !important;
+}
+
+/* ==============================================================================
+   5. CARDS E ELEMENTOS DA IDENTIDADE VISUAL PRONTO SAÚDE
+   ============================================================================== */
+/* Cards de Riscos / Diferenciais */
+.card-risco {
+    background: #ffffff;
+    border: 1px solid var(--ps-border);
+    border-radius: 14px;
+    padding: 24px;
+    height: 100%;
+    transition: var(--ps-transition);
+    box-shadow: var(--ps-shadow-sm);
+}
+.card-risco:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ps-shadow-card);
+    border-color: var(--ps-primary);
+}
+.icon-risco {
+    width: 52px;
+    height: 52px;
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+}
+
+/* Cards de Planos e Fidelidade */
+.card-plano {
+    background: #ffffff;
+    border: 1.5px solid var(--ps-border);
     border-radius: 16px;
-    overflow: hidden;
-    transition: var(--foco-transition);
+    padding: 26px;
+    transition: var(--ps-transition);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--ps-shadow-sm);
+}
+.card-plano:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--ps-shadow-hover);
+    border-color: var(--ps-primary);
+}
+.card-plano.destaque {
+    border: 2.5px solid var(--ps-primary);
+    box-shadow: 0 10px 30px rgba(10, 107, 116, 0.18);
+}
+.tag-plano-destaque {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #0a6b74 0%, #07474d 100%);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.icone-plano-box {
+    width: 48px;
+    height: 48px;
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin: 0 auto 12px;
+}
+.plano-titulo {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--ps-title);
+    margin-bottom: 4px;
+}
+.plano-subtitulo {
+    font-size: 0.82rem;
+    color: var(--ps-muted);
+    margin-bottom: 14px;
+}
+.bloco-preco {
+    background: var(--ps-light-bg);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.preco-valor {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--ps-primary);
+}
+.preco-periodo {
+    font-size: 0.8rem;
+    color: var(--ps-muted);
+}
+.badge-adesao {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--ps-secondary-hover);
+}
+.recursos-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+.recursos-list li {
+    font-size: 0.85rem;
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ps-text);
+}
+.recursos-list li i {
+    color: var(--ps-secondary);
+    font-size: 0.9rem;
+}
+
+/* Cards de Especialidades */
+.card-estetica {
+    background: #ffffff;
+    border: 1px solid var(--ps-border);
+    border-radius: 14px;
+    padding: 20px;
     height: 100%;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--foco-shadow-sm);
+    justify-content: space-between;
+    transition: var(--ps-transition);
+    box-shadow: var(--ps-shadow-sm);
+}
+.card-estetica:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ps-shadow-card);
+    border-color: var(--ps-primary);
+}
+.badge-estetica-topo {
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    border: 1px solid rgba(10, 107, 116, 0.2);
+}
+.icon-estetica-box {
+    width: 48px;
+    height: 48px;
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+/* Cards de Corpo Clínico / Médicos */
+.card-medico {
+    background: #ffffff;
+    border: 1px solid var(--ps-border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: var(--ps-transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--ps-shadow-sm);
 }
 .card-medico:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--foco-shadow-card);
-    border-color: var(--foco-red);
+    transform: translateY(-5px);
+    box-shadow: var(--ps-shadow-card);
+    border-color: var(--ps-primary);
 }
 .card-medico-thumb {
     width: 100%;
-    height: 280px;
+    height: 220px;
     object-fit: cover;
     background: #e2e8f0;
 }
 .card-medico-body {
-    padding: 22px;
+    padding: 18px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
 }
 .card-medico-name {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    color: var(--foco-title);
-    margin-bottom: 4px;
+    color: var(--ps-title);
+    margin-bottom: 2px;
 }
 .card-medico-spec {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    color: var(--foco-red);
-    margin-bottom: 14px;
+    color: var(--ps-primary);
+    margin-bottom: 12px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
 }
 .card-medico-footer {
     margin-top: auto;
-    padding-top: 14px;
-    border-top: 1px solid var(--foco-border-light);
+    padding-top: 12px;
+    border-top: 1px solid var(--ps-border-light);
+}
+
+/* Accordion FAQ */
+.accordion-foco .accordion-item {
+    border: 1px solid var(--ps-border);
+    border-radius: 10px !important;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.accordion-foco .accordion-button {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ps-title);
+    background: #ffffff;
+    padding: 16px 20px;
+}
+.accordion-foco .accordion-button:not(.collapsed) {
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    box-shadow: none;
+}
+.accordion-foco .accordion-button:focus {
+    box-shadow: none;
+}
+.accordion-foco .accordion-body {
+    font-size: 0.9rem;
+    color: var(--ps-text);
+    padding: 16px 20px;
+    background: #ffffff;
+    line-height: 1.6;
+}
+
+/* Formulário de Contato */
+.card-contato-form {
+    background: #ffffff;
+    border: 1px solid var(--ps-border);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: var(--ps-shadow-card);
+}
+.card-contato-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+/* Utilitários de Cor Pronto Saúde */
+.text-danger {
+    color: var(--ps-primary) !important;
+}
+.bg-danger {
+    background-color: var(--ps-primary) !important;
+}
+.border-danger {
+    border-color: var(--ps-primary) !important;
 }
 
 /* ==============================================================================
-   REGRAS DE ESTABILIDADE DO CARROSSEL HERO & ZERO ESPAÇO EM BRANCO
+   6. RODAPÉ GLOBAL HOSPITALAR (PRONTO SAÚDE)
    ============================================================================== */
-.hero-section {
-    min-height: 580px;
-    background-color: #071822;
+.foco-footer {
+    background-color: var(--ps-dark);
+    color: rgba(255, 255, 255, 0.82);
+    padding: 50px 0 25px;
+    border-top: 3px solid var(--ps-primary);
 }
-@media (min-width: 992px) {
-    .hero-section {
-        min-height: 640px;
-    }
+.foco-footer a {
+    color: rgba(255, 255, 255, 0.78);
+    text-decoration: none;
+    transition: var(--ps-transition);
 }
-.hero-slide-bg {
-    background-size: cover !important;
-    background-position: center center !important;
+.foco-footer a:hover {
+    color: var(--ps-accent);
 }
-.hero-slide-overlay {
-    background: linear-gradient(90deg, rgba(7, 24, 34, 0.94) 0%, rgba(7, 24, 34, 0.82) 48%, rgba(7, 24, 34, 0.45) 80%, rgba(7, 24, 34, 0.2) 100%) !important;
+.foco-footer-title {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 8px;
+}
+.foco-footer-title::after {
+    content: \'\';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 36px;
+    height: 3px;
+    background: var(--ps-primary);
+    border-radius: 2px;
+}
+.foco-footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 35px;
+    padding-top: 20px;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.6);
 }
 
-/* Dropdown Menu Desktop Elegante */
-.foco-navbar .dropdown-menu {
-    border: 1px solid var(--foco-border);
-    border-radius: 12px;
-    box-shadow: var(--foco-shadow-card);
-    padding: 8px;
-    min-width: 230px;
+/* ==============================================================================
+   7. BOTÃO WHATSAPP FLUTUANTE MULTICANAIS & VOLTAR AO TOPO
+   ============================================================================== */
+.foco-whatsapp-float {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-whatsapp-pulse {
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45);
+    border: none;
+    cursor: pointer;
+    transition: var(--ps-transition);
+    position: relative;
+}
+.btn-whatsapp-pulse:hover {
+    transform: scale(1.08);
+    background-color: #20ba5a;
+    color: #ffffff;
+}
+.whatsapp-pulse-ring {
+    position: absolute;
+    inset: -6px;
+    border: 2px solid #25d366;
+    border-radius: 50%;
+    animation: psWhatsPulse 2s infinite cubic-bezier(0.25, 0, 0, 1);
+}
+@keyframes psWhatsPulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.25); opacity: 0; }
+    100% { transform: scale(0.95); opacity: 0; }
+}
+
+.whatsapp-popup-card {
+    position: absolute;
+    bottom: 74px;
+    right: 0;
+    width: 320px;
     background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 16px 45px rgba(7, 24, 34, 0.22);
+    border: 1px solid var(--ps-border);
+    overflow: hidden;
+    display: none;
+    animation: psFadeInUp 0.3s ease;
 }
-.foco-navbar .dropdown-item {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--foco-text);
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: var(--foco-transition);
+.whatsapp-popup-card.show {
+    display: block;
 }
-.foco-navbar .dropdown-item:hover {
-    background-color: var(--foco-red-subtle);
-    color: var(--foco-red);
-    transform: translateX(4px);
+.whatsapp-popup-header {
+    background: #07474d;
+    color: #ffffff;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.whatsapp-popup-body {
+    padding: 14px 16px;
+}
+.whatsapp-channel-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--ps-light-bg);
+    border: 1px solid var(--ps-border);
+    border-radius: 10px;
+    color: var(--ps-title);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    transition: var(--ps-transition);
+}
+.whatsapp-channel-btn:hover {
+    background: #ffffff;
+    border-color: var(--ps-secondary);
+    color: var(--ps-secondary-hover);
+    transform: translateX(3px);
+}
+@keyframes psFadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-voltar-topo {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    width: 44px;
+    height: 44px;
+    background: rgba(7, 71, 77, 0.88);
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 1030;
+    box-shadow: var(--ps-shadow-card);
+    transition: var(--ps-transition);
+    opacity: 0;
+    visibility: hidden;
+}
+.btn-voltar-topo.visible {
+    opacity: 1;
+    visibility: visible;
+}
+.btn-voltar-topo:hover {
+    background: var(--ps-primary);
+    transform: translateY(-3px);
+    color: #ffffff;
 }
 ';
 
-file_put_contents($dest, $css . $extra);
-echo "Sucesso: pronto-modern-frontend.css atualizado com " . strlen($css . $extra) . " bytes.\n";
+// Grava arquivo garantindo UTF-8 puro SEM BOM
+if (substr($css, 0, 3) === "\xEF\xBB\xBF") {
+    $css = substr($css, 3);
+}
+file_put_contents($dest, $css);
+echo "Sucesso: pronto-modern-frontend.css compilado com " . strlen($css) . " bytes.\n";

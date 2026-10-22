@@ -1,8 +1,11 @@
 <?php
-// Script de geração segura do header.php 100% no padrão Foco 7 (UTF-8 No BOM)
+// tools/update_header.php
+// Script de geração segura do header.php com a Paleta Oficial da Pronto Saúde
+// Suporte nativo a logo clara para fundos escuros e logo escura para fundos claros
+
 $header_file = __DIR__ . '/../header.php';
 
-// Lê o arquivo atual e pega a primeira parte com todas as regras de PHP e SEO (linhas 1 a 376)
+// Lê o arquivo atual e pega a primeira parte com todas as regras de PHP e SEO
 $current_header = file_get_contents($header_file);
 $split_marker = '<!-- Favicon -->';
 $parts = explode($split_marker, $current_header);
@@ -34,7 +37,7 @@ $second_part = '
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-        <!-- Estilos Oficiais Pronto Saúde / Foco 7 -->
+        <!-- Estilos Oficiais Pronto Saúde -->
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/pronto-modern-frontend.css?v=<?= time(); ?>">
     </head>
     <body class="ps-foco-body" id="inicio">
@@ -170,15 +173,15 @@ $second_part = '
         $current_script_file = basename($_SERVER[\'SCRIPT_NAME\'] ?? \'\');
         ?>
 
-        <!-- 1. CABEÇALHO FIXO GLOBAL (TOPBAR + NAVBAR) NO PADRÃO FOCO 7 -->
+        <!-- 1. CABEÇALHO GLOBAL (TOPBAR + NAVBAR IDENTIDADE VISUAL PRONTO SAÚDE) -->
         <header class="foco-header-fixed" id="focoHeader">
             <!-- TOPBAR DE CONTATO E HORÁRIOS -->
             <div class="foco-topbar d-none d-md-block">
                 <div class="container d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center gap-4">
-                        <span><i class="fas fa-clock text-danger me-1"></i> Seg a Sex: 07h às 19h | Sáb: 07h às 13h</span>
+                        <span><i class="fas fa-clock text-white-50 me-1"></i> Seg a Sex: 07h às 19h | Sáb: 07h às 13h</span>
                         <?php if(!empty($contact_phone)): ?>
-                            <span><i class="fas fa-phone-alt text-danger me-1"></i> <?= htmlspecialchars($contact_phone); ?></span>
+                            <span><i class="fas fa-phone-alt text-white-50 me-1"></i> <?= htmlspecialchars($contact_phone); ?></span>
                         <?php endif; ?>
                         <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de falar com o atendimento Pronto Saúde\'); ?>" target="_blank" rel="noopener">
                             <i class="fab fa-whatsapp text-success me-1"></i> WhatsApp Oficial
@@ -207,18 +210,22 @@ $second_part = '
                 </div>
             </div>
 
-            <!-- NAVBAR NAVEGAÇÃO FOCO 7 -->
+            <!-- NAVBAR NAVEGAÇÃO PRONTO SAÚDE (Fundo Teal #0a6b74 Oficial) -->
             <nav class="navbar navbar-expand-lg foco-navbar" id="mainNavbar">
                 <div class="container">
-                    <a class="navbar-brand d-flex align-items-center gap-2" href="<?= BASE_URL; ?>">
+                    <!-- Brand: Logo Clara sobre o fundo Teal da Navbar -->
+                    <a class="navbar-brand d-flex align-items-center logo-on-dark" href="<?= BASE_URL; ?>">
                         <?php if(!empty($logo)): ?>
-                            <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" height="42" class="logo-foco7">
+                            <!-- Logo Clara para partes escuras -->
+                            <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" height="42" class="ps-logo ps-logo-light">
+                            <!-- Logo Escura para partes claras -->
+                            <img src="<?= BASE_URL; ?>assets/uploads/logo-dark.png" alt="Pronto Saúde" height="42" class="ps-logo ps-logo-dark">
                         <?php else: ?>
-                            <span class="fw-bold fs-4 text-dark"><i class="fas fa-hospital-user text-danger me-2"></i> Pronto Saúde</span>
+                            <span class="fw-bold fs-4 text-white"><i class="fas fa-hospital-user text-white-50 me-2"></i> Pronto Saúde</span>
                         <?php endif; ?>
                     </a>
 
-                    <!-- BOTÃO HAMBÚRGUER ESTILO ANDROID (Abre Drawer da Esquerda para a Direita) -->
+                    <!-- BOTÃO HAMBÚRGUER ESTILO ANDROID (Mobile) -->
                     <button class="navbar-toggler d-lg-none btn-android-burger" type="button" id="btnOpenMenuDrawer" data-bs-toggle="offcanvas" data-bs-target="#menuDrawerAndroid" aria-controls="menuDrawerAndroid" aria-label="Abrir Menu de Navegação">
                         <i class="fas fa-bars"></i>
                     </button>
@@ -251,7 +258,7 @@ $second_part = '
                                             ?>
                                                 <li>
                                                     <a class="dropdown-item <?= $s_active ? \'active\' : \'\'; ?>" href="<?= $s_url; ?>">
-                                                        <i class="fas fa-angle-right text-muted me-2"></i><?= htmlspecialchars($sub_item[\'menu_name\']); ?>
+                                                        <i class="fas fa-angle-right me-2"></i><?= htmlspecialchars($sub_item[\'menu_name\']); ?>
                                                     </a>
                                                 </li>
                                             <?php endforeach; ?>
@@ -267,11 +274,11 @@ $second_part = '
                             <?php endforeach; ?>
                         </ul>
                         <div class="d-flex flex-column flex-lg-row gap-2 align-items-stretch align-items-lg-center mt-3 mt-lg-0">
-                            <a href="<?= BASE_URL; ?>servicos.php" class="btn btn-sm btn-outline-danger d-none d-xl-inline-flex align-items-center gap-1 btn-foco-outline">
+                            <a href="<?= BASE_URL; ?>servicos.php" class="btn-nav-outline d-none d-xl-inline-flex align-items-center gap-1 text-decoration-none">
                                 <i class="fas fa-stethoscope"></i> Especialidades
                             </a>
-                            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar uma consulta na Pronto Saúde\'); ?>" target="_blank" rel="noopener" class="btn-foco-primary">
-                                <i class="fas fa-calendar-check"></i> Agendar Consulta
+                            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar uma consulta na Pronto Saúde\'); ?>" target="_blank" rel="noopener" class="btn-nav-agendar text-decoration-none">
+                                <i class="fas fa-calendar-check me-1"></i> Agendar Consulta
                             </a>
                         </div>
                     </div>
@@ -279,14 +286,14 @@ $second_part = '
             </nav>
         </header>
 
-        <!-- MENU GAVETA DESLIZANTE NATIVO ANDROID (DESLIZA DA ESQUERDA PARA A DIREITA) -->
+        <!-- MENU GAVETA DESLIZANTE NATIVO ANDROID (Mobile) -->
         <div class="offcanvas offcanvas-start foco-android-drawer" tabindex="-1" id="menuDrawerAndroid" aria-labelledby="menuDrawerLabel">
             <div class="offcanvas-header android-drawer-header">
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 logo-on-dark">
                     <?php if(!empty($logo)): ?>
-                        <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" height="34" class="drawer-logo">
+                        <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" height="34" class="ps-logo ps-logo-light">
                     <?php else: ?>
-                        <span class="fw-bold text-dark"><i class="fas fa-hospital-user text-danger me-2"></i> Pronto Saúde</span>
+                        <span class="fw-bold text-white"><i class="fas fa-hospital-user text-white-50 me-2"></i> Pronto Saúde</span>
                     <?php endif; ?>
                 </div>
                 <button type="button" class="btn-android-close" data-bs-dismiss="offcanvas" aria-label="Fechar menu">
@@ -352,12 +359,12 @@ $second_part = '
                     </a>
                     <?php if(!empty($contact_phone)): ?>
                         <div class="small text-secondary mb-1">
-                            <i class="fas fa-phone-alt text-danger me-2"></i> <?= htmlspecialchars($contact_phone); ?>
+                            <i class="fas fa-phone-alt me-2" style="color: var(--ps-primary);"></i> <?= htmlspecialchars($contact_phone); ?>
                         </div>
                     <?php endif; ?>
                     <?php if(!empty($contact_email)): ?>
                         <div class="small text-secondary">
-                            <i class="fas fa-envelope text-danger me-2"></i> <?= htmlspecialchars($contact_email); ?>
+                            <i class="fas fa-envelope me-2" style="color: var(--ps-primary);"></i> <?= htmlspecialchars($contact_email); ?>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -373,4 +380,4 @@ if (substr($new_header, 0, 3) === "\xEF\xBB\xBF") {
 }
 
 file_put_contents($header_file, $new_header);
-echo "Sucesso: header.php atualizado no padrão Foco 7 (" . strlen($new_header) . " bytes).\n";
+echo "Sucesso: header.php atualizado com paleta oficial Pronto Saúde (" . strlen($new_header) . " bytes).\n";

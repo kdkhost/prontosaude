@@ -1,1660 +1,853 @@
-/**
- * ==============================================================================
- * SISTEMA PRONTO SAÚDE - ESTILOS VISUAIS DA LANDING PAGE (TEMA CLARO SOFISTICADO)
- * Paleta Oficial Pronto Saúde (#0a6b74), Tipografia Moderna, Menu de Alta Conversão
- * ==============================================================================
- */
-
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap');
+/* ==============================================================================
+   PRONTO SAÚDE - FOLHA DE ESTILOS MODERNA (IDENTIDADE VISUAL OFICIAL)
+   Cores: Teal (#0a6b74), Dark Teal (#07474d), Verde Saúde (#10b981), Menta (#87cca4)
+   Tipografia: Plus Jakarta Sans / Outfit
+   Arquitetura: Densa, Robusta, sem espaços inflados em branco
+   ============================================================================== */
 
 :root {
-    /* Paleta Oficial Pronto Saúde */
-    --foco-red: #0a6b74;
-    --foco-red-hover: #075259;
-    --foco-red-light: #0d838e;
-    --foco-red-subtle: rgba(10, 107, 116, 0.08);
-    --foco-red-glow: rgba(10, 107, 116, 0.22);
-    --foco-green-whats: #25d366;
-    --foco-green-hover: #20bd5a;
-
-    /* Tema Claro Premium (Fundos e Superfícies) */
-    --foco-bg-body: #f8fafc;
-    --foco-bg-surface: #ffffff;
-    --foco-bg-subtle: #f1f5f9;
-    --foco-bg-alt: #fcfcfd;
-
-    /* Tipografia e Cores de Texto */
-    --foco-title: #0f172a;
-    --foco-text: #334155;
-    --foco-text-secondary: #475569;
-    --foco-muted: #64748b;
-    --foco-border: #e2e8f0;
-    --foco-border-light: #f1f5f9;
-    --foco-border-hover: #cbd5e1;
-
-    /* Sombras e Elevações */
-    --foco-shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
-    --foco-shadow-md: 0 8px 24px rgba(15, 23, 42, 0.06);
-    --foco-shadow-lg: 0 16px 36px rgba(15, 23, 42, 0.08);
-    --foco-shadow-card: 0 10px 30px -5px rgba(15, 23, 42, 0.05), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
-
-    --foco-transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    --ps-primary: #0a6b74;
+    --ps-primary-dark: #07474d;
+    --ps-primary-hover: #08585f;
+    --ps-primary-light: #0d838e;
+    --ps-primary-subtle: rgba(10, 107, 116, 0.08);
+    --ps-primary-glow: rgba(10, 107, 116, 0.25);
+    
+    --ps-secondary: #10b981;
+    --ps-secondary-hover: #059669;
+    --ps-accent: #87cca4;
+    
+    --ps-dark: #071822;
+    --ps-dark-card: #0c2331;
+    --ps-title: #0f2430;
+    --ps-text: #334155;
+    --ps-muted: #64748b;
+    --ps-light-bg: #f0f9fa;
+    --ps-border: #e2e8f0;
+    --ps-border-light: #edf2f7;
+    
+    --ps-shadow-sm: 0 2px 8px rgba(10, 107, 116, 0.06);
+    --ps-shadow-card: 0 6px 20px rgba(10, 107, 116, 0.09);
+    --ps-shadow-hover: 0 12px 30px rgba(10, 107, 116, 0.16);
+    --ps-transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    --bs-primary: #0a6b74;
 }
 
-html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 85px;
-    width: 100%;
-    max-width: 100%;
+/* Reset Global & Tipografia */
+body.ps-foco-body {
+    font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    color: var(--ps-text);
+    background-color: #ffffff;
+    line-height: 1.55;
     overflow-x: hidden;
+    padding-top: 110px; /* Compensa Topbar + Navbar fixos */
 }
 
-body {
-    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif !important;
-    background-color: var(--foco-bg-body);
-    color: var(--foco-text);
-    margin: 0;
-    padding: 0;
-    padding-top: 104px; /* Offset para acomodar cabeçalho fixo no desktop */
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-    position: relative;
-    -webkit-font-smoothing: antialiased;
-}
-
-@media (max-width: 991.98px) {
-    body {
-        padding-top: 64px; /* Offset para mobile (onde a topbar fica oculta) */
+@media (max-width: 991px) {
+    body.ps-foco-body {
+        padding-top: 68px; /* Topbar oculta no mobile */
     }
 }
 
-/* Proteção global contra estouro de largura e corte lateral no mobile */
-*, *::before, *::after {
-    box-sizing: border-box;
-}
-
-img, svg, video, canvas, audio, iframe, embed, object {
-    max-width: 100%;
-    height: auto;
-}
-
 /* ==============================================================================
-   1. CABEÇALHO FIXO GLOBAL (TOPBAR + NAVBAR FIXOS NO TOPO)
+   1. CABEÇALHO GLOBAL (TOPBAR + NAVBAR IDENTIDADE VISUAL PRONTO SAÚDE)
    ============================================================================== */
 .foco-header-fixed {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    width: 100%;
     z-index: 1040;
-    background: transparent;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    box-shadow: 0 4px 20px rgba(7, 24, 34, 0.12);
 }
 
-.foco-header-fixed .foco-topbar {
-    transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease;
-    overflow: hidden;
-}
-
-.foco-header-fixed.scrolled .foco-topbar {
-    max-height: 0;
-    opacity: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-}
-
-.foco-header-fixed.scrolled .foco-navbar {
-    padding: 7px 0;
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
-    background: rgba(255, 255, 255, 0.98);
-}
-
+/* Topbar Escura Hospitalar */
 .foco-topbar {
-    background: #ffffff;
-    border-bottom: 1px solid var(--foco-border);
+    background: #07474d;
+    color: rgba(255, 255, 255, 0.88);
     font-size: 0.82rem;
-    padding: 6px 0;
-    color: #64748b;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .foco-topbar a {
-    color: #475569;
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    transition: var(--foco-transition);
+    transition: var(--ps-transition);
 }
-
 .foco-topbar a:hover {
-    color: var(--foco-red);
+    color: var(--ps-accent);
 }
-
 .foco-topbar .btn-cliente-topo {
-    background: #f8fafc;
-    border: 1px solid var(--foco-border);
-    color: #0f172a;
-    font-size: 0.76rem;
-    font-weight: 700;
-    padding: 4px 14px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff !important;
+    padding: 3px 12px;
     border-radius: 20px;
-    transition: var(--foco-transition);
+    font-size: 0.78rem;
+    font-weight: 600;
 }
-
 .foco-topbar .btn-cliente-topo:hover {
-    background: var(--foco-red);
-    border-color: var(--foco-red);
-    color: #ffffff;
-    box-shadow: 0 2px 10px var(--foco-red-glow);
+    background: var(--ps-secondary);
+    border-color: var(--ps-secondary);
+    color: #ffffff !important;
 }
 
-/* ==============================================================================
-   2. NAVBAR PRINCIPAL (ESBELTA, COMPACTA, SEM TEXTOS GIGANTES)
-   ============================================================================== */
+/* Navbar Principal: Fundo Teal Pronto Saúde (#0a6b74) com Alta Legibilidade */
 .foco-navbar {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--foco-border);
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+    background: #0a6b74;
     padding: 10px 0;
-    transition: var(--foco-transition);
-    z-index: 1040;
+    transition: var(--ps-transition);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.foco-navbar.scrolled {
-    padding: 8px 0;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.07);
-}
-
-.foco-navbar .navbar-brand {
-    padding: 4px 0;
-    margin: 0;
-    display: inline-flex;
-    align-items: center;
-    line-height: 1;
-}
-
-.logo-foco7 {
-    max-height: 38px;
-    height: 38px;
-    width: auto;
-    object-fit: contain;
-    display: block;
-    padding: 2px 0;
-    transition: var(--foco-transition);
-}
-
-.logo-foco7:hover {
-    transform: scale(1.02);
-}
-
-.foco-navbar .nav-link {
-    color: #334155;
-    font-weight: 600;
-    font-size: 0.88rem;
-    padding: 0.42rem 0.72rem;
-    letter-spacing: 0.2px;
-    transition: var(--foco-transition);
-    position: relative;
-    border-radius: 6px;
-    white-space: nowrap;
-}
-
-.foco-navbar .nav-link:hover {
-    color: var(--foco-red);
-    background: rgba(10, 107, 116, 0.04);
-}
-
-.foco-navbar .nav-link.active {
-    color: var(--foco-red);
-    font-weight: 700;
-}
-
-.foco-navbar .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 50%;
-    width: 0;
-    height: 2.5px;
-    background: var(--foco-red);
-    border-radius: 2px;
-    transition: var(--foco-transition);
-    transform: translateX(-50%);
-}
-
-.foco-navbar .nav-link:hover::after,
-.foco-navbar .nav-link.active::after {
-    width: 50%;
-}
-
-/* Botões da Navbar */
-.btn-foco-whatsapp {
-    background: linear-gradient(135deg, #25d366 0%, #1ea952 100%);
-    color: #ffffff !important;
-    font-weight: 700;
-    font-size: 0.84rem;
-    border: none;
-    border-radius: 8px;
-    padding: 0.45rem 1rem;
-    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.28);
-    transition: var(--foco-transition);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.btn-foco-whatsapp:hover {
-    background: linear-gradient(135deg, #2ae16f 0%, #1c9b4b 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(37, 211, 102, 0.4);
-    color: #ffffff;
-}
-
-/* Botão de Destaque da Plataforma de Rastreamento */
-.btn-foco-rastreamento {
-    background: linear-gradient(135deg, var(--cor-primaria, #0a6b74) 0%, #075259 100%);
-    color: #ffffff !important;
-    font-weight: 700;
-    font-size: 0.84rem;
-    border: none;
-    border-radius: 8px;
-    padding: 0.45rem 1rem;
-    box-shadow: 0 3px 12px rgba(10, 107, 116, 0.3);
-    transition: var(--foco-transition);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.btn-foco-rastreamento:hover {
-    background: linear-gradient(135deg, #ef0000 0%, #990000 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(10, 107, 116, 0.45);
-    color: #ffffff !important;
-}
-
-
-.btn-foco-login-nav {
-    background: #f8fafc;
-    color: #334155;
-    font-weight: 600;
-    font-size: 0.82rem;
-    border: 1px solid var(--foco-border);
-    border-radius: 8px;
-    padding: 0.45rem 0.9rem;
-    transition: var(--foco-transition);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.btn-foco-login-nav:hover {
-    border-color: var(--foco-red);
-    color: var(--foco-red);
-    background: #ffffff;
-    transform: translateY(-1px);
-}
-
-/* Botão Hambúrguer Estilo App Android */
-.btn-android-burger {
-    width: 42px;
+/* Tratamento Inteligente dos Logotipos: Claro para fundos escuros / Escuro para fundos claros */
+.ps-logo {
     height: 42px;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    border: 1.5px solid var(--foco-border);
-    background: #ffffff;
-    color: #0f172a;
-    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
-    outline: none !important;
-}
-
-.btn-android-burger:hover,
-.btn-android-burger:active {
-    background: var(--foco-bg-subtle);
-    border-color: var(--foco-red);
-    color: var(--foco-red);
-    transform: scale(0.96);
-}
-
-.android-burger-box {
-    width: 20px;
-    height: 14px;
-    position: relative;
-    display: inline-block;
-}
-
-.android-burger-inner,
-.android-burger-inner::before,
-.android-burger-inner::after {
-    width: 20px;
-    height: 2px;
-    background-color: currentColor;
-    border-radius: 2px;
-    position: absolute;
-    transition: all 0.25s ease;
-}
-
-.android-burger-inner {
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.android-burger-inner::before {
-    content: '';
-    top: -6px;
-}
-
-.android-burger-inner::after {
-    content: '';
-    top: 6px;
-}
-
-@media (min-width: 992px) {
-    .btn-android-burger {
-        display: none !important;
-    }
-}
-
-@media (min-width: 992px) and (max-width: 1240px) {
-    .foco-navbar .nav-link {
-        font-size: 0.78rem;
-        padding: 0.32rem 0.45rem;
-    }
-    .foco-navbar .navbar-brand .logo-foco7 {
-        max-height: 32px;
-        height: 32px;
-    }
-    .btn-foco-login-nav {
-        font-size: 0.76rem;
-        padding: 0.35rem 0.6rem;
-    }
-    .btn-foco-whatsapp {
-        font-size: 0.78rem;
-        padding: 0.35rem 0.7rem;
-    }
-}
-
-/* ==============================================================================
-   GAVETA DESLIZANTE NATIVA ANDROID (DA ESQUERDA PARA A DIREITA)
-   ============================================================================== */
-.foco-android-drawer.offcanvas-start {
-    width: 320px;
-    max-width: 86vw;
-    background: #ffffff;
-    border-right: none;
-    border-top-right-radius: 24px;
-    border-bottom-right-radius: 24px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-    transition: transform 0.38s cubic-bezier(0.2, 0.9, 0.3, 1) !important;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    z-index: 1055;
-}
-
-.offcanvas-backdrop {
-    background: rgba(11, 15, 25, 0.65) !important;
-    backdrop-filter: blur(6px) !important;
-    -webkit-backdrop-filter: blur(6px) !important;
-    transition: opacity 0.35s ease !important;
-    z-index: 1050;
-}
-
-.android-drawer-header {
-    padding: 16px 20px;
-    background: #ffffff;
-    border-bottom: 1px solid var(--foco-border-light);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.drawer-logo {
-    max-height: 32px;
-    height: 32px;
     width: auto;
     object-fit: contain;
+    transition: var(--ps-transition);
+}
+/* Em partes escuras (como navbar teal #0a6b74 ou footer #071822) */
+.logo-on-dark .ps-logo-light {
+    display: inline-block !important;
+}
+.logo-on-dark .ps-logo-dark {
+    display: none !important;
+}
+/* Em partes claras */
+.logo-on-light .ps-logo-light {
+    display: none !important;
+}
+.logo-on-light .ps-logo-dark {
+    display: inline-block !important;
 }
 
-.btn-android-close {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
+/* Itens de Navegação Desktop */
+.foco-navbar .nav-link {
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 8px 14px !important;
+    border-radius: 8px;
+    transition: var(--ps-transition);
+}
+.foco-navbar .nav-link:hover,
+.foco-navbar .nav-link.active {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Dropdown Menu Desktop */
+.foco-navbar .dropdown-menu {
+    background: #ffffff;
+    border: 1px solid var(--ps-border);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(7, 24, 34, 0.15);
+    padding: 8px;
+    min-width: 230px;
+    margin-top: 8px;
+}
+.foco-navbar .dropdown-item {
+    color: var(--ps-title) !important;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: var(--ps-transition);
+}
+.foco-navbar .dropdown-item:hover,
+.foco-navbar .dropdown-item.active {
+    background-color: var(--ps-light-bg);
+    color: var(--ps-primary) !important;
+    transform: translateX(3px);
+}
+.foco-navbar .dropdown-item i {
+    color: var(--ps-primary);
+}
+
+/* Botões do Navbar */
+.btn-nav-outline {
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: #ffffff !important;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: var(--ps-transition);
+}
+.btn-nav-outline:hover {
+    background: #ffffff;
+    color: var(--ps-primary) !important;
+    border-color: #ffffff;
+}
+
+.btn-nav-agendar {
+    background: var(--ps-secondary) !important;
+    color: #ffffff !important;
+    padding: 7px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.88rem;
     border: none;
-    background: var(--foco-bg-subtle);
-    color: #0f172a;
-    display: inline-flex;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: var(--ps-transition);
+}
+.btn-nav-agendar:hover {
+    background: var(--ps-secondary-hover) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+}
+
+/* Hambúrguer Mobile */
+.btn-android-burger {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    font-size: 1.25rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+.btn-android-burger:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+/* Drawer Android Mobile */
+.foco-android-drawer {
+    background-color: #ffffff;
+    width: 320px;
+}
+.android-drawer-header {
+    background: #07474d;
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.btn-android-close {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #ffffff;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
-    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
 }
-
-.btn-android-close:hover,
-.btn-android-close:active {
-    background: rgba(10, 107, 116, 0.1);
-    color: var(--foco-red);
-    transform: scale(0.92);
-}
-
 .android-drawer-card-status {
-    margin: 12px 16px 6px 16px;
-    padding: 12px 14px;
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    border: 1px solid var(--foco-border);
-    border-radius: 14px;
+    background: var(--ps-light-bg);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--ps-border);
 }
-
 .android-pulse-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #22c55e;
+    width: 9px;
+    height: 9px;
+    background: var(--ps-secondary);
     border-radius: 50%;
     display: inline-block;
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-    animation: androidPulse 2s infinite;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
 }
-
-@keyframes androidPulse {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-}
-
-.android-drawer-body {
-    flex: 1;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding-bottom: 24px;
-}
-
-.android-drawer-body::-webkit-scrollbar {
-    width: 4px;
-}
-
-.android-drawer-body::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.android-drawer-body::-webkit-scrollbar-thumb {
-    background: rgba(15, 23, 42, 0.15);
-    border-radius: 4px;
-}
-
 .android-nav-list {
-    padding: 8px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    padding: 10px 0;
 }
-
 .android-nav-item {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 11px 14px;
-    border-radius: 14px;
-    color: #334155;
+    padding: 12px 18px;
+    color: var(--ps-title);
     text-decoration: none;
+    font-weight: 600;
     font-size: 0.92rem;
-    font-weight: 600;
-    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
-    position: relative;
+    border-bottom: 1px solid var(--ps-border-light);
+    transition: var(--ps-transition);
 }
-
-.android-item-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    background: var(--foco-bg-subtle);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #475569;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-
-.android-item-text {
-    flex: 1;
-}
-
-.android-item-arrow {
-    font-size: 0.75rem;
-    color: #94a3b8;
-    transition: transform 0.2s ease;
-}
-
 .android-nav-item:hover,
-.android-nav-item:active {
-    background: rgba(10, 107, 116, 0.06);
-    color: var(--foco-red);
-    transform: translateX(4px);
-}
-
-.android-nav-item:hover .android-item-icon,
-.android-nav-item.active .android-item-icon {
-    background: var(--foco-red);
-    color: #ffffff;
-}
-
-.android-nav-item:hover .android-item-arrow {
-    color: var(--foco-red);
-    transform: translateX(3px);
-}
-
 .android-nav-item.active {
-    background: rgba(10, 107, 116, 0.08);
-    color: var(--foco-red);
-    font-weight: 700;
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    padding-left: 22px;
 }
-
-.android-drawer-actions {
-    padding: 16px;
-    margin-top: 8px;
-    background: #ffffff;
-    border-top: 1px solid var(--foco-border-light);
+.android-item-icon {
+    width: 28px;
+    color: var(--ps-primary);
 }
-
-/* Entrada escalonada dos itens ao abrir a gaveta no Android */
-.foco-android-drawer.show .android-nav-item {
-    animation: androidSlideIn 0.35s cubic-bezier(0.2, 0.9, 0.3, 1) both;
-}
-
-.foco-android-drawer.show .android-nav-item:nth-child(1) { animation-delay: 0.04s; }
-.foco-android-drawer.show .android-nav-item:nth-child(2) { animation-delay: 0.07s; }
-.foco-android-drawer.show .android-nav-item:nth-child(3) { animation-delay: 0.10s; }
-.foco-android-drawer.show .android-nav-item:nth-child(4) { animation-delay: 0.13s; }
-.foco-android-drawer.show .android-nav-item:nth-child(5) { animation-delay: 0.16s; }
-.foco-android-drawer.show .android-nav-item:nth-child(6) { animation-delay: 0.19s; }
-.foco-android-drawer.show .android-nav-item:nth-child(7) { animation-delay: 0.22s; }
-.foco-android-drawer.show .android-nav-item:nth-child(8) { animation-delay: 0.25s; }
-.foco-android-drawer.show .android-nav-item:nth-child(9) { animation-delay: 0.28s; }
-
-@keyframes androidSlideIn {
-    0% {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
+.android-item-arrow {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--ps-muted);
 }
 
 /* ==============================================================================
-   3. BOTÕES E COMPONENTES DE AÇÃO (CTAS)
-   ============================================================================== */
-.btn-foco-primary {
-    background: linear-gradient(135deg, var(--foco-red) 0%, #075259 100%);
-    color: #ffffff;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    border: none;
-    border-radius: 10px;
-    padding: 0.85rem 2rem;
-    box-shadow: 0 4px 18px var(--foco-red-glow);
-    transition: var(--foco-transition);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    text-decoration: none;
-}
-
-.btn-foco-primary:hover {
-    background: linear-gradient(135deg, var(--foco-red-light) 0%, var(--foco-red) 100%);
-    color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(10, 107, 116, 0.45);
-}
-
-.btn-foco-outline {
-    background: #ffffff;
-    color: #0f172a;
-    font-weight: 600;
-    border: 1.5px solid var(--foco-border);
-    border-radius: 10px;
-    padding: 0.85rem 2rem;
-    box-shadow: var(--foco-shadow-sm);
-    transition: var(--foco-transition);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    text-decoration: none;
-}
-
-.btn-foco-outline:hover {
-    background: #f8fafc;
-    border-color: #cbd5e1;
-    color: var(--foco-red);
-    transform: translateY(-2px);
-}
-
-/* ==============================================================================
-   4. HERO SECTION COM BACKGROUND CINEMATOGRÁFICO & OVERLAY DIREIONAL
+   2. HERO CAROUSEL COMPACTO & ROBUSTO (ZERO VÃO EM BRANCO)
    ============================================================================== */
 .hero-section {
+    min-height: 500px;
+    background-color: var(--ps-dark);
     position: relative;
-    min-height: 85vh;
-    display: flex;
-    align-items: stretch;
-    background-color: #0b0f19;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    overflow: hidden;
-    padding: 0;
-    width: 100%;
-    max-width: 100%;
-}
-
-#heroCarousel {
-    width: 100%;
-    max-width: 100%;
-    position: relative;
-    z-index: 3;
-    min-height: 85vh;
-    height: 100%;
     overflow: hidden;
 }
-
-.hero-section .carousel-inner {
-    width: 100%;
-    max-width: 100%;
-    min-height: 85vh;
-    height: 100%;
-    overflow: hidden;
+@media (min-width: 992px) {
+    .hero-section {
+        min-height: 540px;
+    }
 }
-
-.hero-section .carousel-item {
-    position: relative;
-    min-height: 85vh;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-}
-
-/* Garante que slides inativos fiquem 100% ocultos, eliminando sobreposição de textos */
-.hero-section .carousel-item:not(.active):not(.carousel-item-next):not(.carousel-item-prev) {
-    display: none !important;
-}
-
-.hero-section .carousel-item.active,
-.hero-section .carousel-item-next,
-.hero-section .carousel-item-prev {
-    display: flex;
-}
-
-/* Transição cinematográfica cross-fade suave */
-.hero-section #heroCarousel.carousel-fade .carousel-item {
-    opacity: 0;
-    transition-duration: .7s;
-    transition-property: opacity;
-}
-
-.hero-section #heroCarousel.carousel-fade .carousel-item.active,
-.hero-section #heroCarousel.carousel-fade .carousel-item-next.carousel-item-start,
-.hero-section #heroCarousel.carousel-fade .carousel-item-prev.carousel-item-end {
-    z-index: 1;
-    opacity: 1;
-}
-
-.hero-section #heroCarousel.carousel-fade .active.carousel-item-start,
-.hero-section #heroCarousel.carousel-fade .active.carousel-item-end {
-    z-index: 0;
-    opacity: 0;
-    transition: opacity 0s .7s;
-}
-
 .hero-slide-bg {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center right;
-    background-repeat: no-repeat;
-    z-index: 1;
-    pointer-events: none;
-    transition: filter 0.3s ease;
+    inset: 0;
+    background-size: cover !important;
+    background-position: center center !important;
+    transform: scale(1.02);
+    transition: transform 7s ease;
 }
-
+.carousel-item.active .hero-slide-bg {
+    transform: scale(1);
+}
 .hero-slide-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    pointer-events: none;
-    transition: opacity 0.3s ease, background 0.3s ease;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(7, 24, 34, 0.94) 0%, rgba(7, 24, 34, 0.85) 50%, rgba(7, 24, 34, 0.55) 85%, rgba(7, 24, 34, 0.35) 100%) !important;
 }
-
 .hero-slide-content {
     position: relative;
-    z-index: 4;
-    padding: 90px 0 80px 0;
-    width: 100%;
-    max-width: 100%;
+    z-index: 2;
+    padding: 42px 0;
 }
-
-.hero-slide-content .container {
-    padding-left: 1.25rem !important;
-    padding-right: 1.25rem !important;
-}
-
-@media (max-width: 991.98px) {
-    .hero-section,
-    #heroCarousel,
-    .hero-section .carousel-inner,
-    .hero-section .carousel-item {
-        min-height: auto;
-    }
-
-    .hero-slide-bg {
-        background-position: center center !important;
-    }
-
-    .hero-slide-content {
-        padding: 55px 0 55px 0;
-    }
-}
-
 .hero-badge {
     display: inline-flex;
     align-items: center;
-    background: rgba(10, 107, 116, 0.18);
-    border: 1px solid rgba(13, 131, 142, 0.45);
-    color: #0d838e;
+    background: rgba(16, 185, 129, 0.18);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 0.82rem;
     font-weight: 700;
-    font-size: 0.85rem;
-    padding: 6px 16px;
-    border-radius: 50px;
-    margin-bottom: 1.25rem;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
-    backdrop-filter: blur(8px);
-    max-width: 100%;
-    white-space: normal;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
 }
-
 .hero-title {
-    font-size: 3.2rem;
-    font-weight: 900;
-    line-height: 1.15;
-    margin-bottom: 1.5rem;
+    font-size: clamp(1.8rem, 3.8vw, 2.75rem);
+    font-weight: 800;
     color: #ffffff;
-    letter-spacing: -0.5px;
-    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
-    overflow-wrap: break-word;
-    word-break: break-word;
-    hyphens: auto;
+    line-height: 1.18;
+    margin-bottom: 12px;
 }
-
-.hero-title span {
-    color: #0d838e;
-}
-
 .hero-desc {
-    font-size: 1.18rem;
-    color: #cbd5e1;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    max-width: 620px;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
-    overflow-wrap: break-word;
-    word-break: break-word;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 1rem;
+    max-width: 580px;
+    margin-bottom: 22px;
+    line-height: 1.5;
 }
 
-/* Card da Simulação Rápida no Hero (Contraste premium sobre o fundo escuro) */
+/* Card Agendamento Rápido no Hero */
 .card-simulacao-hero {
     background: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 2.25rem;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
-    position: relative;
-    transition: var(--foco-transition);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
-
-.card-simulacao-hero:hover {
-    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
-    transform: translateY(-2px);
-}
-
 .btn-tipo-veiculo {
-    background: #f8fafc;
-    border: 1px solid var(--foco-border);
-    color: var(--foco-title);
-    border-radius: 12px;
-    padding: 1rem;
-    text-decoration: none;
     display: block;
-    transition: var(--foco-transition);
+    background: var(--ps-light-bg);
+    border: 1px solid var(--ps-border);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-decoration: none;
+    color: var(--ps-title);
+    transition: var(--ps-transition);
 }
-
 .btn-tipo-veiculo:hover {
     background: #ffffff;
-    border-color: var(--foco-red);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(10, 107, 116, 0.12);
-    color: var(--foco-red);
+    border-color: var(--ps-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--ps-shadow-sm);
+    color: var(--ps-primary);
 }
-
-/* Controles do Carrossel Hero */
-.hero-nav-container {
-    position: absolute !important;
-    bottom: 22px;
-    left: 0;
-    right: 0;
-    z-index: 10;
-    margin: 0 auto;
-    pointer-events: none;
-    display: flex;
-    justify-content: center;
-}
-
-.hero-carousel-nav {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    pointer-events: auto;
-}
-
-#heroCarousel .carousel-control-prev,
-#heroCarousel .carousel-control-next {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    opacity: 1;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    transition: var(--foco-transition);
-    z-index: 5;
-    top: auto;
-    bottom: auto;
-}
-
-#heroCarousel .carousel-control-prev:hover,
-#heroCarousel .carousel-control-next:hover {
-    background: var(--foco-red);
-    border-color: var(--foco-red);
-    color: #ffffff;
-    box-shadow: 0 6px 20px var(--foco-red-glow);
-    transform: scale(1.08);
-}
-
-.hero-carousel-nav .carousel-indicators {
-    position: relative;
-    margin: 0;
-    gap: 8px;
-    display: flex;
-    align-items: center;
-}
-
-.hero-carousel-nav .carousel-indicators [data-bs-target] {
-    width: 28px;
-    height: 5px;
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.45);
-    border: none;
-    opacity: 0.85;
-    margin: 0;
-    transition: all 0.3s ease;
-}
-
-.hero-carousel-nav .carousel-indicators .active {
-    width: 48px;
-    background-color: var(--foco-red);
-    opacity: 1;
-    box-shadow: 0 0 10px var(--foco-red-glow);
+.btn-tipo-veiculo i {
+    color: var(--ps-primary);
 }
 
 /* ==============================================================================
-   5. SEÇÃO PROBLEMA VS SOLUÇÃO (POR QUE PROTEGER)
+   3. BOTÕES GLOBAIS COM IDENTIDADE VISUAL PRONTO SAÚDE
+   ============================================================================== */
+.btn-foco-primary {
+    background: linear-gradient(135deg, #0a6b74 0%, #07474d 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(10, 107, 116, 0.28) !important;
+    transition: var(--ps-transition);
+}
+.btn-foco-primary:hover {
+    background: linear-gradient(135deg, #0d838e 0%, #0a6b74 100%) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(10, 107, 116, 0.4) !important;
+}
+
+.btn-foco-outline {
+    background: transparent !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.7) !important;
+    padding: 9px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: var(--ps-transition);
+}
+.btn-foco-outline:hover {
+    background: #ffffff !important;
+    color: var(--ps-primary) !important;
+    border-color: #ffffff !important;
+}
+
+.btn-outline-danger {
+    color: var(--ps-primary) !important;
+    border: 1.5px solid var(--ps-primary) !important;
+    background: transparent !important;
+    transition: var(--ps-transition);
+}
+.btn-outline-danger:hover {
+    background: var(--ps-primary) !important;
+    color: #ffffff !important;
+}
+
+.btn-agendar-estetica {
+    background: linear-gradient(135deg, #0a6b74 0%, #07474d 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    width: 100%;
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: var(--ps-transition);
+}
+.btn-agendar-estetica:hover {
+    background: linear-gradient(135deg, #0d838e 0%, #0a6b74 100%) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(10, 107, 116, 0.35);
+}
+
+/* ==============================================================================
+   4. SEÇÕES DENSO-FUNCIONAIS (ESPAÇOS EM BRANCO ENXUTOS: 45px - 50px)
    ============================================================================== */
 .section-risco {
+    padding: 48px 0;
     background: #ffffff;
-    padding: 90px 0;
-    position: relative;
-    border-bottom: 1px solid var(--foco-border);
+}
+.section-sobre {
+    padding: 48px 0;
+    background: var(--ps-light-bg);
+}
+.section-planos {
+    padding: 52px 0;
+    background: #ffffff;
+}
+.section-estetica {
+    padding: 48px 0;
+    background: var(--ps-light-bg);
+}
+.section-medicos {
+    padding: 48px 0;
+    background: #ffffff;
+}
+.section-depoimentos {
+    padding: 45px 0;
+    background: var(--ps-light-bg);
+}
+.section-convenios,
+.section-parceiros {
+    padding: 36px 0;
+    background: #ffffff;
+}
+.section-faq {
+    padding: 45px 0;
+    background: var(--ps-light-bg);
+}
+.section-contato {
+    padding: 48px 0;
+    background: #ffffff;
 }
 
+@media (max-width: 767px) {
+    .section-risco,
+    .section-sobre,
+    .section-planos,
+    .section-estetica,
+    .section-medicos,
+    .section-depoimentos,
+    .section-faq,
+    .section-contato {
+        padding: 34px 0;
+    }
+}
+
+/* Títulos das Seções Compactos */
+.max-w-700 {
+    max-width: 700px;
+}
+.max-w-800 {
+    max-width: 800px;
+}
+.section-header-compact {
+    margin-bottom: 28px !important;
+}
+
+/* ==============================================================================
+   5. CARDS E ELEMENTOS DA IDENTIDADE VISUAL PRONTO SAÚDE
+   ============================================================================== */
+/* Cards de Riscos / Diferenciais */
 .card-risco {
-    background: #f8fafc;
-    border: 1px solid var(--foco-border);
-    border-radius: 16px;
-    padding: 2.25rem 2rem;
-    height: 100%;
-    box-shadow: var(--foco-shadow-sm);
-    transition: var(--foco-transition);
-}
-
-.card-risco:hover {
     background: #ffffff;
-    border-color: rgba(10, 107, 116, 0.4);
-    transform: translateY(-6px);
-    box-shadow: var(--foco-shadow-card);
-}
-
-.card-risco .icon-risco {
-    width: 58px;
-    height: 58px;
+    border: 1px solid var(--ps-border);
     border-radius: 14px;
-    background: rgba(10, 107, 116, 0.08);
-    color: var(--foco-red);
+    padding: 24px;
+    height: 100%;
+    transition: var(--ps-transition);
+    box-shadow: var(--ps-shadow-sm);
+}
+.card-risco:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ps-shadow-card);
+    border-color: var(--ps-primary);
+}
+.icon-risco {
+    width: 52px;
+    height: 52px;
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.6rem;
-    margin-bottom: 1.5rem;
-    transition: var(--foco-transition);
+    font-size: 1.4rem;
+    margin-bottom: 16px;
 }
 
-.card-risco:hover .icon-risco {
-    background: var(--foco-red);
-    color: #ffffff;
-    box-shadow: 0 6px 18px var(--foco-red-glow);
-}
-
-/* ==============================================================================
-   6. SEÇÃO QUEM SOMOS E AUTORIDADE
-   ============================================================================== */
-.section-sobre {
-    background: #f8fafc;
-    padding: 90px 0;
-    border-bottom: 1px solid var(--foco-border);
-}
-
-.card-diferenciais {
-    background: #ffffff;
-    border: 1px solid var(--foco-border);
-    border-radius: 20px;
-    box-shadow: var(--foco-shadow-md);
-}
-
-/* ==============================================================================
-   7. SEÇÃO PLANOS E PREÇOS (CARDS ESPAÇOSOS, ELEGANTES E DE ALTA CONVERSÃO)
-   ============================================================================== */
-.section-planos {
-    padding: 95px 0;
-    background: #ffffff;
-    position: relative;
-    border-bottom: 1px solid var(--foco-border);
-}
-
+/* Cards de Planos e Fidelidade */
 .card-plano {
     background: #ffffff;
-    border: 2px solid #e2e8f0;
-    border-radius: 22px;
-    padding: 2.35rem 1.75rem;
-    height: 100%;
-    width: 100%;
-    box-sizing: border-box;
+    border: 1.5px solid var(--ps-border);
+    border-radius: 16px;
+    padding: 26px;
+    transition: var(--ps-transition);
     position: relative;
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
+    box-shadow: var(--ps-shadow-sm);
 }
-
 .card-plano:hover {
-    transform: translateY(-7px);
-    border-color: #cbd5e1;
-    box-shadow: 0 20px 42px rgba(15, 23, 42, 0.09);
+    transform: translateY(-5px);
+    box-shadow: var(--ps-shadow-hover);
+    border-color: var(--ps-primary);
 }
-
 .card-plano.destaque {
-    border: 2px solid var(--foco-red);
-    background: linear-gradient(180deg, #fff8f8 0%, #ffffff 100%);
-    box-shadow: 0 14px 38px rgba(10, 107, 116, 0.12);
+    border: 2.5px solid var(--ps-primary);
+    box-shadow: 0 10px 30px rgba(10, 107, 116, 0.18);
 }
-
-.card-plano.destaque:hover {
-    transform: translateY(-9px);
-    box-shadow: 0 22px 50px rgba(10, 107, 116, 0.18);
-}
-
 .tag-plano-destaque {
     position: absolute;
-    top: -14px;
+    top: -13px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, var(--foco-red) 0%, #075259 100%);
+    background: linear-gradient(135deg, #0a6b74 0%, #07474d 100%);
     color: #ffffff;
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     font-weight: 800;
-    padding: 5px 18px;
-    border-radius: 50px;
-    letter-spacing: 0.9px;
-    text-transform: uppercase;
-    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.35);
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-}
-
-.icone-plano-box {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    background: rgba(10, 107, 116, 0.07);
-    color: var(--foco-red);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.55rem;
-    margin-bottom: 0.95rem;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(10, 107, 116, 0.12);
-}
-
-.card-plano:hover .icone-plano-box {
-    background: var(--foco-red);
-    color: #ffffff;
-    transform: scale(1.08) rotate(-3deg);
-    box-shadow: 0 6px 18px var(--foco-red-glow);
-    border-color: var(--foco-red);
-}
-
-.plano-titulo {
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: var(--foco-title);
-    margin-bottom: 0.35rem;
-    letter-spacing: -0.3px;
-}
-
-.plano-subtitulo {
-    font-size: 0.84rem;
-    color: var(--foco-muted);
-    min-height: 44px;
-    line-height: 1.45;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.bloco-preco {
-    background: #f8fafc;
-    border-radius: 16px;
-    padding: 1.15rem 0.95rem;
-    margin: 0.85rem 0 1.35rem 0;
-    border: 1px solid var(--foco-border-light);
-    text-align: center;
-    transition: background-color 0.25s ease;
-    min-height: 94px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.card-plano.destaque .bloco-preco {
-    background: #fff5f5;
-    border-color: rgba(10, 107, 116, 0.18);
-}
-
-.preco-valor {
-    font-size: 2.35rem;
-    font-weight: 900;
-    color: var(--foco-title);
-    line-height: 1;
-    letter-spacing: -0.5px;
-}
-
-.card-plano.destaque .preco-valor {
-    color: var(--foco-red);
-}
-
-.preco-periodo {
-    color: var(--foco-muted);
-    font-size: 0.92rem;
-    font-weight: 700;
-}
-
-.badge-adesao {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 0.73rem;
-    font-weight: 800;
-    padding: 3px 12px;
+    padding: 4px 14px;
     border-radius: 20px;
-    margin-top: 8px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
 }
-
-.badge-adesao-gratis {
-    background: #dcfce7;
-    color: #15803d;
-    border: 1px solid rgba(22, 163, 74, 0.2);
+.icone-plano-box {
+    width: 48px;
+    height: 48px;
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin: 0 auto 12px;
 }
-
-.badge-adesao-paga {
-    background: #f1f5f9;
-    color: #64748b;
-    border: 1px solid #e2e8f0;
+.plano-titulo {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--ps-title);
+    margin-bottom: 4px;
 }
-
+.plano-subtitulo {
+    font-size: 0.82rem;
+    color: var(--ps-muted);
+    margin-bottom: 14px;
+}
+.bloco-preco {
+    background: var(--ps-light-bg);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.preco-valor {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--ps-primary);
+}
+.preco-periodo {
+    font-size: 0.8rem;
+    color: var(--ps-muted);
+}
+.badge-adesao {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--ps-secondary-hover);
+}
 .recursos-list {
     list-style: none;
     padding: 0;
-    margin: 0 0 1.75rem 0;
-    flex-grow: 1;
+    margin: 0 0 20px 0;
 }
-
 .recursos-list li {
-    padding: 0.52rem 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.65rem;
-    color: #334155;
-    font-size: 0.87rem;
-    line-height: 1.45;
-    border-bottom: 1px dashed rgba(226, 232, 240, 0.85);
-}
-
-.recursos-list li:last-child {
-    border-bottom: none;
-}
-
-/* Cor dos checados restaurada para o vermelho característico original da Pronto Saúde */
-.recursos-list li i {
-    color: var(--foco-red) !important;
-    font-size: 0.95rem;
-    margin-top: 2px;
-    flex-shrink: 0;
-    filter: drop-shadow(0 2px 4px rgba(10, 107, 116, 0.25));
-}
-
-.card-plano .btn-contratar,
-.card-plano .btn-foco-primary,
-.card-plano.destaque .btn-contratar,
-.card-plano.destaque .btn-foco-primary {
-    font-size: 0.85rem !important;
-    letter-spacing: 0.2px !important;
-    border-radius: 12px !important;
-    transition: all 0.25s ease !important;
-    white-space: nowrap !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
-    padding-top: 0.85rem !important;
-    padding-bottom: 0.85rem !important;
-    line-height: 1.2 !important;
-    max-width: 100% !important;
-}
-
-.card-plano .btn-contratar i,
-.card-plano .btn-foco-primary i {
-    flex-shrink: 0 !important;
-    margin-right: 0.35rem !important;
-}
-
-.card-plano:not(.destaque) .btn-contratar:hover {
-    background: var(--foco-red);
-    color: #ffffff;
-    box-shadow: 0 6px 18px var(--foco-red-glow);
-}
-
-/* ==============================================================================
-   8. SEÇÃO RONDA TÁTICA
-   ============================================================================== */
-.section-ronda {
-    background: #f8fafc;
-    padding: 100px 0;
-    border-bottom: 1px solid var(--foco-border);
-}
-
-.etapa-ronda-card {
-    background: #ffffff;
-    border: 1px solid var(--foco-border);
-    border-radius: 16px;
-    padding: 2rem 1.75rem;
-    text-align: center;
-    position: relative;
-    height: 100%;
-    box-shadow: var(--foco-shadow-sm);
-    transition: var(--foco-transition);
-}
-
-.etapa-ronda-card:hover {
-    border-color: rgba(10, 107, 116, 0.4);
-    transform: translateY(-6px);
-    box-shadow: var(--foco-shadow-card);
-}
-
-.etapa-numero {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: var(--foco-red);
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 0.85rem;
+    padding: 6px 0;
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.25rem auto;
-    box-shadow: 0 6px 18px var(--foco-red-glow);
+    gap: 8px;
+    color: var(--ps-text);
+}
+.recursos-list li i {
+    color: var(--ps-secondary);
+    font-size: 0.9rem;
 }
 
-/* ==============================================================================
-   9. RECURSOS DO APLICATIVO
-   ============================================================================== */
-.section-app {
+/* Cards de Especialidades */
+.card-estetica {
     background: #ffffff;
-    padding: 100px 0;
-    border-bottom: 1px solid var(--foco-border);
-}
-
-.card-recurso-app {
-    background: #f8fafc;
-    border: 1px solid var(--foco-border);
+    border: 1px solid var(--ps-border);
     border-radius: 14px;
-    padding: 1.25rem;
-    transition: var(--foco-transition);
-}
-
-.card-recurso-app:hover {
-    background: #ffffff;
-    border-color: var(--foco-red);
-    transform: translateY(-2px);
-    box-shadow: var(--foco-shadow-sm);
-}
-
-.mockup-app-box {
-    background: linear-gradient(135deg, #f8fafc 0%, #fee2e2 100%);
-    border: 1px solid var(--foco-border);
-    border-radius: 24px;
-    padding: 3rem 2rem;
-    box-shadow: var(--foco-shadow-md);
-}
-
-/* ==============================================================================
-/* ==============================================================================
-   10. DEPOIMENTOS DE CLIENTES (CARROSSEL TOUCH & DRAG)
-   ============================================================================== */
-.section-depoimentos {
-    background: #f8fafc;
-    padding: 100px 0;
-    border-bottom: 1px solid var(--foco-border);
-    position: relative;
-    overflow: hidden;
-}
-
-.depoimentos-carousel-container {
-    position: relative;
-    padding: 0 16px;
-}
-
-.swiper-depoimentos {
-    width: 100%;
-    padding: 14px 4px 28px 4px !important;
-    overflow: hidden;
-    cursor: grab;
-}
-
-.swiper-depoimentos:active,
-.swiper-depoimentos.swiper-grabbing {
-    cursor: grabbing;
-}
-
-.swiper-depoimentos .swiper-slide {
-    height: auto;
-    display: flex;
-    box-sizing: border-box;
-}
-
-.card-depoimento {
-    width: 100%;
-    background: #ffffff;
-    border: 1px solid var(--foco-border);
-    border-radius: 20px;
-    padding: 2.2rem 1.75rem;
-    box-shadow: var(--foco-shadow-sm);
-    transition: var(--foco-transition);
+    padding: 20px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    user-select: none;
-    -webkit-user-select: none;
+    transition: var(--ps-transition);
+    box-shadow: var(--ps-shadow-sm);
 }
-
-.card-depoimento:hover {
-    border-color: rgba(var(--bs-primary-rgb), 0.35);
-    transform: translateY(-6px);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+.card-estetica:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ps-shadow-card);
+    border-color: var(--ps-primary);
 }
-
-.card-depoimento-texto {
-    font-size: 0.94rem;
-    line-height: 1.65;
-    color: #475569;
+.badge-estetica-topo {
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    border: 1px solid rgba(10, 107, 116, 0.2);
 }
-
-/* AVATAR DO CLIENTE: RÍGIDO, CIRCULAR E PROTEGIDO CONTRA ACHATAMENTO (NUNCA OVAL) */
-.depoimento-avatar-wrapper {
-    width: 48px !important;
-    height: 48px !important;
-    min-width: 48px !important;
-    min-height: 48px !important;
-    max-width: 48px !important;
-    max-height: 48px !important;
-    aspect-ratio: 1 / 1 !important;
-    flex-shrink: 0 !important;
-    flex-grow: 0 !important;
-    border-radius: 50% !important;
-    overflow: hidden !important;
-    position: relative;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    border: 2px solid #ffffff;
-    outline: 2px solid rgba(var(--bs-primary-rgb), 0.25);
-    background: #f1f5f9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.depoimento-avatar-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 50% !important;
-    display: block;
-}
-
-.depoimento-avatar-inicial {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--foco-red) 0%, #990000 100%);
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 1.15rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-transform: uppercase;
-    user-select: none;
-    line-height: 1;
-    border-radius: 50% !important;
-}
-
-.depoimento-info {
-    min-width: 0 !important;
-    flex: 1;
-    overflow: hidden;
-}
-
-.depoimento-info h6 {
-    font-size: 0.95rem;
-    line-height: 1.3;
-}
-
-.depoimento-info span {
-    font-size: 0.8rem;
-    line-height: 1.3;
-}
-
-/* SETAS DE NAVEGAÇÃO LATERAIS */
-.swiper-btn-depoimentos {
-    position: absolute;
-    top: calc(50% - 24px);
-    transform: translateY(-50%);
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: #ffffff;
-    border: 1px solid var(--foco-border);
-    color: var(--foco-title);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.swiper-btn-depoimentos:hover {
-    background: var(--foco-red);
-    color: #ffffff;
-    border-color: var(--foco-red);
-    box-shadow: 0 8px 24px rgba(var(--bs-primary-rgb), 0.35);
-    transform: translateY(-50%) scale(1.08);
-}
-
-.swiper-btn-prev {
-    left: -20px;
-}
-
-.swiper-btn-next {
-    right: -20px;
-}
-
-.swiper-btn-depoimentos.swiper-button-disabled {
-    opacity: 0.28;
-    cursor: not-allowed;
-    pointer-events: none;
-    transform: translateY(-50%) scale(1);
-}
-
-/* BULLETS DE PAGINAÇÃO */
-.swiper-pagination-depoimentos {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 1.5rem !important;
-}
-
-.swiper-pagination-depoimentos .swiper-pagination-bullet {
-    width: 10px;
-    height: 10px;
-    margin: 0 !important;
-    background: #cbd5e1;
-    opacity: 0.7;
-    border-radius: 999px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-}
-
-.swiper-pagination-depoimentos .swiper-pagination-bullet-active {
-    width: 32px;
-    background: var(--foco-red);
-    opacity: 1;
-    box-shadow: 0 3px 10px rgba(var(--bs-primary-rgb), 0.4);
-}
-
-@media (max-width: 991.98px) {
-    .swiper-btn-depoimentos {
-        display: none !important;
-    }
-    .depoimentos-carousel-container {
-        padding: 0 !important;
-    }
-    .card-depoimento {
-        padding: 1.6rem 1.3rem;
-    }
-}
-
-/* ==============================================================================
-   11. FAQ (PERGUNTAS FREQUENTES)
-   ============================================================================== */
-.section-faq {
-    background: #ffffff;
-    padding: 100px 0;
-    border-bottom: 1px solid var(--foco-border);
-}
-
-.accordion-foco .accordion-item {
-    background: #ffffff;
-    border: 1px solid var(--foco-border);
-    border-radius: 12px !important;
-    margin-bottom: 1rem;
-    overflow: hidden;
-    box-shadow: var(--foco-shadow-sm);
-}
-
-.accordion-foco .accordion-button {
-    background: #ffffff;
-    color: var(--foco-title);
-    font-weight: 700;
-    font-size: 1.05rem;
-    box-shadow: none;
-    padding: 1.25rem 1.5rem;
-    transition: var(--foco-transition);
-}
-
-.accordion-foco .accordion-button:not(.collapsed) {
-    background: #f8fafc;
-    color: var(--foco-red);
-    border-bottom: 1px solid var(--foco-border);
-}
-
-.accordion-foco .accordion-button::after {
-    filter: none;
-}
-
-.accordion-foco .accordion-body {
-    background: #ffffff;
-    color: var(--foco-text-secondary);
-    line-height: 1.7;
-    padding: 1.5rem;
-}
-
-/* ==============================================================================
-   12. FORMULÁRIO DE CONTATO (CARD CLARO & CLEAN)
-   ============================================================================== */
-.section-contato {
-    background: #f8fafc;
-    padding: 100px 0;
-}
-
-.card-contato-icon {
+.icon-estetica-box {
     width: 48px;
     height: 48px;
-    min-width: 48px;
-    min-height: 48px;
-    border-radius: 50% !important;
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    font-size: 1.25rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-size: 1.3rem;
 }
 
+/* Cards de Corpo Clínico / Médicos */
+.card-medico {
+    background: #ffffff;
+    border: 1px solid var(--ps-border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: var(--ps-transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--ps-shadow-sm);
+}
+.card-medico:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--ps-shadow-card);
+    border-color: var(--ps-primary);
+}
+.card-medico-thumb {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    background: #e2e8f0;
+}
+.card-medico-body {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.card-medico-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ps-title);
+    margin-bottom: 2px;
+}
+.card-medico-spec {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ps-primary);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+.card-medico-footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--ps-border-light);
+}
+
+/* Accordion FAQ */
+.accordion-foco .accordion-item {
+    border: 1px solid var(--ps-border);
+    border-radius: 10px !important;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.accordion-foco .accordion-button {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ps-title);
+    background: #ffffff;
+    padding: 16px 20px;
+}
+.accordion-foco .accordion-button:not(.collapsed) {
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    box-shadow: none;
+}
+.accordion-foco .accordion-button:focus {
+    box-shadow: none;
+}
+.accordion-foco .accordion-body {
+    font-size: 0.9rem;
+    color: var(--ps-text);
+    padding: 16px 20px;
+    background: #ffffff;
+    line-height: 1.6;
+}
+
+/* Formulário de Contato */
 .card-contato-form {
     background: #ffffff;
-    border: 1px solid var(--foco-border);
-    border-radius: 20px;
-    padding: 2.5rem;
-    box-shadow: var(--foco-shadow-md);
+    border: 1px solid var(--ps-border);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: var(--ps-shadow-card);
 }
-
-.card-contato-form .form-control {
-    background: #f8fafc;
-    border: 1px solid #cbd5e1;
-    color: #0f172a;
+.card-contato-icon {
+    width: 44px;
+    height: 44px;
     border-radius: 10px;
-    padding: 0.75rem 1rem;
-    transition: var(--foco-transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
 }
 
-.card-contato-form .form-control:focus {
-    background: #ffffff;
-    border-color: var(--foco-red);
-    box-shadow: 0 0 0 0.25rem rgba(10, 107, 116, 0.15);
-    color: #0f172a;
+/* Utilitários de Cor Pronto Saúde */
+.text-danger {
+    color: var(--ps-primary) !important;
+}
+.bg-danger {
+    background-color: var(--ps-primary) !important;
+}
+.border-danger {
+    border-color: var(--ps-primary) !important;
 }
 
 /* ==============================================================================
-   13. RODAPÉ INSTITUCIONAL (TEMA CLARO CORPORATIVO & CLEAN)
+   6. RODAPÉ GLOBAL HOSPITALAR (PRONTO SAÚDE)
    ============================================================================== */
 .foco-footer {
-    background: #f1f5f9;
-    border-top: 1px solid var(--foco-border);
-    padding: 70px 0 30px 0;
-    color: #475569;
+    background-color: var(--ps-dark);
+    color: rgba(255, 255, 255, 0.82);
+    padding: 50px 0 25px;
+    border-top: 3px solid var(--ps-primary);
 }
-
-.foco-footer h5 {
-    color: var(--foco-title);
-    font-weight: 700;
-    font-size: 1.05rem;
-    margin-bottom: 1.2rem;
-}
-
 .foco-footer a {
-    color: #475569;
+    color: rgba(255, 255, 255, 0.78);
     text-decoration: none;
-    transition: var(--foco-transition);
+    transition: var(--ps-transition);
 }
-
 .foco-footer a:hover {
-    color: var(--foco-red);
+    color: var(--ps-accent);
 }
-
-.badge-footer-ssl {
-    background: #ffffff;
-    border: 1px solid var(--foco-border);
-    color: #334155;
-    font-size: 0.78rem;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-weight: 600;
-    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+.foco-footer-title {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 8px;
+}
+.foco-footer-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 36px;
+    height: 3px;
+    background: var(--ps-primary);
+    border-radius: 2px;
+}
+.foco-footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 35px;
+    padding-top: 20px;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 /* ==============================================================================
-   14. BOTÕES FLUTUANTES (WHATSAPP E VOLTAR AO TOPO)
+   7. BOTÃO WHATSAPP FLUTUANTE MULTICANAIS & VOLTAR AO TOPO
    ============================================================================== */
 .foco-whatsapp-float {
     position: fixed;
-    bottom: 25px;
-    right: 25px;
-    width: 62px;
-    height: 62px;
-    background: #25d366;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-whatsapp-pulse {
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
     color: #ffffff;
     border-radius: 50%;
     display: flex;
@@ -1662,1641 +855,109 @@ img, svg, video, canvas, audio, iframe, embed, object {
     justify-content: center;
     font-size: 32px;
     box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45);
-    z-index: 1060;
-    text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    animation: pulse-whatsapp 2s infinite;
-}
-
-.foco-whatsapp-float:hover {
-    background: #20ba59;
-    color: #ffffff;
-    transform: scale(1.08) translateY(-3px);
-    box-shadow: 0 10px 32px rgba(37, 211, 102, 0.6);
-}
-
-.foco-whatsapp-float .whatsapp-tooltip {
-    position: absolute;
-    right: 74px;
-    background: #0f172a;
-    color: #ffffff;
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 8px 14px;
-    border-radius: 20px;
-    white-space: nowrap;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    pointer-events: none;
-    opacity: 0;
-    transform: translateX(10px);
-    transition: all 0.3s ease;
-}
-
-.foco-whatsapp-float:hover .whatsapp-tooltip {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-@keyframes pulse-whatsapp {
-    0% {
-        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 16px rgba(37, 211, 102, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
-    }
-}
-
-.foco-btn-topo {
-    position: fixed;
-    bottom: 98px;
-    right: 32px;
-    width: 48px;
-    height: 48px;
-    background: #ffffff;
-    border: 1px solid var(--foco-border);
-    color: #0f172a;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
-    z-index: 1050;
-    cursor: pointer;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(15px);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.foco-btn-topo.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.foco-btn-topo:hover {
-    background: var(--foco-red);
-    border-color: var(--foco-red);
-    color: #ffffff;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px var(--foco-red-glow);
-}
-
-/* Responsividade Mobile da Navbar e Menu */
-@media (max-width: 991.98px) {
-    .hero-title {
-        font-size: 2.15rem;
-        line-height: 1.2;
-    }
-    .hero-desc {
-        font-size: 1.05rem;
-        line-height: 1.55;
-    }
-    .foco-navbar {
-        background: #ffffff !important;
-        padding: 10px 0 !important;
-    }
-    .foco-navbar.scrolled {
-        padding: 8px 0 !important;
-    }
-    .foco-navbar .navbar-brand {
-        padding: 3px 0 !important;
-    }
-    .logo-foco7 {
-        max-height: 36px !important;
-        height: 36px !important;
-        padding: 2px 0 !important;
-    }
-    .foco-navbar .nav-link::after {
-        display: none;
-    }
-    .foco-navbar .navbar-collapse {
-        background: #ffffff;
-        border-radius: 16px;
-        padding: 1.25rem 1rem;
-        margin-top: 0.75rem;
-        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
-        border: 1px solid rgba(226, 232, 240, 0.9);
-        max-height: calc(100vh - 85px);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    .foco-navbar .navbar-collapse::-webkit-scrollbar {
-        width: 4px;
-    }
-    .foco-navbar .navbar-collapse::-webkit-scrollbar-thumb {
-        background: rgba(10, 107, 116, 0.25);
-        border-radius: 4px;
-    }
-    .foco-navbar .nav-link {
-        padding: 0.65rem 0.95rem;
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #1e293b;
-        border-radius: 8px;
-        margin-bottom: 2px;
-        transition: all 0.2s ease;
-    }
-    .foco-navbar .nav-link:hover,
-    .foco-navbar .nav-link:active {
-        background: rgba(10, 107, 116, 0.05);
-        color: var(--foco-red);
-        transform: translateX(3px);
-    }
-    .foco-navbar .nav-link.active {
-        background: rgba(10, 107, 116, 0.08);
-        color: var(--foco-red);
-        font-weight: 700;
-    }
-}
-
-/* Responsividade para Tablets Pequenos e Celulares Maiores (<= 767.98px) */
-@media (max-width: 767.98px) {
-    .hero-slide-content {
-        padding: 42px 0 48px 0;
-    }
-    .hero-slide-content .container {
-        padding-left: 1.25rem !important;
-        padding-right: 1.25rem !important;
-    }
-    .hero-title {
-        font-size: 1.85rem;
-        line-height: 1.22;
-        margin-bottom: 1rem;
-    }
-    .hero-desc {
-        font-size: 0.98rem;
-        line-height: 1.5;
-        margin-bottom: 1.5rem;
-    }
-    .card-simulacao-hero {
-        padding: 1.75rem 1.25rem;
-        border-radius: 18px;
-    }
-    .card-simulacao-hero h4 {
-        font-size: 1.25rem;
-    }
-    .btn-tipo-veiculo {
-        padding: 0.8rem 0.5rem;
-        font-size: 0.9rem;
-    }
-    .foco-whatsapp-float {
-        width: 52px;
-        height: 52px;
-        font-size: 26px;
-        right: 16px;
-        bottom: 16px;
-    }
-    .foco-whatsapp-float .whatsapp-tooltip {
-        display: none !important;
-    }
-    .foco-btn-topo {
-        width: 42px;
-        height: 42px;
-        font-size: 1rem;
-        right: 20px;
-        bottom: 78px;
-    }
-    .section-risco,
-    .section-sobre,
-    .section-planos,
-    .section-estetica,
-    .section-ronda,
-    .section-app,
-    .section-depoimentos,
-    .section-faq,
-    .section-contato {
-        padding: 55px 0;
-    }
-}
-
-/* Responsividade para Smartphones (<= 575.98px) */
-@media (max-width: 575.98px) {
-    .hero-slide-content {
-        padding: 28px 0 38px 0;
-    }
-    .hero-slide-content .container {
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-    }
-    .hero-badge {
-        font-size: 0.72rem;
-        padding: 4px 12px;
-        margin-bottom: 0.75rem;
-        letter-spacing: 0.5px;
-    }
-    .hero-title {
-        font-size: 1.55rem;
-        line-height: 1.24;
-        letter-spacing: -0.3px;
-        margin-bottom: 0.75rem;
-    }
-    .hero-desc {
-        font-size: 0.9rem;
-        line-height: 1.45;
-        margin-bottom: 1.25rem;
-    }
-    .hero-btn-group {
-        flex-direction: column;
-        width: 100%;
-        gap: 0.65rem !important;
-    }
-    .hero-btn-group .btn-foco-primary,
-    .hero-btn-group .btn-foco-outline {
-        width: 100%;
-        justify-content: center;
-        padding: 0.75rem 1.25rem;
-        font-size: 0.9rem;
-    }
-    .card-simulacao-hero {
-        padding: 1.25rem 0.95rem !important;
-        border-radius: 16px;
-        margin-top: 1rem;
-    }
-    .card-simulacao-hero h4 {
-        font-size: 1.15rem;
-    }
-    .btn-tipo-veiculo {
-        padding: 0.6rem 0.3rem;
-        font-size: 0.8rem;
-    }
-    .btn-tipo-veiculo i {
-        font-size: 1.2rem !important;
-    }
-    .card-risco {
-        padding: 1.4rem 1.1rem;
-    }
-    .card-plano {
-        padding: 1.7rem 1.15rem;
-        border-radius: 18px;
-    }
-    .preco-valor {
-        font-size: 1.95rem;
-    }
-    .card-estetica {
-        padding: 1.4rem 1.1rem;
-        border-radius: 16px;
-    }
-    .preco-estetica-valor {
-        font-size: 1.4rem;
-    }
-    .card-diferencial-estetica {
-        padding: 0.9rem;
-    }
-    .card-diferenciais {
-        padding: 1.4rem 1.1rem !important;
-    }
-    .card-depoimento {
-        padding: 1.3rem 1.1rem;
-    }
-    .hero-nav-container {
-        bottom: 10px;
-    }
-    #heroCarousel .carousel-control-prev,
-    #heroCarousel .carousel-control-next {
-        width: 34px;
-        height: 34px;
-        font-size: 0.8rem;
-    }
-    .hero-carousel-nav .carousel-indicators [data-bs-target] {
-        width: 18px;
-        height: 4px;
-    }
-    .hero-carousel-nav .carousel-indicators .active {
-        width: 30px;
-    }
-    h2.display-6 {
-        font-size: 1.75rem !important;
-    }
-    .section-risco,
-    .section-sobre,
-    .section-planos,
-    .section-estetica,
-    .section-ronda,
-    .section-app,
-    .section-depoimentos,
-    .section-faq,
-    .section-contato {
-        padding: 45px 0;
-    }
-}
-
-/* Responsividade para Telas Ultracompactas (<= 380px) */
-@media (max-width: 380px) {
-    .hero-title {
-        font-size: 1.35rem;
-        line-height: 1.22;
-    }
-    .hero-desc {
-        font-size: 0.84rem;
-    }
-    .card-simulacao-hero {
-        padding: 1rem 0.75rem !important;
-    }
-    .btn-tipo-veiculo span.small {
-        font-size: 0.7rem;
-    }
-    .btn-foco-primary,
-    .btn-foco-outline {
-        font-size: 0.84rem;
-        padding: 0.7rem 1rem;
-    }
-}
-
-/* ==============================================================================
-   13. ESTÉTICA AUTOMOTIVA PREMIUM & MODAL DE AGENDAMENTO MULTI-CATEGORIA
-   ============================================================================== */
-.section-estetica {
-    padding: 90px 0;
-    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-    position: relative;
-    border-top: 1px solid var(--foco-border-light);
-    border-bottom: 1px solid var(--foco-border-light);
-    position: relative;
-}
-
-.badge-estetica-topo {
-    background: rgba(10, 107, 116, 0.08);
-    color: var(--foco-red);
-    border: 1px solid rgba(10, 107, 116, 0.22);
-    letter-spacing: 1px;
-    display: inline-flex;
-    align-items: center;
-}
-
-.card-estetica {
-    background: #ffffff;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 20px;
-    padding: 2.2rem 1.85rem;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-}
-
-.card-estetica::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--foco-red) 0%, #ff4d4d 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.card-estetica:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 42px -10px rgba(0, 0, 0, 0.08), 0 0 24px rgba(10, 107, 116, 0.12);
-    border-color: rgba(10, 107, 116, 0.35);
-}
-
-.card-estetica:hover::before {
-    opacity: 1;
-}
-
-.icon-estetica-box {
-    width: 60px;
-    height: 60px;
-    border-radius: 16px;
-    background: rgba(10, 107, 116, 0.08);
-    color: var(--foco-red);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.65rem;
-    margin-bottom: 1.35rem;
-    transition: all 0.3s ease;
-}
-
-.card-estetica:hover .icon-estetica-box {
-    background: linear-gradient(135deg, var(--foco-red) 0%, #075259 100%);
-    color: #ffffff;
-    transform: scale(1.08) rotate(4deg);
-    box-shadow: 0 6px 18px var(--foco-red-glow);
-}
-
-.badge-estetica-tempo {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 20px;
-    background: #f1f5f9;
-    color: #475569;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.preco-estetica-valor {
-    font-size: 1.65rem;
-    font-weight: 900;
-    color: var(--foco-red);
-    line-height: 1.1;
-}
-
-.btn-agendar-estetica {
-    background: linear-gradient(135deg, var(--foco-red) 0%, #075259 100%);
-    color: #ffffff;
-    font-weight: 700;
-    padding: 12px 20px;
-    border-radius: 12px;
     border: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    box-shadow: 0 6px 18px rgba(10, 107, 116, 0.28);
+    cursor: pointer;
+    transition: var(--ps-transition);
+    position: relative;
 }
-
-.btn-agendar-estetica:hover {
-    background: linear-gradient(135deg, #075259 0%, #900000 100%);
+.btn-whatsapp-pulse:hover {
+    transform: scale(1.08);
+    background-color: #20ba5a;
     color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(10, 107, 116, 0.42);
+}
+.whatsapp-pulse-ring {
+    position: absolute;
+    inset: -6px;
+    border: 2px solid #25d366;
+    border-radius: 50%;
+    animation: psWhatsPulse 2s infinite cubic-bezier(0.25, 0, 0, 1);
+}
+@keyframes psWhatsPulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.25); opacity: 0; }
+    100% { transform: scale(0.95); opacity: 0; }
 }
 
-.card-diferencial-estetica {
+.whatsapp-popup-card {
+    position: absolute;
+    bottom: 74px;
+    right: 0;
+    width: 320px;
     background: #ffffff;
-    border: 1px solid var(--foco-border);
-    border-radius: 14px;
-    padding: 1.2rem;
+    border-radius: 16px;
+    box-shadow: 0 16px 45px rgba(7, 24, 34, 0.22);
+    border: 1px solid var(--ps-border);
+    overflow: hidden;
+    display: none;
+    animation: psFadeInUp 0.3s ease;
+}
+.whatsapp-popup-card.show {
+    display: block;
+}
+.whatsapp-popup-header {
+    background: #07474d;
+    color: #ffffff;
+    padding: 14px 16px;
     display: flex;
     align-items: center;
-    gap: 14px;
-    transition: all 0.3s ease;
+    justify-content: space-between;
+}
+.whatsapp-popup-body {
+    padding: 14px 16px;
+}
+.whatsapp-channel-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--ps-light-bg);
+    border: 1px solid var(--ps-border);
+    border-radius: 10px;
+    color: var(--ps-title);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    transition: var(--ps-transition);
+}
+.whatsapp-channel-btn:hover {
+    background: #ffffff;
+    border-color: var(--ps-secondary);
+    color: var(--ps-secondary-hover);
+    transform: translateX(3px);
+}
+@keyframes psFadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.card-diferencial-estetica:hover {
-    border-color: rgba(10, 107, 116, 0.4);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-    transform: translateY(-2px);
-}
-
-/* ==========================================================================
-   BOTÃO HAMBÚRGUER ESTILO ANDROID (Apenas Mobile e Tablets < 992px)
-   ========================================================================== */
-@media (max-width: 991.98px) {
-    .btn-android-burger {
-        display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
-        width: 44px;
-        height: 44px;
-        padding: 0;
-        border: 1.5px solid rgba(10, 107, 116, 0.35) !important;
-        background: rgba(10, 107, 116, 0.06) !important;
-        border-radius: 10px;
-        color: var(--foco-red, #0a6b74) !important;
-        font-size: 1.25rem;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-        outline: none !important;
-        cursor: pointer;
-    }
-
-    .btn-android-burger:hover,
-    .btn-android-burger:active,
-    .btn-android-burger:focus {
-        background: var(--foco-red, #0a6b74) !important;
-        color: #ffffff !important;
-        border-color: var(--foco-red, #0a6b74) !important;
-        transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(10, 107, 116, 0.3);
-    }
-}
-
-@media (min-width: 992px) {
-    .btn-android-burger,
-    button.btn-android-burger,
-    #btnOpenMenuDrawer {
-        display: none !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-        opacity: 0 !important;
-    }
-}
-
-/* ==========================================================================
-   BANNER LGPD FLUTUANTE PREMIUM (CONSENTIMENTO DE COOKIES & PRIVACIDADE)
-   ========================================================================== */
-.foco-lgpd-banner {
+.btn-voltar-topo {
     position: fixed;
     bottom: 24px;
     left: 24px;
-    width: 440px;
-    max-width: calc(100vw - 48px);
-    z-index: 1040;
-    background: linear-gradient(145deg, rgba(15, 23, 42, 0.96) 0%, rgba(24, 33, 54, 0.94) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 20px;
-    padding: 20px 22px;
-    box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05), 0 10px 30px rgba(10, 107, 116, 0.18);
-    transform: translate3d(0, 40px, 0) scale(0.96);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    overflow: hidden;
-    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, visibility 0.4s;
-    will-change: transform, opacity;
-}
-
-.foco-lgpd-banner.show {
-    transform: translate3d(0, 0, 0) scale(1);
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
-.foco-lgpd-banner.closing {
-    transform: translate3d(0, 30px, 0) scale(0.96);
-    opacity: 0;
-    pointer-events: none;
-}
-
-.foco-lgpd-glow-line {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent 0%, var(--foco-red, #0a6b74) 25%, #ff4d4d 50%, var(--foco-red, #0a6b74) 75%, transparent 100%);
-    opacity: 0.95;
-}
-
-.foco-lgpd-card-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.foco-lgpd-icon-shield {
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, rgba(10, 107, 116, 0.22) 0%, rgba(10, 107, 116, 0.08) 100%);
-    border: 1px solid rgba(10, 107, 116, 0.35);
-    color: #ff4d4d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.15rem;
-    flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(10, 107, 116, 0.2);
-}
-
-.foco-lgpd-title {
-    color: #ffffff;
-    font-size: 0.98rem;
-    font-weight: 700;
-    margin: 0;
-    line-height: 1.25;
-}
-
-.foco-lgpd-subtitle {
-    color: #94a3b8;
-    font-size: 0.73rem;
-    margin-top: 2px;
-}
-
-.foco-lgpd-badge-law {
-    background: rgba(34, 197, 94, 0.14);
-    color: #4ade80;
-    border: 1px solid rgba(34, 197, 94, 0.3);
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    white-space: nowrap;
-}
-
-.foco-lgpd-btn-close {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #94a3b8;
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-
-.foco-lgpd-btn-close:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.15);
-    transform: rotate(90deg);
-}
-
-.foco-lgpd-card-body {
-    display: flex;
-    flex-direction: column;
-}
-
-.foco-lgpd-text {
-    font-size: 0.83rem;
-    color: #cbd5e1;
-    margin: 0 0 10px 0;
-    line-height: 1.5;
-}
-
-.foco-lgpd-tags-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 10px;
-}
-
-.foco-lgpd-tag-item {
-    font-size: 0.72rem;
-    color: #94a3b8;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-}
-
-.foco-lgpd-policy-link {
-    margin-bottom: 4px;
-}
-
-.foco-lgpd-link {
-    color: #f87171;
-    font-size: 0.82rem;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    transition: color 0.2s ease;
-}
-
-.foco-lgpd-link:hover {
-    color: #ffffff;
-    text-decoration: underline;
-}
-
-.foco-lgpd-card-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 14px;
-}
-
-.foco-lgpd-btn-sec {
-    flex: 1;
-    padding: 10px 14px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: #e2e8f0;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 10px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    text-align: center;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.foco-lgpd-btn-sec:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.25);
-    transform: translateY(-1px);
-}
-
-.foco-lgpd-btn-pri {
-    flex: 1.25;
-    padding: 10px 16px;
-    font-size: 0.84rem;
-    font-weight: 700;
-    color: #ffffff !important;
-    background: linear-gradient(135deg, var(--foco-red, #0a6b74) 0%, #075259 100%);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    text-align: center;
-    white-space: nowrap;
-    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.4);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.foco-lgpd-btn-pri:hover {
-    background: linear-gradient(135deg, #ef1a1a 0%, #c40000 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(10, 107, 116, 0.6);
-    color: #ffffff !important;
-}
-
-@media (max-width: 576px) {
-    .foco-lgpd-banner {
-        left: 12px;
-        right: 12px;
-        bottom: 12px;
-        width: auto;
-        max-width: none;
-        padding: 16px 18px;
-        border-radius: 16px;
-    }
-
-    .foco-lgpd-card-actions {
-        flex-direction: column-reverse;
-        gap: 8px;
-    }
-
-    .foco-lgpd-btn-sec,
-    .foco-lgpd-btn-pri {
-        width: 100%;
-        padding: 11px 14px;
-    }
-}
-
-/* ==========================================================================
-   BOTÃO FLUTUANTE DO WHATSAPP NA COR DA PALETA & BOX MULTICANAIS
-   ========================================================================== */
-.foco-whatsapp-float {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 60px;
-    height: 60px;
-    background: var(--foco-red, #0a6b74) !important;
-    color: #ffffff !important;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    box-shadow: 0 6px 20px rgba(10, 107, 116, 0.45);
-    z-index: 1045;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.foco-whatsapp-float:hover {
-    background: #075259 !important;
-    color: #ffffff !important;
-    transform: scale(1.1) translateY(-3px);
-    box-shadow: 0 10px 25px rgba(10, 107, 116, 0.6);
-}
-
-.foco-whatsapp-float::before {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    border-radius: 50%;
-    border: 2px solid var(--foco-red, #0a6b74);
-    opacity: 0.7;
-    animation: pulseRingRed 2s infinite;
-}
-
-@keyframes pulseRingRed {
-    0% {
-        transform: scale(0.95);
-        opacity: 0.8;
-    }
-    50% {
-        transform: scale(1.18);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(0.95);
-        opacity: 0;
-    }
-}
-
-.whatsapp-badge-pulse {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    width: 14px;
-    height: 14px;
-    background: #22c55e;
-    border: 2px solid #ffffff;
-    border-radius: 50%;
-}
-
-/* BOX POP-UP MULTICANAIS DE SUPORTE */
-.foco-support-popup {
-    position: fixed;
-    bottom: 95px;
-    right: 24px;
-    width: 360px;
-    max-width: calc(100vw - 32px);
-    background: #ffffff;
-    border-radius: 18px;
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(0, 0, 0, 0.05);
-    z-index: 1045;
-    overflow: hidden;
-    display: none;
-    transform-origin: bottom right;
-    animation: popupScaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes popupScaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.85) translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-}
-
-.foco-support-popup.show {
-    display: block !important;
-}
-
-.foco-support-header {
-    background: linear-gradient(135deg, var(--foco-red, #0a6b74) 0%, #a80000 100%);
-    padding: 16px 18px;
-    color: #ffffff;
-    position: relative;
-}
-
-.foco-support-header .btn-close-support {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: #ffffff;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 13px;
-    transition: background 0.2s;
-}
-
-.foco-support-header .btn-close-support:hover {
-    background: rgba(255, 255, 255, 0.35);
-}
-
-.foco-support-body {
-    padding: 14px;
-    max-height: 420px;
-    overflow-y: auto;
-}
-
-.foco-support-intro {
-    font-size: 0.8rem;
-    color: #64748b;
-    margin-bottom: 12px;
-    padding: 0 4px;
-}
-
-.foco-channel-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    border-radius: 12px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    text-decoration: none !important;
-    margin-bottom: 8px;
-    transition: all 0.2s ease;
-}
-
-.foco-channel-card:hover {
-    background: #fff5f5;
-    border-color: rgba(10, 107, 116, 0.35);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(10, 107, 116, 0.1);
-}
-
-.foco-channel-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: rgba(10, 107, 116, 0.1);
-    color: var(--foco-red, #0a6b74);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-}
-
-.foco-channel-info {
-    flex-grow: 1;
-}
-
-.foco-channel-title {
-    font-size: 0.86rem;
-    font-weight: 700;
-    color: #1e293b;
-    margin: 0;
-    line-height: 1.3;
-}
-
-.foco-channel-desc {
-    font-size: 0.73rem;
-    color: #64748b;
-    margin: 2px 0 0 0;
-}
-
-.foco-channel-arrow {
-    color: #94a3b8;
-    font-size: 0.8rem;
-    transition: transform 0.2s ease;
-}
-
-.foco-channel-card:hover .foco-channel-arrow {
-    color: var(--foco-red, #0a6b74);
-    transform: translateX(3px);
-}
-
-/* ==========================================================================
-   AVALIAÇÃO EM ESTRELAS DINÂMICA (HOVER & SELEÇÃO SUAVE)
-   ========================================================================== */
-.foco-star-interactive {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    user-select: none;
-}
-
-.foco-star-interactive .star-item {
-    font-size: 1.8rem;
-    color: #cbd5e1;
-    transition: transform 0.15s ease, color 0.15s ease;
-    cursor: pointer;
-}
-
-.foco-star-interactive .star-item:hover,
-.foco-star-interactive .star-item.active {
-    color: #f59e0b;
-    transform: scale(1.18);
-}
-
-/* ==========================================================================
-   OPÇÕES DE PAGAMENTO DO AGENDAMENTO (ONLINE VS LOCAL)
-   ========================================================================== */
-.foco-payment-option {
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 14px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    background: #ffffff;
-    position: relative;
-}
-
-.foco-payment-option:hover {
-    border-color: rgba(10, 107, 116, 0.4);
-    background: #fffafb;
-}
-
-.foco-payment-option.selected {
-    border-color: var(--foco-red, #0a6b74);
-    background: #fff5f5;
-    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.12);
-}
-
-.foco-payment-option .payment-check {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid #cbd5e1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-
-.foco-payment-option.selected .payment-check {
-    background: var(--foco-red, #0a6b74);
-    border-color: var(--foco-red, #0a6b74);
-    color: #ffffff;
-}
-
-/* Sincronização de Inputs, Radios e Switches com a Paleta Oficial Pronto Saúde */
-.form-check-input:checked {
-    background-color: var(--foco-red, #0a6b74) !important;
-    border-color: var(--foco-red, #0a6b74) !important;
-}
-
-.form-check-input:focus {
-    border-color: var(--foco-red, #0a6b74) !important;
-    box-shadow: 0 0 0 0.25rem var(--foco-red-glow, rgba(10, 107, 116, 0.22)) !important;
-}
-
-.form-control:focus,
-.form-select:focus {
-    border-color: var(--foco-red, #0a6b74) !important;
-    box-shadow: 0 0 0 0.2rem var(--foco-red-subtle, rgba(10, 107, 116, 0.08)) !important;
-}
-
-/* ==============================================================================
-   TOOLTIPS BOOTSTRAP 5 PERSONALIZADOS PRONTO SAÚDE
-   Substituição dos títulos nativos do navegador por microtooltips elegantes
-   ============================================================================== */
-.tooltip {
-    font-family: inherit;
-    font-size: 0.8125rem;
-    pointer-events: none;
-    z-index: 1090;
-    opacity: 0;
-    transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.tooltip.show {
-    opacity: 1;
-}
-
-.tooltip-inner {
-    background: #0f121a;
-    color: #f8fafc;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-weight: 500;
-    line-height: 1.35;
-    letter-spacing: 0.01em;
-    max-width: 280px;
-    text-align: center;
-}
-
-.bs-tooltip-top .tooltip-arrow::before,
-.bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before {
-    border-top-color: #0f121a;
-}
-
-.bs-tooltip-bottom .tooltip-arrow::before,
-.bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::before {
-    border-bottom-color: #0f121a;
-}
-
-.bs-tooltip-start .tooltip-arrow::before,
-.bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::before {
-    border-left-color: #0f121a;
-}
-
-.bs-tooltip-end .tooltip-arrow::before,
-.bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::before {
-    border-right-color: #0f121a;
-}
-
-/* ==============================================================================
-   CHECKOUT TRANSPARENTE EFÍ PRO - CARDS INTERATIVOS DE PAGAMENTO
-   ============================================================================== */
-.metodo-card {
-    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    border-radius: 10px;
-    background: #ffffff;
-    border: 1.5px solid var(--foco-border);
-    user-select: none;
-}
-
-.metodo-card:hover {
-    border-color: var(--foco-red) !important;
-    background: #fff8f8;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(10, 107, 116, 0.08);
-}
-
-.metodo-card.active {
-    border-color: var(--foco-red) !important;
-    background: #fff5f5 !important;
-    box-shadow: 0 0 0 3px rgba(10, 107, 116, 0.15), 0 4px 12px rgba(10, 107, 116, 0.1);
-    transform: translateY(-1px);
-}
-
-/* ==============================================================================
-   11. SEÇÃO DE PARCEIROS & HOMOLOGAÇÕES (CARROSSEL INFINITO TOUCH & DRAG)
-   ============================================================================== */
-.section-parceiros {
-    background: #ffffff;
-    padding: 85px 0 95px 0;
-    border-bottom: 1px solid var(--foco-border);
-    position: relative;
-    overflow: hidden;
-}
-
-[data-bs-theme="dark"] .section-parceiros {
-    background: #0f121a;
-    border-color: rgba(255, 255, 255, 0.08);
-}
-
-.parceiros-carousel-container {
-    position: relative;
-    padding: 0 16px;
-}
-
-.swiper-parceiros {
-    width: 100%;
-    padding: 16px 4px 34px 4px !important;
-    overflow: hidden;
-    cursor: grab;
-}
-
-.swiper-parceiros:active,
-.swiper-parceiros.swiper-grabbing {
-    cursor: grabbing;
-}
-
-.swiper-parceiros .swiper-slide {
-    height: auto;
-    display: flex;
-    box-sizing: border-box;
-}
-
-.card-parceiro {
-    width: 100%;
-    background: #f8fafc;
-    border: 1px solid var(--foco-border);
-    border-radius: 18px;
-    padding: 1.5rem 1.25rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    user-select: none;
-    -webkit-user-select: none;
-    text-decoration: none !important;
-    color: inherit;
-    min-height: 140px;
-}
-
-[data-bs-theme="dark"] .card-parceiro {
-    background: #171c28;
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.card-parceiro:hover {
-    background: #ffffff;
-    border-color: rgba(var(--bs-primary-rgb), 0.45);
-    transform: translateY(-5px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-}
-
-[data-bs-theme="dark"] .card-parceiro:hover {
-    background: #1e2434;
-    border-color: var(--foco-red);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
-}
-
-.parceiro-logo-wrapper {
-    width: 100%;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.85rem;
-    padding: 4px 8px;
-}
-
-.parceiro-logo-img {
-    max-width: 100%;
-    max-height: 52px;
-    object-fit: contain;
-    filter: grayscale(80%) opacity(85%);
-    transition: all 0.35s ease;
-}
-
-.card-parceiro:hover .parceiro-logo-img {
-    filter: grayscale(0%) opacity(100%);
-    transform: scale(1.05);
-}
-
-.parceiro-nome {
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: var(--foco-title);
-    margin-bottom: 0.25rem;
-    letter-spacing: -0.01em;
-}
-
-.parceiro-categoria {
-    font-size: 0.73rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #64748b;
-}
-
-[data-bs-theme="dark"] .parceiro-categoria {
-    color: #94a3b8;
-}
-
-/* SETAS DE NAVEGAÇÃO DOS PARCEIROS */
-.swiper-btn-parceiros {
-    position: absolute;
-    top: calc(50% - 20px);
-    transform: translateY(-50%);
     width: 44px;
     height: 44px;
+    background: rgba(7, 71, 77, 0.88);
+    color: #ffffff;
+    border: none;
     border-radius: 50%;
-    background: #ffffff;
-    border: 1px solid var(--foco-border);
-    color: var(--foco-title);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.95rem;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    font-size: 1rem;
     cursor: pointer;
-    z-index: 10;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1030;
+    box-shadow: var(--ps-shadow-card);
+    transition: var(--ps-transition);
+    opacity: 0;
+    visibility: hidden;
 }
-
-[data-bs-theme="dark"] .swiper-btn-parceiros {
-    background: #1e2434;
-    border-color: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-}
-
-.swiper-btn-parceiros:hover {
-    background: var(--foco-red);
-    border-color: var(--foco-red);
-    color: #ffffff;
-    box-shadow: 0 8px 20px rgba(var(--bs-primary-rgb), 0.35);
-    transform: translateY(-50%) scale(1.08);
-}
-
-.swiper-btn-parceiros.swiper-btn-prev {
-    left: -8px;
-}
-
-.swiper-btn-parceiros.swiper-btn-next {
-    right: -8px;
-}
-
-@media (max-width: 768px) {
-    .swiper-btn-parceiros {
-        display: none !important;
-    }
-    .parceiros-carousel-container {
-        padding: 0 4px;
-    }
-}
-
-/* PAGINAÇÃO EM BULLETS DOS PARCEIROS */
-.swiper-pagination-parceiros .swiper-pagination-bullet {
-    width: 8px;
-    height: 8px;
-    background: #cbd5e1;
-    opacity: 0.7;
-    transition: all 0.3s ease;
-}
-
-.swiper-pagination-parceiros .swiper-pagination-bullet-active {
-    width: 24px;
-    border-radius: 4px;
-    background: var(--foco-red);
+.btn-voltar-topo.visible {
     opacity: 1;
+    visibility: visible;
 }
-
-/* ==========================================================================
-   SEÇÃO FILIAIS & LOCALIDADES DE ATENDIMENTO (MAPA DO BRASIL INTERATIVO)
-   ========================================================================== */
-.section-filiais {
-    background-color: var(--foco-bg, #ffffff);
-    position: relative;
-    border-top: 1px solid var(--foco-border, #e2e8f0);
-}
-
-.filiais-sidebar {
-    background: var(--foco-card-bg, #ffffff);
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-}
-
-.card-filial-item {
-    background: var(--foco-card-bg, #ffffff);
-    border: 1px solid var(--foco-border, #e2e8f0);
-    transition: all 0.25s ease;
-}
-
-.card-filial-item:hover {
-    border-color: rgba(10, 107, 116, 0.5);
-    box-shadow: 0 6px 16px rgba(10, 107, 116, 0.08);
-    transform: translateY(-2px);
-}
-
-.card-filial-item.active {
-    border-color: var(--foco-red);
-    background: rgba(10, 107, 116, 0.03);
-    box-shadow: 0 0 0 1px var(--foco-red), 0 8px 20px rgba(10, 107, 116, 0.12);
-}
-
-/* MARCADOR CUSTOMIZADO PRONTO SAÚDE NO LEAFLET */
-.foco-marker-container {
-    position: relative;
-    width: 36px;
-    height: 48px;
-}
-
-.foco-map-marker-pin {
-    width: 32px;
-    height: 32px;
-    border-radius: 50% 50% 50% 0;
-    background: linear-gradient(135deg, #0d838e 0%, #0a6b74 100%);
-    position: absolute;
-    transform: rotate(-45deg);
-    left: 2px;
-    top: 2px;
-    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.foco-map-marker-pin:hover {
-    transform: rotate(-45deg) scale(1.15);
-    box-shadow: 0 6px 20px rgba(10, 107, 116, 0.7);
-}
-
-.foco-map-marker-pin::after {
-    content: '';
-    width: 14px;
-    height: 14px;
-    background: #ffffff;
-    position: absolute;
-    border-radius: 50%;
-}
-
-.foco-map-marker-pulse {
-    background: rgba(10, 107, 116, 0.35);
-    border-radius: 50%;
-    height: 20px;
-    width: 20px;
-    position: absolute;
-    left: 8px;
-    top: 30px;
-    transform: rotateX(55deg);
-    z-index: -2;
-    animation: focoMarkerPulse 2s ease-out infinite;
-}
-
-@keyframes focoMarkerPulse {
-    0% {
-        transform: rotateX(55deg) scale(0.5);
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        transform: rotateX(55deg) scale(2.2);
-        opacity: 0;
-    }
-}
-
-/* POPUP ESTILIZADO DO LEAFLET */
-.leaflet-popup-content-wrapper {
-    background: #0f172a !important;
-    color: #ffffff !important;
-    border-radius: 14px !important;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45) !important;
-    border: 1px solid rgba(10, 107, 116, 0.3) !important;
-    padding: 0 !important;
-    overflow: hidden;
-}
-
-.leaflet-popup-content {
-    margin: 14px 16px !important;
-    line-height: 1.4 !important;
-    font-family: inherit !important;
-}
-
-.leaflet-popup-tip {
-    background: #0f172a !important;
-}
-
-.leaflet-popup-close-button {
-    color: #ffffff !important;
-    padding: 6px !important;
-}
-
-
-
-
-
-/* ==============================================================================
-   REGRAS TAILORED DE DESIGN PRONTO SAÚDE (TEAL & VERDE ESMERALDA)
-   ============================================================================== */
-:root {
-    --foco-red: #0a6b74 !important;
-    --foco-red-hover: #075259 !important;
-    --foco-red-light: #0d838e !important;
-    --foco-red-subtle: rgba(10, 107, 116, 0.08) !important;
-    --foco-red-glow: rgba(10, 107, 116, 0.25) !important;
-    --bs-primary: #0a6b74 !important;
-}
-
-/* Logo no Navbar Branco: converte imagem com texto branco para a cor Teal Hospitalar */
-.logo-foco7 {
-    filter: brightness(0) saturate(100%) invert(27%) sepia(85%) saturate(542%) hue-rotate(143deg) brightness(91%) contrast(93%);
-    height: 40px;
-    width: auto;
-    object-fit: contain;
-}
-
-/* Botões com gradiente Hospitalar Teal */
-.btn-foco-primary {
-    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
-    color: #ffffff !important;
-    border: none !important;
-    box-shadow: 0 4px 18px rgba(10, 107, 116, 0.28) !important;
-}
-.btn-foco-primary:hover {
-    background: linear-gradient(135deg, #0d838e 0%, #0a6b74 100%) !important;
-    color: #ffffff !important;
-    box-shadow: 0 8px 25px rgba(10, 107, 116, 0.42) !important;
-    transform: translateY(-2px);
-}
-
-.btn-outline-danger {
-    color: #0a6b74 !important;
-    border-color: #0a6b74 !important;
-}
-.btn-outline-danger:hover {
-    background-color: #0a6b74 !important;
-    border-color: #0a6b74 !important;
-    color: #ffffff !important;
-}
-
-.text-danger {
-    color: #0a6b74 !important;
-}
-.bg-danger {
-    background-color: #0a6b74 !important;
-}
-
-.badge.bg-danger,
-.badge-estetica-topo,
-.tag-plano-destaque {
-    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
-    color: #ffffff !important;
-}
-
-.btn-agendar-estetica {
-    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
-    color: #ffffff !important;
-    border: none !important;
-    width: 100%;
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--foco-transition);
-}
-.btn-agendar-estetica:hover {
-    background: linear-gradient(135deg, #0d838e 0%, #0a6b74 100%) !important;
-    color: #ffffff !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(10, 107, 116, 0.35);
-}
-
-/* ==============================================================================
-   SEÇÃO CORPO CLÍNICO & MÉDICOS ESPECIALISTAS (PRONTO SAÚDE)
-   ============================================================================== */
-.section-medicos {
-    padding: 85px 0;
-    background: #f8fafc;
-    position: relative;
-}
-.card-medico {
-    background: #ffffff;
-    border: 1px solid var(--foco-border);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: var(--foco-transition);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    box-shadow: var(--foco-shadow-sm);
-}
-.card-medico:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--foco-shadow-card);
-    border-color: var(--foco-red);
-}
-.card-medico-thumb {
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-    background: #e2e8f0;
-}
-.card-medico-body {
-    padding: 22px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-.card-medico-name {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--foco-title);
-    margin-bottom: 4px;
-}
-.card-medico-spec {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--foco-red);
-    margin-bottom: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.card-medico-footer {
-    margin-top: auto;
-    padding-top: 14px;
-    border-top: 1px solid var(--foco-border-light);
-}
-
-/* ==============================================================================
-   REGRAS DE ESTABILIDADE DO CARROSSEL HERO & ZERO ESPAÇO EM BRANCO
-   ============================================================================== */
-.hero-section {
-    min-height: 580px;
-    background-color: #071822;
-}
-@media (min-width: 992px) {
-    .hero-section {
-        min-height: 640px;
-    }
-}
-.hero-slide-bg {
-    background-size: cover !important;
-    background-position: center center !important;
-}
-.hero-slide-overlay {
-    background: linear-gradient(90deg, rgba(7, 24, 34, 0.94) 0%, rgba(7, 24, 34, 0.82) 48%, rgba(7, 24, 34, 0.45) 80%, rgba(7, 24, 34, 0.2) 100%) !important;
-}
-
-/* Dropdown Menu Desktop Elegante */
-.foco-navbar .dropdown-menu {
-    border: 1px solid var(--foco-border);
-    border-radius: 12px;
-    box-shadow: var(--foco-shadow-card);
-    padding: 8px;
-    min-width: 230px;
-    background: #ffffff;
-}
-.foco-navbar .dropdown-item {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--foco-text);
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: var(--foco-transition);
-}
-.foco-navbar .dropdown-item:hover {
-    background-color: var(--foco-red-subtle);
-    color: var(--foco-red);
-    transform: translateX(4px);
+.btn-voltar-topo:hover {
+    background: var(--ps-primary);
+    transform: translateY(-3px);
+    color: #ffffff;
 }
