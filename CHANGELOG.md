@@ -4,6 +4,22 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.19.0] - 2026-10-22
+
+### Adicionado & Aprimorado
+- **Botão Flutuante do WhatsApp & Pop-up Multicanais (Estilo Foco 7 Oficial)**:
+  - **Fidelidade Integral ao Site de Referência:** Implementação da mesma mecânica de atendimento multicanais da plataforma Foco 7, harmonizada com a identidade visual médica da Pronto Saúde (`#0a6b74`).
+  - **Botão Flutuante com Pulso e Status Online:** Botão pulsante com ondas suaves (`pulseRingTeal`), badge verde de status em tempo real (`.whatsapp-badge-pulse`) e tooltip contextual.
+  - **Box Pop-up Multicanais (`#popupSupportWhatsapp`):** Janela suspensa com 5 canais categorizados de atendimento humanizado:
+    - *Consultas Médicas & Especialidades*
+    - *Exames Laboratoriais & Imagem*
+    - *Centro Odontológico*
+    - *Cartão Fidelidade & Benefícios*
+    - *Recepção & Informações Gerais*
+    Todos com textos pré-preenchidos contextualizados e disparo instantâneo para o WhatsApp oficial.
+  - **Controle de Fechamento Amigável:** Abertura via botão flutuante e fechamento facilitado por botão `X`, clique externo (`outside click`) ou tecla `Escape`.
+  - **Botão Voltar ao Topo (`#btnVoltarAoTopo`):** Exibição dinâmica com scroll > 300px e rolagem suave ao início da página.
+
 ## [2.18.0] - 2026-10-22
 
 ### Padronizado & Aprimorado

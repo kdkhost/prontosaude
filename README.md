@@ -31,8 +31,10 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - 4 colunas perfeitamente alinhadas (Sobre a clínica, Especialidades, Links rápidos e Localização/Contato), ícones sociais circulares com hover animado e mapa interativo do Google Maps responsivo embutido com segurança.
 - **Menu Deslizante Offcanvas Mobile (Drawer Lateral da Esquerda para a Direita):**
   - Abertura e fechamento suaves acelerados por hardware (`translate3d`), suporte a gestos swipe, backdrop com desfoque de vidro (*backdrop-filter: blur*), acordeões de navegação e acesso rápido aos canais de atendimento.
-- **Botão Flutuante de WhatsApp Oficial:**
-  - Botão fixo no canto inferior direito (`.ps-floating-whatsapp`) com animação contínua de pulso suave, tooltip interativo "Agende sua Consulta" e redirecionamento direto com mensagens contextualizadas.
+- **Botão Flutuante de WhatsApp Oficial & Box Pop-up Multicanais (Estilo Foco 7):**
+  - Botão pulsante fixo (`.foco-whatsapp-float`) com indicador Online em tempo real e abertura interativa do **Box Pop-up Multicanais de Atendimento** (`#popupSupportWhatsapp`).
+  - 5 canais categorizados com mensagens pré-formatadas para WhatsApp (Consultas & Especialidades, Exames & Laboratório, Odontologia, Cartão Fidelidade e Recepção/Dúvidas).
+  - Botão flutuante integrado de **Voltar ao Topo** (`#btnVoltarAoTopo`) com detecção de scroll e animação suave.
 - **Trabalhe Conosco:** Divulgação de vagas de emprego ativas com modal hospitalar de detalhes, badges de requisitos e candidatura direta via WhatsApp ou e-mail.
 - **Blog/Notícias & Busca:** Sistema de categorias, artigos completos, paginação moderna, contagem atômica de visualizações e barra lateral com anúncios e busca rápida.
 - **Interface e Feedback 100% Interativos:** Formulários públicos integrados com AJAX assíncrono (sem reload), notificações flutuantes com **Toastr** e caixas de diálogo elegantes com **SweetAlert2** substituindo qualquer alerta nativo de navegador.

@@ -108,9 +108,10 @@
 		</footer>
 		<!-- Fim do Rodapé Foco7 -->
 
-		<a href="#" class="scrollup">
-			<i class="fa fa-angle-up"></i>
-		</a>
+		<!-- BOTÃO VOLTAR AO TOPO FLUTUANTE (ESTILO FOCO 7) -->
+		<button type="button" id="btnVoltarAoTopo" class="foco-btn-topo scrollup" aria-label="Voltar ao início da página" title="Voltar ao Topo">
+			<i class="fa fa-arrow-up"></i>
+		</button>
 
 	</div>
 
@@ -137,6 +138,61 @@
 		$('#accordion').on('show.bs.collapse', function () {
 			$('#accordion .in').collapse('hide');
 		});
+
+		// ==========================================================================
+		// BOTÃO WHATSAPP FLUTUANTE & BOX MULTICANAIS (ESTILO FOCO 7)
+		// ==========================================================================
+		var $btnWhatsappFloat = $('#btnFocoWhatsappFloat');
+		var $popupSupport = $('#popupSupportWhatsapp');
+		var $btnCloseSupport = $('#btnCloseSupportPopup');
+		var $btnTopo = $('#btnVoltarAoTopo');
+
+		if ($btnWhatsappFloat.length && $popupSupport.length) {
+			$btnWhatsappFloat.on('click', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				$popupSupport.toggleClass('show');
+			});
+
+			if ($btnCloseSupport.length) {
+				$btnCloseSupport.on('click', function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+					$popupSupport.removeClass('show');
+				});
+			}
+
+			$(document).on('click', function(e) {
+				if (!$(e.target).closest('#popupSupportWhatsapp, #btnFocoWhatsappFloat').length) {
+					$popupSupport.removeClass('show');
+				}
+			});
+
+			$(document).on('keydown', function(e) {
+				if (e.key === 'Escape' && $popupSupport.hasClass('show')) {
+					$popupSupport.removeClass('show');
+				}
+			});
+		}
+
+		// Botão Voltar ao Topo Flutuante
+		if ($btnTopo.length) {
+			$(window).on('scroll', function() {
+				if ($(this).scrollTop() > 300) {
+					$btnTopo.addClass('show');
+				} else {
+					$btnTopo.removeClass('show');
+				}
+			});
+
+			$btnTopo.on('click', function(e) {
+				e.preventDefault();
+				window.scrollTo({
+					top: 0,
+					behavior: 'smooth'
+				});
+			});
+		}
 	});
 	</script>
 
@@ -152,16 +208,88 @@
 	</script>
 	<?php endif; ?>
 
-	<!-- Botão Flutuante de Atendimento WhatsApp Oficial -->
-	<a href="https://wa.me/+5521985831464?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta%20através%20do%20site%20Pronto%20Saúde" 
-	   target="_blank" 
-	   rel="noopener noreferrer" 
-	   class="ps-floating-whatsapp" 
-	   title="Fale Conosco pelo WhatsApp"
-	   aria-label="Fale Conosco pelo WhatsApp">
+	<!-- ==========================================================================
+	     BOTÃO FLUTUANTE DO WHATSAPP & BOX MULTICANAIS DE ATENDIMENTO (ESTILO FOCO 7)
+	     ========================================================================== -->
+	<?php
+	$whats_raw = !empty($contact_phone) ? $contact_phone : '21985831464';
+	$whats_clean = preg_replace('/\D/', '', $whats_raw);
+	if (strlen($whats_clean) <= 11) {
+		$whats_clean = '55' . $whats_clean;
+	}
+	?>
+	<!-- BOTÃO FLUTUANTE DO WHATSAPP OFICIAL NA COR DA PALETA -->
+	<button type="button" id="btnFocoWhatsappFloat" class="foco-whatsapp-float" aria-label="Abrir canais de atendimento Pronto Saúde pelo WhatsApp" title="Central de Atendimento pelo WhatsApp">
+		<span class="whatsapp-badge-pulse"></span>
 		<i class="fa fa-whatsapp"></i>
-		<span class="ps-floating-whatsapp-tooltip">Agende sua Consulta</span>
-	</a>
+		<span class="whatsapp-tooltip">Central WhatsApp</span>
+	</button>
+
+	<!-- BOX POP-UP MULTICANAIS DE SUPORTE -->
+	<div class="foco-support-popup shadow-lg" id="popupSupportWhatsapp" role="dialog" aria-modal="true" aria-labelledby="txtSupportTitle">
+		<div class="foco-support-header">
+			<button type="button" class="btn-close-support" id="btnCloseSupportPopup" aria-label="Fechar box">
+				<i class="fa fa-times"></i>
+			</button>
+			<div class="foco-support-online-badge">
+				<span class="support-pulse-dot"></span>
+				<span class="support-online-text">Online</span>
+			</div>
+			<h6 class="foco-support-title" id="txtSupportTitle">Central de Atendimento Pronto Saúde</h6>
+			<small class="foco-support-subtitle">Atendimento Humanizado • Selecione o canal desejado:</small>
+		</div>
+		<div class="foco-support-body">
+			<!-- Canal 1: Agendamentos & Consultas -->
+			<a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de agendar uma consulta médica na Pronto Saúde.'); ?>" target="_blank" rel="noopener noreferrer" class="foco-channel-card">
+				<div class="foco-channel-icon ch-consulta"><i class="fa fa-calendar-check-o"></i></div>
+				<div class="foco-channel-info">
+					<p class="foco-channel-title">Consultas & Especialidades</p>
+					<p class="foco-channel-desc">Agende com cardiologia, pediatria, ginecologia e mais</p>
+				</div>
+				<i class="fa fa-chevron-right foco-channel-arrow"></i>
+			</a>
+
+			<!-- Canal 2: Exames & Laboratório -->
+			<a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de informações e agendamento de exames laboratoriais / imagem.'); ?>" target="_blank" rel="noopener noreferrer" class="foco-channel-card">
+				<div class="foco-channel-icon ch-exame"><i class="fa fa-flask"></i></div>
+				<div class="foco-channel-info">
+					<p class="foco-channel-title">Exames Laboratoriais & Imagem</p>
+					<p class="foco-channel-desc">Preparo, agendamento e entrega de resultados rápidos</p>
+				</div>
+				<i class="fa fa-chevron-right foco-channel-arrow"></i>
+			</a>
+
+			<!-- Canal 3: Odontologia -->
+			<a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de agendar uma avaliação odontológica na Pronto Saúde.'); ?>" target="_blank" rel="noopener noreferrer" class="foco-channel-card">
+				<div class="foco-channel-icon ch-odonto"><i class="fa fa-medkit"></i></div>
+				<div class="foco-channel-info">
+					<p class="foco-channel-title">Centro Odontológico</p>
+					<p class="foco-channel-desc">Limpeza, ortodontia, próteses, clareamento e implantes</p>
+				</div>
+				<i class="fa fa-chevron-right foco-channel-arrow"></i>
+			</a>
+
+			<!-- Canal 4: Cartão Fidelidade -->
+			<a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de conhecer e solicitar o Cartão Fidelidade Pronto Saúde.'); ?>" target="_blank" rel="noopener noreferrer" class="foco-channel-card">
+				<div class="foco-channel-icon ch-plano"><i class="fa fa-credit-card"></i></div>
+				<div class="foco-channel-info">
+					<p class="foco-channel-title">Cartão Fidelidade & Benefícios</p>
+					<p class="foco-channel-desc">Descontos exclusivos em consultas e procedimentos</p>
+				</div>
+				<i class="fa fa-chevron-right foco-channel-arrow"></i>
+			</a>
+
+			<!-- Canal 5: Recepção & Informações Gerais -->
+			<a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Preciso de auxílio ou informações gerais com a recepção da Pronto Saúde.'); ?>" target="_blank" rel="noopener noreferrer" class="foco-channel-card">
+				<div class="foco-channel-icon ch-duvidas"><i class="fa fa-comments-o"></i></div>
+				<div class="foco-channel-info">
+					<p class="foco-channel-title">Recepção & Informações Gerais</p>
+					<p class="foco-channel-desc">Horários de funcionamento, convênios atendidos e dúvidas</p>
+				</div>
+				<i class="fa fa-chevron-right foco-channel-arrow"></i>
+			</a>
+		</div>
+	</div>
 
 	<!-- Banner LGPD Moderno (Glassmorphism & Conformidade com a Lei Geral de Proteção de Dados) -->
 	<div class="ps-lgpd-banner" id="psLgpdBanner">
