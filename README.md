@@ -4,15 +4,24 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 
 ## 🚀 Funcionalidades Principais
 
-### Portal Público (Frontend)
-- **Home Dinâmica:** Exibição de banners (sliders), serviços, clínicas/departamentos, equipe médica, planos e preços, depoimentos e notícias mais recentes.
-- **Departamentos:** Seção detalhada das especialidades e infraestrutura das clínicas.
-- **Corpo Clínico:** Busca e perfil detalhado dos médicos, com suporte a mídias sociais.
-- **Trabalhe Conosco:** Divulgação de vagas de emprego, requisitos, salários e formulário integrado ao WhatsApp.
-- **Planos e Preços:** Sistema de fidelidade, planos corporativos e tabelas de preços dos serviços dentários/médicos.
-- **Blog/Notícias:** Sistema de categorias, artigos, contagem atômica de visualizações e barra lateral com anúncios.
-- **Seção Institucional:** Páginas de FAQ, parceiros institucionais e páginas estáticas (Política de Privacidade e Termos de Uso).
-- **Interface e Feedback:** Notificações flutuantes com **Toastr** e caixas de diálogo elegantes com **SweetAlert2** substituindo qualquer alerta nativo de navegador.
+### Portal Público (Frontend Moderno & Responsivo)
+- **Design System Premium (`assets/css/pronto-modern-frontend.css`):**
+  - Tipografia moderna **Plus Jakarta Sans** (Google Fonts) em todos os títulos, textos e elementos de navegação.
+  - Paleta visual rica e harmoniosa preservando a identidade original: Teal (`#0a6b74`), Verde Esmeralda (`#10b981`), Dark Slate (`#0f172a`), Cyan Glow, bordas suaves e sombras com elevação 3D.
+  - Micro-animações e hover interativo em cards de serviços, médicos, planos e depoimentos.
+- **Menu Deslizante Offcanvas Mobile (Drawer Lateral da Esquerda para a Direita):**
+  - Abertura e fechamento suaves acelerados por hardware (`translate3d`), suporte a gestos swipe, backdrop com desfoque de vidro (*backdrop-filter: blur*), acordeões de navegação e acesso rápido aos canais de atendimento.
+- **Botão Flutuante de WhatsApp Oficial:**
+  - Botão fixo no canto inferior direito (`.ps-floating-whatsapp`) com animação contínua de pulso suave, tooltip interativo "Agende sua Consulta" e redirecionamento direto com mensagens contextualizadas.
+- **Home Dinâmica:** Exibição de banners (sliders), serviços em cards elevados, clínicas/departamentos, equipe médica, planos de fidelidade, depoimentos com estrelas de avaliação e notícias mais recentes.
+- **Departamentos & Clínicas:** Seção detalhada das especialidades e infraestrutura das clínicas com visual moderno.
+- **Corpo Clínico & Perfil Individual:** Busca e perfil detalhado dos médicos com badges de titulação, horários de atendimento, links sociais e botão de agendamento direto.
+- **Trabalhe Conosco:** Divulgação de vagas de emprego ativas com modal hospitalar de detalhes, badges de requisitos e candidatura direta via WhatsApp ou e-mail.
+- **Serviços Odontológicos & Médicos:** Cards modernos com valores "A partir de", tópicos de benefícios e modais de procedimentos.
+- **Planos e Fidelidade:** Cards responsivos com selos de popularidade, badges de destaque e contratação instantânea.
+- **Blog/Notícias & Busca:** Sistema de categorias, artigos completos, paginação moderna, contagem atômica de visualizações e barra lateral com anúncios e busca rápida.
+- **Seção Institucional:** Páginas de Convênios, FAQ com accordions, parceiros institucionais e páginas estáticas (Política de Privacidade e Termos de Uso).
+- **Interface e Feedback 100% Interativos:** Formulários públicos integrados com AJAX assíncrono (sem reload), notificações flutuantes com **Toastr** e caixas de diálogo elegantes com **SweetAlert2** substituindo qualquer alerta nativo de navegador.
 
 ### Painel Administrativo Moderno e Desacoplado (AdminLTE 4 + SPA)
 - **Painel Totalmente Desacoplado via AJAX (SPA):**

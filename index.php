@@ -85,7 +85,7 @@
 				$benefits_items = !empty($row['benefits']) ? explode("\n", str_replace("\r", "", $row['benefits'])) : [];
 				?>
 				<div class="col-sm-6 col-md-4 col-lg-4">
-					<div class="item border border-info service-card-box">
+					<div class="item service-card-box">
 						<div class="photo" style="background-image:url(<?php echo $photo_src; ?>); position: relative;">
 							<?php if(!empty($row['price'])): ?>
 								<div class="service-card-price-badge">
@@ -422,7 +422,7 @@
 
 <?php if($home_status_testimonial == 1): ?>
 <!-- Testimonial Start -->
-<section class="testimonial-v1" style="background-image:url(https://biotecnology.mx/wp-content/uploads/2020/07/TEC-1024x650.jpg);">
+<section class="testimonial-v1" style="background-image:url(<?= BASE_URL; ?>assets/uploads/department-1.png);">
 	<div class="overlay"></div>
 	<div class="container">
 		<div class="row">
@@ -447,15 +447,22 @@
 						<div class="item">
 							<div class="testimonial-wrapper">								
 								<div class="content">
+									<div class="stars" style="color: #f59e0b; font-size: 15px; margin-bottom: 12px;">
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+									</div>
 									<div class="comment">
 										<p>
-											<?php echo nl2br($row['comment']); ?>
+											"<?php echo nl2br($row['comment']); ?>"
 										</p>
 										<div class="icon"></div>
 									</div>
 									<div class="author">
 										<div class="photo">
-											<img src="<?php echo BASE_URL; ?>assets/uploads/<?php echo $row['photo']; ?>"  alt="<?php echo $row['name']; ?>">
+											<img src="<?php echo BASE_URL; ?>assets/uploads/<?php echo $row['photo']; ?>" alt="<?php echo $row['name']; ?>">
 										</div>
 										<div class="text">
 											<h3><?php echo $row['name']; ?></h3>

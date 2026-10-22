@@ -305,6 +305,11 @@ $email   = $row2['dep_email'] ?? '';
         <!-- Favicon -->
         <link href="<?= BASE_URL; ?>assets/uploads/<?= $favicon; ?>" rel="shortcut icon" type="image/png">
         
+        <!-- Google Fonts: Plus Jakarta Sans (Tipografia Moderna Hospitalar) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        
         <!-- Stylesheets -->
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/toastr.min.css">
@@ -315,9 +320,9 @@ $email   = $row2['dep_email'] ?? '';
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/jquery.bxslider.css">
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/hover.css">
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/magnific-popup.css">
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/style.css">
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/responsive.css">
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/pronto-modern-frontend.css">
+        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/style.css?v=<?= time(); ?>">
+        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/responsive.css?v=<?= time(); ?>">
+        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/pronto-modern-frontend.css?v=<?= time(); ?>">
         <script src="<?= BASE_URL; ?>assets/js/modernizr.min.js"></script>
 
         <?php if ($cur_page == 'news.php' && !empty($og_title)): ?>

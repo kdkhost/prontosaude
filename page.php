@@ -30,13 +30,16 @@ $status       = $row['status'] ?? '';
 		
 		
 <!-- Banner Start -->
-<div class="page-banner" style="background-image: url(<?php echo BASE_URL; ?>assets/uploads/<?php echo $banner; ?>)">
+<?php
+$page_banner_src = (!empty($banner) && file_exists('assets/uploads/' . $banner)) ? BASE_URL . 'assets/uploads/' . $banner : BASE_URL . 'assets/uploads/department-1.png';
+?>
+<div class="page-banner" style="background-image: url(<?php echo $page_banner_src; ?>)">
 	<div class="overlay"></div>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="banner-text">
-					<h1><?php echo $page_name; ?></h1>
+					<h1><?php echo htmlspecialchars($page_name); ?></h1>
 				</div>
 			</div>
 		</div>
@@ -201,7 +204,7 @@ $visitor_email = $_POST['visitor_email'];
 				   'Reply-To: ' . $visitor_email . "\r\n" .
 				   'X-Mailer: PHP/' . phpversion() . "\r\n" . 
 				   "MIME-Version: 1.0\r\n" . 
-				   "Content-Type: text/html; charset=ISO-8859-1\r\n";
+				   "Content-Type: text/html; charset=UTF-8\r\n";
 
 		// Sending email to admin				   
         mail($to_admin, $subject, $message, $headers); 
@@ -209,6 +212,17 @@ $visitor_email = $_POST['visitor_email'];
         $success_message = $receive_email_thank_you_message;
 
     }
+
+	// Resposta JSON para submissões via AJAX
+	if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+		header('Content-Type: application/json; charset=utf-8');
+		if(!empty($error_message)) {
+			echo json_encode(['success' => false, 'message' => strip_tags(str_replace('<br>', "\n", $error_message))]);
+		} else {
+			echo json_encode(['success' => true, 'message' => $success_message]);
+		}
+		exit;
+	}
 }
 ?>
 				
@@ -478,7 +492,6 @@ $visitor_email = $_POST['visitor_email'];
 </section>
 <?php endif; ?>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>  
         $(document).ready(function($) {
             $('.parado').on('play', function() {

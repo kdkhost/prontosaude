@@ -45,21 +45,30 @@ $data = $stmt->fetchAll();
 
 ?>
 
+<?php
+$doc_banner_src = (!empty($banner) && file_exists('assets/uploads/' . $banner)) ? BASE_URL . 'assets/uploads/' . $banner : BASE_URL . 'assets/uploads/department-1.png';
+$doc_photo_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ? BASE_URL . 'assets/uploads/' . $photo : BASE_URL . 'assets/images/sem-foto.gif';
+$zap_num = !empty($phone) ? preg_replace('/[^0-9]/', '', $phone) : (!empty($contact_phone) ? preg_replace('/[^0-9]/', '', $contact_phone) : '5521985831464');
+if (strlen($zap_num) <= 11 && substr($zap_num, 0, 2) !== '55') {
+    $zap_num = '55' . $zap_num;
+}
+$zap_doc_msg = urlencode("*Olá! Gostaria de agendar uma consulta com Dr(a).* " . $name);
+?>
+
 <!-- Banner Start -->
-<div class="page-banner" style="background-image:url(<?php echo BASE_URL; ?>assets/uploads/<?php echo $banner; ?>);">
+<div class="page-banner" style="background-image:url(<?= $doc_banner_src; ?>);">
 	<div class="overlay"></div>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="banner-text">
-					<h1>Doutor (a): <?php echo $name; ?></h1>
+					<h1>Doutor(a): <?php echo htmlspecialchars($name); ?></h1>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 <!-- Banner End -->
-
 
 <!-- Doctor Start -->
 <section class="doctor-detail">
@@ -68,19 +77,16 @@ $data = $stmt->fetchAll();
 			<div class="col-md-4">
 				<div class="doctor-single">
 					<div class="thumb">
-						<img src="<?php echo BASE_URL; ?>assets/uploads/<?php echo $photo; ?>" alt="<?php echo $name; ?>">
+						<img src="<?= $doc_photo_src; ?>" alt="<?php echo htmlspecialchars($name); ?>">
 					</div>
 					<div class="text">
-						<h2><?php echo $name; ?></h2>
-						<h3><?php echo $designation_name; ?></h3>
+						<h2><?php echo htmlspecialchars($name); ?></h2>
+						<h3><?php echo htmlspecialchars($designation_name); ?></h3>
 						<p>
-							<?php echo $degree; ?>
+							<?php echo htmlspecialchars($degree); ?>
 						</p>
 					</div>
 					<div class="social">
-						<!--<div class="title">
-							Atividades de Mídia Social
-						</div>-->
 						<ul>
 							<?php if($facebook!=''): ?>
 								<li><a href="<?php echo $facebook; ?>" target="_blank"><i class="fa fa-facebook"></i></a></li>
@@ -110,6 +116,11 @@ $data = $stmt->fetchAll();
 								<li><a href="<?php echo $flickr; ?>" target="_blank"><i class="fa fa-flickr"></i></a></li>
 							<?php endif; ?>
 						</ul>
+					</div>
+					<div style="margin-top: 20px; padding-top: 18px; border-top: 1px solid #f1f5f9;">
+						<a href="https://wa.me/<?= $zap_num; ?>?text=<?= $zap_doc_msg; ?>" target="_blank" rel="noopener" class="btn btn-success btn-block" style="background: #10b981; border: none; border-radius: 8px; font-weight: 700; padding: 12px 18px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(16,185,129,0.35);">
+							<i class="fa fa-whatsapp" style="font-size: 18px;"></i> Agendar Consulta
+						</a>
 					</div>
 				</div>
 			</div>

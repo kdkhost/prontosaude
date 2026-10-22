@@ -2,19 +2,19 @@
 window.cookieconsent.initialise({
   "palette": {
     "popup": {
-      "background": "#f5f5f5",
-      "text": "#000000"
+      "background": "#0f172a",
+      "text": "#e2e8f0"
     },
     "button": {
-      "background": "#f00",
+      "background": "#0a6b74",
       "text": "#ffffff"
     }
   },
   "content": {
-    "message": "Este site usa cookies para garantir que você obtenha a melhor experiência de navegação. Desativar os cookies do site pode prejudicar a funcionalidade de alguns recursos.",
-    "dismiss": "Concordar e fechar",
-    "link": "Ler mais",
-    "href": "/privacidade.php"
+    "message": "Este site utiliza cookies para garantir que você obtenha a melhor experiência de navegação e atendimento.",
+    "dismiss": "Concordar e Fechar",
+    "link": "Política de Privacidade",
+    "href": "<?= defined('BASE_URL') ? BASE_URL : '/'; ?>privacidade"
   }
 });
 </script>

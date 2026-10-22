@@ -30,6 +30,21 @@ foreach ($result as $row) {
 }
 ?>
 
+<!-- Banner Start -->
+<div class="page-banner" style="background-image: url(<?= BASE_URL; ?>assets/uploads/department-1.png);">
+	<div class="overlay"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="banner-text">
+					<h1><?php echo !empty($home_title_pricing) ? htmlspecialchars($home_title_pricing) : 'Planos de Fidelidade'; ?></h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Banner End -->
+
 <?php if($home_status_pricing == 1): ?>
 <!-- Pricing Start -->
 <section class="pricing-v1" id="fidelidade">

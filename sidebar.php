@@ -2,8 +2,8 @@
 <div class="sidebar">
 	<div class="widget widget-search">
 		<form action="<?php echo BASE_URL; ?>search" method="post">
-			<input type="text" name="search_string" placeholder="Search">
-			<button type="submit"><i class="fa fa-search"></i></button>
+			<input type="text" name="search_string" placeholder="Buscar artigos, notícias..." required>
+			<button type="submit" aria-label="Pesquisar"><i class="fa fa-search"></i></button>
 		</form>
 	</div>
 	<div class="widget">

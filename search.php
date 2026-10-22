@@ -10,13 +10,13 @@ if(!isset($_REQUEST['search_string']))
 ?>
 
 <!-- Banner Start -->
-<div class="page-banner" style="background:none;">
+<div class="page-banner" style="background-image: url(<?= BASE_URL; ?>assets/uploads/department-1.png);">
 	<div class="overlay"></div>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="banner-text">
-					<h1>Procurar por: <?php echo htmlspecialchars($_REQUEST['search_string']); ?></h1>
+					<h1>Resultado da Busca: "<?php echo htmlspecialchars($_REQUEST['search_string']); ?>"</h1>
 				</div>
 			</div>
 		</div>

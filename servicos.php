@@ -55,7 +55,7 @@ foreach ($result as $row) {
 				$benefits_items = !empty($row['benefits']) ? explode("\n", str_replace("\r", "", $row['benefits'])) : [];
 				?>
 				<div class="col-sm-6 col-md-4 col-lg-4">
-					<div class="item border border-info service-card-box">
+					<div class="item service-card-box">
 						<div class="photo" style="background-image:url(<?php echo $photo_src; ?>); position: relative;">
 							<?php if(!empty($row['price'])): ?>
 								<div class="service-card-price-badge">

@@ -197,79 +197,30 @@
 	<script src="<?php echo BASE_URL; ?>assets/js/jquery.bxslider.min.js"></script>
 	<script src="<?php echo BASE_URL; ?>assets/js/jquery.mixitup.min.js"></script>
 	<script src="<?php echo BASE_URL; ?>assets/js/jquery.magnific-popup.min.js"></script>
-	<script src="<?php echo BASE_URL; ?>assets/js/custom.js"></script>
+	<script src="<?php echo BASE_URL; ?>assets/js/custom.js?v=<?= time(); ?>"></script>
 	<script src="<?php echo BASE_URL; ?>assets/js/sweetalert2.all.min.js"></script>
 	<script src="<?php echo BASE_URL; ?>assets/js/toastr.min.js"></script>
-	<script src="<?php echo BASE_URL; ?>assets/js/pronto-global.js"></script>
-	<script src="<?php echo BASE_URL; ?>assets/js/pronto-drawer.js"></script>
+	<script src="<?php echo BASE_URL; ?>assets/js/pronto-global.js?v=<?= time(); ?>"></script>
+	<script src="<?php echo BASE_URL; ?>assets/js/pronto-drawer.js?v=<?= time(); ?>"></script>
 
-	
 	<script>
-	    $('#accordion').on('show.bs.collapse', function () {
-            $('#accordion .in').collapse('hide');
-        });
+	$(function () {
+		$('#accordion').on('show.bs.collapse', function () {
+			$('#accordion .in').collapse('hide');
+		});
+	});
 	</script>
-	<script>
-	    function foco() {
-            var inicio = document.getElementById('inicio')
-            var fim = document.getElementById('fim')
-                if (inicio.value.length == 4 ) {
-                    inicio.blur()
-                    fim.focus()
-        
-                }
-        }
-	</script>
-	
-	<style>
-	    [data-tooltip] {
-          position: relative;
-          font-weight: bold;
-        }
-        
-        [data-tooltip]:after {
-          display: none;
-          position: absolute;
-          top: 12px;
-          padding: 5px;
-          border-radius: 6px;
-          right: calc(100% + 2px);
-          content: attr(data-tooltip);
-          white-space: nowrap;
-          background-color: #0A6B74;
-          color: White;
-        }
-        
-        [data-tooltip]:hover:after {
-          display: block;
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(1, 1);
-            }
-        
-            50% {
-                opacity: 0.3;
-            }
-        
-            65% {
-                transform: scale(1.5);
-                opacity: 0;
-            }
-        }
-	</style>
-	
-	<ethestrategia class="" onclick="window.open('https://wa.me/+5521985831464?&text=Solicitação%20de%20Agendamento%20feito%20através%20do%20site%20Pronto%20Saúde', '_blank')" 
-	    style="cursor:pointer;position: fixed;bottom: 120px;right:10px;padding:4px;background-color: #00b0eb00;
-	    border-radius: 8px; width:auto;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white;z-index:99999;">
-	    <span data-tooltip="Agende sua Consulta Agora">
-	        <img src="https://58b04f5940c1474e557e363a.static-01.com/l/images/459914f38f0e6f78aa48d40a775aa87f9d6c36a9.png" 
-	        class="d-block" style="animation: pulse 2.2s ease infinite;" alt="Pronto Saúde" height="60"> 
-	    </span>
-	</ethestrategia>
 
-	
+	<!-- Botão Flutuante de Atendimento WhatsApp Oficial -->
+	<a href="https://wa.me/+5521985831464?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta%20através%20do%20site%20Pronto%20Saúde" 
+	   target="_blank" 
+	   rel="noopener noreferrer" 
+	   class="ps-floating-whatsapp" 
+	   title="Fale Conosco pelo WhatsApp"
+	   aria-label="Fale Conosco pelo WhatsApp">
+		<i class="fa fa-whatsapp"></i>
+		<span class="ps-floating-whatsapp-tooltip">Agende sua Consulta</span>
+	</a>
 
 </body>
 </html>

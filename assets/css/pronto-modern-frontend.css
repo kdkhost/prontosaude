@@ -1,11 +1,334 @@
 /**
- * Pronto Saúde - Modernização do Site Público e Menu Deslizante Offcanvas
- * Efeito: Slide suave da esquerda para a direita (Hardware Accelerated)
- * Responsividade completa para smartphones, tablets e desktops
+ * Pronto Saúde - Sistema de Design & Modernização do Frontend Público
+ * Cores Tailored: Teal Hospitalar (#0a6b74), Verde Saúde (#10b981), Slate (#0f172a / #1e293b)
+ * Tipografia: Plus Jakarta Sans / Outfit / Inter
+ * Suporte a Glassmorphism, Microinterações, Cards Elevados e Drawer Deslizante
  */
 
 /* ==========================================================================
-   1. BACKDROP & DRAWER CONTAINER (OFFCANVAS)
+   0. VARIÁVEIS GLOBAIS DE DESIGN (DESIGN TOKENS)
+   ========================================================================== */
+:root {
+    --ps-primary: #0a6b74;
+    --ps-primary-dark: #075259;
+    --ps-primary-light: #0d838e;
+    --ps-primary-subtle: #f0f9fa;
+    --ps-secondary: #10b981;
+    --ps-secondary-dark: #059669;
+    --ps-accent: #06b6d4;
+    --ps-gold: #f59e0b;
+    --ps-dark: #0f172a;
+    --ps-dark-surface: #1e293b;
+    --ps-body-text: #334155;
+    --ps-muted: #64748b;
+    --ps-light-muted: #94a3b8;
+    --ps-border: #e2e8f0;
+    --ps-border-subtle: #f1f5f9;
+    --ps-card-bg: #ffffff;
+    --ps-radius-sm: 8px;
+    --ps-radius-md: 12px;
+    --ps-radius-lg: 16px;
+    --ps-radius-xl: 24px;
+    --ps-radius-pill: 9999px;
+    --ps-shadow-xs: 0 1px 3px rgba(10, 107, 116, 0.05);
+    --ps-shadow-sm: 0 3px 10px rgba(10, 107, 116, 0.07);
+    --ps-shadow-md: 0 8px 24px rgba(10, 107, 116, 0.10);
+    --ps-shadow-lg: 0 16px 38px rgba(10, 107, 116, 0.14);
+    --ps-shadow-hover: 0 20px 42px rgba(10, 107, 116, 0.18);
+    --ps-transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tipografia e Base */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+    color: var(--ps-body-text);
+    background-color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-weight: 700;
+    color: var(--ps-dark);
+    letter-spacing: -0.02em;
+}
+
+a {
+    color: var(--ps-primary);
+    transition: var(--ps-transition);
+}
+
+a:hover, a:focus {
+    color: var(--ps-primary-light);
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   1. TOP BAR MODERNA
+   ========================================================================== */
+.top-bar {
+    background: linear-gradient(90deg, #07474d 0%, #0a6b74 60%, #0d838e 100%) !important;
+    color: #ffffff;
+    padding: 9px 0 !important;
+    font-size: 0.885rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.top-bar a {
+    color: rgba(255, 255, 255, 0.92) !important;
+    text-decoration: none !important;
+    font-weight: 500;
+    transition: var(--ps-transition);
+}
+
+.top-bar a:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.top-contact {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.top-contact .list {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 0 !important;
+}
+
+.top-contact .list i {
+    color: var(--ps-secondary) !important;
+    font-size: 0.95rem;
+}
+
+.top-social {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.top-social ul {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.top-social ul li a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff !important;
+    font-size: 0.85rem;
+    transition: var(--ps-transition);
+}
+
+.top-social ul li a:hover {
+    background: var(--ps-secondary) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.35);
+}
+
+/* Dropdown Contato Top Bar */
+.top-bar .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.top-bar .dropbtn {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: var(--ps-radius-pill) !important;
+    color: #ffffff !important;
+    padding: 4px 14px !important;
+    font-size: 0.825rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: var(--ps-transition);
+}
+
+.top-bar .dropbtn:hover {
+    background-color: var(--ps-secondary) !important;
+    border-color: var(--ps-secondary) !important;
+    color: #ffffff !important;
+}
+
+.top-bar .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #ffffff !important;
+    min-width: 190px;
+    box-shadow: var(--ps-shadow-lg) !important;
+    border-radius: var(--ps-radius-md) !important;
+    border: 1px solid var(--ps-border) !important;
+    padding: 8px 0 !important;
+    z-index: 1050;
+    animation: psDropdownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.top-bar .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.top-bar .dropdown-content a {
+    color: var(--ps-dark) !important;
+    padding: 9px 16px !important;
+    font-size: 0.88rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--ps-transition);
+}
+
+.top-bar .dropdown-content a:hover {
+    background-color: var(--ps-primary-subtle) !important;
+    color: var(--ps-primary) !important;
+    padding-left: 20px !important;
+}
+
+.top-bar .dropdown-content a i.fa-whatsapp {
+    color: #25d366 !important;
+}
+
+@keyframes psDropdownFade {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   2. HEADER PRINCIPAL & NAVEGAÇÃO DESKTOP
+   ========================================================================== */
+header {
+    background: #ffffff !important;
+    box-shadow: 0 4px 20px rgba(10, 107, 116, 0.06) !important;
+    border-bottom: 1px solid rgba(10, 107, 116, 0.08) !important;
+    position: relative;
+    z-index: 999;
+}
+
+header .logo {
+    padding: 16px 0 !important;
+}
+
+header .logo img {
+    max-height: 52px !important;
+    width: auto !important;
+    object-fit: contain;
+    transition: transform 0.25s ease;
+}
+
+header .logo a:hover img {
+    transform: scale(1.02);
+}
+
+/* Menu Desktop Superfish */
+.nav-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.sf-menu {
+    display: flex !important;
+    align-items: center;
+    gap: 4px;
+    margin: 0 !important;
+}
+
+.sf-menu > li > a {
+    color: var(--ps-dark) !important;
+    font-size: 0.945rem !important;
+    font-weight: 600 !important;
+    padding: 26px 14px !important;
+    position: relative;
+    letter-spacing: -0.01em;
+    display: inline-flex;
+    align-items: center;
+    border: none !important;
+    background: transparent !important;
+    transition: var(--ps-transition);
+}
+
+.sf-menu > li > a:hover,
+.sf-menu > li.sfHover > a,
+.sf-menu > li.active > a {
+    color: var(--ps-primary) !important;
+    background: transparent !important;
+}
+
+.sf-menu > li > a::after {
+    content: '';
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--ps-primary), var(--ps-secondary));
+    border-radius: var(--ps-radius-pill);
+    transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sf-menu > li:hover > a::after,
+.sf-menu > li.active > a::after,
+.sf-menu > li.sfHover > a::after {
+    width: 60%;
+}
+
+/* Dropdowns Desktop */
+.sf-menu ul {
+    background: #ffffff !important;
+    border-radius: var(--ps-radius-md) !important;
+    border: 1px solid var(--ps-border) !important;
+    box-shadow: 0 16px 38px rgba(10, 107, 116, 0.14) !important;
+    padding: 10px 0 !important;
+    min-width: 220px !important;
+    margin-top: 4px;
+}
+
+.sf-menu ul li a {
+    color: var(--ps-dark) !important;
+    padding: 10px 20px !important;
+    font-size: 0.915rem !important;
+    font-weight: 500 !important;
+    background: transparent !important;
+    border: none !important;
+    transition: var(--ps-transition) !important;
+}
+
+.sf-menu ul li:hover > a,
+.sf-menu ul li.sfHover > a {
+    background: var(--ps-primary-subtle) !important;
+    color: var(--ps-primary) !important;
+    padding-left: 24px !important;
+}
+
+/* ==========================================================================
+   3. MENU DESLIZANTE OFFCANVAS (DRAWER MOBILE DA ESQUERDA PARA A DIREITA)
    ========================================================================== */
 .ps-drawer-backdrop {
     position: fixed;
@@ -50,7 +373,6 @@
     overflow: hidden;
 }
 
-/* Quando o drawer está aberto */
 body.ps-drawer-open {
     overflow: hidden !important;
 }
@@ -60,15 +382,12 @@ body.ps-drawer-open .ps-offcanvas-drawer {
     -webkit-transform: translate3d(0, 0, 0);
 }
 
-/* ==========================================================================
-   2. CABEÇALHO DO DRAWER
-   ========================================================================== */
 .ps-drawer-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 18px 20px;
-    background: #0a6b74;
+    background: linear-gradient(135deg, var(--ps-primary-dark), var(--ps-primary));
     color: #ffffff;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -80,47 +399,46 @@ body.ps-drawer-open .ps-offcanvas-drawer {
 }
 
 .ps-drawer-logo {
-    max-height: 40px;
+    max-height: 38px;
     width: auto;
     object-fit: contain;
     background: #ffffff;
     padding: 4px 8px;
-    border-radius: 6px;
+    border-radius: var(--ps-radius-sm);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .ps-drawer-title {
-    font-size: 1.15rem;
+    font-size: 1.12rem;
     font-weight: 700;
     letter-spacing: -0.3px;
+    color: #ffffff;
 }
 
 .ps-drawer-close-btn {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.18);
     border: none;
     color: #ffffff;
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: var(--ps-transition);
 }
 
 .ps-drawer-close-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.35);
     transform: rotate(90deg);
 }
 
-/* ==========================================================================
-   3. CTA RÁPIDO NO TOPO DO DRAWER
-   ========================================================================== */
 .ps-drawer-quick-cta {
-    padding: 14px 18px;
-    background: #f1f8f8;
-    border-bottom: 1px solid #e1eeef;
+    padding: 12px 18px;
+    background: #f0fdf4;
+    border-bottom: 1px solid #dcfce7;
 }
 
 .ps-drawer-cta-btn {
@@ -131,34 +449,32 @@ body.ps-drawer-open .ps-offcanvas-drawer {
     background: #25d366;
     color: #ffffff !important;
     text-decoration: none !important;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.925rem;
     padding: 10px 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.25);
-    transition: background 0.2s ease, transform 0.2s ease;
+    border-radius: var(--ps-radius-sm);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    transition: var(--ps-transition);
 }
 
 .ps-drawer-cta-btn:hover {
     background: #1ebc59;
     transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
 }
 
-/* ==========================================================================
-   4. CORPO E LINKS DE NAVEGAÇÃO
-   ========================================================================== */
 .ps-drawer-body {
     flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 10px 0;
+    padding: 8px 0;
 }
 
 .ps-drawer-body::-webkit-scrollbar {
     width: 4px;
 }
 .ps-drawer-body::-webkit-scrollbar-thumb {
-    background: #0a6b7440;
+    background: rgba(10, 107, 116, 0.25);
     border-radius: 4px;
 }
 
@@ -170,51 +486,50 @@ body.ps-drawer-open .ps-offcanvas-drawer {
 }
 
 .ps-drawer-item {
-    border-bottom: 1px solid #f0f4f5;
+    border-bottom: 1px solid #f1f5f9;
 }
 
 .ps-drawer-link-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: background 0.15s ease;
+    transition: background 0.18s ease;
 }
 
 .ps-drawer-link-row:hover {
-    background: #f7fafb;
+    background: var(--ps-primary-subtle);
 }
 
 .ps-drawer-link {
     flex: 1;
     display: block;
-    padding: 14px 20px;
-    color: #1e293b !important;
+    padding: 13px 20px;
+    color: var(--ps-dark) !important;
     text-decoration: none !important;
     font-size: 0.985rem;
-    font-weight: 500;
+    font-weight: 600;
     transition: color 0.2s ease;
 }
 
 .ps-drawer-link:hover {
-    color: #0a6b74 !important;
+    color: var(--ps-primary) !important;
 }
 
 .ps-drawer-toggle-sub {
     background: transparent;
     border: none;
-    color: #64748b;
-    padding: 14px 20px;
+    color: var(--ps-muted);
+    padding: 13px 20px;
     cursor: pointer;
     font-size: 0.9rem;
-    transition: transform 0.3s ease, color 0.2s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
 }
 
 .ps-drawer-item.open > .ps-drawer-link-row .ps-drawer-toggle-sub {
     transform: rotate(180deg);
-    color: #0a6b74;
+    color: var(--ps-primary);
 }
 
-/* Submenu em cascata suave */
 .ps-drawer-submenu {
     max-height: 0;
     overflow: hidden;
@@ -231,32 +546,30 @@ body.ps-drawer-open .ps-offcanvas-drawer {
     align-items: center;
     gap: 8px;
     padding: 11px 20px 11px 34px;
-    color: #475569 !important;
+    color: var(--ps-body-text) !important;
     text-decoration: none !important;
     font-size: 0.92rem;
+    font-weight: 500;
     border-left: 3px solid transparent;
-    transition: all 0.2s ease;
+    transition: var(--ps-transition);
 }
 
 .ps-drawer-sublink:hover {
-    color: #0a6b74 !important;
-    background: #edf6f7;
-    border-left-color: #0a6b74;
+    color: var(--ps-primary) !important;
+    background: var(--ps-primary-subtle);
+    border-left-color: var(--ps-primary);
     padding-left: 38px;
 }
 
 .ps-drawer-sublink i {
     font-size: 0.8rem;
-    color: #94a3b8;
+    color: var(--ps-light-muted);
 }
 
-/* ==========================================================================
-   5. RODAPÉ DO DRAWER
-   ========================================================================== */
 .ps-drawer-footer {
     padding: 16px 20px;
     background: #f8fafc;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid var(--ps-border);
 }
 
 .ps-drawer-contact-list {
@@ -271,23 +584,22 @@ body.ps-drawer-open .ps-offcanvas-drawer {
     align-items: center;
     gap: 10px;
     font-size: 0.88rem;
-    color: #64748b;
+    color: var(--ps-muted);
 }
 
 .ps-drawer-contact-item i {
-    color: #0a6b74;
+    color: var(--ps-primary);
     width: 16px;
     text-align: center;
 }
 
 .ps-drawer-contact-item a {
-    color: #334155 !important;
+    color: var(--ps-dark) !important;
     text-decoration: none !important;
-    transition: color 0.2s ease;
 }
 
 .ps-drawer-contact-item a:hover {
-    color: #0a6b74 !important;
+    color: var(--ps-primary) !important;
 }
 
 .ps-drawer-socials {
@@ -301,24 +613,23 @@ body.ps-drawer-open .ps-offcanvas-drawer {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: #0a6b74;
+    background: var(--ps-primary);
     color: #ffffff !important;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.85rem;
     text-decoration: none !important;
-    transition: transform 0.2s ease, background 0.2s ease;
+    transition: var(--ps-transition);
 }
 
 .ps-drawer-socials a:hover {
-    background: #075259;
+    background: var(--ps-primary-dark);
     transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(10, 107, 116, 0.3);
 }
 
-/* ==========================================================================
-   6. BOTÃO HAMBURGER NO HEADER & AJUSTES RESPONSIVOS
-   ========================================================================== */
+/* Botão Hamburger Mobile */
 .ps-mobile-toggle-btn {
     display: none;
     flex-direction: column;
@@ -327,22 +638,22 @@ body.ps-drawer-open .ps-offcanvas-drawer {
     gap: 5px;
     width: 44px;
     height: 44px;
-    background: #0a6b74;
+    background: var(--ps-primary);
     border: none;
-    border-radius: 8px;
+    border-radius: var(--ps-radius-sm);
     cursor: pointer;
     padding: 10px;
-    box-shadow: 0 4px 10px rgba(10, 107, 116, 0.25);
-    transition: background 0.2s ease, transform 0.15s ease;
+    box-shadow: 0 4px 12px rgba(10, 107, 116, 0.25);
+    transition: var(--ps-transition);
 }
 
 .ps-mobile-toggle-btn:hover {
-    background: #075259;
-    transform: scale(1.03);
+    background: var(--ps-primary-dark);
+    transform: scale(1.04);
 }
 
 .ps-mobile-toggle-btn:active {
-    transform: scale(0.97);
+    transform: scale(0.96);
 }
 
 .ps-hamburger-bar {
@@ -354,83 +665,1226 @@ body.ps-drawer-open .ps-offcanvas-drawer {
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/* Responsividade Header */
 @media (max-width: 991px) {
     .ps-mobile-toggle-btn {
         display: inline-flex !important;
     }
-
     .slicknav_menu {
-        display: none !important; /* Desativa slicknav para usar o drawer moderno */
+        display: none !important;
     }
-
+    header .nav-wrapper {
+        display: none !important;
+    }
     header .logo {
         display: flex;
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        padding: 10px 15px;
-    }
-
-    header .nav-wrapper {
-        display: none !important;
-    }
-
-    .header-mobile-flex {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
+        padding: 10px 15px !important;
     }
 }
 
 /* ==========================================================================
-   7. MODERNIZAÇÕES GERAIS DO SITE PÚBLICO
+   4. SLIDER PRINCIPAL (HERO) COM OVERLAY SOFISTICADO
    ========================================================================== */
-/* Botões mais elegantes com transição e micro-sombras */
-.btn-success,
-.btn-primary,
-.cform-1 input[type="submit"],
-.service-v1 .item .text a,
-.pricing-item .pricing-btn a {
-    border-radius: 6px !important;
-    transition: all 0.25s ease !important;
+.main-slider .slider .bxslider li {
+    background-size: cover !important;
+    background-position: center center !important;
+}
+
+.main-slider .slider .overlay {
+    background: linear-gradient(135deg, rgba(7, 71, 77, 0.82) 0%, rgba(10, 107, 116, 0.65) 55%, rgba(15, 23, 42, 0.82) 100%) !important;
+}
+
+.main-slider .slider .content .text h2 {
+    font-size: 2.75rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em !important;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+    color: #ffffff !important;
+    margin-bottom: 12px !important;
+}
+
+.main-slider .slider .content .text h3 {
+    font-size: 1.5rem !important;
     font-weight: 600 !important;
-    letter-spacing: 0.2px;
+    color: #e2e8f0 !important;
+    margin-bottom: 16px !important;
 }
 
-.btn-success:hover,
-.cform-1 input[type="submit"]:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(10, 107, 116, 0.25);
+.main-slider .slider .content .text p {
+    font-size: 1.05rem !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    max-width: 680px;
+    line-height: 1.7 !important;
 }
 
-/* Cards de Serviços, Planos e Médicos com elevação suave */
-.service-v1 .item,
-.doctor-v1 .item,
-.pricing-item,
+.main-slider .slider .content .text p.button a {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: linear-gradient(135deg, var(--ps-secondary), #059669) !important;
+    color: #ffffff !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    padding: 13px 28px !important;
+    border-radius: var(--ps-radius-pill) !important;
+    border: none !important;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35) !important;
+    transition: var(--ps-transition) !important;
+}
+
+.main-slider .slider .content .text p.button a:hover {
+    background: linear-gradient(135deg, #059669, #047857) !important;
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 10px 28px rgba(16, 185, 129, 0.45) !important;
+}
+
+/* ==========================================================================
+   5. CABEÇALHOS DE SEÇÃO MODERNOS
+   ========================================================================== */
+.heading, .heading-normal {
+    text-align: center;
+    margin-bottom: 48px !important;
+    position: relative;
+}
+
+.heading h2, .heading-normal h2 {
+    font-size: 2.25rem !important;
+    font-weight: 800 !important;
+    color: var(--ps-dark) !important;
+    letter-spacing: -0.025em !important;
+    margin-bottom: 12px !important;
+    position: relative;
+    display: inline-block;
+}
+
+.heading h2::after, .heading-normal h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--ps-primary), var(--ps-secondary));
+    border-radius: var(--ps-radius-pill);
+}
+
+.heading p, .heading-normal p {
+    font-size: 1.05rem !important;
+    color: var(--ps-muted) !important;
+    max-width: 650px;
+    margin: 18px auto 0 auto !important;
+    line-height: 1.65;
+}
+
+/* ==========================================================================
+   6. CARDS DE SERVIÇOS & PRODUTOS MODERNOS
+   ========================================================================== */
+.service-v1 {
+    background: var(--ps-border-subtle);
+    padding: 70px 0 !important;
+}
+
 .service-card-box {
-    border-radius: 10px !important;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    background: #ffffff !important;
+    border: 1px solid var(--ps-border) !important;
+    border-radius: var(--ps-radius-lg) !important;
+    overflow: hidden !important;
+    box-shadow: var(--ps-shadow-sm) !important;
+    transition: var(--ps-transition) !important;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
 }
 
-.service-v1 .item:hover,
-.doctor-v1 .item:hover,
-.pricing-item:hover,
 .service-card-box:hover {
-    transform: translateY(-6px) !important;
-    box-shadow: 0 14px 30px rgba(10, 107, 116, 0.12) !important;
+    transform: translateY(-8px) !important;
+    box-shadow: var(--ps-shadow-hover) !important;
+    border-color: rgba(10, 107, 116, 0.25) !important;
 }
 
-/* Suavização de formulários */
-.cform-1 .form-control {
-    border-radius: 6px !important;
-    border: 1px solid #cbd5e1 !important;
-    padding: 10px 14px !important;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+.service-card-box .photo {
+    height: 220px !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s ease;
 }
 
-.cform-1 .form-control:focus {
-    border-color: #0a6b74 !important;
-    box-shadow: 0 0 0 3px rgba(10, 107, 116, 0.15) !important;
+.service-card-box:hover .photo {
+    transform: scale(1.04);
 }
+
+.service-card-price-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(10, 107, 116, 0.92) !important;
+    color: #ffffff !important;
+    padding: 6px 14px !important;
+    border-radius: var(--ps-radius-pill) !important;
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.2px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.service-card-price-badge small {
+    font-size: 0.72rem !important;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-right: 3px;
+    font-weight: 600;
+}
+
+.service-card-box .text {
+    padding: 22px !important;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background: #ffffff;
+}
+
+.service-card-box .text h3 {
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+}
+
+.service-card-box .text h3 a {
+    color: var(--ps-dark) !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    transition: color 0.2s ease;
+}
+
+.service-card-box .text h3 a:hover {
+    color: var(--ps-primary) !important;
+}
+
+.service-card-box .text p {
+    color: var(--ps-muted) !important;
+    font-size: 0.925rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 16px !important;
+}
+
+.service-card-benefits {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 0 20px 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.service-card-benefits li {
+    font-size: 0.875rem !important;
+    color: var(--ps-body-text) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px;
+}
+
+.service-card-benefits li i {
+    color: var(--ps-secondary) !important;
+    font-size: 0.95rem !important;
+    flex-shrink: 0;
+}
+
+.service-card-box .text p.button {
+    margin-top: auto !important;
+    margin-bottom: 0 !important;
+}
+
+.service-card-box .text p.button a {
+    display: block !important;
+    text-align: center !important;
+    background: linear-gradient(135deg, var(--ps-primary), var(--ps-primary-light)) !important;
+    color: #ffffff !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    padding: 11px 20px !important;
+    border-radius: var(--ps-radius-sm) !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(10, 107, 116, 0.25) !important;
+    transition: var(--ps-transition) !important;
+}
+
+.service-card-box .text p.button a:hover {
+    background: linear-gradient(135deg, var(--ps-primary-dark), var(--ps-primary)) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(10, 107, 116, 0.35) !important;
+}
+
+/* ==========================================================================
+   7. ESPECIALIDADES & DEPARTAMENTOS MODERNOS
+   ========================================================================== */
+.department-v2 {
+    padding: 70px 0 !important;
+    background: #ffffff;
+}
+
+.department-tab .nav-tabs {
+    border: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px;
+    padding: 0 !important;
+}
+
+.department-tab .nav-tabs > li {
+    float: none !important;
+    margin: 0 !important;
+}
+
+.department-tab .nav-tabs > li > a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 14px 20px !important;
+    border: 1px solid var(--ps-border) !important;
+    border-radius: var(--ps-radius-md) !important;
+    color: var(--ps-dark) !important;
+    font-size: 0.985rem !important;
+    font-weight: 600 !important;
+    background: var(--ps-border-subtle) !important;
+    transition: var(--ps-transition) !important;
+}
+
+.department-tab .nav-tabs > li > a:hover {
+    background: var(--ps-primary-subtle) !important;
+    color: var(--ps-primary) !important;
+    border-color: rgba(10, 107, 116, 0.25) !important;
+    transform: translateX(4px);
+}
+
+.department-tab .nav-tabs > li.active > a,
+.department-tab .nav-tabs > li.active > a:hover,
+.department-tab .nav-tabs > li.active > a:focus {
+    background: linear-gradient(90deg, var(--ps-primary), var(--ps-primary-light)) !important;
+    color: #ffffff !important;
+    border-color: var(--ps-primary) !important;
+    box-shadow: 0 6px 18px rgba(10, 107, 116, 0.25) !important;
+    transform: translateX(6px);
+}
+
+.department-content {
+    background: #ffffff;
+    padding: 10px 20px;
+}
+
+.department-content h2 {
+    font-size: 1.85rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 16px !important;
+    color: var(--ps-dark) !important;
+}
+
+.department-content p {
+    font-size: 1rem !important;
+    color: var(--ps-body-text) !important;
+    line-height: 1.7 !important;
+}
+
+.department-content p.button a {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px;
+    background: var(--ps-primary) !important;
+    color: #ffffff !important;
+    padding: 10px 24px !important;
+    border-radius: var(--ps-radius-pill) !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px rgba(10, 107, 116, 0.2) !important;
+    transition: var(--ps-transition) !important;
+}
+
+.department-content p.button a:hover {
+    background: var(--ps-primary-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(10, 107, 116, 0.3) !important;
+}
+
+.department-tab .thumb img {
+    border-radius: var(--ps-radius-lg);
+    box-shadow: var(--ps-shadow-md);
+}
+
+/* ==========================================================================
+   8. CORPO CLÍNICO / MÉDICOS MODERNOS
+   ========================================================================== */
+.doctor-v1 {
+    background: var(--ps-border-subtle);
+    padding: 70px 0 !important;
+}
+
+.doctor-v1 .item {
+    background: #ffffff !important;
+    border-radius: var(--ps-radius-lg) !important;
+    overflow: hidden !important;
+    border: 1px solid var(--ps-border) !important;
+    box-shadow: var(--ps-shadow-sm) !important;
+    transition: var(--ps-transition) !important;
+    margin: 10px 5px !important;
+}
+
+.doctor-v1 .item:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: var(--ps-shadow-hover) !important;
+}
+
+.doctor-v1 .item .thumb .photo {
+    height: 280px !important;
+    background-size: cover !important;
+    background-position: center top !important;
+    transition: transform 0.4s ease;
+}
+
+.doctor-v1 .item:hover .thumb .photo {
+    transform: scale(1.05);
+}
+
+.doctor-v1 .item .text {
+    padding: 20px !important;
+    text-align: center !important;
+    background: #ffffff !important;
+}
+
+.doctor-v1 .item .text h3 a {
+    color: var(--ps-dark) !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    transition: color 0.2s ease;
+}
+
+.doctor-v1 .item .text h3 a:hover {
+    color: var(--ps-primary) !important;
+}
+
+.doctor-v1 .item .text p {
+    color: var(--ps-primary) !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 0 !important;
+}
+
+.doctor-v1 .social-icons ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+}
+
+.doctor-v1 .social-icons ul li a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(10, 107, 116, 0.9) !important;
+    color: #ffffff !important;
+    font-size: 0.85rem;
+    transition: var(--ps-transition);
+}
+
+.doctor-v1 .social-icons ul li a:hover {
+    background: var(--ps-secondary) !important;
+    transform: translateY(-3px);
+}
+
+/* ==========================================================================
+   9. PLANOS E PREÇOS / CARTÃO FIDELIDADE
+   ========================================================================== */
+.pricing-v1 {
+    padding: 70px 0 !important;
+    background: #ffffff;
+}
+
+.pricing-item {
+    background: #ffffff !important;
+    border: 1px solid var(--ps-border) !important;
+    border-radius: var(--ps-radius-lg) !important;
+    padding: 32px 24px !important;
+    box-shadow: var(--ps-shadow-sm) !important;
+    transition: var(--ps-transition) !important;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.pricing-item:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: var(--ps-shadow-hover) !important;
+}
+
+.pricing-popular {
+    border: 2px solid var(--ps-primary) !important;
+    box-shadow: 0 16px 36px rgba(10, 107, 116, 0.16) !important;
+    transform: scale(1.02);
+}
+
+.pricing-badge-flag {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    padding: 5px 14px !important;
+    border-radius: var(--ps-radius-pill) !important;
+    box-shadow: 0 3px 10px rgba(245, 158, 11, 0.4) !important;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.pricing-item .title {
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+    color: var(--ps-dark) !important;
+    margin-bottom: 12px;
+}
+
+.plan-img-container {
+    margin: 14px auto !important;
+    max-width: 220px;
+    height: 95px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plan-pricing-amount {
+    margin: 16px 0 !important;
+}
+
+.pricing-item .offer ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 20px 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+}
+
+.pricing-item .offer ul li {
+    font-size: 0.915rem !important;
+    color: var(--ps-body-text) !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--ps-border-subtle);
+}
+
+.pricing-item .offer ul li i {
+    color: var(--ps-secondary) !important;
+    font-size: 0.95rem;
+}
+
+.pricing-item .button a {
+    display: block !important;
+    background: linear-gradient(135deg, var(--ps-primary), var(--ps-primary-light)) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 0.965rem !important;
+    padding: 12px 20px !important;
+    border-radius: var(--ps-radius-sm) !important;
+    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.25) !important;
+    transition: var(--ps-transition) !important;
+}
+
+.pricing-item .button a:hover {
+    background: linear-gradient(135deg, var(--ps-primary-dark), var(--ps-primary)) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(10, 107, 116, 0.35) !important;
+}
+
+/* ==========================================================================
+   10. DEPOIMENTOS
+   ========================================================================== */
+.testimonial-v1 {
+    padding: 80px 0 !important;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+.testimonial-v1 .overlay {
+    background: linear-gradient(135deg, rgba(7, 71, 77, 0.9) 0%, rgba(15, 23, 42, 0.92) 100%) !important;
+}
+
+.testimonial-v1 .heading h2,
+.testimonial-v1 .heading p {
+    color: #ffffff !important;
+}
+
+.testimonial-v1 .heading h2::after {
+    background: #ffffff;
+}
+
+.testimonial-wrapper {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: var(--ps-radius-lg);
+    padding: 34px !important;
+    box-shadow: var(--ps-shadow-lg);
+    margin: 10px 5px;
+}
+
+.testimonial-wrapper .comment p {
+    font-size: 1.05rem !important;
+    color: var(--ps-dark) !important;
+    font-style: italic;
+    line-height: 1.7 !important;
+}
+
+.testimonial-wrapper .author {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.testimonial-wrapper .author .photo img {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50% !important;
+    object-fit: cover;
+    border: 3px solid var(--ps-primary);
+}
+
+.testimonial-wrapper .author .text h3 {
+    margin: 0 !important;
+    font-size: 1.15rem !important;
+    color: var(--ps-dark) !important;
+}
+
+.testimonial-wrapper .author .text h4 {
+    margin: 4px 0 0 0 !important;
+    font-size: 0.885rem !important;
+    color: var(--ps-primary) !important;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   11. NOTÍCIAS & BLOG
+   ========================================================================== */
+.news-v1 {
+    padding: 70px 0 !important;
+    background: var(--ps-border-subtle);
+}
+
+.news-v1 .item {
+    background: #ffffff;
+    border-radius: var(--ps-radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--ps-border);
+    box-shadow: var(--ps-shadow-sm);
+    transition: var(--ps-transition);
+    margin: 10px 5px;
+}
+
+.news-v1 .item:hover {
+    transform: translateY(-7px);
+    box-shadow: var(--ps-shadow-hover);
+}
+
+.news-v1 .item .thumb .photo {
+    height: 220px;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.4s ease;
+}
+
+.news-v1 .item:hover .thumb .photo {
+    transform: scale(1.04);
+}
+
+.news-v1 .item .text {
+    padding: 22px;
+}
+
+.news-v1 .item .text h3 a {
+    color: var(--ps-dark);
+    font-size: 1.18rem;
+    font-weight: 700;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+}
+
+.news-v1 .item .text h3 a:hover {
+    color: var(--ps-primary);
+}
+
+/* ==========================================================================
+   12. PARCEIROS
+   ========================================================================== */
+.partner-v1 {
+    padding: 60px 0 !important;
+    background: #ffffff;
+}
+
+.partner-v1 .item {
+    padding: 10px;
+}
+
+.partner-v1 .item .inner img {
+    max-height: 65px;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(100%);
+    opacity: 0.65;
+    transition: var(--ps-transition);
+    margin: 0 auto;
+}
+
+.partner-v1 .item:hover .inner img {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* ==========================================================================
+   13. RODAPÉ (FOOTER) PROFISSIONAL
+   ========================================================================== */
+.footer-social {
+    background: #062b30 !important;
+    padding: 24px 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-social .item ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-social .item ul li a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    font-size: 1rem;
+    transition: var(--ps-transition);
+}
+
+.footer-social .item ul li a:hover {
+    background: var(--ps-secondary) !important;
+    border-color: var(--ps-secondary) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.footer-main {
+    background: #08343a !important;
+    color: rgba(255, 255, 255, 0.78);
+    padding: 65px 0 40px 0 !important;
+}
+
+.footer-col h3 {
+    color: #ffffff !important;
+    font-size: 1.25rem !important;
+    font-weight: 700;
+    margin-bottom: 24px;
+    position: relative;
+    padding-bottom: 12px;
+}
+
+.footer-col h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--ps-secondary), var(--ps-primary-light)) !important;
+    border-radius: var(--ps-radius-pill);
+}
+
+.footer-col p {
+    font-size: 0.925rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.footer-col .news-item {
+    margin-bottom: 12px;
+}
+
+.footer-col .news-title a {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-size: 0.915rem;
+    font-weight: 500;
+    transition: var(--ps-transition);
+    display: block;
+    line-height: 1.45;
+}
+
+.footer-col .news-title a:hover {
+    color: var(--ps-secondary) !important;
+    padding-left: 4px;
+}
+
+.footer-col .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-col .contact-item i {
+    color: var(--ps-secondary);
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.footer-col .contact-item a {
+    color: rgba(255, 255, 255, 0.85) !important;
+    text-decoration: none;
+    transition: var(--ps-transition);
+}
+
+.footer-col .contact-item a:hover {
+    color: var(--ps-secondary) !important;
+    padding-left: 4px;
+}
+
+.footer-bottom {
+    background: #052125 !important;
+    color: rgba(255, 255, 255, 0.65);
+    padding: 20px 0 !important;
+    font-size: 0.875rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ==========================================================================
+   14. BOTÃO FLUTUANTE DE WHATSAPP ELEGANTE & PULSO
+   ========================================================================== */
+.ps-floating-whatsapp {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 58px;
+    height: 58px;
+    background: #25d366;
+    color: #ffffff !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+    z-index: 99990;
+    cursor: pointer;
+    text-decoration: none !important;
+    transition: var(--ps-transition);
+    animation: psWhatsAppPulse 2.4s infinite;
+}
+
+.ps-floating-whatsapp:hover {
+    transform: scale(1.12);
+    box-shadow: 0 10px 28px rgba(37, 211, 102, 0.6);
+    color: #ffffff !important;
+}
+
+.ps-floating-whatsapp-tooltip {
+    position: absolute;
+    right: 70px;
+    background: var(--ps-dark);
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: var(--ps-radius-pill);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    transform: translateX(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.ps-floating-whatsapp:hover .ps-floating-whatsapp-tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@keyframes psWhatsAppPulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.65); }
+    70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+/* ==========================================================================
+   15. FORMULÁRIOS MODERNOS
+   ========================================================================== */
+.form-control, input[type="text"], input[type="email"], input[type="password"], textarea, select {
+    border-radius: var(--ps-radius-sm) !important;
+    border: 1px solid var(--ps-border) !important;
+    padding: 11px 16px !important;
+    font-size: 0.95rem !important;
+    color: var(--ps-dark) !important;
+    background-color: #ffffff !important;
+    transition: var(--ps-transition) !important;
+    box-shadow: none !important;
+}
+
+.form-control:focus, input:focus, textarea:focus, select:focus {
+    border-color: var(--ps-primary) !important;
+    box-shadow: 0 0 0 3px rgba(10, 107, 116, 0.16) !important;
+    outline: none !important;
+}
+
+.btn-primary, .btn-success, input[type="submit"] {
+    border-radius: var(--ps-radius-sm) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.2px;
+    padding: 11px 24px !important;
+    transition: var(--ps-transition) !important;
+}
+
+.btn-primary:hover, .btn-success:hover, input[type="submit"]:hover {
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   16. PERFIL E DETALHES DO MÉDICO (DOCTOR DETAIL & SINGLE)
+   ========================================================================== */
+.doctor-detail {
+    padding: 60px 0 !important;
+    background: #f8fafc;
+}
+
+.doctor-single {
+    background: #ffffff;
+    border-radius: var(--ps-radius-md);
+    padding: 24px;
+    box-shadow: var(--ps-shadow-sm);
+    border: 1px solid var(--ps-border);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.doctor-single .thumb {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 20px auto;
+    border: 4px solid var(--ps-primary-light);
+    box-shadow: 0 8px 20px rgba(10, 107, 116, 0.15);
+}
+
+.doctor-single .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.doctor-single .text h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--ps-dark);
+    margin-bottom: 6px;
+}
+
+.doctor-single .text h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ps-primary);
+    margin-bottom: 12px;
+}
+
+.doctor-single .text p {
+    font-size: 0.885rem;
+    color: var(--ps-muted);
+    line-height: 1.55;
+    margin-bottom: 16px;
+}
+
+.doctor-single .social ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.doctor-single .social ul li a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: var(--ps-primary) !important;
+    font-size: 0.95rem;
+    transition: var(--ps-transition);
+}
+
+.doctor-single .social ul li a:hover {
+    background: var(--ps-primary);
+    color: #ffffff !important;
+    transform: translateY(-2px);
+}
+
+.doctor-detail-tab {
+    background: #ffffff;
+    border-radius: var(--ps-radius-md);
+    padding: 28px;
+    box-shadow: var(--ps-shadow-sm);
+    border: 1px solid var(--ps-border);
+}
+
+.doctor-detail-tab .nav-tabs {
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 10px;
+}
+
+.doctor-detail-tab .nav-tabs > li > a {
+    border: none !important;
+    border-radius: var(--ps-radius-sm) var(--ps-radius-sm) 0 0 !important;
+    color: var(--ps-muted) !important;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 12px 20px;
+    transition: var(--ps-transition);
+    background: transparent !important;
+}
+
+.doctor-detail-tab .nav-tabs > li.active > a,
+.doctor-detail-tab .nav-tabs > li > a:hover {
+    color: var(--ps-primary) !important;
+    border-bottom: 3px solid var(--ps-primary) !important;
+    background: var(--ps-primary-light) !important;
+}
+
+/* ==========================================================================
+   17. SIDEBAR & WIDGETS
+   ========================================================================== */
+.sidebar .widget {
+    background: #ffffff;
+    border-radius: var(--ps-radius-md);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--ps-shadow-sm);
+    border: 1px solid var(--ps-border);
+}
+
+.sidebar .widget h4 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--ps-dark);
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--ps-primary-light);
+}
+
+.sidebar .widget ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar .widget ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.sidebar .widget ul li:last-child {
+    border-bottom: none;
+}
+
+.sidebar .widget ul li a {
+    color: var(--ps-dark);
+    font-size: 0.925rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: var(--ps-transition);
+    display: block;
+}
+
+.sidebar .widget ul li a:hover {
+    color: var(--ps-primary);
+    padding-left: 6px;
+}
+
+.sidebar .widget-search form {
+    position: relative;
+    display: flex;
+}
+
+.sidebar .widget-search input {
+    width: 100%;
+    padding: 12px 48px 12px 16px !important;
+    border-radius: var(--ps-radius-pill) !important;
+    border: 1px solid var(--ps-border) !important;
+    font-size: 0.9rem;
+}
+
+.sidebar .widget-search button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    bottom: 5px;
+    width: 38px;
+    border: none;
+    background: var(--ps-primary);
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--ps-transition);
+}
+
+.sidebar .widget-search button:hover {
+    background: var(--ps-primary-dark);
+    transform: scale(1.06);
+}
+
+/* ==========================================================================
+   18. PAGINAÇÃO MODERNA
+   ========================================================================== */
+.pagination {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 30px 0;
+    list-style: none;
+}
+
+.pagination a, .pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--ps-dark);
+    background: #ffffff;
+    border: 1px solid var(--ps-border);
+    transition: var(--ps-transition);
+}
+
+.pagination a:hover {
+    background: var(--ps-primary-light);
+    color: var(--ps-primary);
+    border-color: var(--ps-primary);
+}
+
+.pagination .current {
+    background: var(--ps-primary) !important;
+    color: #ffffff !important;
+    border-color: var(--ps-primary) !important;
+}
+
+.pagination .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   19. ACCORDIONS / FAQ
+   ========================================================================== */
+.panel-group .panel {
+    border: 1px solid var(--ps-border) !important;
+    border-radius: var(--ps-radius-sm) !important;
+    box-shadow: var(--ps-shadow-sm) !important;
+    margin-bottom: 12px !important;
+    overflow: hidden;
+}
+
+.panel-group .panel-heading {
+    background: #f8fafc !important;
+    padding: 16px 20px !important;
+    border-bottom: 1px solid var(--ps-border) !important;
+}
+
+.panel-group .panel-title a {
+    color: var(--ps-dark) !important;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-group .panel-title a:hover {
+    color: var(--ps-primary) !important;
+}
+
+.panel-group .panel-body {
+    padding: 20px !important;
+    color: var(--ps-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    background: #ffffff;
+}
+
+/* ==========================================================================
+   20. COOKIE CONSENT BANNER MODERNO
+   ========================================================================== */
+.cc-window.cc-banner {
+    background: rgba(15, 23, 42, 0.94) !important;
+    backdrop-filter: blur(12px) !important;
+    box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.25) !important;
+    padding: 16px 24px !important;
+    color: #e2e8f0 !important;
+    border-top: 2px solid var(--ps-primary) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.cc-window.cc-banner .cc-btn {
+    background: linear-gradient(135deg, var(--ps-primary) 0%, var(--ps-secondary) 100%) !important;
+    color: #ffffff !important;
+    border-radius: var(--ps-radius-pill) !important;
+    font-weight: 700 !important;
+    padding: 10px 24px !important;
+    border: none !important;
+    transition: var(--ps-transition) !important;
+    cursor: pointer;
+}
+
+.cc-window.cc-banner .cc-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.4) !important;
+}
+

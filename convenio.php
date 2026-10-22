@@ -78,16 +78,16 @@ if($home_status_service == 1): ?>
 			</div>
 		</div>
 		<div class="row">
-			<?php							
-			foreach ($result as $conv) {?>
-				<div class="col-12">
-					<div class="item border border-info">
-					    <p style="margin-left:15px; margin-right:15px;">
-					        <?= $descricao; ?>
-					    </p>
+			<div class="col-md-12">
+				<div class="p-4 p-md-5" style="background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 8px 24px rgba(10, 107, 116, 0.08); font-size: 1.05rem; line-height: 1.8;">
+					<?= $descricao; ?>
+					<div class="text-center mt-4 pt-3" style="border-top: 1px solid #f1f5f9;">
+						<a href="https://wa.me/+5521985831464?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20o%20Convênio%20Livre%20Escolha" target="_blank" rel="noopener noreferrer" class="btn btn-success" style="padding: 12px 28px; border-radius: 50px; font-weight: 700; background: #25d366; border: none; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35);">
+							<i class="fa fa-whatsapp me-1"></i> Tirar Dúvidas via WhatsApp
+						</a>
 					</div>
 				</div>
-			<?php }?>
+			</div>
 		</div>
 	</div>
 </section>

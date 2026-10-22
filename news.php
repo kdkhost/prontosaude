@@ -47,14 +47,17 @@ $update_stmt->execute(array($slug));
 ?>
 
 
+<?php
+$news_banner_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ? BASE_URL . 'assets/uploads/' . $photo : BASE_URL . 'assets/uploads/department-1.png';
+?>
 <!-- Banner Start -->
-<div class="page-banner" style="background:none;">
+<div class="page-banner" style="background-image: url(<?= $news_banner_src; ?>);">
 	<div class="overlay"></div>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="banner-text">
-					<h1><?php echo $news_title; ?></h1>
+					<h1><?php echo htmlspecialchars($news_title); ?></h1>
 				</div>
 			</div>
 		</div>

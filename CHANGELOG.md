@@ -4,6 +4,38 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.14.0] - 2026-10-22
+
+### Reformulado & Modernizado
+- **Modernização e Refatoração Completa do Frontend Público**:
+  - **Design System do Portal (`assets/css/pronto-modern-frontend.css`)**:
+    - Tipografia de alto padrão com **Plus Jakarta Sans** (Google Fonts) carregada globalmente.
+    - Paleta de cores oficial refinada: Teal (`#0a6b74`), Verde Esmeralda (`#10b981`), Cyan Glow e Dark Slate (`#0f172a`), com design tokens CSS, sombras suaves e bordas arredondadas.
+    - Cards modernos com elevação 3D ao passar o mouse (`translateY(-4px)`), badges com blur translúcido e micro-animações fluidas.
+    - Estilização completa e refinada para perfis médicos (`.doctor-detail`, `.doctor-single`), abas de especialidade (`.doctor-detail-tab .nav-tabs`), barra lateral (`.sidebar .widget`), paginação moderna (`.pagination`), accordions (`.panel-group`) e banner de cookies consent (`.cc-window`).
+  - **Menu Deslizante Offcanvas Mobile (Drawer Lateral)**:
+    - Menu deslizante suave da esquerda para a direita acelerado por hardware (`translate3d`), com animação elástica, suporte a gestos swipe, backdrop com desfoque de vidro e canais de atendimento rápido.
+  - **Botão Flutuante Oficial do WhatsApp**:
+    - Substituição de links e tags órfãs por botão fixo e responsivo (`.ps-floating-whatsapp`) com animação de pulso contínua, tooltip "Agende sua Consulta" e número oficial de atendimento.
+  - **Interatividade & AJAX Global (`assets/js/pronto-global.js`)**:
+    - Interceptador global de `window.alert` e `window.confirm` com **SweetAlert2**.
+    - Notificações flutuantes assíncronas com **Toastr**.
+    - Submissão via AJAX com `fetch()` e `FormData` nos formulários de contato público e páginas institucionais com bloqueio de clique duplo e spinner de carregamento.
+    - Máscaras automáticas e dinâmicas para campos de telefone/WhatsApp.
+  - **Páginas Institucionais Refatoradas**:
+    - `index.php`: Seção de serviços, depoimentos com estrelas e imagem de fundo local de alta qualidade.
+    - `trabalhe-conosco.php`: Vagas de emprego ativas com modal hospitalar de detalhes, badges de requisitos e candidatura direta via WhatsApp ou e-mail.
+    - `convenio.php`: Apresentação moderna com cards responsivos e contato direto para parcerias.
+    - `odontologia.php`: Banner institucional, cards de procedimentos e modal moderno com foto em moldura suave, detalhes e agendamento via WhatsApp.
+    - `fidelidade.php`: Banner padrão moderno, cards de planos com destaque de popularidade e badges.
+    - `service.php`: Detalhe do serviço com imagem em moldura, botão de agendamento e barra lateral interativa destacando o serviço ativo.
+    - `doctor.php`: Perfil do médico com card lateral, badges de formação, links de redes sociais e agendamento direto com o profissional.
+    - `news.php`, `category.php`, `search.php`: Banners padronizados com imagem e overlay gradiente, eliminando cabeçalhos vazios (`background: none`), e campo de busca modernizado.
+    - `page.php`: Fallback elegante para banners, suporte a resposta JSON em AJAX no formulário de contato e remoção de scripts jQuery duplicados.
+    - `cookie.php`: Harmonização de cores do consentimento de cookies com o tema do Pronto Saúde.
+
+---
+
 ## [2.13.1] - 2026-10-22
 
 ### Corrigido & Aprimorado
