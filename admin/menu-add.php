@@ -97,17 +97,26 @@ if(isset($_POST['form3'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Add Menu</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Adicionar Menu</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Adicionar Menu</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="menu.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="menu.php" class="btn btn-primary btn-sm">View All</a>
-	</div>
-</section>
+</div>
 
 
-<section class="content" style="min-height:auto;margin-bottom: -30px;">
+<div class="app-content">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 			<?php if($error_message): ?>
@@ -127,31 +136,34 @@ if(isset($_POST['form3'])) {
 			<?php endif; ?>
 		</div>
 	</div>
-</section>
 
-<section class="content">
+</div>
+</div>
+
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
 
-			<div class="nav-tabs-custom">
+			<div class="nav-tabs-custom mb-4">
 				<ul class="nav nav-tabs">
-					<li class="active"><a href="#tab_1" data-toggle="tab">Category as Menu</a></li>
-					<li><a href="#tab_2" data-toggle="tab">Page as Menu</a></li>
-					<li><a href="#tab_3" data-toggle="tab">Other Menu</a></li>
+					<li class="nav-item"><a class="nav-link active" href="#tab_1" data-bs-toggle="tab">Categoria como Menu</a></li>
+					<li class="nav-item"><a class="nav-link" href="#tab_2" data-bs-toggle="tab">Página como Menu</a></li>
+					<li class="nav-item"><a class="nav-link" href="#tab_3" data-bs-toggle="tab">Other Menu</a></li>
 				</ul>
 				<div class="tab-content">
       				<div class="tab-pane active" id="tab_1">
 
 
-						<form class="form-horizontal" action="" method="post">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Select Category <span>*</span></label>
-										<div class="col-sm-4">
+						<form action="" method="post">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Categoria <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<select class="form-control select2" name="menu_name_and_category_or_page_slug" style="width:250px;">
-												<option value="">Select a category</option>
+												<option value="">Selecione uma categoria</option>
 												<?php
 												$statement = $pdo->prepare("SELECT * FROM tbl_category ORDER BY category_name ASC");
 												$statement->execute();
@@ -163,15 +175,15 @@ if(isset($_POST['form3'])) {
 											</select>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Order <span>*</span></label>
-										<div class="col-sm-2">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Ordem <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="menu_order">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Parent <span>*</span></label>
-										<div class="col-sm-4">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Menu Pai <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<select class="form-control select2" name="menu_parent" style="width:250px;">
 												<option value="">Select a parent for this menu</option>
 												<option value="0">No Parent</option>
@@ -186,10 +198,11 @@ if(isset($_POST['form3'])) {
 											</select>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
+									<div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+<a href="menu.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 										</div>
 									</div>
 								</div>
@@ -201,14 +214,14 @@ if(isset($_POST['form3'])) {
       				<div class="tab-pane" id="tab_2">
 
 
-						<form class="form-horizontal" action="" method="post">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Select Page <span>*</span></label>
-										<div class="col-sm-4">
+						<form action="" method="post">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Página <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<select class="form-control select2" name="menu_name_and_category_or_page_slug" style="width:250px;">
-												<option value="">Select a page</option>
+												<option value="">Selecione uma página</option>
 												<?php
 												$statement = $pdo->prepare("SELECT * FROM tbl_page ORDER BY page_name ASC");
 												$statement->execute();
@@ -220,15 +233,15 @@ if(isset($_POST['form3'])) {
 											</select>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Order <span>*</span></label>
-										<div class="col-sm-2">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Ordem <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="menu_order">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Parent <span>*</span></label>
-										<div class="col-sm-4">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Menu Pai <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<select class="form-control select2" name="menu_parent" style="width:250px;">
 												<option value="">Select a parent for this menu</option>
 												<option value="0">No Parent</option>
@@ -243,10 +256,10 @@ if(isset($_POST['form3'])) {
 											</select>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form2">Submit</button>
+									<div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form2"><i class="bi bi-check-lg me-1"></i>Salvar</button>
 										</div>
 									</div>
 								</div>
@@ -259,30 +272,30 @@ if(isset($_POST['form3'])) {
       				<div class="tab-pane" id="tab_3">
 
 
-						<form class="form-horizontal" action="" method="post">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Menu Name <span>*</span></label>
-										<div class="col-sm-4">
+						<form action="" method="post">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nome do Menu <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="menu_name">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Order <span>*</span></label>
-										<div class="col-sm-2">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Ordem <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="menu_order">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">URL <span>*</span></label>
-										<div class="col-sm-4">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">URL <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="menu_url">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Parent <span>*</span></label>
-										<div class="col-sm-6">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Menu Pai <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<select class="form-control select2" name="menu_parent" style="width:250px;">
 												<option value="">Select a parent for this menu</option>
 												<option value="0">No Parent</option>
@@ -297,10 +310,10 @@ if(isset($_POST['form3'])) {
 											</select>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form3">Submit</button>
+									<div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form3"><i class="bi bi-check-lg me-1"></i>Salvar</button>
 										</div>
 									</div>
 								</div>
@@ -314,6 +327,8 @@ if(isset($_POST['form3'])) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

@@ -4,6 +4,26 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.0] - 2026-10-22
+
+### Reformulado & Modernizado
+- **Reformulação Integral de Todos os Modelos de Páginas Administrativas (AdminLTE 4 + Bootstrap 5.3)**:
+  - **Modernização de mais de 90 Arquivos de Interface**: Refatoração e alinhamento de todas as páginas de listagem, cadastro, edição e configuração (`*-add.php`, `*-edit.php`, tabelas e formulários).
+  - **Eliminação Total de Estruturas Legadas**: Substituição de `<section class="content-header">`, `<section class="content">`, `.box`, `.box-header`, `.box-body`, `.box-footer`, botões desalinhados e ícones obsoletos por componentes oficiais do AdminLTE 4:
+    - Cabeçalhos de página com `.app-content-header`, `.container-fluid`, tipografia moderna e breadcrumbs semânticos com ícones Bootstrap.
+    - Área de conteúdo com `.app-content` e `.container-fluid`.
+    - Cards padronizados com `.card`, `.card-outline`, `.card-primary`, `.shadow-sm`, `.card-header` e `.card-body`.
+    - Tabelas responsivas com `.table-hover`, `.table-striped`, `.align-middle` e alinhamento horizontal consistente dos botões de ação (Editar, Excluir, Ativar/Inativar).
+    - Formulários reestruturados com grid nativo do Bootstrap 5 (`.row`, `.col-md-*`, `.form-label fw-bold`, `.form-control`, `.form-select`).
+  - **Redesenho Completo da Tela de Recuperação de Senha (`admin/recover.php`)**:
+    - Substituição da interface legada do AdminLTE 2 pelo padrão contemporâneo em Glassmorphism, Bootstrap 5.3 e AdminLTE 4 idêntico à tela de login.
+    - Suporte a floating labels (`.form-floating`), notificações integradas via SweetAlert2 (sem alerts nativos) e correção de bug na validação de confirmação de senha.
+  - **Validação e Integridade de Código**:
+    - 100% dos arquivos PHP do painel verificados com zero erros de sintaxe no PHP 8.5/8.4 (`php -l`).
+    - Validação de exclusão segura de fotos e banners em cadastros garantindo existência prévia de arquivo em disco.
+
+---
+
 ## [2.11.0] - 2026-10-21
 
 ### Adicionado & Aprimorado

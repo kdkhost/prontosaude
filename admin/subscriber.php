@@ -1,22 +1,31 @@
 <?php require_once('header.php'); ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Subscriber</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Inscritos na Newsletter</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Inscritos na Newsletter</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="subscriber-remove.php" class="btn btn-primary btn-sm"><i class="bi bi-person-x"></i> Remover Pendentes</a>
+				<a href="subscriber-csv.php" class="btn btn-primary btn-sm"><i class="bi bi-filetype-csv"></i> Exportar CSV</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="subscriber-remove.php" class="btn btn-primary btn-sm">Remove Pending Subscribers</a>
-		<a href="subscriber-csv.php" class="btn btn-primary btn-sm">Export as CSV</a>
-	</div>
-</section>
+</div>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <div class="box box-info">        
-        <div class="box-body table-responsive">
-          <table id="example1" class="table table-bordered table-striped">
+      <div class="card card-outline card-primary shadow-sm mb-4">        
+        <div class="card-body table-responsive">
+          <table id="example1" class="table table-hover table-striped align-middle w-100">
 			<thead>
 			    <tr>
 			        <th>SL</th>
@@ -45,26 +54,9 @@
       </div>
   
 
-</section>
 
-
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-            </div>
-            <div class="modal-body">
-                Are you sure want to delete this item?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger btn-ok">Delete</a>
-            </div>
-        </div>
-    </div>
 </div>
-
-
+</div>
+</div>
+</div>
 <?php require_once('footer.php'); ?>

@@ -127,16 +127,25 @@ if(isset($_POST['form1'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Adicionar Serviço Médico</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Adicionar Serviço Médico</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Adicionar Serviço Médico</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="service.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="service.php" class="btn btn-primary btn-sm"><i class="bi bi-list-ul me-1"></i> Visualizar Todos</a>
-	</div>
-</section>
+</div>
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 
@@ -152,22 +161,22 @@ if(isset($_POST['form1'])) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-				<div class="box box-info">
-					<div class="box-body">
+			<form action="" method="post" enctype="multipart/form-data">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
 
 						<!-- Nome do Serviço -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Nome do Serviço <span>*</span></label>
-							<div class="col-sm-8">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nome do Serviço <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-8">
 								<input type="text" autocomplete="off" class="form-control" name="name" placeholder="Ex: Consulta Cardiológica, Ultrassonografia, Exame de Sangue" value="<?= htmlspecialchars($_POST['name'] ?? ''); ?>" required>
 							</div>
 						</div>
 
 						<!-- Valor / Preço do Serviço -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Preço / Valor no Card</label>
-							<div class="col-sm-4">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Preço / Valor no Card</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<div class="input-group">
 									<span class="input-group-text">R$</span>
 									<input type="text" class="form-control mascara-moeda" name="price" placeholder="Ex: 120,00 ou Sob Consulta" value="<?= htmlspecialchars($_POST['price'] ?? ''); ?>">
@@ -177,9 +186,9 @@ if(isset($_POST['form1'])) {
 						</div>
 
 						<!-- Slug Automático -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Slug </label>
-							<div class="col-sm-8">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Slug</label>
+							<div class="col-12 col-sm-9 col-lg-8">
 								<input type="text" autocomplete="off" class="form-control ps-slug-locked" name="slug" value="<?= htmlspecialchars($_POST['slug'] ?? ''); ?>" readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
 								<div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
 									<i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada)
@@ -188,17 +197,17 @@ if(isset($_POST['form1'])) {
 						</div>
 
 						<!-- Descrição Curta (Exibida no Card) -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Descrição Curta (Card) <span>*</span></label>
-							<div class="col-sm-8">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Descrição Curta (Card) <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-8">
 								<textarea class="form-control" name="short_description" rows="3" placeholder="Resumo atrativo exibido no card do serviço..." required><?= htmlspecialchars($_POST['short_description'] ?? ''); ?></textarea>
 							</div>
 						</div>
 
 						<!-- Benefícios Inclusos -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Benefícios Inclusos (1 por linha)</label>
-							<div class="col-sm-8">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Benefícios Inclusos (1 por linha)</label>
+							<div class="col-12 col-sm-9 col-lg-8">
 								<textarea class="form-control" name="benefits" rows="4" placeholder="Exemplo:
 Consulta com especialista qualificado
 Retorno garantido em até 15 dias
@@ -209,51 +218,51 @@ Atendimento com hora marcada"><?= htmlspecialchars($_POST['benefits'] ?? ''); ?>
 						</div>
 
 						<!-- Botão de Ação e Link -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Texto do Botão do Card</label>
-							<div class="col-sm-4">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Texto do Botão do Card</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control" name="button_text" placeholder="Ex: Agendar Consulta, Saiba Mais, Ver Detalhes" value="<?= htmlspecialchars($_POST['button_text'] ?? 'Agendar Consulta'); ?>">
 							</div>
 						</div>
 
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">URL / Destino do Botão</label>
-							<div class="col-sm-8">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">URL / Destino do Botão</label>
+							<div class="col-12 col-sm-9 col-lg-8">
 								<input type="text" class="form-control" name="button_url" placeholder="Ex: https://wa.me/5598988887777?text=Quero%20agendar%20este%20serviço (Deixe vazio para usar a página do serviço)" value="<?= htmlspecialchars($_POST['button_url'] ?? ''); ?>">
 								<small class="text-muted">Se preenchido, o botão levará direto para o WhatsApp ou página de contratação.</small>
 							</div>
 						</div>
 
 						<!-- Descrição Completa -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Descrição Completa <span>*</span></label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Descrição Completa <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control summernote" name="description"><?= htmlspecialchars($_POST['description'] ?? ''); ?></textarea>
 							</div>
 						</div>
 
 						<!-- Foto de Destaque -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Foto do Card <span>*</span></label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto do Card <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="file" name="photo" class="form-control" accept="image/*" required>
 								<small class="text-muted">Imagem que estampa o card do serviço (formato recomendado: 600x400px).</small>
 							</div>
 						</div>
 
 						<!-- Banner do Serviço -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Banner da Página <span>*</span></label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner da Página <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="file" name="banner" class="form-control" accept="image/*" required>
 								<small class="text-muted">Imagem panorâmica do topo da página do serviço (ex: 1920x400px).</small>
 							</div>
 						</div>		
 
 						<!-- Botão de Salvar -->
-						<div class="form-group mt-4">
-							<label class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
+						<div class="row mb-3 mt-4">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<button type="submit" class="btn btn-success px-4" name="form1"><i class="bi bi-check-circle me-1"></i> Cadastrar Serviço</button>
 								<a href="service.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 							</div>
@@ -264,6 +273,8 @@ Atendimento com hora marcada"><?= htmlspecialchars($_POST['benefits'] ?? ''); ?>
 			</form>
 		</div>
 	</div>
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

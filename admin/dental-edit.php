@@ -99,16 +99,25 @@ if(isset($_POST['form1'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Editar Serviço Odontológico: <?= htmlspecialchars($current_dental['servico']); ?></h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Editar Serviço Odontológico: <?= htmlspecialchars($current_dental['servico']); ?></h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Editar Serviço Odontológico: <?= htmlspecialchars($current_dental['servico']); ?></li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="dental.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="dental.php" class="btn btn-primary btn-sm"><i class="bi bi-list-ul me-1"></i> Visualizar Todos</a>
-	</div>
-</section>
+</div>
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 
@@ -124,22 +133,22 @@ if(isset($_POST['form1'])) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-				<div class="box box-info">
-					<div class="box-body">
+			<form action="" method="post" enctype="multipart/form-data">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
 
 						<!-- Nome do Serviço -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Procedimento <span>*</span></label>
-							<div class="col-sm-8">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Procedimento <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-8">
 								<input type="text" autocomplete="off" class="form-control" name="servico" value="<?= htmlspecialchars($current_dental['servico']); ?>" required>
 							</div>
 						</div>
 
 						<!-- Preço / Valor -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Valor no Card</label>
-							<div class="col-sm-4">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Valor no Card</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<div class="input-group">
 									<span class="input-group-text">R$</span>
 									<input type="text" class="form-control mascara-moeda" name="valor" placeholder="Ex: 150,00 ou Sob Avaliação" value="<?= htmlspecialchars($current_dental['valor'] ?? ''); ?>">
@@ -149,49 +158,49 @@ if(isset($_POST['form1'])) {
 						</div>
 
 						<!-- Descrição Curta (Card) -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Descrição Curta (Card) <span>*</span></label>
-							<div class="col-sm-8">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Descrição Curta (Card) <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-8">
 								<textarea class="form-control" name="descricao" rows="3" required><?= htmlspecialchars($current_dental['descricao']); ?></textarea>
 							</div>
 						</div>
 
 						<!-- Benefícios Inclusos -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Benefícios Inclusos (1 por linha)</label>
-							<div class="col-sm-8">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Benefícios Inclusos (1 por linha)</label>
+							<div class="col-12 col-sm-9 col-lg-8">
 								<textarea class="form-control" name="beneficios" rows="4" placeholder="Digite cada benefício em uma linha separada..."><?= htmlspecialchars($current_dental['beneficios'] ?? ''); ?></textarea>
 							</div>
 						</div>
 
 						<!-- Botão de Ação e Link -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Texto do Botão</label>
-							<div class="col-sm-4">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Texto do Botão</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control" name="button_text" value="<?= htmlspecialchars($current_dental['button_text'] ?? 'Agendar Avaliação'); ?>">
 							</div>
 						</div>
 
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Link de Destino</label>
-							<div class="col-sm-8">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Link de Destino</label>
+							<div class="col-12 col-sm-9 col-lg-8">
 								<input type="text" autocomplete="off" class="form-control" name="link" value="<?= htmlspecialchars($current_dental['link']); ?>">
 								<small class="text-muted">Link do WhatsApp para agendamento direto com o consultório odontológico.</small>
 							</div>
 						</div>
 
 						<!-- Descrição Completa -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Descrição Completa <span>*</span></label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Descrição Completa <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control summernote" name="desc_total"><?= htmlspecialchars($current_dental['desc_total']); ?></textarea>
 							</div>
 						</div>
 
 						<!-- Foto Atual e Troca -->
-						<div class="form-group mb-3">
-							<label class="col-sm-2 control-label fw-bold">Foto Atual do Card</label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual do Card</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<div class="p-2 border rounded bg-body-tertiary d-inline-block mb-2 shadow-sm">
 									<?php 
 										$foto = $current_dental['foto'];
@@ -205,9 +214,9 @@ if(isset($_POST['form1'])) {
 						</div>
 						
 						<!-- Botão Atualizar -->
-						<div class="form-group mt-4">
-							<label class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
+						<div class="row mb-3 mt-4">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<button type="submit" class="btn btn-success px-4" name="form1"><i class="bi bi-check-circle me-1"></i> Atualizar Informações</button>
 								<a href="dental.php" class="btn btn-outline-secondary ms-2">Voltar</a>
 							</div>
@@ -218,6 +227,8 @@ if(isset($_POST['form1'])) {
 			</form>
 		</div>
 	</div>
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

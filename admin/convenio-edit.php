@@ -17,7 +17,8 @@ foreach ($result as $conv) {
 
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -36,38 +37,38 @@ foreach ($result as $conv) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="convenio-update.php" method="POST" enctype="multipart/form-data">
+			<form action="convenio-update.php" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="id_conv" value="<?= $id; ?>">
-				<div class="box box-info">
-					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Título <span>*</span></label>
-							<div class="col-sm-6">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="titulo" value="<?= $titulo; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Sub-Título <span>*</span></label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Subtítulo <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="subtitulo" value="<?= $subtitulo; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Descrição<span>*</span></label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Descrição <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea id="1" class="form-control" name="descricao" id="1"><?= $descricao; ?></textarea>
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Título do Banner<span>*</span></label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título do Banner <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<input class="form-control" name="titulo_banner" value="<?= $nome; ?>">
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Banner Atual</label>
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner Atual</label>
 							<div class="col-sm-9 page-banner" style="padding-top:5px">
 								<?php if($banner != ""){?>
 								    <img src="<?= BASE_URL; ?>assets/uploads/<?= $banner; ?>" alt="Foto Banner" style="width:100%;">
@@ -76,17 +77,17 @@ foreach ($result as $conv) {
 								<?php } ?>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Banner </label>
-							<div class="col-sm-6" style="padding-top:5px">
-								<input type="file" name="banner">(Somente jpg, jpeg, gif e png será permitido)
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner</label>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<input type="file" name="banner"><div class="form-text">Somente jpg, jpeg, gif e png será permitido</div>
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="BtnConv">Atualizar</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-success" name="BtnConv">Atualizar</button>
 							</div>
 						</div>
 					</div>
@@ -95,6 +96,8 @@ foreach ($result as $conv) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

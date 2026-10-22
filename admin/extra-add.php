@@ -35,17 +35,26 @@ if(isset($_POST['form1'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Adicionar Funções Extras</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Adicionar Funções Extras</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Adicionar Funções Extras</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="extra.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="extra.php" class="btn btn-primary btn-sm">Visualizar Todos</a>
-	</div>
-</section>
+</div>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -66,23 +75,23 @@ if(isset($_POST['form1'])) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post">
+			<form action="" method="post">
 
-				<div class="box box-info">
-					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Início de Atendimento<span>*</span></label>
-							<div class="col-sm-2">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Início de Atendimento <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="time" id="inicio" class="form-control" onkeyup="foco()" maxlength="4" minlength="4" name="inicio" value="<?php if(isset($_POST['inicio'])){echo $_POST['inicio'];} ?>">
 							</div>
-							<label for="" class="col-sm-3 control-label">Término de Atendimento<span>*</span></label>
-							<div class="col-sm-2">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Término de Atendimento <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="time" id="fim" class="form-control" name="fim" value="<?php if(isset($_POST['fim'])){echo $_POST['fim'];} ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Selecione a Clínica<span>*</span></label>
-							<div class="col-sm-7">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Selecione a Clínica <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-7">
 								<select class="form-control" name="clinica">
 									<?php
 									$statement = $pdo->prepare("SELECT * FROM tbl_department ORDER BY dep_name ASC");
@@ -94,9 +103,9 @@ if(isset($_POST['form1'])) {
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Selecione o Médico<span>*</span></label>
-							<div class="col-sm-7">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Selecione o Médico <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-7">
 								<select class="form-control select2" name="medico">
 									<option value="">Selecione o Médico</option>
 									<?php
@@ -109,9 +118,9 @@ if(isset($_POST['form1'])) {
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Selecione o Dia<span>*</span></label>
-							<div class="col-sm-7">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Selecione o Dia <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-7">
 								<select class="form-control select2" name="semana">
 									<option value="">Selecione o Dia</option>
 									<?php
@@ -124,9 +133,9 @@ if(isset($_POST['form1'])) {
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Selecione a Função <span>*</span></label>
-							<div class="col-sm-7">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Selecione a Função <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-7">
 								<select class="form-control select2" name="especialidade">
 									<option value="">Selecione a Especialidade</option>
 									<?php
@@ -139,10 +148,11 @@ if(isset($_POST['form1'])) {
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Cadastrar</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Cadastrar</button>
+<a href="extra.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 							</div>
 						</div>
 					</div>
@@ -331,6 +341,8 @@ if(isset($_POST['form1'])) {
         </div>
     </div>
 <!-- Fim do Anuncio do programador -->
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

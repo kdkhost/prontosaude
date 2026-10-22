@@ -121,14 +121,22 @@ if(!isset($_REQUEST['id'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Editar Médico</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Editar Médico</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Editar Médico</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="doctor.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="doctor.php" class="btn btn-primary btn-sm">Ver todos</a>
-	</div>
-</section>
+</div>
 
 <?php
 $statement = $pdo->prepare("SELECT * FROM tbl_doctor WHERE id=?");
@@ -164,7 +172,8 @@ foreach ($result as $row) {
 }
 ?>
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -185,30 +194,30 @@ foreach ($result as $row) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+			<form action="" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="current_photo" value="<?php echo $photo; ?>">
 				<input type="hidden" name="current_banner" value="<?php echo $banner; ?>">
 				<input type="hidden" name="current_doctor_name" value="<?php echo $name; ?>">
-				<div class="box box-info">
-					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Name <span>*</span></label>
-							<div class="col-sm-6">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nome <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="name" value="<?php echo $name; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Slug </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Slug</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control ps-slug-locked" name="slug" value="<?php echo $slug; ?>" readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
 								<div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
 									<i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada)
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Select Designation <span>*</span></label>
-				            <div class="col-sm-3">
+						<div class="row mb-3">
+				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Designação <span class="text-danger">*</span></label>
+				            <div class="col-12 col-sm-9 col-lg-6">
 				            	<select class="form-control select2" name="designation_id" style="width:300px;">
 								<?php
 				            	$i=0;
@@ -225,9 +234,9 @@ foreach ($result as $row) {
 				            </div>
 				        </div>
 				        
-				        <div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Clínica <span>*</span></label>
-				            <div class="col-sm-3">
+				        <div class="row mb-3">
+				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Clínica <span class="text-danger">*</span></label>
+				            <div class="col-12 col-sm-9 col-lg-6">
 				            	<select class="form-control select2" name="clinica" style="width:300px;">
 								<?php
 				            	$i=0;
@@ -244,94 +253,94 @@ foreach ($result as $row) {
 				            </div>
 				        </div>
 				        
-				        <div class="form-group">
-							<label for="" class="col-sm-2 control-label">Registro <span>*</span></label>
-							<div class="col-sm-3" style="padding-top:5px">
+				        <div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Registro <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" name="registro" class="form-control" value="<?=$registro?>">
 							</div>
 						</div>
 				        
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Existing Photo</label>
-							<div class="col-sm-9" style="padding-top:5px">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<img src="<?php echo BASE_URL; ?>assets/uploads/<?php echo $photo; ?>" alt="Doctor Photo" style="width:200px;">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Photo <span>*</span></label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<input type="file" name="photo">(Only jpg, jpeg, gif and png are allowed)
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
+								<input type="file" name="photo"><div class="form-text">Only jpg, jpeg, gif and png are allowed</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Existing Banner</label>
-							<div class="col-sm-9" style="padding-top:5px">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner Atual</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<img src="<?php echo BASE_URL; ?>assets/uploads/<?php echo $banner; ?>" alt="Doctor Banner" style="width:200px;">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Banner <span>*</span></label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<input type="file" name="banner">(Only jpg, jpeg, gif and png are allowed)
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
+								<input type="file" name="banner"><div class="form-text">Only jpg, jpeg, gif and png are allowed</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Degree </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Formação</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="degree" value="<?php echo $degree; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Detail </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Detalhes</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control" name="detail" id="1"><?php echo $detail; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Facebook </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Facebook</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="facebook" value="<?php echo $facebook; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Twitter </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Twitter</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="twitter" value="<?php echo $twitter; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">LinkedIn </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">LinkedIn</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="linkedin" value="<?php echo $linkedin; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">YouTube </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">YouTube</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="youtube" value="<?php echo $youtube; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Google Plus </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Google Plus</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="google_plus" value="<?php echo $google_plus; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Instagram </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Instagram</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="instagram" value="<?php echo $instagram; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Flickr </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Flickr</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="flickr" value="<?php echo $flickr; ?>">
 							</div>
 						</div>
-						<div class="form-group mb-3">
-							<label for="" class="col-sm-2 control-label">Buscar por CEP </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Buscar por CEP</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<div class="row g-2">
 									<div class="col-7">
 										<div class="input-group">
@@ -348,70 +357,67 @@ foreach ($result as $row) {
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Endereço </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Endereço</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<textarea class="form-control" name="address" style="height: 140px"><?php echo $address; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Practice Location </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Local de Atendimento</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<textarea class="form-control" name="practice_location" style="height: 140px"><?php echo $practice_location; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Phone </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Telefone</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="phone" value="<?php echo $phone; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Email Address </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">E-mail</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="email" value="<?php echo $email; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Website </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Website</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="website" value="<?php echo $website; ?>">
 							</div>
 						</div>				        
-				        <div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Active </label>
-				            <div class="col-sm-6">
-				                <label class="radio-inline">
-				                    <input type="radio" name="status" value="Active" <?php if($status == 'Active') { echo 'checked'; } ?>>Yes
-				                </label>
-				                <label class="radio-inline">
-				                    <input type="radio" name="status" value="Inactive" <?php if($status == 'Inactive') { echo 'checked'; } ?>>No
-				                </label>
+				        <div class="row mb-3">
+				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Ativo?</label>
+				            <div class="col-12 col-sm-9 col-lg-6">
+				                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Active" <?php if($status == 'Active') { echo 'checked'; } ?>> <label class="form-check-label">Yes</label></div>
+				                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Inactive" <?php if($status == 'Inactive') { echo 'checked'; } ?>> <label class="form-check-label">No</label></div>
 				            </div>
 				        </div>
-						<h3 class="seo-info">SEO Information</h3>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Title </label>
-							<div class="col-sm-9">
+						<div class="row mb-3 mt-4"><div class="col-12"><h5 class="fw-bold text-primary border-bottom pb-2 mb-0"><i class="bi bi-search me-2"></i>SEO Information</h5></div></div>
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Título</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<input type="text" autocomplete="off" class="form-control" name="meta_title" value="<?php echo $meta_title; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Keywords </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Palavras-chave</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<input type="text" autocomplete="off" class="form-control" name="meta_keyword" value="<?php echo $meta_keyword; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Description </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Descrição</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control" name="meta_description" style="height:140px;"><?php echo $meta_description; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+<a href="doctor.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 							</div>
 						</div>
 					</div>
@@ -420,6 +426,8 @@ foreach ($result as $row) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

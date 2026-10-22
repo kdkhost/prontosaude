@@ -1,25 +1,34 @@
 <?php require_once('header.php'); ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Visualizar Notícias</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Visualizar Notícias</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Visualizar Notícias</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="news-add.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Adicionar Notícia</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="news-add.php" class="btn btn-primary btn-sm">Adcionar Notícia</a>
-	</div>
-</section>
+</div>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
 
 
-			<div class="box box-info">
+			<div class="card card-outline card-primary shadow-sm mb-4">
 
-				<div class="box-body table-responsive">
-					<table id="example1" class="table table-bordered table-striped">
+				<div class="card-body table-responsive">
+					<table id="example1" class="table table-hover table-striped align-middle w-100">
 						<thead>
 							<tr>
 								<th>Id</th>
@@ -72,24 +81,22 @@
 									<td>
 										<?php echo $row['category_name']; ?>
 									</td>
-									<td>										
-										<a href="news-edit.php?id=<?php echo $row['news_id']; ?>" class="btn btn-primary btn-xs">Editar</a>
-										<a href="#" class="btn btn-danger btn-xs" data-href="news-delete.php?id=<?php echo $row['news_id']; ?>" data-toggle="modal" data-target="#confirm-delete-<?$row['news_id']?>">Deletar</a>  
-									</td>
+									<td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="news-edit.php?id=<?php echo $row['news_id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Editar</a>
+										<a href="#" class="btn btn-danger btn-sm" data-href="news-delete.php?id=<?php echo $row['news_id']; ?>" data-target="#confirm-delete-<?$row['news_id']?>"><i class="bi bi-trash3"></i> Excluir</a></div></td>
 								</tr>
 								
 								<div class="modal fade" id="confirm-delete-<?$row['news_id']?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
                                             <h4 class="modal-title" id="myModalLabel">Confirmação de Exclusão</h4>
                                         </div>
                                         <div class="modal-body">
                                             <p>Tem certeza de que deseja excluir este item?</p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                             <a href="news-delete.php?id=<?php echo $row['news_id']; ?>" class="btn btn-danger btn-ok">Deletar</a>
                                         </div>
                                     </div>
@@ -102,7 +109,9 @@
 			</div>
 		</div>
 	</div>
-</section>
+
+</div>
+</div>
 
 
 <?php require_once('footer.php'); ?>

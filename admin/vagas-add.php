@@ -66,17 +66,26 @@ if(isset($_POST['form1'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Adicionar Vagas de Emprego</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Adicionar Vagas de Emprego</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Adicionar Vagas de Emprego</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="trabalhe-conosco.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="trabalhe-conosco.php" class="btn btn-primary btn-sm">Visualizar todos</a>
-	</div>
-</section>
+</div>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -95,58 +104,58 @@ if(isset($_POST['form1'])) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+			<form action="" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="current_photo" value="<?= $photo; ?>">
-				<div class="box box-info">
-					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Serviço <span>*</span></label>
-							<div class="col-sm-6">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Serviço <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="titulo" value="<?= $name; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Status da Vaga<span>*</span></label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Status da Vaga <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 							    <p>
 							        <input type="radio" name="status" <?php if($status == 1){ echo "checked";}?> value="1"/> Ativo
                                 <input type="radio" name="status" <?php if($status == 0){ echo "checked";}?> value="0"/> Inativo
 							    </p>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">local <span>*</span></label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Local <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="local" value="<?= $local; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Salário <span>*</span></label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Salário <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="salario" value="<?= $salario; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Carga Horária <span>*</span></label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Carga Horária <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="carga" value="<?= $carga; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Requisitos <span>*</span></label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Requisitos <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea id="1" class="form-control" name="requisitos" id="1"><?= $requisitos; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Benefícios <span>*</span></label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Benefícios <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea id="2" class="form-control" name="beneficios" style="height:140px;"><?= $beneficios; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Foto Atual</label>
-							<div class="col-sm-9" style="padding-top:5px">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<?php if($photo != ""){?>
 								    <img src="<?= BASE_URL; ?>assets/uploads/<?= $photo; ?>" alt="Foto Odonto" style="width:400px;">
 								<?php }else{?>
@@ -154,17 +163,17 @@ if(isset($_POST['form1'])) {
 								<?php } ?>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Foto </label>
-							<div class="col-sm-6" style="padding-top:5px">
-								<input type="file" name="photo">(Somente jpg, jpeg, gif and png are allowed)
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto</label>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<input type="file" name="photo"><div class="form-text">Somente jpg, jpeg, gif and png are allowed</div>
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Atualizar</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
 							</div>
 						</div>
 					</div>
@@ -173,6 +182,8 @@ if(isset($_POST['form1'])) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

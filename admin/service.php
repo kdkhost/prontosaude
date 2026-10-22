@@ -1,19 +1,28 @@
 <?php require_once('header.php'); ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Gerenciar Serviços Médicos & Cards</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Gerenciar Serviços Médicos & Cards</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Gerenciar Serviços Médicos & Cards</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="service-add.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Adicionar Novo Serviço</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="service-add.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i> Adicionar Novo Serviço</a>
-	</div>
-</section>
+</div>
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
-			<div class="box box-info">
-				<div class="box-body table-responsive">
+			<div class="card card-outline card-primary shadow-sm mb-4">
+				<div class="card-body table-responsive">
 					<table id="example1" class="table table-bordered table-striped dt-responsive nowrap">
 						<thead>
 							<tr>
@@ -41,7 +50,7 @@
 							<tr>
 								<td><?= $i; ?></td>
 								<td>
-									<img src="<?= BASE_URL; ?>assets/uploads/<?= htmlspecialchars($row['photo']); ?>" alt="<?= htmlspecialchars($row['name']); ?>" style="width: 80px; height: 55px; object-fit: cover; border-radius: 6px; border: 1px solid #e2e8f0;">
+									<img class="rounded border object-fit-cover" src="<?= BASE_URL; ?>assets/uploads/<?= htmlspecialchars($row['photo']); ?>" alt="<?= htmlspecialchars($row['name']); ?>" style="width: 80px; height: 55px; object-fit: cover; border-radius: 6px; border: 1px solid #e2e8f0;">
 								</td>
 								<td>
 									<div class="fw-bold fs-6"><?= htmlspecialchars($row['name']); ?></div>
@@ -92,7 +101,9 @@
 			</div>
 		</div>
 	</div>
-</section>
+
+</div>
+</div>
 
 <script>
 document.addEventListener('click', function(e) {

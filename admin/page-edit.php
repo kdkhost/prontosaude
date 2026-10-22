@@ -96,14 +96,22 @@ if(!isset($_REQUEST['id'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Editar Página</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Editar Página</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Editar Página</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="page.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="page.php" class="btn btn-primary btn-sm">Visualizar Todas</a>
-	</div>
-</section>
+</div>
 
 
 <?php							
@@ -120,7 +128,8 @@ foreach ($result as $row) {
 }
 ?>
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
   <div class="row">
     <div class="col-md-12">
@@ -141,29 +150,29 @@ foreach ($result as $row) {
 		</div>
 		<?php endif; ?>
 
-        <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+        <form action="" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="current_banner" value="<?php echo $banner; ?>">
-        <div class="box box-info">
+        <div class="card card-outline card-primary shadow-sm mb-4">
 
-            <div class="box-body">
-                <div class="form-group">
-                    <label for="" class="col-sm-2 control-label">Nome da Página <span>*</span></label>
-                    <div class="col-sm-4">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nome da Página <span class="text-danger">*</span></label>
+                    <div class="col-12 col-sm-9 col-lg-6">
                         <input type="text" class="form-control" name="page_name" value="<?php echo $page_name; ?>">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="" class="col-sm-2 control-label">Slug da Página </label>
-                    <div class="col-sm-4">
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Slug da Página</label>
+                    <div class="col-12 col-sm-9 col-lg-6">
                         <input type="text" class="form-control ps-slug-locked" name="page_slug" value="<?php echo $page_slug; ?>" readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
                         <div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
                             <i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada)
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-					<label for="" class="col-sm-2 control-label">Layout da Página </label>
-					<div class="col-sm-2">
+                <div class="row mb-3">
+					<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Layout da Página</label>
+					<div class="col-12 col-sm-9 col-lg-6">
 						<select class="form-control select2" name="page_layout" style="width:300px;" onchange="showContentInputArea(this)">
 							<option value="Full Width Page Layout" <?php if($page_layout=='Full Width Page Layout') {echo 'selected';} ?>>Layout de página de largura total</option>
 							<option value="FAQ Page Layout" <?php if($page_layout=='FAQ Page Layout') {echo 'selected';} ?>>Layout da página FAQ</option>
@@ -175,58 +184,55 @@ foreach ($result as $row) {
 						</select>
 					</div>
 				</div>
-                <div class="form-group" id="showPageContent" style="<?php if($page_layout=='Full Width Page Layout') {echo 'display:block';}else{echo 'display:none;';} ?>">
-					<label for="" class="col-sm-2 control-label">Conteúdo da página </label>
-					<div class="col-sm-9">
+                <div class="row mb-3" id="showPageContent" style="<?php if($page_layout=='Full Width Page Layout') {echo 'display:block';}else{echo 'display:none;';} ?>">
+					<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Conteúdo da página</label>
+					<div class="col-12 col-sm-9 col-lg-9">
 						<textarea class="form-control" name="page_content" id="1"><?php echo $page_content; ?></textarea>
 					</div>
 				</div>
-				<div class="form-group">
-					<label for="" class="col-sm-2 control-label">Banner existente</label>
-					<div class="col-sm-9" style="padding-top:5px">
+				<div class="row mb-3">
+					<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner Atual</label>
+					<div class="col-12 col-sm-9 col-lg-9">
 						<img src="<?php echo BASE_URL; ?>assets/uploads/<?php echo $banner; ?>" alt="Banner de página" style="width:200px;">
 					</div>
 				</div>
-				<div class="form-group">
-					<label for="" class="col-sm-2 control-label">Banner <span>*</span></label>
-					<div class="col-sm-9" style="padding-top:5px">
-						<input type="file" name="banner">(Apenas jpg, jpeg, gif e png são permitidos)
+				<div class="row mb-3">
+					<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner <span class="text-danger">*</span></label>
+					<div class="col-12 col-sm-9 col-lg-9">
+						<input type="file" name="banner"><div class="form-text">Apenas jpg, jpeg, gif e png são permitidos</div>
 					</div>
 				</div>			
-                <div class="form-group">
-		            <label for="" class="col-sm-2 control-label">Ativo? </label>
-		            <div class="col-sm-6">
-		                <label class="radio-inline">
-		                    <input type="radio" name="status" value="Active" <?php if($status == 'Active') { echo 'checked'; } ?>>Sim
-		                </label>
-		                <label class="radio-inline">
-		                    <input type="radio" name="status" value="Inactive" <?php if($status == 'Inactive') { echo 'checked'; } ?>>Não
-		                </label>
+                <div class="row mb-3">
+		            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Ativo?</label>
+		            <div class="col-12 col-sm-9 col-lg-6">
+		                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Active" <?php if($status == 'Active') { echo 'checked'; } ?>> <label class="form-check-label">Sim</label></div>
+		                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Inactive" <?php if($status == 'Inactive') { echo 'checked'; } ?>> <label class="form-check-label">Não</label></div>
 		            </div>
 		        </div>
-                <h3 class="seo-info">Informações de SEO</h3>
-                <div class="form-group">
-					<label for="" class="col-sm-2 control-label">Metatítulo </label>
-					<div class="col-sm-9">
+                <div class="row mb-3 mt-4"><div class="col-12"><h5 class="fw-bold text-primary border-bottom pb-2 mb-0"><i class="bi bi-search me-2"></i>Informações de SEO</h5></div></div>
+                <div class="row mb-3">
+					<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Título</label>
+					<div class="col-12 col-sm-9 col-lg-9">
 						<input type="text" class="form-control" name="meta_title" value="<?php echo $meta_title; ?>">
 					</div>
 				</div>
-				<div class="form-group">
-					<label for="" class="col-sm-2 control-label">Meta-palavras-chave </label>
-					<div class="col-sm-9">
+				<div class="row mb-3">
+					<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Palavras-chave</label>
+					<div class="col-12 col-sm-9 col-lg-9">
 						<textarea class="form-control" name="meta_keyword" style="height:100px;"><?php echo $meta_keyword; ?></textarea>
 					</div>
 				</div>
-				<div class="form-group">
-					<label for="" class="col-sm-2 control-label">Meta Descrição </label>
-					<div class="col-sm-9">
+				<div class="row mb-3">
+					<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Descrição</label>
+					<div class="col-12 col-sm-9 col-lg-9">
 						<textarea class="form-control" id="2" name="meta_description" style="height:100px;"><?php echo $meta_description; ?></textarea>
 					</div>
 				</div>
-                <div class="form-group">
-                	<label for="" class="col-sm-2 control-label"></label>
-                    <div class="col-sm-6">
-                      <button type="submit" class="btn btn-success pull-left" name="form1">Atualizar</button>
+                <div class="row mb-3">
+                	<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+                    <div class="col-12 col-sm-9 col-lg-6">
+                      <button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
+<a href="page.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
                     </div>
                 </div>
 
@@ -235,24 +241,7 @@ foreach ($result as $row) {
         </form>
     </div>
   </div>
-</section>
 
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Confirmação de Exclusão</h4>
-            </div>
-            <div class="modal-body">
-                Tem certeza de que deseja excluir este item?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <a class="btn btn-danger btn-ok">Deletar</a>
-            </div>
-        </div>
-    </div>
 </div>
-
+</div>
 <?php require_once('footer.php'); ?>

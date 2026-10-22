@@ -55,14 +55,22 @@ if(!isset($_REQUEST['id'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Edit Slider</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Editar Slider</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Editar Slider</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="slider.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="slider.php" class="btn btn-primary btn-sm">View All</a>
-	</div>
-</section>
+</div>
 
 <?php
 $statement = $pdo->prepare("SELECT * FROM tbl_slider WHERE id=?");
@@ -80,7 +88,8 @@ foreach ($result as $row) {
 }
 ?>
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -99,55 +108,55 @@ foreach ($result as $row) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+			<form action="" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="current_photo" value="<?php echo $photo; ?>">
-				<div class="box box-info">
-					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Existing Photo</label>
-							<div class="col-sm-9" style="padding-top:5px">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<img src="<?php echo BASE_URL; ?>assets/uploads/<?php echo $photo; ?>" alt="Slider Photo" style="width:400px;">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Photo </label>
-							<div class="col-sm-6" style="padding-top:5px">
-								<input type="file" name="photo">(Only jpg, jpeg, gif and png are allowed)
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto</label>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<input type="file" name="photo"><div class="form-text">Only jpg, jpeg, gif and png are allowed</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Heading </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="heading" value="<?php echo $heading; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Sub-Heading </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Subtítulo</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="subheading" value="<?php echo $subheading; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Content </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Conteúdo</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<textarea class="form-control" name="content" style="height:140px;"><?php echo $content; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Button Text </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Texto do Botão</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="button_text" value="<?php echo $button_text; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Button URL </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">URL do Botão</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="button_url" value="<?php echo $button_url; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Position </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Cargo</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<select name="position" class="form-control">
 									<option value="Left" <?php if($position == 'Left') {echo 'selected';} ?>>Left</option>
 									<option value="Center" <?php if($position == 'Center') {echo 'selected';} ?>>Center</option>
@@ -155,21 +164,18 @@ foreach ($result as $row) {
 								</select>
 							</div>
 						</div>      
-				        <div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Active </label>
-				            <div class="col-sm-6">
-				                <label class="radio-inline">
-				                    <input type="radio" name="status" value="Active" <?php if($status == 'Active') { echo 'checked'; } ?>>Yes
-				                </label>
-				                <label class="radio-inline">
-				                    <input type="radio" name="status" value="Inactive" <?php if($status == 'Inactive') { echo 'checked'; } ?>>No
-				                </label>
+				        <div class="row mb-3">
+				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Ativo?</label>
+				            <div class="col-12 col-sm-9 col-lg-6">
+				                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Active" <?php if($status == 'Active') { echo 'checked'; } ?>> <label class="form-check-label">Yes</label></div>
+				                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Inactive" <?php if($status == 'Inactive') { echo 'checked'; } ?>> <label class="form-check-label">No</label></div>
 				            </div>
 				        </div>						
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+<a href="slider.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 							</div>
 						</div>
 					</div>
@@ -178,6 +184,8 @@ foreach ($result as $row) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

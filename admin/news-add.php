@@ -124,17 +124,26 @@ if(isset($_POST['form1'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Adcionar Notícia</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Adicionar Notícia</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Adicionar Notícia</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="news.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="news.php" class="btn btn-primary btn-sm">Visualizar Todas</a>
-	</div>
-</section>
+</div>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -153,45 +162,45 @@ if(isset($_POST['form1'])) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-				<div class="box box-info">
-					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Título da notícia <span>*</span></label>
-							<div class="col-sm-6">
+			<form action="" method="post" enctype="multipart/form-data">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título da notícia <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control" name="news_title" placeholder="Exemplo: manchete de notícias">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Slug de Notícias </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Slug de Notícias</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control ps-slug-locked" name="news_slug" placeholder="Gerado automaticamente..." readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
 								<div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
 									<i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada)
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Notícias <span>*</span></label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Notícias <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control" name="news_content" id="1"></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Data de publicação <span>*</span></label>
-							<div class="col-sm-2">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Data de publicação <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control" name="news_date" id="datepicker" value="<?php echo date('d-m-Y'); ?>">(Format: dd-mm-yy)
 							</div>
 						</div>
-						<div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Foto em destaque</label>
-				            <div class="col-sm-6" style="padding-top:6px;">
+						<div class="row mb-3">
+				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto em destaque</label>
+				            <div class="col-12 col-sm-9 col-lg-6">
 				                <input type="file" name="photo">
 				            </div>
 				        </div>
-						<div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Categoria <span>*</span></label>
-				            <div class="col-sm-3">
+						<div class="row mb-3">
+				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Categoria <span class="text-danger">*</span></label>
+				            <div class="col-12 col-sm-9 col-lg-6">
 				            	<select class="form-control select2" name="category_id">
 				            		<option value="">Selecione uma categoria</option>
 				            		<?php
@@ -208,35 +217,36 @@ if(isset($_POST['form1'])) {
 				            	</select>
 				            </div>
 				        </div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Editor </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Editor</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control" name="publisher"> (Se você deixar em branco, o usuário logado será tratado como o editor)
 							</div>
 						</div>
-						<h3 class="seo-info">Informações de SEO</h3>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Title </label>
-							<div class="col-sm-9">
+						<div class="row mb-3 mt-4"><div class="col-12"><h5 class="fw-bold text-primary border-bottom pb-2 mb-0"><i class="bi bi-search me-2"></i>Informações de SEO</h5></div></div>
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Título</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<input type="text" class="form-control" name="meta_title">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Keywords </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Palavras-chave</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<input type="text" class="form-control" name="meta_keyword">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Description </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Descrição</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control" name="meta_description" style="height:200px;"></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Enviar</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+<a href="news.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 							</div>
 						</div>
 					</div>
@@ -245,6 +255,8 @@ if(isset($_POST['form1'])) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

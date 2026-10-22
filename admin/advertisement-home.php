@@ -77,11 +77,19 @@ if(isset($_POST['form2'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Advertisement (Home)</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Advertisement (Home)</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Advertisement (Home)</li>
+				</ol>
+			</div>
+		</div>
 	</div>
-</section>
+</div>
 
 
 <?php
@@ -95,7 +103,8 @@ foreach ($result as $row) {
 }
 ?>
 
-<section class="content" style="min-height:auto;margin-bottom: -30px;">
+<div class="app-content">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 			<?php if($error_message): ?>
@@ -113,58 +122,57 @@ foreach ($result as $row) {
 			<?php endif; ?>
 		</div>
 	</div>
-</section>
 
-<section class="content">
+</div>
+</div>
+
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
 
-				<div class="nav-tabs-custom">
+				<div class="nav-tabs-custom mb-4">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#tab_1" data-toggle="tab">Inside Header</a></li>
-						<li><a href="#tab_2" data-toggle="tab">Under Featured News</a></li>						
+						<li class="nav-item"><a class="nav-link active" href="#tab_1" data-bs-toggle="tab">Inside Header</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_2" data-bs-toggle="tab">Under Featured News</a></li>						
 					</ul>
 					<div class="tab-content">
 						
           				<div class="tab-pane active" id="tab_1">
-							<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-								<div class="box box-info">
-									<div class="box-body">
-										<div class="form-group">
-								            <label for="" class="col-sm-2 control-label">Existing Photo</label>
-								            <div class="col-sm-6" style="padding-top:6px;">
+							<form action="" method="post" enctype="multipart/form-data">
+								<div class="card card-outline card-primary shadow-sm mb-4">
+									<div class="card-body">
+										<div class="row mb-3">
+								            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
+								            <div class="col-12 col-sm-9 col-lg-6">
 												<img src="../assets/uploads/<?php echo $adv_photo[0]; ?>"  style="width:300px;">
 												<input type="hidden" name="previous_photo" value="<?php echo $adv_photo[0]; ?>">
 								            </div>
 								        </div>
-								        <div class="form-group">
-								            <label for="" class="col-sm-2 control-label">New Photo</label>
-								            <div class="col-sm-6" style="padding-top:6px;">
+								        <div class="row mb-3">
+								            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nova Foto</label>
+								            <div class="col-12 col-sm-9 col-lg-6">
 								                <input type="file" name="photo">
 								            </div>
 								        </div>
-								        <div class="form-group">
-								            <label for="" class="col-sm-2 control-label">URL</label>
-								            <div class="col-sm-6">
+								        <div class="row mb-3">
+								            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">URL</label>
+								            <div class="col-12 col-sm-9 col-lg-6">
 								                <input type="text" class="form-control" name="adv_url" value="<?php echo $adv_url[0]; ?>">
 								            </div>
 								        </div>
-								        <div class="form-group">
-								            <label for="" class="col-sm-2 control-label">Show? </label>
-								            <div class="col-sm-6">
-								                <label class="radio-inline">
-								                    <input type="radio" name="adv_status" value="Show" <?php if($adv_status[0] == 'Show') { echo 'checked'; } ?>>Yes
-								                </label>
-								                <label class="radio-inline">
-								                    <input type="radio" name="adv_status" value="Hide" <?php if($adv_status[0] == 'Hide') { echo 'checked'; } ?>>No
-								                </label>
+								        <div class="row mb-3">
+								            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Exibir?</label>
+								            <div class="col-12 col-sm-9 col-lg-6">
+								                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="adv_status" value="Show" <?php if($adv_status[0] == 'Show') { echo 'checked'; } ?>> <label class="form-check-label">Yes</label></div>
+								                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="adv_status" value="Hide" <?php if($adv_status[0] == 'Hide') { echo 'checked'; } ?>> <label class="form-check-label">No</label></div>
 								            </div>
 								        </div>
-										<div class="form-group">
-											<label for="" class="col-sm-2 control-label"></label>
-											<div class="col-sm-6">
-												<button type="submit" class="btn btn-success pull-left" name="form1">Update Photo</button>
+										<div class="row mb-3">
+											<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+											<div class="col-12 col-sm-9 col-lg-6">
+												<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Atualizar Foto</button>
 											</div>
 										</div>
 									</div>
@@ -175,43 +183,39 @@ foreach ($result as $row) {
 
 
           				<div class="tab-pane" id="tab_2">
-							<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-								<div class="box box-info">
-									<div class="box-body">
-										<div class="form-group">
-								            <label for="" class="col-sm-2 control-label">Existing Photo</label>
-								            <div class="col-sm-6" style="padding-top:6px;">
+							<form action="" method="post" enctype="multipart/form-data">
+								<div class="card card-outline card-primary shadow-sm mb-4">
+									<div class="card-body">
+										<div class="row mb-3">
+								            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
+								            <div class="col-12 col-sm-9 col-lg-6">
 												<img src="../assets/uploads/<?php echo $adv_photo[1]; ?>"  style="width:300px;">
 												<input type="hidden" name="previous_photo" value="<?php echo $adv_photo[1]; ?>">
 								            </div>
 								        </div>
-								        <div class="form-group">
-								            <label for="" class="col-sm-2 control-label">New Photo</label>
-								            <div class="col-sm-6" style="padding-top:6px;">
+								        <div class="row mb-3">
+								            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nova Foto</label>
+								            <div class="col-12 col-sm-9 col-lg-6">
 								                <input type="file" name="photo">
 								            </div>
 								        </div>
-								        <div class="form-group">
-								            <label for="" class="col-sm-2 control-label">URL</label>
-								            <div class="col-sm-6">
+								        <div class="row mb-3">
+								            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">URL</label>
+								            <div class="col-12 col-sm-9 col-lg-6">
 								                <input type="text" class="form-control" name="adv_url" value="<?php echo $adv_url[1]; ?>">
 								            </div>
 								        </div>
-								        <div class="form-group">
-								            <label for="" class="col-sm-2 control-label">Show? </label>
-								            <div class="col-sm-6">
-								                <label class="radio-inline">
-								                    <input type="radio" name="adv_status" value="Show" <?php if($adv_status[1] == 'Show') { echo 'checked'; } ?>>Yes
-								                </label>
-								                <label class="radio-inline">
-								                    <input type="radio" name="adv_status" value="Hide" <?php if($adv_status[1] == 'Hide') { echo 'checked'; } ?>>No
-								                </label>
+								        <div class="row mb-3">
+								            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Exibir?</label>
+								            <div class="col-12 col-sm-9 col-lg-6">
+								                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="adv_status" value="Show" <?php if($adv_status[1] == 'Show') { echo 'checked'; } ?>> <label class="form-check-label">Yes</label></div>
+								                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="adv_status" value="Hide" <?php if($adv_status[1] == 'Hide') { echo 'checked'; } ?>> <label class="form-check-label">No</label></div>
 								            </div>
 								        </div>
-										<div class="form-group">
-											<label for="" class="col-sm-2 control-label"></label>
-											<div class="col-sm-6">
-												<button type="submit" class="btn btn-success pull-left" name="form2">Update Photo</button>
+										<div class="row mb-3">
+											<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+											<div class="col-12 col-sm-9 col-lg-6">
+												<button type="submit" class="btn btn-primary px-4" name="form2"><i class="bi bi-check-lg me-1"></i>Atualizar Foto</button>
 											</div>
 										</div>
 									</div>
@@ -230,6 +234,8 @@ foreach ($result as $row) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

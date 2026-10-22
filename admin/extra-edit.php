@@ -52,16 +52,25 @@ if(isset($_POST['form1'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Editar Especialidade de <?php echo htmlspecialchars($funcao['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?></h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Editar Especialidade de <?php echo htmlspecialchars($funcao['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?></h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Editar Especialidade de <?php echo htmlspecialchars($funcao['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?></li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="extra.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="extra.php" class="btn btn-primary btn-sm">Visualizar Todas</a>
-	</div>
-</section>
+</div>
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -82,22 +91,22 @@ if(isset($_POST['form1'])) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post">
+			<form action="" method="post">
 
-				<div class="box box-info">
-					<div class="box-body">
-					    <div class="form-group">
-							<label for="" class="col col-sm-3 control-label">Início de Atendimento <span>*</span></label>
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+					    <div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Início de Atendimento <span class="text-danger">*</span></label>
 							<div class="col col-sm-2">
 								<input type="time" class="form-control" name="inicio" value="<?=$funcao['inicio']; ?>">
 							</div>
-							<label for="" class="col col-sm-3 control-label">Término de Atendimento <span>*</span></label>
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Término de Atendimento <span class="text-danger">*</span></label>
 							<div class="col col-sm-2">
 								<input type="time" class="form-control" name="fim" value="<?=$funcao['fim']; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col col-sm-3 control-label">Dia da Semana <span>*</span></label>
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Dia da Semana <span class="text-danger">*</span></label>
 							<div class="col col-sm-7">
 								<select class="form-control select2" name="semana">
 									<?php
@@ -111,8 +120,8 @@ if(isset($_POST['form1'])) {
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label for="" class="col col-sm-3 control-label">Especialidade <span>*</span></label>
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Especialidade <span class="text-danger">*</span></label>
 							<div class="col col-sm-7">
 								<select class="form-control select2" name="funcao">
 									<?php
@@ -126,8 +135,8 @@ if(isset($_POST['form1'])) {
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label for="" class="col col-sm-3 control-label">Clínica <span>*</span></label>
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Clínica <span class="text-danger">*</span></label>
 							<div class="col col-sm-7">
 								<select class="form-control select2" name="clinica">
 									<?php
@@ -141,10 +150,11 @@ if(isset($_POST['form1'])) {
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label for="" class="col col-sm-2 control-label"></label>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
 							<div class="col col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Atualizar</button>
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
+<a href="extra.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 							</div>
 						</div>
 					</div>
@@ -156,6 +166,8 @@ if(isset($_POST['form1'])) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

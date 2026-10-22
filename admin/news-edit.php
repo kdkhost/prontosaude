@@ -139,14 +139,22 @@ if(!isset($_REQUEST['id'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Edit News</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Editar Notícia</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Editar Notícia</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="news.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="news.php" class="btn btn-primary btn-sm">View All</a>
-	</div>
-</section>
+</div>
 
 <?php
 $statement = $pdo->prepare("SELECT * FROM tbl_news WHERE news_id=?");
@@ -166,7 +174,8 @@ foreach ($result as $row) {
 }
 ?>
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -187,39 +196,39 @@ foreach ($result as $row) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-				<div class="box box-info">
-					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">News Title <span>*</span></label>
-							<div class="col-sm-6">
+			<form action="" method="post" enctype="multipart/form-data">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título da Notícia <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control" name="news_title" value="<?php echo $news_title; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-		                    <label for="" class="col-sm-2 control-label">Slug da Notícia</label>
-		                    <div class="col-sm-6">
+						<div class="row mb-3">
+		                    <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Slug da Notícia</label>
+		                    <div class="col-12 col-sm-9 col-lg-6">
 		                        <input type="text" class="form-control ps-slug-locked" name="news_slug" value="<?php echo $news_slug; ?>" readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
 								<div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
 									<i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada)
 								</div>
 		                    </div>
 		                </div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">News Content <span>*</span></label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Conteúdo <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control" name="news_content" id="1"><?php echo $news_content; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">News Publish Date <span>*</span></label>
-							<div class="col-sm-2">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Data de Publicação <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control" name="news_date" id="datepicker" value="<?php echo $news_date; ?>">(Format: dd-mm-yy)
 							</div>
 						</div>
-						<div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Existing Featured Photo</label>
-				            <div class="col-sm-6" style="padding-top:6px;">
+						<div class="row mb-3">
+				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto em Destaque Atual</label>
+				            <div class="col-12 col-sm-9 col-lg-6">
 				            	<?php
 				            	if($photo == '') {
 				            		echo 'No photo found';
@@ -230,15 +239,15 @@ foreach ($result as $row) {
 				                <input type="hidden" name="previous_photo" value="<?php echo $photo; ?>">
 				            </div>
 				        </div>
-						<div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Change Featured Photo</label>
-				            <div class="col-sm-6" style="padding-top:6px;">
+						<div class="row mb-3">
+				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nova Foto em Destaque</label>
+				            <div class="col-12 col-sm-9 col-lg-6">
 				                <input type="file" name="photo">
 				            </div>
 				        </div>
-						<div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Categories <span>*</span></label>
-				            <div class="col-sm-3">
+						<div class="row mb-3">
+				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Categorias <span class="text-danger">*</span></label>
+				            <div class="col-12 col-sm-9 col-lg-6">
 				            	<select class="form-control select2" name="category_id">
 								<?php
 				            	$i=0;
@@ -254,35 +263,36 @@ foreach ($result as $row) {
 								</select>
 				            </div>
 				        </div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Publisher </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Publisher</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control" name="publisher" value="<?php echo $publisher; ?>"> (If you keep this blank, logged user will be treated as the publisher)
 							</div>
 						</div>
-						<h3 class="seo-info">SEO Information</h3>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Title </label>
-							<div class="col-sm-9">
+						<div class="row mb-3 mt-4"><div class="col-12"><h5 class="fw-bold text-primary border-bottom pb-2 mb-0"><i class="bi bi-search me-2"></i>SEO Information</h5></div></div>
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Título</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<input type="text" class="form-control" name="meta_title" value="<?php echo $meta_title; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Keywords </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Palavras-chave</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<input type="text" class="form-control" name="meta_keyword" value="<?php echo $meta_keyword; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Description </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Descrição</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control" name="meta_description" style="height:200px;"><?php echo $meta_description; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Update</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
+<a href="news.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 							</div>
 						</div>
 					</div>
@@ -291,6 +301,8 @@ foreach ($result as $row) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

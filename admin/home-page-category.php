@@ -28,14 +28,23 @@ if(isset($_POST['form1'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Categorias da página inicial</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Categorias da página inicial</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Categorias da página inicial</li>
+				</ol>
+			</div>
+		</div>
 	</div>
-</section>
+</div>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -56,14 +65,14 @@ if(isset($_POST['form1'])) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post">
+			<form action="" method="post">
 
-				<div class="box box-info">
-					<div class="box-body">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
 						
 						<p style="padding-bottom: 20px;">Se você não quiser mostrar uma categoria em sua página inicial, basta deixar o campo do pedido em branco.</p>
 						
-						<div class="form-group">
+						<div class="row mb-3">
 							<div class="col-sm-12">
 								<table class="table table-bordered table-striped table-responsive" style="width:auto;">
 									<thead>
@@ -115,9 +124,9 @@ if(isset($_POST['form1'])) {
 								</table>
 							</div>
 						</div>					
-						<div class="form-group">
+						<div class="row mb-3">
 							<div class="col-sm-12">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Atualizar Informação</button>
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Atualizar Informações</button>
 							</div>
 						</div>
 					</div>
@@ -129,6 +138,8 @@ if(isset($_POST['form1'])) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

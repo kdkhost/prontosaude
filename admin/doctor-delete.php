@@ -36,11 +36,11 @@ if(!isset($_POST['del'])) {
     	$apagar->execute();
     	
     	// Unlink the photo
-    	if(empty($photo)) {
+    	if(!empty($photo) && file_exists('../assets/uploads/'.$photo)) {
     		unlink('../assets/uploads/'.$photo);	
     	}
     
-    	if(empty($banner)) {
+    	if(!empty($banner) && file_exists('../assets/uploads/'.$banner)) {
     		unlink('../assets/uploads/'.$banner);
     	}
     	

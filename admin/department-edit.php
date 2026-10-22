@@ -194,14 +194,22 @@ if(!isset($_REQUEST['id'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Editar Departamento</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Editar Departamento</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Editar Departamento</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="department.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="department.php" class="btn btn-primary btn-sm">Visualizar Todos</a>
-	</div>
-</section>
+</div>
 
 <?php
 $statement = $pdo->prepare("SELECT * FROM tbl_department WHERE dep_id=?");
@@ -241,7 +249,8 @@ foreach ($result as $row) {
 
 ?>
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 
@@ -259,35 +268,35 @@ foreach ($result as $row) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+			<form action="" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="current_photo" value="<?= $dep_photo; ?>">
 				<input type="hidden" name="current_banner" value="<?= $dep_banner; ?>">
-				<div class="box box-info">
-					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Nome <span>*</span></label>
-							<div class="col-sm-6">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nome <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="dep_name" value="<?= $dep_name; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Slug </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Slug</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control ps-slug-locked" name="dep_slug" value="<?= $dep_slug; ?>" readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
 								<div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
 									<i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada para evitar bugs de URL)
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Detalhes </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Detalhes</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control" name="dep_detail" id="1"><?= $dep_detail; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group mb-3">
-							<label for="" class="col-sm-2 control-label">Buscar por CEP </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Buscar por CEP</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<div class="row g-2">
 									<div class="col-7">
 										<div class="input-group">
@@ -304,58 +313,58 @@ foreach ($result as $row) {
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Endereço </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Endereço</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<textarea class="form-control" name="dep_address" style="height:140px;"><?= $dep_address; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Telefone </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Telefone</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="dep_phone" value="<?= $dep_phone; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">WhatsApp </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">WhatsApp</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="dep_fax" value="<?= $dep_fax; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Email </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Email</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="dep_email" value="<?= $dep_email; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Foto Existente</label>
-							<div class="col-sm-9" style="padding-top:5px">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<img src="<?= BASE_URL; ?>assets/uploads/<?= $dep_photo; ?>" alt="Department Photo" style="width:400px;">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Foto em destaque <span>*</span></label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<input type="file" name="dep_photo">(Somente jpg, jpeg, gif & png Serão aceitos)
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto em destaque <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
+								<input type="file" name="dep_photo"><div class="form-text">Somente jpg, jpeg, gif & png Serão aceitos</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Existing Banner</label>
-							<div class="col-sm-9" style="padding-top:5px">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner Atual</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<img src="<?= BASE_URL; ?>assets/uploads/<?= $dep_banner; ?>" alt="Department Photo" style="width:400px;">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Banner <span>*</span></label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<input type="file" name="dep_banner">(Somente jpg, jpeg, gif & png Serão aceitos)
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
+								<input type="file" name="dep_banner"><div class="form-text">Somente jpg, jpeg, gif & png Serão aceitos</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Seção de Horário de Funcionamento</label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<table id="ohSection" class="table table-bordered table-striped">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Seção de Horário de Funcionamento</label>
+							<div class="col-12 col-sm-9 col-lg-9">
+								<table id="ohSection" class="table table-hover table-striped align-middle w-100">
 									<thead>
 										<tr>
 											<th style="width:50%;">Dia</th>
@@ -375,11 +384,7 @@ foreach ($result as $row) {
 												<td>
 													<input autocomplete="off" type="text" class="form-control" style="width:100%" value="<?= $arr_oh_time[$i]; ?>">
 												</td>
-												<td>
-												    <a href="department-oh-delete.php?id=<?= $arr_oh_id[$i]; ?>&id1=<?= $_REQUEST['id']; ?>" class="btn btn-danger btn-xs">
-												        X
-												    </a>
-												</td>
+												<td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="department-oh-delete.php?id=<?= $arr_oh_id[$i]; ?>&id1=<?= $_REQUEST['id']; ?>" class="btn btn-danger btn-sm">X</a></div></td>
 											</tr>
 											<?php
 										}
@@ -387,7 +392,7 @@ foreach ($result as $row) {
 										?>
 									</tbody>
 								</table>
-								<input type="button" class="btn btn-info btn-xs" id="btnAddOpenningHour" value="+ Adicionar linha" style="margin-bottom:10px;">
+								<input type="button" class="btn btn-info btn-sm" id="btnAddOpenningHour" value="+ Adicionar linha" style="margin-bottom:10px;">
 							</div>
 						</div>
 						
@@ -402,7 +407,7 @@ foreach ($result as $row) {
                     				
                     				var ohContent = '<input autocomplete="off" type="text" class="form-control" name="oh_time[]" style="width:100%">';
                     
-                                    var ohDelete = '<a href="javascript:void()" class="Delete1 btn btn-danger btn-xs">X</a>';
+                                    var ohDelete = '<a href="javascript:void()" class="Delete1 btn btn-danger btn-sm">X</a>';
                     
                                     trNew1 = trNew1 + '<tr> ';
                     
@@ -424,10 +429,10 @@ foreach ($result as $row) {
                             });
 						</script>
 						
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Sessão F.A.Q</label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<table id="fqSection" class="table table-bordered table-striped">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Sessão F.A.Q</label>
+							<div class="col-12 col-sm-9 col-lg-9">
+								<table id="fqSection" class="table table-hover table-striped align-middle w-100">
 									<thead>
 										<tr>
 											<th style="width:50%;">Título</th>
@@ -447,11 +452,7 @@ foreach ($result as $row) {
 												<td>
 													<textarea id="1" class="form-control" cols="30" rows="10" style="width:100%;height:50px;"><?= $arr_fq_content[$i]; ?></textarea>
 												</td>
-												<td>
-												    <a href="department-fq-delete.php?id=<?= $arr_fq_id[$i]; ?>&id1=<?= $_REQUEST['id']; ?>" class="btn btn-danger btn-xs">
-												        X
-												    </a>
-												</td>
+												<td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="department-fq-delete.php?id=<?= $arr_fq_id[$i]; ?>&id1=<?= $_REQUEST['id']; ?>" class="btn btn-danger btn-sm">X</a></div></td>
 											</tr>
 											<?php
 										}
@@ -459,7 +460,7 @@ foreach ($result as $row) {
 										?>
 									</tbody>
 								</table>
-								<input type="button" class="btn btn-info btn-xs" id="btnAddFaq" value="+ Adicionar linha" style="margin-bottom:10px;">
+								<input type="button" class="btn btn-info btn-sm" id="btnAddFaq" value="+ Adicionar linha" style="margin-bottom:10px;">
 							</div>
 						</div>
 						
@@ -474,7 +475,7 @@ foreach ($result as $row) {
                     				
                     				var fqContent = '<textarea class="form-control" cols="30" rows="10" name="fq_content[]" style="width:100%;height:50px;"></textarea>';
                     
-                                    var fqDelete = '<a href="javascript:void()" class="Delete1 btn btn-danger btn-xs">X</a>';
+                                    var fqDelete = '<a href="javascript:void()" class="Delete1 btn btn-danger btn-sm">X</a>';
                     
                                     trNew1 = trNew1 + '<tr> ';
                     
@@ -496,29 +497,30 @@ foreach ($result as $row) {
                             });
 						</script>
 						
-						<h3 class="seo-info">Informações do SEO</h3>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Título </label>
-							<div class="col-sm-9">
+						<div class="row mb-3 mt-4"><div class="col-12"><h5 class="fw-bold text-primary border-bottom pb-2 mb-0"><i class="bi bi-search me-2"></i>Informações do SEO</h5></div></div>
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Título</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<input type="text" class="form-control" name="meta_title" value="<?= $meta_title; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Keywords </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Palavras-chave</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<input type="text" class="form-control" name="meta_keyword" value="<?= $meta_keyword; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Descição </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Descrição</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control" name="meta_description" style="height:200px;"><?= $meta_description; ?></textarea>
 							</div>
 						</div>			
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+<a href="department.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 							</div>
 						</div>
 					</div>
@@ -527,24 +529,7 @@ foreach ($result as $row) {
 		</div>
 	</div>
 
-</section>
 
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-            </div>
-            <div class="modal-body">
-                Are you sure want to delete this item?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger btn-ok">Delete</a>
-            </div>
-        </div>
-    </div>
 </div>
-
+</div>
 <?php require_once('footer.php'); ?>

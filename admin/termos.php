@@ -2,20 +2,29 @@
 require_once('header.php'); 
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Ver Termos</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Visualizar Termos</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Visualizar Termos</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="termos-add.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Adicionar Termos</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="termos-add.php" class="btn btn-primary btn-sm">Add Termos</a>
-	</div>
-</section>
+</div>
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
-			<div class="box box-info">
-				<div class="box-body table-responsive">
+			<div class="card card-outline card-primary shadow-sm mb-4">
+				<div class="card-body table-responsive">
 				    
 				    <?php if(!empty($_SESSION['sucesso'])){?>
 				    <div class="callout callout-success">
@@ -27,7 +36,7 @@ require_once('header.php');
         			    </div>
 				    <?php unset($_SESSION['erro']);} ?>
 				    
-					<table id="example1" class="table table-bordered table-striped">
+					<table id="example1" class="table table-hover table-striped align-middle w-100">
 						<thead>
 							<tr>
 								<th width="50">ID</th>
@@ -60,7 +69,7 @@ require_once('header.php');
 									            <img src="<?= BASE_URL; ?>assets/images/no-image-found.png" alt="<?= $row['titulo']; ?>" style="width:140px;">
 									        <?php }?>
 									        <div class="clearfix"><br></div>
-									        <button type="button" class="btn btn-warning btn-block btn-sm" data-toggle="modal" data-target="#exampleModal-<?=$id;?>">
+									        <button type="button" class="btn btn-warning w-100 btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal-<?=$id;?>">
                                               Trocar Banner
                                             </button>
 									        <!-- Modal -->
@@ -69,7 +78,7 @@ require_once('header.php');
                                                 <div class="modal-content">
                                                   <div class="modal-header">
                                                     <b><?= $row['titulo']; ?></b>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                                       <span aria-hidden="true">&times;</span>
                                                     </button>
                                                   </div>
@@ -82,8 +91,8 @@ require_once('header.php');
         									                        <input type="file" name="banner">
         									                    </div>
         									                    <br>
-        									                    <div class="row pull-right">
-        									                        <button type="button" class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal">
+        									                    <div class="row float-end">
+        									                        <button type="button" class="btn btn-danger btn-sm text-uppercase" data-bs-dismiss="modal">
         									                            <span class="glyphicon glyphicon-remove"></span> 
         									                            Cancelar
         									                        </button>
@@ -109,28 +118,22 @@ require_once('header.php');
                                             </div>
                                         </div>
 									</td>
-									<td>										
-										<a href="termos-edit.php?id=<?= $row['id']; ?>" class="btn btn-primary btn-xs">
-										    Editar
-										</a>
-										<a href="#" class="btn btn-danger btn-xs" data-href="termos-delete.php?id=<?= $row['id']; ?>" 
-										    data-toggle="modal" data-target="#confirm-delete-<?= $row['id']; ?>">
-										    Deletar
-										</a>  
-									</td>
+									<td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="termos-edit.php?id=<?= $row['id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Editar</a>
+										<a href="#" class="btn btn-danger btn-sm" data-href="termos-delete.php?id=<?= $row['id']; ?>" 
+										    data-target="#confirm-delete-<?= $row['id']; ?>"><i class="bi bi-trash3"></i> Excluir</a></div></td>
 								</tr>
 								<div class="modal fade" id="confirm-delete-<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
                                                 <h4 class="modal-title" id="myModalLabel">Confirmação de Exclusão</h4>
                                             </div>
                                             <div class="modal-body">
                                                 <p>Você tem certeza de que quer deletar essa Política de termos?</p>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                                 <a href="termos-delete.php?id=<?= $row['id']; ?>" class="btn btn-danger btn-ok">Deletar</a>
                                             </div>
                                         </div>
@@ -145,5 +148,7 @@ require_once('header.php');
 	</div>
 
 
-</section>
+
+</div>
+</div>
 <?php require_once('footer.php'); ?>

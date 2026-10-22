@@ -153,17 +153,26 @@ if(isset($_POST['form1'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Adcionar Departamento</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Adicionar Departamento</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Adicionar Departamento</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="department.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="department.php" class="btn btn-primary btn-sm">Visualizar todos</a>
-	</div>
-</section>
+</div>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -182,33 +191,33 @@ if(isset($_POST['form1'])) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-				<div class="box box-info">
-					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Nome <span>*</span></label>
-							<div class="col-sm-6">
+			<form action="" method="post" enctype="multipart/form-data">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nome <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="dep_name" placeholder="Exemplo: Clínica gardênia" value="<?php if(isset($_POST['dep_name'])){echo $_POST['dep_name'];} ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Slug </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Slug</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control ps-slug-locked" name="dep_slug" placeholder="Gerado automaticamente..." readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
 								<div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
 									<i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada para evitar bugs de URL)
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Detalhe </label>
-							<div class="col-sm-7">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Detalhes</label>
+							<div class="col-12 col-sm-9 col-lg-7">
 								<textarea class="form-control" name="dep_detail" id="1"><?php if(isset($_POST['dep_detail'])){echo $_POST['dep_detail'];} ?></textarea>
 							</div>
 						</div>
-						<div class="form-group mb-3">
-							<label for="" class="col-sm-2 control-label">Buscar por CEP </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Buscar por CEP</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<div class="row g-2">
 									<div class="col-7">
 										<div class="input-group">
@@ -225,46 +234,46 @@ if(isset($_POST['form1'])) {
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Endereço </label>
-							<div class="col-sm-7">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Endereço</label>
+							<div class="col-12 col-sm-9 col-lg-7">
 								<textarea class="form-control" name="dep_address" style="height:140px;"><?php if(isset($_POST['dep_address'])){echo $_POST['dep_address'];} ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Telefone </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Telefone</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="dep_phone" value="<?php if(isset($_POST['dep_phone'])){echo $_POST['dep_phone'];} ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">WhatsApp </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">WhatsApp</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="dep_fax" value="<?php if(isset($_POST['dep_fax'])){echo $_POST['dep_fax'];} ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Email </label>
-							<div class="col-sm-6">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Email</label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" autocomplete="off" class="form-control" name="dep_email" value="<?php if(isset($_POST['dep_email'])){echo $_POST['dep_email'];} ?>">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Foto em destaque <span>*</span></label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<input type="file" name="dep_photo">(Apenas jpg, jpeg, gif e png são permitidos)
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto em destaque <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
+								<input type="file" name="dep_photo"><div class="form-text">Apenas jpg, jpeg, gif e png são permitidos</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Banner <span>*</span></label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<input type="file" name="dep_banner">(Apenas jpg, jpeg, gif e png são permitidos)
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-9">
+								<input type="file" name="dep_banner"><div class="form-text">Apenas jpg, jpeg, gif e png são permitidos</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Seção de Horário de Funcionamento</label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<table id="ohSection" class="table table-bordered table-striped">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Seção de Horário de Funcionamento</label>
+							<div class="col-12 col-sm-9 col-lg-9">
+								<table id="ohSection" class="table table-hover table-striped align-middle w-100">
 									<thead>
 										<tr>
 											<th style="width:50%;">Dia</th>
@@ -275,7 +284,7 @@ if(isset($_POST['form1'])) {
 									<tbody>										
 									</tbody>
 								</table>
-								<input type="button" class="btn btn-primary btn-xs" id="btnAddOpenningHour" value="+ Adicionar linha" style="margin-bottom:10px;">
+								<input type="button" class="btn btn-primary btn-sm" id="btnAddOpenningHour" value="+ Adicionar linha" style="margin-bottom:10px;">
 							</div>
 						</div>
 						
@@ -290,7 +299,7 @@ if(isset($_POST['form1'])) {
                     				
                     				var fqContent = '<input autocomplete="off" type="text" class="form-control" name="oh_time[]" style="width:100%">';
                     
-                                    var fqDelete = '<a href="javascript:void()" class="Delete1 btn btn-danger btn-xs">X</a>';
+                                    var fqDelete = '<a href="javascript:void()" class="Delete1 btn btn-danger btn-sm">X</a>';
                     
                                     trNew1 = trNew1 + '<tr> ';
                     
@@ -312,10 +321,10 @@ if(isset($_POST['form1'])) {
                             });
 						</script>
 
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">F.A.Q</label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<table id="fqSection" class="table table-bordered table-striped">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">F.A.Q</label>
+							<div class="col-12 col-sm-9 col-lg-9">
+								<table id="fqSection" class="table table-hover table-striped align-middle w-100">
 									<thead>
 										<tr>
 											<th style="width:50%;">Pergunta</th>
@@ -326,7 +335,7 @@ if(isset($_POST['form1'])) {
 									<tbody>
 									</tbody>
 								</table>
-								<input type="button" class="btn btn-primary btn-xs" id="btnAddFaq" value="+ Adicionar linha" style="margin-bottom:10px;">
+								<input type="button" class="btn btn-primary btn-sm" id="btnAddFaq" value="+ Adicionar linha" style="margin-bottom:10px;">
 							</div>
 						</div>
 
@@ -341,7 +350,7 @@ if(isset($_POST['form1'])) {
                     				
                     				var fqContent = '<textarea class="form-control" cols="30" rows="10" name="fq_content[]" style="width:100%;height:50px;"></textarea>';
                     
-                                    var fqDelete = '<a href="javascript:void()" class="Delete1 btn btn-danger btn-xs">X</a>';
+                                    var fqDelete = '<a href="javascript:void()" class="Delete1 btn btn-danger btn-sm">X</a>';
                     
                                     trNew1 = trNew1 + '<tr> ';
                     
@@ -363,29 +372,30 @@ if(isset($_POST['form1'])) {
                             });
 						</script>
 
-						<h3 class="seo-info">Informações de SEO</h3>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Title </label>
-							<div class="col-sm-9">
+						<div class="row mb-3 mt-4"><div class="col-12"><h5 class="fw-bold text-primary border-bottom pb-2 mb-0"><i class="bi bi-search me-2"></i>Informações de SEO</h5></div></div>
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Título</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<input type="text" class="form-control" name="meta_title">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Keywords </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Palavras-chave</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<input type="text" class="form-control" name="meta_keyword">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Description </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Descrição</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control" name="meta_description" style="height:200px;"></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Enviar</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+<a href="department.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 							</div>
 						</div>
 					</div>
@@ -394,6 +404,8 @@ if(isset($_POST['form1'])) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

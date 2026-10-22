@@ -10,17 +10,26 @@ if(isset($_POST['form1'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Ver menus</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Visualizar Menus</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Visualizar Menus</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="menu-add.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Adicionar Novo</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="menu-add.php" class="btn btn-primary btn-sm">Add Novo</a>
-	</div>
-</section>
+</div>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
   	<div class="row">
     	<div class="col-md-12">
@@ -32,8 +41,8 @@ if(isset($_POST['form1'])) {
 			</p>
 		
 
-			<div class="box box-info">        
-				<div class="box-body table-responsive">
+			<div class="card card-outline card-primary shadow-sm mb-4">        
+				<div class="card-body table-responsive">
 
 					<?php if($error_message): ?>
 					<div class="callout callout-danger">
@@ -52,7 +61,7 @@ if(isset($_POST['form1'])) {
 					<?php endif; ?>
 					
 					<form action="" method="post">
-					<table id="example1" class="table table-bordered table-striped">
+					<table id="example1" class="table table-hover table-striped align-middle w-100">
 						<thead>
 							<tr>
 								<th>ID Menu</th>
@@ -84,22 +93,20 @@ if(isset($_POST['form1'])) {
 									</td>
 									<td><?php echo $row['menu_parent']; ?></td>
 									<td><?php echo $row['menu_url']; ?></td>
-									<td>
-									<a href="#" class="btn btn-danger btn-xs" data-href="menu-delete.php?id=<?php echo $row['menu_id']; ?>" data-toggle="modal" data-target="#confirm-delete-<?php echo $row['menu_id']; ?>">Delete</a>
-									</td>
+									<td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="#" class="btn btn-danger btn-sm" data-href="menu-delete.php?id=<?php echo $row['menu_id']; ?>" data-target="#confirm-delete-<?php echo $row['menu_id']; ?>"><i class="bi bi-trash3"></i> Excluir</a></div></td>
 								</tr>
 								<div class="modal fade" id="confirm-delete-<?php echo $row['menu_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
                                                 <h4 class="modal-title" id="myModalLabel">Confirmação de Exclusão</h4>
                                             </div>
                                             <div class="modal-body">
                                                 Tem certeza de que deseja remover este item ("<?php echo $row['menu_name']; ?>")?
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                                 <a href="menu-delete.php?id=<?php echo $row['menu_id']; ?>" class="btn btn-danger btn-ok">Deletar</a>
                                             </div>
                                         </div>
@@ -116,6 +123,8 @@ if(isset($_POST['form1'])) {
 			</div>
 		</div>
 	</div>
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

@@ -126,11 +126,19 @@ if(isset($_POST['form3'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Editar Perfil</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Editar Perfil</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Editar Perfil</li>
+				</ol>
+			</div>
+		</div>
 	</div>
-</section>
+</div>
 
 <?php
 $statement = $pdo->prepare("SELECT * FROM tbl_user WHERE id=?");
@@ -148,25 +156,26 @@ foreach ($result as $row) {
 ?>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
 				
-				<div class="nav-tabs-custom">
+				<div class="nav-tabs-custom mb-4">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#tab_1" data-toggle="tab">Atualizar Informações</a></li>
-						<li><a href="#tab_2" data-toggle="tab">Atualizar Foto</a></li>
-						<li><a href="#tab_3" data-toggle="tab">Atualizar Senha</a></li>
+						<li class="nav-item"><a class="nav-link active" href="#tab_1" data-bs-toggle="tab">Atualizar Informações</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_2" data-bs-toggle="tab">Atualizar Foto</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_3" data-bs-toggle="tab">Atualizar Senha</a></li>
 					</ul>
 					<div class="tab-content">
           				<div class="tab-pane active" id="tab_1">
 							
-							<form class="form-horizontal" action="" method="post">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Nome <span>*</span></label>
+							<form action="" method="post">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nome <span class="text-danger">*</span></label>
 										<?php if($_SESSION['user']['role'] == 'Super Admin' || $_SESSION['user']['role'] == 'Admin') { ?>
 												<div class="col-sm-4">
 													<input type="text" class="form-control" name="full_name" value="<?= $full_name; ?>">
@@ -178,15 +187,15 @@ foreach ($result as $row) {
 											<?php } ?>
 										
 									</div>
-									<div class="form-group">
-							            <label for="" class="col-sm-2 control-label">Foto Atual</label>
-							            <div class="col-sm-6" style="padding-top:6px;">
+									<div class="row mb-3">
+							            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
+							            <div class="col-12 col-sm-9 col-lg-6">
 							                <img src="../assets/uploads/<?= $photo; ?>" class="existing-photo" width="140">
 							            </div>
 							        </div>
 									
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Email <span>*</span></label>
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Email <span class="text-danger">*</span></label>
 										<?php
 										if($_SESSION['user']['role'] == 'Super Admin') {
 											?>
@@ -204,22 +213,22 @@ foreach ($result as $row) {
 										?>
 										
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Telefone </label>
-										<div class="col-sm-4">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Telefone</label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="phone" value="<?= $phone; ?>">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Permissão <span>*</span></label>
-										<div class="col-sm-4" style="padding-top:7px;">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Permissão <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<?php if($role == "Admin"){echo "Administrador";}elseif($role == "Super Admin"){echo "Super-Admin";}else{echo "Editor";} ?>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form1">Atualizar Informação</button>
+									<div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Atualizar Informações</button>
 										</div>
 									</div>
 								</div>
@@ -227,19 +236,19 @@ foreach ($result as $row) {
 							</form>
           				</div>
           				<div class="tab-pane" id="tab_2">
-							<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-							            <label for="" class="col-sm-2 control-label">Nova Foto</label>
-							            <div class="col-sm-6" style="padding-top:6px;">
+							<form action="" method="post" enctype="multipart/form-data">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+							            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nova Foto</label>
+							            <div class="col-12 col-sm-9 col-lg-6">
 							                <input type="file" name="photo">
 							            </div>
 							        </div>
-							        <div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form2">Atualizar Foto</button>
+							        <div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form2"><i class="bi bi-check-lg me-1"></i>Atualizar Foto</button>
 										</div>
 									</div>
 								</div>
@@ -247,25 +256,25 @@ foreach ($result as $row) {
 							</form>
           				</div>
           				<div class="tab-pane" id="tab_3">
-							<form class="form-horizontal" action="" method="post">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Senha </label>
-										<div class="col-sm-4">
+							<form action="" method="post">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Senha</label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="password" class="form-control" name="password">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Repita a Senha </label>
-										<div class="col-sm-4">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Repita a Senha</label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="password" class="form-control" name="re_password">
 										</div>
 									</div>
-							        <div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form3">Atualizar Senha</button>
+							        <div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form3"><i class="bi bi-check-lg me-1"></i>Atualizar Senha</button>
 										</div>
 									</div>
 								</div>
@@ -278,6 +287,8 @@ foreach ($result as $row) {
 
 		</div>
 	</div>
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

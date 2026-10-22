@@ -239,11 +239,19 @@ if(isset($_POST['form_recaptcha'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Definições</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Definições</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Definições</li>
+				</ol>
+			</div>
+		</div>
 	</div>
-</section>
+</div>
 
 <?php
 $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
@@ -312,7 +320,8 @@ if(isset($_POST['BtnPreloader'])){
 ?>
 
 
-<section class="content" style="min-height:auto;margin-bottom: -30px;">
+<div class="app-content">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 			<?php if(!empty($error_message)): ?>
@@ -341,49 +350,52 @@ if(isset($_POST['BtnPreloader'])){
 			<?php endif; ?>
 		</div>
 	</div>
-</section>
 
-<section class="content">
+</div>
+</div>
+
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
 							
-				<div class="nav-tabs-custom">
+				<div class="nav-tabs-custom mb-4">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#tab_1" data-toggle="tab">Logo</a></li>
-						<li><a href="#tab_2" data-toggle="tab">Favicon</a></li>
-						<li><a href="#tab_3" data-toggle="tab">Conteúdo Geral</a></li>
-						<li><a href="#tab_4" data-toggle="tab">Configurações de e-mail</a></li>
-						<li><a href="#tab_5" data-toggle="tab">Notícia</a></li>
-						<li><a href="#tab_6" data-toggle="tab">Página inicial Meta</a></li>
-						<li><a href="#tab_7" data-toggle="tab">Título e legendas da página inicial</a></li>
-						<li><a href="#tab_8" data-toggle="tab">Cor</a></li>
-						<li><a href="#tab_9" data-toggle="tab">Preloader</a></li>
-						<li><a href="#tab_10" data-toggle="tab"><i class="bi bi-shield-check text-primary me-1"></i> reCAPTCHA</a></li>
+						<li class="nav-item"><a class="nav-link active" href="#tab_1" data-bs-toggle="tab">Logo</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_2" data-bs-toggle="tab">Favicon</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_3" data-bs-toggle="tab">Conteúdo Geral</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_4" data-bs-toggle="tab">Configurações de e-mail</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_5" data-bs-toggle="tab">Notícia</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_6" data-bs-toggle="tab">Página inicial Meta</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_7" data-bs-toggle="tab">Título e legendas da página inicial</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_8" data-bs-toggle="tab">Cor</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_9" data-bs-toggle="tab">Preloader</a></li>
+						<li class="nav-item"><a class="nav-link" href="#tab_10" data-bs-toggle="tab"><i class="bi bi-shield-check text-primary me-1"></i> reCAPTCHA</a></li>
 					</ul>
 					<div class="tab-content">
           				<div class="tab-pane active" id="tab_1">
 
 
-          					<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-          					<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-							            <label for="" class="col-sm-2 control-label">Foto existente</label>
-							            <div class="col-sm-6" style="padding-top:6px;">
+          					<form action="" method="post" enctype="multipart/form-data">
+          					<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+							            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
+							            <div class="col-12 col-sm-9 col-lg-6">
 							                <img src="../assets/uploads/<?php echo $logo; ?>" class="existing-photo" style="height:80px;">
 							            </div>
 							        </div>
-									<div class="form-group">
-							            <label for="" class="col-sm-2 control-label">Foto Nova</label>
-							            <div class="col-sm-6" style="padding-top:6px;">
+									<div class="row mb-3">
+							            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nova Foto</label>
+							            <div class="col-12 col-sm-9 col-lg-6">
 							                <input type="file" name="photo_logo">
 							            </div>
 							        </div>
-							        <div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form1">Atualizar Logo</button>
+							        <div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Atualizar Logo</button>
 										</div>
 									</div>
 								</div>
@@ -396,25 +408,25 @@ if(isset($_POST['BtnPreloader'])){
           				</div>
           				<div class="tab-pane" id="tab_2">
 
-          					<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-							            <label for="" class="col-sm-2 control-label">Foto existente</label>
-							            <div class="col-sm-6" style="padding-top:6px;">
+          					<form action="" method="post" enctype="multipart/form-data">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+							            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
+							            <div class="col-12 col-sm-9 col-lg-6">
 							                <img src="../assets/uploads/<?php echo $favicon; ?>" class="existing-photo" style="height:40px;">
 							            </div>
 							        </div>
-									<div class="form-group">
-							            <label for="" class="col-sm-2 control-label">Foto Nova</label>
-							            <div class="col-sm-6" style="padding-top:6px;">
+									<div class="row mb-3">
+							            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nova Foto</label>
+							            <div class="col-12 col-sm-9 col-lg-6">
 							                <input type="file" name="photo_favicon">
 							            </div>
 							        </div>
-							        <div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form2">Atualizar Favicon</button>
+							        <div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form2"><i class="bi bi-check-lg me-1"></i>Atualizar Favicon</button>
 										</div>
 									</div>
 								</div>
@@ -425,24 +437,24 @@ if(isset($_POST['BtnPreloader'])){
           				</div>
           				<div class="tab-pane" id="tab_3">
 
-							<form class="form-horizontal" action="" method="post">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Rodapé - Sobre Nós </label>
-										<div class="col-sm-9">
+							<form action="" method="post">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Rodapé - Sobre Nós</label>
+										<div class="col-12 col-sm-9 col-lg-9">
 											<textarea class="form-control" name="footer_about" id="1"><?php echo $footer_about; ?></textarea>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Rodapé - Copyright </label>
-										<div class="col-sm-9">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Rodapé - Copyright</label>
+										<div class="col-12 col-sm-9 col-lg-9">
 											<input class="form-control" type="text" name="footer_copyright" value="<?php echo $footer_copyright; ?>">
 										</div>
 									</div>								
-									<div class="form-group mb-3">
-										<label for="" class="col-sm-2 control-label">Buscar por CEP </label>
-										<div class="col-sm-6">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Buscar por CEP</label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<div class="row g-2">
 												<div class="col-7">
 													<div class="input-group">
@@ -459,40 +471,40 @@ if(isset($_POST['BtnPreloader'])){
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Endereço do Estabelecimento </label>
-										<div class="col-sm-6">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Endereço do Estabelecimento</label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<textarea class="form-control" name="contact_address" style="height:140px;"><?php echo $contact_address; ?></textarea>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Email de Contato </label>
-										<div class="col-sm-6">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Email de Contato</label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="contact_email" value="<?php echo $contact_email; ?>">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Telefone de Contato </label>
-										<div class="col-sm-6">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Telefone de Contato</label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="contact_phone" value="<?php echo $contact_phone; ?>">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">FAX para Contato </label>
-										<div class="col-sm-6">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">FAX para Contato</label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="contact_fax" value="<?php echo $contact_fax; ?>">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Mapa (iFrame) </label>
-										<div class="col-sm-9">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Mapa (iFrame)</label>
+										<div class="col-12 col-sm-9 col-lg-9">
 											<textarea class="form-control" name="contact_map_iframe" style="height:200px;"><?php echo $contact_map_iframe; ?></textarea>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form3">Atualizar</button>
+									<div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form3"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
 										</div>
 									</div>
 								</div>
@@ -504,31 +516,31 @@ if(isset($_POST['BtnPreloader'])){
 
           				<div class="tab-pane" id="tab_4">
 
-          					<form class="form-horizontal" action="" method="post">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Email <span>*</span></label>
-										<div class="col-sm-4">
+          					<form action="" method="post">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Email <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="receive_email" value="<?php echo $receive_email; ?>">
 										</div>
 									</div>									
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Assunto do Email <span>*</span></label>
-										<div class="col-sm-9">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Assunto do Email <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-9">
 											<input type="text" class="form-control" name="receive_email_subject" value="<?php echo $receive_email_subject; ?>">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Mensagem de Agradecimento <span>*</span></label>
-										<div class="col-sm-9">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Mensagem de Agradecimento <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-9">
 											<textarea class="form-control" name="receive_email_thank_you_message"><?php echo $receive_email_thank_you_message; ?></textarea>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form4">Atualizar</button>
+									<div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form4"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
 										</div>
 									</div>
 								</div>
@@ -540,43 +552,43 @@ if(isset($_POST['BtnPreloader'])){
 
           				<div class="tab-pane" id="tab_5">
 
-          					<form class="form-horizontal" action="" method="post">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-										<label for="" class="col-sm-4 control-label">Rodapé (Quantas notícias recentes?)<span>*</span></label>
-										<div class="col-sm-2">
+          					<form action="" method="post">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Rodapé (Quantas notícias recentes?) <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="total_recent_news_footer" value="<?php echo $total_recent_news_footer; ?>">
 										</div>
 									</div>		
-									<div class="form-group">
-										<label for="" class="col-sm-4 control-label">Rodapé (Quantas notícias populares?)<span>*</span></label>
-										<div class="col-sm-2">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Rodapé (Quantas notícias populares?) <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="total_popular_news_footer" value="<?php echo $total_popular_news_footer; ?>">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-4 control-label">Barra lateral (Quantas notícias recentes?)<span>*</span></label>
-										<div class="col-sm-2">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Barra lateral (Quantas notícias recentes?) <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="total_recent_news_sidebar" value="<?php echo $total_recent_news_sidebar; ?>">
 										</div>
 									</div>		
-									<div class="form-group">
-										<label for="" class="col-sm-4 control-label">Barra lateral (Quantas notícias populares?)<span>*</span></label>
-										<div class="col-sm-2">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Barra lateral (Quantas notícias populares?) <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="total_popular_news_sidebar" value="<?php echo $total_popular_news_sidebar; ?>">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-4 control-label">Home Page (Quantas notícias recentes?)<span>*</span></label>
-										<div class="col-sm-2">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Home Page (Quantas notícias recentes?) <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" class="form-control" name="total_recent_news_home_page" value="<?php echo $total_recent_news_home_page; ?>">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-4 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form5">Atualizar</button>
+									<div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form5"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
 										</div>
 									</div>
 								</div>
@@ -589,31 +601,31 @@ if(isset($_POST['BtnPreloader'])){
 
           				<div class="tab-pane" id="tab_6">
 
-          					<form class="form-horizontal" action="" method="post">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Metatítulo </label>
-										<div class="col-sm-9">
+          					<form action="" method="post">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Título</label>
+										<div class="col-12 col-sm-9 col-lg-9">
 											<input type="text" name="meta_title_home" class="form-control" value="<?php echo $meta_title_home ?>">
 										</div>
 									</div>		
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Meta-palavra-chave </label>
-										<div class="col-sm-9">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Palavras-chave</label>
+										<div class="col-12 col-sm-9 col-lg-9">
 											<textarea class="form-control" name="meta_keyword_home" style="height:100px;"><?php echo $meta_keyword_home ?></textarea>
 										</div>
 									</div>	
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Meta Descrição </label>
-										<div class="col-sm-9">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Descrição</label>
+										<div class="col-12 col-sm-9 col-lg-9">
 											<textarea class="form-control" name="meta_description_home" style="height:200px;"><?php echo $meta_description_home ?></textarea>
 										</div>
 									</div>	
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form6">Atualizar</button>
+									<div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form6"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
 										</div>
 									</div>
 								</div>
@@ -627,7 +639,7 @@ if(isset($_POST['BtnPreloader'])){
 
           				<div class="tab-pane" id="tab_7">
 
-          					<form class="form-horizontal" action="" method="post">
+          					<form action="" method="post">
 							
 									
 									
@@ -635,30 +647,30 @@ if(isset($_POST['BtnPreloader'])){
 								
 								<!-- Service Section -->
 								<div class="panel box box-primary">
-									<div class="box-header">
-										<h4 class="box-title">
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+									<div class="card-header">
+										<h4 class="card-title fw-semibold">
+											<a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapse1">
 												Serviço
 											</a>
 										</h4>
 									</div>
 									<div id="collapse1" class="panel-collapse collapse">
-										<div class="box-body">
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Título </label>
-												<div class="col-sm-9">
+										<div class="card-body">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_title_service" class="form-control" value="<?php echo $home_title_service; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Sub-título </label>
-												<div class="col-sm-9">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Subtítulo</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_subtitle_service" class="form-control" value="<?php echo $home_subtitle_service; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Mostrar na Home? </label>
-												<div class="col-sm-9" style="padding-top:7px;">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Mostrar na Home?</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="checkbox" name="home_status_service" value="<?php echo $home_status_service; ?>" <?php if($home_status_service == 1) {echo 'checked';} ?>>
 												</div>
 											</div>											
@@ -670,30 +682,30 @@ if(isset($_POST['BtnPreloader'])){
 
 								<!-- Department Section -->
 								<div class="panel box box-primary">
-									<div class="box-header">
-										<h4 class="box-title">
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+									<div class="card-header">
+										<h4 class="card-title fw-semibold">
+											<a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapse2">
 												Departamento
 											</a>
 										</h4>
 									</div>
 									<div id="collapse2" class="panel-collapse collapse">
-										<div class="box-body">
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Título </label>
-												<div class="col-sm-9">
+										<div class="card-body">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_title_department" class="form-control" value="<?php echo $home_title_department; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Sub-título </label>
-												<div class="col-sm-9">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Subtítulo</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_subtitle_department" class="form-control" value="<?php echo $home_subtitle_department; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Mostrar na Home? </label>
-												<div class="col-sm-9" style="padding-top:7px;">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Mostrar na Home?</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="checkbox" name="home_status_department" value="<?php echo $home_status_department; ?>" <?php if($home_status_department == 1) {echo 'checked';} ?>>
 												</div>
 											</div>
@@ -706,30 +718,30 @@ if(isset($_POST['BtnPreloader'])){
 
 								<!-- Doctor Section -->
 								<div class="panel box box-primary">
-									<div class="box-header">
-										<h4 class="box-title">
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+									<div class="card-header">
+										<h4 class="card-title fw-semibold">
+											<a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapse3">
 												Doutor
 											</a>
 										</h4>
 									</div>
 									<div id="collapse3" class="panel-collapse collapse">
-										<div class="box-body">
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Título </label>
-												<div class="col-sm-9">
+										<div class="card-body">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_title_doctor" class="form-control" value="<?php echo $home_title_doctor; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Sub-título </label>
-												<div class="col-sm-9">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Subtítulo</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_subtitle_doctor" class="form-control" value="<?php echo $home_subtitle_doctor; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Mostrar na Home? </label>
-												<div class="col-sm-9" style="padding-top:7px;">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Mostrar na Home?</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="checkbox" name="home_status_doctor" value="<?php echo $home_status_doctor; ?>" <?php if($home_status_doctor == 1) {echo 'checked';} ?>>
 												</div>
 											</div>
@@ -742,30 +754,30 @@ if(isset($_POST['BtnPreloader'])){
 
 								<!-- Pricing Section -->
 								<div class="panel box box-primary">
-									<div class="box-header">
-										<h4 class="box-title">
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+									<div class="card-header">
+										<h4 class="card-title fw-semibold">
+											<a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapse4">
 												Preços
 											</a>
 										</h4>
 									</div>
 									<div id="collapse4" class="panel-collapse collapse">
-										<div class="box-body">
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Título </label>
-												<div class="col-sm-9">
+										<div class="card-body">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_title_pricing" class="form-control" value="<?php echo $home_title_pricing; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Sub-título </label>
-												<div class="col-sm-9">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Subtítulo</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_subtitle_pricing" class="form-control" value="<?php echo $home_subtitle_pricing; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Mostrar na Home? </label>
-												<div class="col-sm-9" style="padding-top:7px;">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Mostrar na Home?</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="checkbox" name="home_status_pricing" value="<?php echo $home_status_pricing; ?>" <?php if($home_status_pricing == 1) {echo 'checked';} ?>>
 												</div>
 											</div>
@@ -778,30 +790,30 @@ if(isset($_POST['BtnPreloader'])){
 
 								<!-- Testimonial Section -->
 								<div class="panel box box-primary">
-									<div class="box-header">
-										<h4 class="box-title">
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapse5">
+									<div class="card-header">
+										<h4 class="card-title fw-semibold">
+											<a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapse5">
 												Testemunho
 											</a>
 										</h4>
 									</div>
 									<div id="collapse5" class="panel-collapse collapse">
-										<div class="box-body">
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Título </label>
-												<div class="col-sm-9">
+										<div class="card-body">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_title_testimonial" class="form-control" value="<?php echo $home_title_testimonial; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Sub-título </label>
-												<div class="col-sm-9">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Subtítulo</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_subtitle_testimonial" class="form-control" value="<?php echo $home_subtitle_testimonial; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Mostrar na Home? </label>
-												<div class="col-sm-9" style="padding-top:7px;">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Mostrar na Home?</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="checkbox" name="home_status_testimonial" value="<?php echo $home_status_testimonial; ?>" <?php if($home_status_testimonial == 1) {echo 'checked';} ?>>
 												</div>
 											</div>
@@ -814,30 +826,30 @@ if(isset($_POST['BtnPreloader'])){
 
 								<!-- Latest News Section -->
 								<div class="panel box box-primary">
-									<div class="box-header">
-										<h4 class="box-title">
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapse6">
+									<div class="card-header">
+										<h4 class="card-title fw-semibold">
+											<a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapse6">
 												Últimas notícias
 											</a>
 										</h4>
 									</div>
 									<div id="collapse6" class="panel-collapse collapse">
-										<div class="box-body">
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Título </label>
-												<div class="col-sm-9">
+										<div class="card-body">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_title_news" class="form-control" value="<?php echo $home_title_news; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Sub-título </label>
-												<div class="col-sm-9">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Subtítulo</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_subtitle_news" class="form-control" value="<?php echo $home_subtitle_news; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Mostrar na Home? </label>
-												<div class="col-sm-9" style="padding-top:7px;">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Mostrar na Home?</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="checkbox" name="home_status_news" value="<?php echo $home_status_news; ?>" <?php if($home_status_news == 1) {echo 'checked';} ?>>
 												</div>
 											</div>
@@ -850,30 +862,30 @@ if(isset($_POST['BtnPreloader'])){
 
 								<!-- Partner Section -->
 								<div class="panel box box-primary">
-									<div class="box-header">
-										<h4 class="box-title">
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapse7">
+									<div class="card-header">
+										<h4 class="card-title fw-semibold">
+											<a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapse7">
 												Parceiro
 											</a>
 										</h4>
 									</div>
 									<div id="collapse7" class="panel-collapse collapse">
-										<div class="box-body">
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Título </label>
-												<div class="col-sm-9">
+										<div class="card-body">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_title_partner" class="form-control" value="<?php echo $home_title_partner; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Sub-título </label>
-												<div class="col-sm-9">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Subtítulo</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="text" name="home_subtitle_partner" class="form-control" value="<?php echo $home_subtitle_partner; ?>">
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="" class="col-sm-2 control-label">Mostrar na Home? </label>
-												<div class="col-sm-9" style="padding-top:7px;">
+											<div class="row mb-3">
+												<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Mostrar na Home?</label>
+												<div class="col-12 col-sm-9 col-lg-9">
 													<input type="checkbox" name="home_status_partner" value="<?php echo $home_status_partner; ?>" <?php if($home_status_partner == 1) {echo 'checked';} ?>>
 												</div>
 											</div>
@@ -886,9 +898,9 @@ if(isset($_POST['BtnPreloader'])){
 							</div>
 
 
-							<div class="form-group">
+							<div class="row mb-3">
 								<div class="col-sm-6">
-									<button type="submit" class="btn btn-success pull-left" name="form7">Atualizar</button>
+									<button type="submit" class="btn btn-primary px-4" name="form7"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
 								</div>
 							</div>
 							
@@ -902,19 +914,19 @@ if(isset($_POST['BtnPreloader'])){
 
 
           				<div class="tab-pane" id="tab_8">
-          					<form class="form-horizontal" action="" method="post">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Selecione a cor </label>
-										<div class="col-sm-2">
+          					<form action="" method="post">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Selecione a cor</label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="text" name="color" class="form-control jscolor" value="<?php echo $color; ?>">
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="form8">Atualizar</button>
+									<div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-primary px-4" name="form8"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
 										</div>
 									</div>
 								</div>
@@ -923,20 +935,20 @@ if(isset($_POST['BtnPreloader'])){
           				</div>
           				
           				<div class="tab-pane" id="tab_9">
-          					<form class="form-horizontal" action="" method="post">
-							<div class="box box-info">
-								<div class="box-body">
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label">Ativar Preloader?</label>
-										<div class="col-sm-2">
+          					<form action="" method="post">
+							<div class="card card-outline card-primary shadow-sm mb-4">
+								<div class="card-body">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Ativar Preloader?</label>
+										<div class="col-12 col-sm-9 col-lg-6">
 											<input type="radio" name="preloader" <?php if($preloader == 1){echo 'checked="checked"';}?> value="1"> Ativar <br>
 											<input type="radio" name="preloader" <?php if($preloader == 0){echo 'checked="checked"';}?> value="0"> Desativar
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="" class="col-sm-2 control-label"></label>
-										<div class="col-sm-6">
-											<button type="submit" class="btn btn-success pull-left" name="BtnPreloader">Atualizar</button>
+									<div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<button type="submit" class="btn btn-success" name="BtnPreloader">Atualizar</button>
 										</div>
 									</div>
 								</div>
@@ -945,7 +957,7 @@ if(isset($_POST['BtnPreloader'])){
           				</div>
           				
           				<div class="tab-pane" id="tab_10">
-          					<form class="form-horizontal" action="" method="post">
+          					<form action="" method="post">
 							<div class="card card-outline card-primary shadow-sm border-0 my-3">
 								<div class="card-header bg-body-tertiary d-flex align-items-center justify-content-between">
 									<h5 class="card-title fw-bold text-primary mb-0">
@@ -1021,6 +1033,9 @@ if(isset($_POST['BtnPreloader'])){
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

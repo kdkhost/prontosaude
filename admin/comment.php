@@ -11,11 +11,19 @@ if(isset($_POST['form1'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Configuração de comentários do Facebook</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Configuração de comentários do Facebook</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Configuração de comentários do Facebook</li>
+				</ol>
+			</div>
+		</div>
 	</div>
-</section>
+</div>
 
 <?php
 $statement = $pdo->prepare("SELECT * FROM tbl_comment WHERE id=1");
@@ -27,7 +35,8 @@ foreach ($result as $row) {
 ?>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -48,23 +57,23 @@ foreach ($result as $row) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post">
+			<form action="" method="post">
 
-				<div class="box box-info">
-					<div class="box-body">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
 						
 						<p style="padding-bottom: 20px;">Vá para a seção de desenvolvedores do Facebook (<a href="https://developers.facebook.com/docs/plugins/comments/">https://developers.facebook.com/docs/plugins/comments/</a>) para obter seus códigos de comentários.</p>
 
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Código para usar após a abertura &lt;body&gt; tag </label>
-							<div class="col-sm-9">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Código para usar após a abertura &lt;body&gt; tag</label>
+							<div class="col-12 col-sm-9 col-lg-9">
 								<textarea class="form-control" name="code_body" style="height:300px;"><?php echo $code_body; ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Atualizar</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
 							</div>
 						</div>
 					</div>
@@ -76,6 +85,8 @@ foreach ($result as $row) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

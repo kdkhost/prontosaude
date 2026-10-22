@@ -54,8 +54,11 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - **DataTables Responsive no Padrão AdminLTE 3 / 4:**
   - Tabelas totalmente responsivas com recolhimento inteligente de colunas em telas menores ou dispositivos móveis.
   - Botão circular expansível com ícone verde de sinal de mais (`+`) e sinal de menos (`-`) em vermelho ao expandir a linha filha com todos os dados e detalhes estruturados.
-- **Padronização Visual Completa e Alinhamento de Botões:**
+- **Padronização Visual Completa, Reformulação de Modelos de Páginas e Alinhamento de Botões:**
+  - Modernização integral de mais de 90 páginas administrativas (`*-add.php`, `*-edit.php`, listagens e configurações) convertidas para os padrões oficiais do **AdminLTE 4** e **Bootstrap 5.3**.
+  - Erradicação definitiva de classes legadas (`.box`, `.box-header`, `.box-body`, `<section class="content">`), adotando containers `.app-content-header`, `.app-content`, `.card card-outline`, cabeçalhos com breadcrumbs com ícones e rodapé padronizado.
   - Tipografia unificada estritamente em 14px (`Source Sans 3`), alinhamento automático de botões de ação nas tabelas (Editar, Deletar, Visualizar) lado a lado sem quebra feia, cabeçalhos de página proporcionais e grid de formulários perfeitamente alinhado.
+  - Tela de recuperação de senha (`admin/recover.php`) completamente modernizada com Glassmorphism, Floating Labels e confirmações via SweetAlert2 no mesmo padrão do login.
 - **Gestão e Customização Total de Cards (Serviços, Planos e Produtos):**
   - **100% Configurável pelo Painel Admin:** Fim de imagens, links e textos fixos no código-fonte. Tudo é editável em tempo real nos módulos de Serviços (`admin/service.php`), Planos (`admin/pricing-plan.php`) e Odontologia (`admin/dental.php`).
   - **Upload Dinâmico com Preview:** Upload por arrastar e soltar (Drag & Drop) de fotos e ilustrações sem dependência de caminhos estáticos.

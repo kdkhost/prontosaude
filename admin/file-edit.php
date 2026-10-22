@@ -60,14 +60,22 @@ if(!isset($_REQUEST['id'])) {
 }
 ?>
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Edit File</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Editar Arquivo</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Editar Arquivo</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="file.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="file.php" class="btn btn-primary btn-sm">View All</a>
-	</div>
-</section>
+</div>
 
 <?php							
 foreach ($result as $row) {
@@ -77,7 +85,8 @@ foreach ($result as $row) {
 ?>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -98,19 +107,19 @@ foreach ($result as $row) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+			<form action="" method="post" enctype="multipart/form-data">
 
-				<div class="box box-info">
-					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">File Title <span>*</span></label>
-							<div class="col-sm-4">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Título do Arquivo <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control" name="file_title" value="<?php echo $file_title; ?>">
 							</div>
 						</div>
-						<div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Existing File</label>
-				            <div class="col-sm-6" style="padding-top:6px;">
+						<div class="row mb-3">
+				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Arquivo Atual</label>
+				            <div class="col-12 col-sm-9 col-lg-6">
 				            	<?php
         						$fn = explode('.',$file_name);
 		                    	if($fn[1] == 'jpg' || $fn[1] == 'jpeg' || $fn[1] == 'png' || $fn[1] == 'gif') {
@@ -124,16 +133,17 @@ foreach ($result as $row) {
 				                <input type="hidden" name="previous_file" value="<?php echo $file_name; ?>">
 				            </div>
 				        </div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Upload New File <span>*</span></label>
-							<div class="col-sm-4" style="padding-top:6px;">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Novo Arquivo <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="file" name="file">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+<a href="file.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 							</div>
 						</div>
 					</div>
@@ -145,6 +155,8 @@ foreach ($result as $row) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>

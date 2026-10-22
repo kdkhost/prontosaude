@@ -30,17 +30,26 @@ if(isset($_POST['form1'])) {
 ?>
 
 
-<section class="content-header">
-	<div class="content-header-left">
-		<h1>Add Video Category</h1>
+<div class="app-content-header">
+	<div class="container-fluid">
+		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+			<div>
+				<h3 class="mb-1 fw-bold">Adicionar Categoria de Vídeo</h3>
+				<ol class="breadcrumb mb-0 small">
+					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Adicionar Categoria de Vídeo</li>
+				</ol>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<a href="video-category.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-ul"></i> Ver Listagem</a>
+			</div>
+		</div>
 	</div>
-	<div class="content-header-right">
-		<a href="video-category.php" class="btn btn-primary btn-sm">View All</a>
-	</div>
-</section>
+</div>
 
 
-<section class="content">
+<div class="app-content">
+<div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-12">
@@ -61,31 +70,28 @@ if(isset($_POST['form1'])) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post">
+			<form action="" method="post">
 
-				<div class="box box-info">
-					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Category Name <span>*</span></label>
-							<div class="col-sm-4">
+				<div class="card card-outline card-primary shadow-sm mb-4">
+					<div class="card-body">
+						<div class="row mb-3">
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nome da Categoria <span class="text-danger">*</span></label>
+							<div class="col-12 col-sm-9 col-lg-6">
 								<input type="text" class="form-control" name="v_category_name">
 							</div>
 						</div>
-						<div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Active <span>*</span></label>
-				            <div class="col-sm-6">
-				                <label class="radio-inline">
-				                    <input type="radio" name="status" value="Active" checked>Yes
-				                </label>
-				                <label class="radio-inline">
-				                    <input type="radio" name="status" value="Inactive">No
-				                </label>
+						<div class="row mb-3">
+				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Ativo? <span class="text-danger">*</span></label>
+				            <div class="col-12 col-sm-9 col-lg-6">
+				                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Active" checked> <label class="form-check-label">Yes</label></div>
+				                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Inactive"> <label class="form-check-label">No</label></div>
 				            </div>
 				        </div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
+						<div class="row mb-3">
+							<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+							<div class="col-12 col-sm-9 col-lg-6">
+								<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+<a href="video-category.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
 							</div>
 						</div>
 					</div>
@@ -97,6 +103,8 @@ if(isset($_POST['form1'])) {
 		</div>
 	</div>
 
-</section>
+
+</div>
+</div>
 
 <?php require_once('footer.php'); ?>
