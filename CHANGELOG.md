@@ -4,6 +4,19 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.17.0] - 2026-10-22
+
+### Adicionado & Reformulado
+- **Reformulação Visual e Estrutural do Portal Público no Estilo Foco7 com Identidade Pronto Saúde**:
+  - **Topbar Ultra Clean & Navbar Sticky:** Barra superior sutil com dados de atendimento (telefone, WhatsApp, horários de funcionamento) e botão pílula de Área do Paciente; Navbar branca flutuante com logo em alta resolução, links com marcação ativa e botões de chamada rápida (*Especialidades* e *Agendar Consulta*).
+  - **Hero Section de Alto Impacto com Card de Agendamento em 1 Minuto:** Hero escuro (`#071822` / `#0e2b38`) com badge iluminado, chamada persuasiva e card flutuante branco com seleção rápida de especialidade, unidade e turno com agendamento instantâneo via WhatsApp.
+  - **Seções Modernizadas:** Diferenciais preventivos em 3 colunas, Sobre Nós com estatísticas em tempo real, grid moderno de serviços com badges "A partir de" e listas de benefícios, Planos Fidelidade com selo "Mais Popular", Depoimentos com estrelas e FAQ com accordions com ícones circulares.
+  - **Rodapé Premium Escuro com Google Maps:** Design hospitalar premium (`#071822`) com links categorizados, redes sociais com hover animado e mapa interativo do Google Maps responsivo perfeitamente integrado.
+  - **Páginas Internas Padronizadas:** Atualização de `servicos.php` e `fidelidade.php` para utilizarem os novos grids modernos (`.ps-service-card-modern` e `.ps-plan-card`).
+- **Blindagem e Saneamento Definitivo contra UTF-8 com BOM:**
+  - Criação de `.editorconfig`, `.gitattributes`, regras estritas em `.agents/rules/utf8_no_bom.md`, `AGENTS.md` e ferramenta CLI `tools/check_no_bom.php`.
+  - Validação de 0 arquivos com BOM em todo o repositório local e remoto.
+
 ## [2.16.0] - 2026-10-22
 
 ### Padronizado & Aprimorado

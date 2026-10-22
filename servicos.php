@@ -30,19 +30,25 @@ foreach ($result as $row) {
 }
 ?>
 
-<?php if($home_status_service == 1): ?>
-<!-- Service Start -->
-<section class="service-v1">
-	<div class="container">
+<!-- Banner da Página de Serviços -->
+<div class="page-banner" style="background-image: url(<?= BASE_URL; ?>assets/uploads/department-1.png); background-size: cover; background-position: center; padding: 70px 0; position: relative;">
+	<div class="overlay" style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(7, 24, 34, 0.92) 0%, rgba(10, 107, 116, 0.82) 100%);"></div>
+	<div class="container" style="position: relative; z-index: 2;">
 		<div class="row">
-			<div class="col-md-12">
-				<div class="heading">
-					<h2><?php echo $home_title_service; ?></h2>
-					<p><?php echo $home_subtitle_service; ?></p>
-				</div>
+			<div class="col-md-12 text-center text-white">
+				<span class="ps-section-badge mb-2"><i class="fa fa-stethoscope"></i> Cuidado Integral</span>
+				<h1 style="font-size: 2.5rem; font-weight: 800; margin-top: 10px; margin-bottom: 10px;"><?php echo !empty($home_title_service) ? htmlspecialchars($home_title_service) : 'Nossas Especialidades & Serviços'; ?></h1>
+				<p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; max-width: 680px; margin: 0 auto;"><?php echo !empty($home_subtitle_service) ? htmlspecialchars($home_subtitle_service) : 'Atendimento humanizado, equipamentos de ponta e ampla gama de especialidades médicas para cuidar de você e sua família.'; ?></p>
 			</div>
 		</div>
-		<div class="row">
+	</div>
+</div>
+
+<?php if($home_status_service == 1): ?>
+<!-- Service Start -->
+<section class="ps-foco-services" style="padding: 70px 0; background: #f8fafc;">
+	<div class="container">
+		<div class="row g-4">
 			<?php
 			$statement = $pdo->prepare("SELECT * FROM tbl_service WHERE status = 'Active' ORDER BY id ASC");
 			$statement->execute();
@@ -54,30 +60,31 @@ foreach ($result as $row) {
 				$photo_src = (!empty($row['photo']) && file_exists('assets/uploads/' . $row['photo'])) ? BASE_URL . 'assets/uploads/' . $row['photo'] : BASE_URL . 'assets/images/sem-foto.gif';
 				$benefits_items = !empty($row['benefits']) ? explode("\n", str_replace("\r", "", $row['benefits'])) : [];
 				?>
-				<div class="col-sm-6 col-md-4 col-lg-4">
-					<div class="item service-card-box">
-						<div class="photo" style="background-image:url(<?php echo $photo_src; ?>); position: relative;">
+				<div class="col-lg-4 col-md-6 mb-4">
+					<div class="ps-service-card-modern">
+						<div class="ps-service-thumb">
+							<img src="<?php echo $photo_src; ?>" alt="<?php echo htmlspecialchars($row['name']); ?>" loading="lazy" decoding="async">
 							<?php if(!empty($row['price'])): ?>
-								<div class="service-card-price-badge">
-									<small>A partir de</small> R$ <?php echo htmlspecialchars($row['price']); ?>
-								</div>
+								<span class="ps-service-price-tag">A partir de R$ <?php echo htmlspecialchars($row['price']); ?></span>
 							<?php endif; ?>
 						</div>
-						<div class="text">
-							<div class="inner">
-								<h3><a href="<?php echo htmlspecialchars($link_btn); ?>" <?php echo $btn_target; ?>><?php echo htmlspecialchars($row['name']); ?></a></h3>
-								<p><?= substr(strip_tags($row['short_description']), 0, 150) . '...'; ?></p>
-								<?php if(!empty($benefits_items)): ?>
-									<ul class="service-card-benefits">
-										<?php foreach(array_slice($benefits_items, 0, 3) as $b_item): if(!empty(trim($b_item))): ?>
-											<li><i class="fa fa-check text-success" style="margin-right: 5px;"></i> <?php echo htmlspecialchars(trim($b_item)); ?></li>
-										<?php endif; endforeach; ?>
-									</ul>
-								<?php endif; ?>
-								<p class="button">
-									<a href="<?php echo htmlspecialchars($link_btn); ?>" <?php echo $btn_target; ?>><?php echo htmlspecialchars($btn_label); ?></a>
-								</p>
-							</div>
+						<div class="ps-service-body">
+							<h3 class="ps-service-title">
+								<a href="<?php echo htmlspecialchars($link_btn); ?>" <?php echo $btn_target; ?>><?php echo htmlspecialchars($row['name']); ?></a>
+							</h3>
+							<p class="ps-service-desc">
+								<?php echo mb_substr(strip_tags($row['short_description']), 0, 140, 'UTF-8') . '...'; ?>
+							</p>
+							<?php if(!empty($benefits_items)): ?>
+								<ul class="ps-service-benefits">
+									<?php foreach(array_slice($benefits_items, 0, 3) as $b_item): if(!empty(trim($b_item))): ?>
+										<li><i class="fa fa-check-circle"></i> <?php echo htmlspecialchars(trim($b_item)); ?></li>
+									<?php endif; endforeach; ?>
+								</ul>
+							<?php endif; ?>
+							<a href="<?php echo htmlspecialchars($link_btn); ?>" <?php echo $btn_target; ?> class="ps-service-action-btn">
+								<?php echo htmlspecialchars($btn_label); ?> <i class="fa fa-arrow-right"></i>
+							</a>
 						</div>
 					</div>
 				</div>

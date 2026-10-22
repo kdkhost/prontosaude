@@ -4,23 +4,37 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 
 ## 🚀 Funcionalidades Principais
 
-### Portal Público (Frontend Moderno & Responsivo)
+### Portal Público (Frontend Moderno & Responsivo - Estilo Foco7 com Identidade Pronto Saúde)
 - **Design System Premium (`assets/css/pronto-modern-frontend.css`):**
+  - Inspirado na arquitetura visual moderna e dinâmica da plataforma de referência Foco7, preservando integralmente a paleta e identidade visual médica da Pronto Saúde: Azul Petróleo/Teal (`#0a6b74`), Verde Esmeralda (`#10b981`), Dark Slate (`#071822` / `#0b1c24`) e Cyan (`#00b4d8`).
   - Tipografia moderna **Plus Jakarta Sans** (Google Fonts) em todos os títulos, textos e elementos de navegação.
-  - Paleta visual rica e harmoniosa preservando a identidade original: Teal (`#0a6b74`), Verde Esmeralda (`#10b981`), Dark Slate (`#0f172a`), Cyan Glow, bordas suaves e sombras com elevação 3D.
   - Micro-animações e hover interativo em cards de serviços, médicos, planos e depoimentos.
+- **Topbar Ultra Clean & Navbar Sticky:**
+  - Barra superior sutil com dados de atendimento (horários, telefone, WhatsApp oficial) e botão pílula de Área do Paciente.
+  - Barra de navegação branca flutuante/sticky (`.ps-foco-navbar`) com logotipo de alta definição, links centrados com indicadores dinâmicos e botões de chamada de ação (*Especialidades* e *Agendar Consulta*).
+- **Hero Section de Alto Impacto com Card de Agendamento Rápido em 1 Minuto:**
+  - Hero com fundo escuro hospitalar premium (`#071822` / `#0e2b38`), badge brilhante de boas-vindas, chamada persuasiva e bullet points de diferenciais de atendimento.
+  - **Card Flutuante de Agendamento em 1 Minuto (`.ps-quick-card`):** Grid interativo com seleção de Especialidade, Unidade Médica, Turno preferencial e direcionamento automático para confirmação via WhatsApp.
+- **Seção de Cuidado Preventivo & Diferenciais:**
+  - Grid de 3 colunas (`.ps-benefit-card`) com ícones iluminados destacando Atendimento Humanizado, Resultados Online Rápidos e Tecnologia de Ponta.
+- **Sobre Nós & Estatísticas de Impacto:**
+  - Apresentação institucional com bullet points de diferenciais e cards estatísticos com números em tempo real (+50 Especialistas, 98% Satisfação, +15 Anos de Tradição).
+- **Grid Moderno de Serviços & Especialidades (`.ps-service-card-modern`):**
+  - Cards com cantos generosos arredondados (`20px`), badges flutuantes de valores "A partir de", tópicos de benefícios com checks verdes e botões de ação com gradiente.
+- **Planos e Cartão Fidelidade (`.ps-plan-card`):**
+  - Selos dourados de "Mais Popular", valores mensais em destaque com tipografia de impacto, lista de coberturas e contratação instantânea.
+- **Corpo Clínico & Médicos:**
+  - Cards médicos modernos com fotos redondas, titulação de especialidade, CRM e botão direto de agendamento de consulta com o especialista.
+- **Perguntas Frequentes Interativas (FAQ):**
+  - Acordeões modernos com círculos de interrogação `?` à esquerda e chevrons rotativos à direita.
+- **Rodapé Premium Escuro com Google Maps Embutido (`.ps-foco-footer`):**
+  - 4 colunas perfeitamente alinhadas (Sobre a clínica, Especialidades, Links rápidos e Localização/Contato), ícones sociais circulares com hover animado e mapa interativo do Google Maps responsivo embutido com segurança.
 - **Menu Deslizante Offcanvas Mobile (Drawer Lateral da Esquerda para a Direita):**
   - Abertura e fechamento suaves acelerados por hardware (`translate3d`), suporte a gestos swipe, backdrop com desfoque de vidro (*backdrop-filter: blur*), acordeões de navegação e acesso rápido aos canais de atendimento.
 - **Botão Flutuante de WhatsApp Oficial:**
   - Botão fixo no canto inferior direito (`.ps-floating-whatsapp`) com animação contínua de pulso suave, tooltip interativo "Agende sua Consulta" e redirecionamento direto com mensagens contextualizadas.
-- **Home Dinâmica:** Exibição de banners (sliders), serviços em cards elevados, clínicas/departamentos, equipe médica, planos de fidelidade, depoimentos com estrelas de avaliação e notícias mais recentes.
-- **Departamentos & Clínicas:** Seção detalhada das especialidades e infraestrutura das clínicas com visual moderno.
-- **Corpo Clínico & Perfil Individual:** Busca e perfil detalhado dos médicos com badges de titulação, horários de atendimento, links sociais e botão de agendamento direto.
 - **Trabalhe Conosco:** Divulgação de vagas de emprego ativas com modal hospitalar de detalhes, badges de requisitos e candidatura direta via WhatsApp ou e-mail.
-- **Serviços Odontológicos & Médicos:** Cards modernos com valores "A partir de", tópicos de benefícios e modais de procedimentos.
-- **Planos e Fidelidade:** Cards responsivos com selos de popularidade, badges de destaque e contratação instantânea.
 - **Blog/Notícias & Busca:** Sistema de categorias, artigos completos, paginação moderna, contagem atômica de visualizações e barra lateral com anúncios e busca rápida.
-- **Seção Institucional:** Páginas de Convênios, FAQ com accordions, parceiros institucionais e páginas estáticas (Política de Privacidade e Termos de Uso).
 - **Interface e Feedback 100% Interativos:** Formulários públicos integrados com AJAX assíncrono (sem reload), notificações flutuantes com **Toastr** e caixas de diálogo elegantes com **SweetAlert2** substituindo qualquer alerta nativo de navegador.
 
 ### Painel Administrativo Moderno e Desacoplado (AdminLTE 4 + SPA)

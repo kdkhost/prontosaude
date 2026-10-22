@@ -31,14 +31,14 @@ foreach ($result as $row) {
 ?>
 
 <!-- Banner Start -->
-<div class="page-banner" style="background-image: url(<?= BASE_URL; ?>assets/uploads/department-1.png);">
-	<div class="overlay"></div>
-	<div class="container">
+<div class="page-banner" style="background-image: url(<?= BASE_URL; ?>assets/uploads/department-1.png); background-size: cover; background-position: center; padding: 70px 0; position: relative;">
+	<div class="overlay" style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(7, 24, 34, 0.92) 0%, rgba(10, 107, 116, 0.82) 100%);"></div>
+	<div class="container" style="position: relative; z-index: 2;">
 		<div class="row">
-			<div class="col-md-12">
-				<div class="banner-text">
-					<h1><?php echo !empty($home_title_pricing) ? htmlspecialchars($home_title_pricing) : 'Planos de Fidelidade'; ?></h1>
-				</div>
+			<div class="col-md-12 text-center text-white">
+				<span class="ps-section-badge mb-2"><i class="fa fa-id-card"></i> Benefícios Exclusivos</span>
+				<h1 style="font-size: 2.5rem; font-weight: 800; margin-top: 10px; margin-bottom: 10px;"><?php echo !empty($home_title_pricing) ? htmlspecialchars($home_title_pricing) : 'Planos de Fidelidade'; ?></h1>
+				<p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; max-width: 680px; margin: 0 auto;"><?php echo !empty($home_subtitle_pricing) ? htmlspecialchars($home_subtitle_pricing) : 'Planos pensados para oferecer tranquilidade, consultas com descontos especiais e facilidade para sua família.'; ?></p>
 			</div>
 		</div>
 	</div>
@@ -47,17 +47,9 @@ foreach ($result as $row) {
 
 <?php if($home_status_pricing == 1): ?>
 <!-- Pricing Start -->
-<section class="pricing-v1" id="fidelidade">
+<section class="ps-foco-plans" id="fidelidade" style="padding: 70px 0; background: #f8fafc;">
 	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="heading">
-					<h2><?php echo $home_title_pricing; ?></h2>
-					<p><?php echo $home_subtitle_pricing; ?></p>
-				</div>
-			</div>
-		</div>
-		<div class="row">
+		<div class="row g-4 justify-content-center">
 			<?php
 			$statement = $pdo->prepare("SELECT * FROM tbl_pricing_plan WHERE status = 1 ORDER BY pricing_plan_id ASC");
 			$statement->execute();
@@ -71,7 +63,7 @@ foreach ($result as $row) {
 					$photo_src = BASE_URL . 'assets/images/planos/' . $plan_photo;
 				}
 
-				$plan_btn_text = !empty($row['pricing_plan_button_text']) ? $row['pricing_plan_button_text'] : 'Contratar Este';
+				$plan_btn_text = !empty($row['pricing_plan_button_text']) ? $row['pricing_plan_button_text'] : 'Quero Este Plano';
 				$plan_btn_url = !empty($row['pricing_plan_button_url']) ? $row['pricing_plan_button_url'] : '#';
 				$btn_target = (strpos($plan_btn_url, 'http') === 0) ? 'target="_blank" rel="noopener"' : '';
 				$is_popular = !empty($row['pricing_plan_popular']);
@@ -79,71 +71,51 @@ foreach ($result as $row) {
 				$price_val = trim($row['pricing_plan_price'] ?? '');
 				$period_val = trim($row['pricing_plan_period'] ?? '/mês');
 				?>
-				<div class="col-md-4 mb-4">
-					<div class="pricing-item <?php echo $is_popular ? 'pricing-popular' : ''; ?>" style="position: relative; transition: all 0.3s ease; margin-bottom: 30px;">
-						<?php if(!empty($badge)): ?>
-							<div class="pricing-badge-flag" style="position: absolute; top: 12px; right: 12px; background: #ffc107; color: #1e293b; font-weight: bold; font-size: 11px; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); z-index: 2;">
-								<i class="fa fa-star" style="margin-right: 3px;"></i> <?php echo htmlspecialchars($badge); ?>
+				<div class="col-lg-4 col-md-6 mb-4">
+					<div class="ps-plan-card <?php echo $is_popular ? 'ps-plan-popular' : ''; ?>">
+						<?php if($is_popular || !empty($badge)): ?>
+							<span class="ps-plan-badge-tag"><?php echo htmlspecialchars(!empty($badge) ? $badge : 'Mais Popular'); ?></span>
+						<?php endif; ?>
+						<h3 class="ps-plan-name"><?php echo htmlspecialchars($row['pricing_plan_name']); ?></h3>
+						<?php if(!empty($photo_src)): ?>
+							<div class="ps-plan-img">
+								<img src="<?php echo $photo_src; ?>" alt="<?php echo htmlspecialchars($row['pricing_plan_name']); ?>" loading="lazy" decoding="async">
 							</div>
 						<?php endif; ?>
-
-						<div class="title" style="font-size:19px; font-weight: bold;">
-							<?php echo htmlspecialchars($row['pricing_plan_name']); ?>
-						</div>
-
-						<div class="price">
-							<?php if(!empty($photo_src)): ?>
-								<div class="plan-img-container" style="margin: 12px auto; max-width: 220px; height: 95px; display: flex; align-items: center; justify-content: center;">
-									<img class="img img-responsive center-block" src="<?php echo $photo_src; ?>" alt="<?php echo htmlspecialchars($row['pricing_plan_name']); ?>" style="max-height: 90px; max-width: 100%; object-fit: contain; margin: 0 auto;" />
+						<div class="ps-plan-price-wrap">
+							<?php if(strtolower($price_val) === 'consultar' || stripos($price_val, 'sob') !== false): ?>
+								<span class="ps-plan-price-val">Sob Consulta</span>
+							<?php else: ?>
+								<span class="ps-plan-from">A partir de</span>
+								<div class="ps-plan-amount">
+									<span class="ps-plan-currency">R$</span>
+									<span class="ps-plan-number"><?php echo htmlspecialchars($price_val); ?></span>
+									<?php if(!empty($period_val)): ?>
+										<span class="ps-plan-period"><?php echo htmlspecialchars($period_val); ?></span>
+									<?php endif; ?>
 								</div>
 							<?php endif; ?>
-
-							<div class="plan-pricing-amount" style="margin: 12px 0;">
-								<?php if(strtolower($price_val) === 'consultar' || stripos($price_val, 'sob') !== false): ?>
-									<span class="text-uppercase h4 d-block fw-bold" style="color: #0a6b74;">Sob Consulta</span>
-								<?php else: ?>
-									<div style="color: #0a6b74; line-height: 1.2;">
-										<small style="font-size: 12px; color: #64748b; font-weight: 500; display: block; text-transform: uppercase;">A partir de</small>
-										<span style="font-size: 16px; font-weight: bold;">R$</span> 
-										<span style="font-size: 26px; font-weight: 800;"><?php echo htmlspecialchars($price_val); ?></span>
-										<?php if(!empty($period_val)): ?>
-											<span style="font-size: 13px; color: #64748b; font-weight: normal;"><?php echo htmlspecialchars($period_val); ?></span>
-										<?php endif; ?>
-									</div>
-								<?php endif; ?>
-							</div>
 						</div>
-
-						<div class="offer">
-							<ul>
-								<?php
-								$statement1 = $pdo->prepare("SELECT * FROM tbl_pricing_item WHERE pricing_plan_id=? ORDER BY pricing_item_id ASC");
-								$statement1->execute(array($row['pricing_plan_id']));
-								$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);							
-								foreach ($result1 as $row1) {
-									?>
-									<li>
-										<i class="fa fa-check text-success" style="margin-right: 6px;"></i>
-										<?php echo htmlspecialchars($row1['pricing_item_name']); ?>
-									</li>
-									<?php
-								}
+						<ul class="ps-plan-features">
+							<?php
+							$statement1 = $pdo->prepare("SELECT * FROM tbl_pricing_item WHERE pricing_plan_id=? ORDER BY pricing_item_id ASC");
+							$statement1->execute(array($row['pricing_plan_id']));
+							$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
+							foreach ($result1 as $row1) {
 								?>
-							</ul>
-						</div>
-
-						<div class="button" style="margin-top: 15px;">
-							<a href="<?php echo htmlspecialchars($plan_btn_url); ?>" <?php echo $btn_target; ?> style="display: block; border-radius: 6px; font-weight: 600; padding: 10px 15px;">
-								<?php echo htmlspecialchars($plan_btn_text); ?>
-							</a>
-						</div>
+								<li><i class="fa fa-check-circle"></i> <?php echo htmlspecialchars($row1['pricing_item_name']); ?></li>
+								<?php
+							}
+							?>
+						</ul>
+						<a href="<?php echo htmlspecialchars($plan_btn_url); ?>" <?php echo $btn_target; ?> class="ps-plan-btn">
+							<?php echo htmlspecialchars($plan_btn_text); ?> <i class="fa fa-arrow-right"></i>
+						</a>
 					</div>
 				</div>
 				<?php
 			}
 			?>
-
-			
 		</div>
 	</div>
 </section>
