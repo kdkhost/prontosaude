@@ -4,6 +4,30 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.15.1] - 2026-10-22
+
+### Reformulado & Otimizado
+- **Reformulação Completa da Página de Configurações (`admin/settings.php`)**:
+  - **Barra de Abas com Scroll Horizontal Suave (`.ps-tabs-scrollable`)**:
+    - Navegação ergonômica e responsiva com 10 abas categorizadas por ícones (Logo, Favicon, Conteúdo Geral, Contato & E-mail, Notícias, SEO, Seções da Home, Cores, Preloader, reCAPTCHA).
+    - Suporte bidirecional e imediato a hash na URL (`#tab_1` a `#tab_10`) e persistência automática de aba ativa (`active_tab`) em todos os formulários.
+  - **Identidade Visual & Mídias**:
+    - Visualização da logo atual em moldura transparente e upload Drag & Drop moderno com suporte a PNG, WEBP e SVG.
+    - Mockup de aba do navegador em tempo real para prévia do Favicon.
+  - **Localização Inteligente & Busca por CEP**:
+    - Integração assíncrona automática com a API ViaCEP com foco automático imediato no campo de Número (`#numero_endereco`).
+    - Campo de código de incorporação do Google Maps com prévia interativa do mapa.
+  - **Simulador SERP do Google & SEO em Tempo Real**:
+    - Prévia visual dinâmica de como a página inicial aparece nos resultados de busca do Google, com contadores de caracteres para título e descrição.
+  - **Controle de Seções da Home com Switches Visuais**:
+    - Cards modernos para Serviços, Departamentos, Médicos, Preços, Depoimentos, Notícias e Parceiros.
+  - **Seletor de Cores com Paletas Recomendadas**:
+    - Integração de clique rápido para Teal Hospitalar (`#0a6b74`), Verde Saúde (`#10b981`), Azul Clínico (`#0284c7`), Ciano Moderno (`#06b6d4`) e Púrpura Médica (`#7c3aed`) com preview ao vivo.
+  - **Segurança & reCAPTCHA**:
+    - Card refinado com toggle de ativação e botão de alternar visibilidade da chave secreta.
+
+---
+
 ## [2.15.0] - 2026-10-22
 
 ### Reformulado & Aprimorado

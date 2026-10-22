@@ -74,7 +74,8 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - Tela de recuperação de senha (`admin/recover.php`) completamente modernizada com Glassmorphism, Floating Labels e confirmações via SweetAlert2 no mesmo padrão do login.
 - **Arquitetura Oficial de Abas (Tabs) e Resolução Definitiva de Navegação:**
   - Migração completa de todas as páginas com abas (`admin/settings.php`, `admin/menu-add.php`, `admin/advertisement-home.php`, `admin/profile-edit.php` e `admin/user-edit.php`) para a estrutura oficial `.card.card-primary.card-outline.card-outline-tabs`.
-  - Persistência e restauração automática da aba ativa (`$active_tab`) em todos os formulários submetidos via POST.
+  - **Página de Configurações Geral (`admin/settings.php`) Totalmente Reformulada:** Barra de abas com scroll suave horizontal (`.ps-tabs-scrollable`), 10 seções categorizadas por ícones, upload Drag & Drop para Logo e Favicon com mockup de navegador, busca inteligente por CEP com auto focus no número, prévia de mapa Google Maps, simulador de busca Google SERP com contadores de caracteres, seletor de cores com paletas rápidas do Pronto Saúde e controle de seções da Home com switches visuais.
+  - Persistência e restauração automática da aba ativa (`$active_tab`) em todos os formulários submetidos via POST e sincronização bidirecional com a URL hash (`#tab_1` a `#tab_10`).
   - Interceptação global de `window.alert` e `window.confirm` com SweetAlert2 e Toastr em 100% dos fluxos do sistema.
 - **Gestão e Customização Total de Cards (Serviços, Planos e Produtos):**
   - **100% Configurável pelo Painel Admin:** Fim de imagens, links e textos fixos no código-fonte. Tudo é editável em tempo real nos módulos de Serviços (`admin/service.php`), Planos (`admin/pricing-plan.php`) e Odontologia (`admin/dental.php`).
