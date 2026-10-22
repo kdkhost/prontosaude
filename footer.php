@@ -119,6 +119,7 @@
 							    <?php echo $contact_phone; ?>
 							</div>
 						</div>
+						<?php if(function_exists('pronto_is_page_active') && pronto_is_page_active('trabalhe-conosco')): ?>
 						<div class="contact-item">
 							<div class="text">
 							    <a href="../trabalhe-conosco.php" id="link">
@@ -127,12 +128,14 @@
 							    </a>
 							</div>
 						</div>
+						<?php endif; ?>
 						<div class="contact-item">
 							<div class="text">
 							    <i class="fa fa-envelope-o mr-2"></i>
 							    <?php echo $contact_email; ?>
 							</div>
 						</div>
+						<?php if(function_exists('pronto_is_page_active') && pronto_is_page_active('privacidade')): ?>
 						<div class="contact-item">
 							<div class="text">
 							    <a href="privacidade.php" id="link">
@@ -141,6 +144,8 @@
 							    </a>
 							</div>
 						</div>
+						<?php endif; ?>
+						<?php if(function_exists('pronto_is_page_active') && pronto_is_page_active('rsocial')): ?>
 						<div class="contact-item">
 							<div class="text">
 							   <a href="rsocial.php" id="link">
@@ -149,6 +154,7 @@
 							   </a>
 							</div>
 						</div>
+						<?php endif; ?>
 					</div>
 				</div>
 			</div>
@@ -163,12 +169,12 @@
 			<div class="container">
 				<div class="row">
 				    <div class="col-md-6">
-                        <a href="https://yellowestrategias.com.br" target="_blank" style="color:#ffffff;">
+                        <a href="https://ethestrategias.com.br" target="_blank" style="color:#ffffff;">
                             <img src="<?php echo BASE_URL; ?>/assets/img/yellow.png" 
-                            alt="Yellow Estratégias" 
+                            alt="Eth! Estratégias" 
                             data-toggle="tooltip" 
                             data-placement="top" 
-                            title="Yellow Estratégias" style="max-width:100%;height:48px; margin-bottom:0px;">
+                            title="Eth! Estratégias" style="max-width:100%;height:48px; margin-bottom:0px;">
                         </a>
 				    </div>
 					<div class="col-md-6 copyright" style="text-align: right;">
@@ -210,6 +216,18 @@
 		});
 	});
 	</script>
+
+	<?php if(!empty($_GET['pagina_indisponivel'])): ?>
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		setTimeout(function() {
+			if (typeof toastr !== 'undefined') {
+				toastr.info("A página solicitada está temporariamente desativada pelo administrador.", "Página Indisponível", { timeOut: 6000 });
+			}
+		}, 600);
+	});
+	</script>
+	<?php endif; ?>
 
 	<!-- Botão Flutuante de Atendimento WhatsApp Oficial -->
 	<a href="https://wa.me/+5521985831464?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta%20através%20do%20site%20Pronto%20Saúde" 

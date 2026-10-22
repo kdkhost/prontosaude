@@ -1,4 +1,13 @@
 <?php require_once('header.php'); ?>
+<?php
+// Sincroniza seções da Home com o status de cada página individual
+if (function_exists('pronto_is_page_active')) {
+    if (!pronto_is_page_active('doctor')) $home_status_doctor = 0;
+    if (!pronto_is_page_active('servicos')) $home_status_service = 0;
+    if (!pronto_is_page_active('fidelidade')) $home_status_pricing = 0;
+    if (!pronto_is_page_active('news')) $home_status_news = 0;
+}
+?>
 
 
 

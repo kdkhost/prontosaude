@@ -10,6 +10,37 @@ try {
 	} catch (Exception $e2) {}
 }
 
+// Sincroniza páginas institucionais com tbl_page
+if (function_exists('pronto_sync_system_pages')) {
+	pronto_sync_system_pages($pdo);
+}
+
+// Endpoint AJAX rápido para alternar visibilidade/status da página (Active / Inactive)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'toggle_page_status') {
+	header('Content-Type: application/json; charset=utf-8');
+	$page_id = (int)($_POST['page_id'] ?? 0);
+	$page_slug = trim($_POST['page_slug'] ?? '');
+	$new_status = ($_POST['status'] ?? '') === 'Active' ? 'Active' : 'Inactive';
+
+	try {
+		if ($page_id > 0) {
+			$stmt = $pdo->prepare("UPDATE tbl_page SET status = ? WHERE page_id = ?");
+			$stmt->execute([$new_status, $page_id]);
+		} elseif (!empty($page_slug)) {
+			$stmt = $pdo->prepare("UPDATE tbl_page SET status = ? WHERE page_slug = ?");
+			$stmt->execute([$new_status, $page_slug]);
+		}
+		echo json_encode([
+			'success' => true,
+			'new_status' => $new_status,
+			'message' => 'Status da página alterado com sucesso no site!'
+		]);
+	} catch (Exception $e) {
+		echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+	}
+	exit;
+}
+
 // Função de limpeza estrita de metadados contra HTML escapando
 if (!function_exists('seo_clean_text')) {
 	function seo_clean_text($text) {
@@ -128,7 +159,7 @@ $stmtSettings = $pdo->query("SELECT meta_title_home, meta_description_home, meta
 $settingsSEO = $stmtSettings->fetch(PDO::FETCH_ASSOC) ?: [];
 
 // 3. Carrega todas as páginas cadastradas no sistema
-$stmtPages = $pdo->query("SELECT page_id, page_name, page_slug, meta_title, meta_description, meta_keyword, banner FROM tbl_page ORDER BY page_id ASC");
+$stmtPages = $pdo->query("SELECT page_id, page_name, page_slug, status, meta_title, meta_description, meta_keyword, banner FROM tbl_page ORDER BY page_id ASC");
 $allPages = $stmtPages->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
 // 4. Monta lista completa e unificada de páginas auditáveis
@@ -151,13 +182,14 @@ $pagesList[] = [
 	'name' => 'Página Inicial (Home)',
 	'slug' => '',
 	'url' => BASE_URL,
+	'status' => 'Active',
 	'title' => seo_clean_text($settingsSEO['meta_title_home'] ?? 'Pronto Saúde | Centro Médico e Odontológico'),
 	'description' => seo_clean_text($settingsSEO['meta_description_home'] ?? 'Atendimento médico e odontológico humanizado no Rio de Janeiro.'),
 	'keywords' => seo_clean_text($settingsSEO['meta_keyword_home'] ?? 'clinica medica, odontologia, exames, saude rj'),
 	'banner' => $defaultHomeBanner
 ];
 
-// 2. Páginas registradas em tbl_page
+// 2. Páginas registradas em tbl_page (incluindo nativas sincronizadas)
 foreach ($allPages as $p) {
 	$bannerPath = 'assets/images/about.jpg';
 	if (!empty($p['banner']) && file_exists('../assets/uploads/' . $p['banner'])) {
@@ -168,6 +200,7 @@ foreach ($allPages as $p) {
 		'id' => (int)$p['page_id'],
 		'name' => $p['page_name'],
 		'slug' => $p['page_slug'],
+		'status' => $p['status'] ?? 'Active',
 		'url' => (strpos($p['page_slug'], '.php') !== false) ? BASE_URL . $p['page_slug'] : BASE_URL . 'page/' . $p['page_slug'],
 		'title' => seo_clean_text($p['meta_title'] ?: $p['page_name'] . ' | Pronto Saúde'),
 		'description' => seo_clean_text($p['meta_description'] ?: 'Informações completas sobre ' . $p['page_name'] . ' na Pronto Saúde.'),
@@ -350,13 +383,20 @@ foreach ($fixedPages as $idx => $fp) {
 			<!-- Coluna Direita: Editor, Auditoria e Previews Ao Vivo -->
 			<div class="col-lg-8">
 				<div class="card border-0 shadow-sm rounded-3 mb-4">
-					<div class="card-header bg-body py-3 border-bottom d-flex justify-content-between align-items-center">
+					<div class="card-header bg-body py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
 						<div class="d-flex align-items-center gap-2">
 							<span class="badge text-bg-primary px-3 py-2" id="currentEditingPageTag">Página Inicial (Home)</span>
 							<h5 class="fw-bold mb-0 d-none d-sm-inline" id="currentEditingPageTitle">Auditoria & Configuração</h5>
 						</div>
-						<div class="d-flex align-items-center gap-2">
-							<div class="text-end">
+						<div class="d-flex align-items-center gap-3">
+							<!-- Controle de Ativação / Desativação da Página -->
+							<div class="d-flex align-items-center gap-2" id="seoStatusWrapper">
+								<div class="form-check form-switch fs-5 mb-0">
+									<input class="form-check-input" type="checkbox" role="switch" id="seoPageStatusSwitch" checked title="Ativar ou desativar esta página no site">
+								</div>
+								<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill small" id="seoPageStatusBadge">Ativa no Site</span>
+							</div>
+							<div class="text-end border-start ps-3">
 								<span class="small text-body-secondary d-block">Pontuação Técnica</span>
 								<strong class="fs-5 text-success" id="pageScoreDisplay">95/100</strong>
 							</div>
@@ -644,6 +684,8 @@ foreach ($fixedPages as $idx => $fp) {
 		const btnView = container.querySelector('#btnViewLivePage');
 		const pageTag = container.querySelector('#currentEditingPageTag');
 		const scoreDisplay = container.querySelector('#pageScoreDisplay');
+		const seoPageStatusSwitch = container.querySelector('#seoPageStatusSwitch');
+		const seoPageStatusBadge = container.querySelector('#seoPageStatusBadge');
 
 		const titleCounter = container.querySelector('#titleCounter');
 		const descCounter = container.querySelector('#descCounter');
@@ -741,6 +783,25 @@ foreach ($fixedPages as $idx => $fp) {
 			if (pageTag) pageTag.textContent = pg.name || '';
 			if (serpUrl) serpUrl.textContent = pg.url || '';
 
+			// Sincroniza status de ativação da página
+			const isActive = (pg.status === 'Active' || pg.type === 'home');
+			if (seoPageStatusSwitch) {
+				seoPageStatusSwitch.checked = isActive;
+				seoPageStatusSwitch.disabled = (pg.type === 'home');
+			}
+			if (seoPageStatusBadge) {
+				if (pg.type === 'home') {
+					seoPageStatusBadge.textContent = 'Sempre Ativa';
+					seoPageStatusBadge.className = 'badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill small';
+				} else if (isActive) {
+					seoPageStatusBadge.textContent = 'Ativa no Site';
+					seoPageStatusBadge.className = 'badge bg-success-subtle text-success border border-success-subtle rounded-pill small';
+				} else {
+					seoPageStatusBadge.textContent = 'Desativada';
+					seoPageStatusBadge.className = 'badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill small';
+				}
+			}
+
 			if (inputOgFile) inputOgFile.value = '';
 
 			const bannerUrl = (pg.banner && pg.banner.startsWith('http')) ? pg.banner : '<?= BASE_URL ?>' + (pg.banner || 'assets/images/about.jpg');
@@ -754,6 +815,65 @@ foreach ($fixedPages as $idx => $fp) {
 
 			resetDropzoneToOriginal();
 			updateLiveView();
+		}
+
+		// Event listener para alternar status da página via switch no SEO
+		if (seoPageStatusSwitch) {
+			seoPageStatusSwitch.addEventListener('change', function() {
+				const pg = pages[currentIndex];
+				if (!pg || pg.type === 'home') return;
+				const newStatus = this.checked ? 'Active' : 'Inactive';
+
+				if (seoPageStatusBadge) {
+					seoPageStatusBadge.textContent = 'Salvando...';
+					seoPageStatusBadge.className = 'badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill small';
+				}
+				this.disabled = true;
+
+				const formData = new FormData();
+				formData.append('action', 'toggle_page_status');
+				formData.append('page_id', pg.id);
+				formData.append('page_slug', pg.slug || '');
+				formData.append('status', newStatus);
+
+				fetch('seo.php', {
+					method: 'POST',
+					body: formData
+				})
+				.then(res => res.json())
+				.then(data => {
+					this.disabled = false;
+					if (data.success) {
+						pg.status = newStatus;
+						if (seoPageStatusBadge) {
+							if (newStatus === 'Active') {
+								seoPageStatusBadge.textContent = 'Ativa no Site';
+								seoPageStatusBadge.className = 'badge bg-success-subtle text-success border border-success-subtle rounded-pill small';
+							} else {
+								seoPageStatusBadge.textContent = 'Desativada';
+								seoPageStatusBadge.className = 'badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill small';
+							}
+						}
+						if (window.notificar) {
+							window.notificar(newStatus === 'Active' ? 'success' : 'warning', `A página "${pg.name}" foi ${newStatus === 'Active' ? 'ativada' : 'desativada'} no site com sucesso!`, 'Status Atualizado');
+						} else if (typeof toastr !== 'undefined') {
+							toastr[newStatus === 'Active' ? 'success' : 'warning'](`Página ${newStatus === 'Active' ? 'ativada' : 'desativada'} no site.`);
+						}
+					} else {
+						this.checked = !this.checked;
+						if (window.notificar) {
+							window.notificar('error', data.message || 'Falha ao alterar status.', 'Erro');
+						}
+					}
+				})
+				.catch(err => {
+					this.disabled = false;
+					this.checked = !this.checked;
+					if (window.notificar) {
+						window.notificar('error', 'Falha de comunicação.', 'Erro');
+					}
+				});
+			});
 		}
 
 		// Clique nas páginas da lista (abre os dados instantaneamente)

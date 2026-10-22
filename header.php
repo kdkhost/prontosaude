@@ -107,6 +107,26 @@ $email   = $row2['dep_email'] ?? '';
         $cur_page = basename($_SERVER['SCRIPT_NAME'] ?? '');
         $req_slug = trim($_REQUEST['slug'] ?? '');
 
+        // Sincroniza páginas nativas do sistema com tbl_page
+        if (function_exists('pronto_sync_system_pages')) {
+            pronto_sync_system_pages($pdo);
+        }
+
+        // Bloqueio de rota segura caso a página tenha sido desativada pelo administrador
+        $cur_page_clean = strtolower(str_replace('.php', '', $cur_page));
+        if ($cur_page !== 'index.php' && $cur_page_clean !== 'page' && !empty($cur_page_clean) && function_exists('pronto_is_page_active')) {
+            if (!pronto_is_page_active($cur_page_clean, $pdo)) {
+                header("Location: " . BASE_URL . "?pagina_indisponivel=" . urlencode($cur_page_clean));
+                exit;
+            }
+        }
+        if ($cur_page === 'page.php' && !empty($req_slug) && function_exists('pronto_is_page_active')) {
+            if (!pronto_is_page_active($req_slug, $pdo)) {
+                header("Location: " . BASE_URL . "?pagina_indisponivel=" . urlencode($req_slug));
+                exit;
+            }
+        }
+
         // Determina URL Canônica
         $page_protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
         $page_host = $_SERVER['HTTP_HOST'] ?? 'localhost';
@@ -748,12 +768,26 @@ $email   = $row2['dep_email'] ?? '';
             $parent_menus = [];
             $children_menus = [];
             foreach ($all_menus as $m) {
+                // Oculta itens de menu cujas páginas estejam desativadas
+                if (function_exists('pronto_is_menu_active') && !pronto_is_menu_active($m, $pdo)) {
+                    continue;
+                }
                 if ($m['menu_parent'] == 0) {
                     $parent_menus[] = $m;
                 } else {
                     $children_menus[$m['menu_parent']][] = $m;
                 }
             }
+
+            // Remove menus pais que eram agregadores (#) caso todos os seus filhos estejam desativados
+            $parent_menus = array_filter($parent_menus, function($p) use ($children_menus) {
+                $url = trim($p['menu_url'] ?? '');
+                $type = $p['menu_type'] ?? '';
+                if ($type === 'Other' && ($url === '#' || empty($url))) {
+                    return !empty($children_menus[$p['menu_id']]);
+                }
+                return true;
+            });
             ?>
 
             <!-- Drawer Deslizante da Esquerda para a Direita -->

@@ -234,10 +234,18 @@ foreach ($result as $row) {
 					</div>
 				</div>			
                 <div class="row mb-3">
-		            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Ativo?</label>
+		            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Status no Site</label>
 		            <div class="col-12 col-sm-9 col-lg-6">
-		                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Active" <?php if($status == 'Active') { echo 'checked'; } ?>> <label class="form-check-label">Sim</label></div>
-		                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Inactive" <?php if($status == 'Inactive') { echo 'checked'; } ?>> <label class="form-check-label">Não</label></div>
+		                <div class="form-check form-switch fs-5 mb-1">
+		                    <input class="form-check-input" type="checkbox" role="switch" name="status_toggle" id="pageStatusToggle" value="1" <?php if($status == 'Active') { echo 'checked'; } ?>>
+		                    <label class="form-check-label fs-6 fw-semibold ms-2 <?= $status == 'Active' ? 'text-success' : 'text-danger' ?>" for="pageStatusToggle" id="pageStatusLabel">
+		                        <?= ($status == 'Active') ? 'Página Ativa e Visível no Site' : 'Página Desativada (Oculta dos menus e bloqueada)'; ?>
+		                    </label>
+		                </div>
+		                <input type="hidden" name="status" id="inputPageStatusHidden" value="<?php echo htmlspecialchars($status); ?>">
+		                <div class="form-text small text-body-secondary">
+		                    Quando desativada, a página não é exibida nos menus de navegação (desktop e mobile), no rodapé nem na Home, e acessos diretos à URL são redirecionados com segurança.
+		                </div>
 		            </div>
 		        </div>
                 <div class="row mb-3 mt-4"><div class="col-12"><h5 class="fw-bold text-primary border-bottom pb-2 mb-0"><i class="bi bi-search me-2"></i>Informações de SEO</h5></div></div>
@@ -293,6 +301,23 @@ foreach ($result as $row) {
 				reader.readAsDataURL(file);
 			} else {
 				container.classList.add('d-none');
+			}
+		});
+	}
+
+	const statusToggle = document.getElementById('pageStatusToggle');
+	const statusLabel = document.getElementById('pageStatusLabel');
+	const statusHidden = document.getElementById('inputPageStatusHidden');
+	if(statusToggle && statusLabel && statusHidden) {
+		statusToggle.addEventListener('change', function() {
+			if(this.checked) {
+				statusHidden.value = 'Active';
+				statusLabel.textContent = 'Página Ativa e Visível no Site';
+				statusLabel.className = 'form-check-label fs-6 fw-semibold ms-2 text-success';
+			} else {
+				statusHidden.value = 'Inactive';
+				statusLabel.textContent = 'Página Desativada (Oculta dos menus e bloqueada)';
+				statusLabel.className = 'form-check-label fs-6 fw-semibold ms-2 text-danger';
 			}
 		});
 	}
