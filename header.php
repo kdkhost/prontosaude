@@ -711,72 +711,12 @@ $email   = $row2['dep_email'] ?? '';
 
         <div class="page-wrapper">
 
-            <!-- Top Bar Start -->
-            <div class="top-bar">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6 top-contact">
-                            <div class="list">
-                                <ul>
-                                    <li>
-                                        <i class="fa fa-envelope-o" style="color:#fff;"></i> 
-                                        <a href="mailto:<?= $contact_email; ?>">
-                                            <?= $contact_email; ?>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="list">
-                                <i class="fa fa-phone" style="color:#fff;"></i> 
-                                <?php
-                                $tel = preg_replace("/[^0-9]/", "", $contact_phone);
-                                echo "<a href='tel:+55" . $tel . "'>  $contact_phone </a>";
-                                ?>
-                            </div>
-
-
-                            <div class="">
-                                <div class="list">
-                                    <div class="dropdown">
-                                        <a href="#" class="dropbtn text-decoration-none text-uppercase">
-                                            Contato
-                                        </a>
-                                        <div class="dropdown-content">
-                                            <a href="page/contato">
-                                                <i class="fa fa-envelope-o mr-2"></i>
-                                                Fale Conosco
-                                            </a>
-                                            <a href="https://wa.me/+5521985831464?&text=Solicitação%20de%20Agendamento%20feito%20através%20do%20site%20Pronto%20Saúde">
-                                                <i class="fa fa-whatsapp mr-2"></i>
-                                                WhatsApp
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 top-social">
-
-                            <ul>
-
-                                <?php
-                                // Getting and showing all the social media icon URL from the database
-                                $statement = $pdo->prepare("SELECT * FROM tbl_social");
-                                $statement->execute();
-                                $social_data = $statement->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($social_data as $social_row) {
-                                    if ($social_row['social_url'] != '') {
-                                        echo '<li><a href="' . $social_row['social_url'] . '"><i class="' . $social_row['social_icon'] . '"></i></a></li>';
-                                    }
-                                }
-                                ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Top Bar End -->
+            <?php
+            // Carregamento de mídias sociais
+            $statement = $pdo->prepare("SELECT * FROM tbl_social WHERE social_url != ''");
+            $statement->execute();
+            $social_data = $statement->fetchAll(PDO::FETCH_ASSOC);
+            ?>
 
             <!-- Backdrop do Menu Deslizante -->
             <div class="ps-drawer-backdrop" id="psDrawerBackdrop"></div>
@@ -927,6 +867,12 @@ $email   = $row2['dep_email'] ?? '';
                                 <span class="ps-topbar-info-item">
                                     <i class="fa fa-phone" style="color: #0a6b74;"></i> 
                                     <a href="tel:+55<?= preg_replace('/[^0-9]/', '', $contact_phone); ?>"><?= htmlspecialchars($contact_phone); ?></a>
+                                </span>
+                                <?php endif; ?>
+                                <?php if(!empty($contact_email)): ?>
+                                <span class="ps-topbar-info-item">
+                                    <i class="fa fa-envelope-o" style="color: #0a6b74;"></i> 
+                                    <a href="mailto:<?= htmlspecialchars($contact_email); ?>"><?= htmlspecialchars($contact_email); ?></a>
                                 </span>
                                 <?php endif; ?>
                                 <span class="ps-topbar-info-item">
