@@ -18,6 +18,12 @@ O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0
   - **Redesenho Completo da Tela de Recuperação de Senha (`admin/recover.php`)**:
     - Substituição da interface legada do AdminLTE 2 pelo padrão contemporâneo em Glassmorphism, Bootstrap 5.3 e AdminLTE 4 idêntico à tela de login.
     - Suporte a floating labels (`.form-floating`), notificações integradas via SweetAlert2 (sem alerts nativos) e correção de bug na validação de confirmação de senha.
+  - **Correção Definitiva do Bug de Alternância de Abas (Tabs) no Painel Administrativo**:
+    - **Prevenção de Interceptação SPA (`admin/js/pronto-spa.js`)**: Ajustado o interceptador global de links para ignorar links com hash (`href.startsWith('#')`), toggles de abas (`[data-bs-toggle="tab"]`, `[data-bs-toggle="pill"]`) e elementos dentro de `.nav-tabs` e `.nav-pills`, eliminando o recarregamento indevido de página durante a troca de abas.
+    - **Padronização Oficial AdminLTE 4 nas Telas de Perfil e Usuários (`admin/profile-edit.php` e `admin/user-edit.php`)**:
+      - Migração para a estrutura oficial `.card.card-primary.card-outline.card-outline-tabs` com botões semânticos `<button class="nav-link" data-bs-toggle="tab" ...>`.
+      - Persistência e restauração automática da aba ativa após submissão de formulários específicos (Informações, Foto, Senha).
+      - Inicialização e exibição correta de mensagens de erro e sucesso em português com integração ao SweetAlert2 e Toastr.
   - **Validação e Integridade de Código**:
     - 100% dos arquivos PHP do painel verificados com zero erros de sintaxe no PHP 8.5/8.4 (`php -l`).
     - Validação de exclusão segura de fotos e banners em cadastros garantindo existência prévia de arquivo em disco.

@@ -416,7 +416,18 @@
     if (!link) return;
 
     const href = link.getAttribute('href');
-    if (!href || href === '#' || href.startsWith('javascript:') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('https://wa.me')) return;
+    if (!href || href === '#' || href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('https://wa.me')) return;
+
+    // Ignora links que controlam abas (tabs / pills) ou componentes dinâmicos
+    if (
+      link.hasAttribute('data-bs-toggle') ||
+      link.hasAttribute('data-toggle') ||
+      link.getAttribute('role') === 'tab' ||
+      link.closest('.nav-tabs') ||
+      link.closest('.nav-pills')
+    ) {
+      return;
+    }
 
     // Ignora links que abrem nova aba
     if (link.getAttribute('target') === '_blank' || link.getAttribute('target') === 'new') return;
@@ -568,10 +579,10 @@
 
   // 9. SUPORTE UNIVERSAL A TABS NO ADMINLTE 4 (BOOTSTRAP 5 + LEGADO DATA-TOGGLE)
   document.addEventListener('click', function (e) {
-    const tabLink = e.target.closest('[data-toggle="tab"], [data-bs-toggle="tab"], [data-toggle="pill"], [data-bs-toggle="pill"], .nav-tabs > li > a, .nav-tabs > .nav-item > a');
+    const tabLink = e.target.closest('[data-toggle="tab"], [data-bs-toggle="tab"], [data-toggle="pill"], [data-bs-toggle="pill"], .nav-tabs > li > a, .nav-tabs > .nav-item > a, .nav-tabs .nav-link, .nav-pills .nav-link');
     if (!tabLink) return;
 
-    const targetSelector = tabLink.getAttribute('href') || tabLink.getAttribute('data-bs-target') || tabLink.getAttribute('data-target');
+    const targetSelector = tabLink.getAttribute('data-bs-target') || tabLink.getAttribute('href') || tabLink.getAttribute('data-target');
     if (!targetSelector || !targetSelector.startsWith('#')) return;
 
     const targetPane = document.querySelector(targetSelector);
@@ -579,14 +590,28 @@
 
     e.preventDefault();
 
+    // Se a biblioteca oficial do Bootstrap 5 estiver presente, aciona a instância oficial
+    if (window.bootstrap && window.bootstrap.Tab) {
+      try {
+        const bsTab = window.bootstrap.Tab.getOrCreateInstance(tabLink);
+        if (bsTab) bsTab.show();
+      } catch (err) {}
+    }
+
     // Desativa tabs irmãs
     const navList = tabLink.closest('.nav-tabs, .nav-pills, .nav');
     if (navList) {
-      navList.querySelectorAll('li, .nav-item, .nav-link, a').forEach(el => el.classList.remove('active'));
+      navList.querySelectorAll('li, .nav-item, .nav-link, a, button').forEach(el => {
+        el.classList.remove('active');
+        if (el.tagName === 'BUTTON' || el.tagName === 'A') {
+          el.setAttribute('aria-selected', 'false');
+        }
+      });
     }
 
     // Ativa tab atual e item li
     tabLink.classList.add('active');
+    tabLink.setAttribute('aria-selected', 'true');
     const parentLi = tabLink.closest('li, .nav-item');
     if (parentLi) parentLi.classList.add('active');
 
@@ -611,9 +636,15 @@
   function restoreTabFromHash(container) {
     const root = container || document;
     const hash = window.location.hash;
-    if (hash && hash.startsWith('#tab_')) {
-      const activeTab = root.querySelector(`[href="${hash}"], [data-bs-target="${hash}"]`);
+    if (hash && (hash.startsWith('#tab_') || hash.startsWith('#tab-') || hash.includes('tab'))) {
+      const activeTab = root.querySelector(`[data-bs-target="${hash}"], [href="${hash}"], [data-target="${hash}"]`);
       if (activeTab) {
+        if (window.bootstrap && window.bootstrap.Tab) {
+          try {
+            const bsTab = window.bootstrap.Tab.getOrCreateInstance(activeTab);
+            if (bsTab) bsTab.show();
+          } catch (e) {}
+        }
         activeTab.click();
       }
     }

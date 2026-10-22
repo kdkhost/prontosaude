@@ -1,7 +1,12 @@
 <?php require_once('header.php'); ?>
 
 <?php
+$error_message = '';
+$success_message = '';
+$active_tab = 'tab_1';
+
 if(isset($_POST['form1'])) {
+	$active_tab = 'tab_1';
 	$valid = 1;
 
     if(empty($_POST['full_name'])) {
@@ -47,7 +52,7 @@ if(isset($_POST['form1'])) {
 
 
 if(isset($_POST['form2'])) {
-
+	$active_tab = 'tab_2';
 	$valid = 1;
 
 	$path = $_FILES['photo']['name'];
@@ -88,6 +93,7 @@ if(isset($_POST['form2'])) {
 }
 
 if(isset($_POST['form3'])) {
+	$active_tab = 'tab_3';
 	$valid = 1;
 
 	if( empty($_POST['password']) || empty($_POST['re_password']) ) {
@@ -168,168 +174,182 @@ foreach ($result as $row) {
 
 
 <div class="app-content">
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			<?php if($error_message): ?>
-			<div class="callout callout-danger">
-			
-			<p>
-			<?php echo $error_message; ?>
-			</p>
+	<div class="container-fluid">
+		<?php if(!empty($error_message)): ?>
+		<div class="callout callout-danger shadow-sm mb-4">
+			<div class="d-flex align-items-center">
+				<i class="bi bi-exclamation-triangle-fill text-danger fs-4 me-2"></i>
+				<div><?= $error_message; ?></div>
 			</div>
-			<?php endif; ?>
-
-			<?php if($success_message): ?>
-			<div class="callout callout-success">
-			
-			<p><?php echo $success_message; ?></p>
-			</div>
-			<?php endif; ?>
 		</div>
-	</div>
+		<?php endif; ?>
 
-</div>
-</div>
+		<?php if(!empty($success_message)): ?>
+		<div class="callout callout-success shadow-sm mb-4">
+			<div class="d-flex align-items-center">
+				<i class="bi bi-check-circle-fill text-success fs-4 me-2"></i>
+				<div><?= $success_message; ?></div>
+			</div>
+		</div>
+		<?php endif; ?>
 
-<div class="app-content">
-<div class="container-fluid">
-
-	<div class="row">
-		<div class="col-md-12">
-
-				<div class="nav-tabs-custom mb-4">
-					<ul class="nav nav-tabs">
-						<li class="nav-item"><a class="nav-link active" href="#tab_1" data-bs-toggle="tab">Atualizar Informações</a></li>
-						<li class="nav-item"><a class="nav-link" href="#tab_2" data-bs-toggle="tab">Atualizar Foto</a></li>
-						<li class="nav-item"><a class="nav-link" href="#tab_3" data-bs-toggle="tab">Atualizar Senha</a></li>
-					</ul>
-					<div class="tab-content">
-          				<div class="tab-pane active" id="tab_1">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card card-primary card-outline card-outline-tabs shadow-sm mb-4">
+					<div class="card-header p-0 border-bottom-0">
+						<ul class="nav nav-tabs" id="userEditTabs" role="tablist">
+							<li class="nav-item" role="presentation">
+								<button class="nav-link <?= ($active_tab == 'tab_1') ? 'active' : ''; ?>" id="tab-info-tab" data-bs-toggle="tab" data-bs-target="#tab_1" type="button" role="tab" aria-controls="tab_1" aria-selected="<?= ($active_tab == 'tab_1') ? 'true' : 'false'; ?>">
+									<i class="bi bi-person-gear me-1"></i> Atualizar Informações
+								</button>
+							</li>
+							<li class="nav-item" role="presentation">
+								<button class="nav-link <?= ($active_tab == 'tab_2') ? 'active' : ''; ?>" id="tab-photo-tab" data-bs-toggle="tab" data-bs-target="#tab_2" type="button" role="tab" aria-controls="tab_2" aria-selected="<?= ($active_tab == 'tab_2') ? 'true' : 'false'; ?>">
+									<i class="bi bi-image me-1"></i> Atualizar Foto
+								</button>
+							</li>
+							<li class="nav-item" role="presentation">
+								<button class="nav-link <?= ($active_tab == 'tab_3') ? 'active' : ''; ?>" id="tab-pass-tab" data-bs-toggle="tab" data-bs-target="#tab_3" type="button" role="tab" aria-controls="tab_3" aria-selected="<?= ($active_tab == 'tab_3') ? 'true' : 'false'; ?>">
+									<i class="bi bi-key me-1"></i> Atualizar Senha
+								</button>
+							</li>
+						</ul>
+					</div>
+					<div class="card-body">
+						<div class="tab-content" id="userEditTabsContent">
 							
-							<form action="" method="post">
-							<div class="card card-outline card-primary shadow-sm mb-4">
-								<div class="card-body">
+							<!-- ABA 1: ATUALIZAR INFORMAÇÕES -->
+							<div class="tab-pane fade <?= ($active_tab == 'tab_1') ? 'show active' : ''; ?>" id="tab_1" role="tabpanel" aria-labelledby="tab-info-tab">
+								<form action="" method="post">
 									<div class="row mb-3">
 										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nome <span class="text-danger">*</span></label>
 										<div class="col-12 col-sm-9 col-lg-6">
-											<input type="text" class="form-control" name="full_name" value="<?php echo $full_name; ?>">
+											<input type="text" class="form-control" name="full_name" value="<?= htmlspecialchars($full_name); ?>" required>
 										</div>
 									</div>
 									<div class="row mb-3">
-							            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
-							            <div class="col-12 col-sm-9 col-lg-6">
-											<?php
-											if($photo == '') {
-												echo '<img src="../assets/uploads/no-photo.jpg" style="width:150px;">';
-											} else {
-												echo '<img src="../assets/uploads/'.$photo.'"  style="width:150px;">';
-											}
-											?>
-							                
-							            </div>
-							        </div>
-									
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<?php if(!empty($photo) && file_exists('../assets/uploads/' . $photo)): ?>
+												<img src="../assets/uploads/<?= htmlspecialchars($photo); ?>" class="rounded-circle border shadow-sm object-fit-cover" width="90" height="90" alt="Foto">
+											<?php else: ?>
+												<div class="d-inline-flex align-items-center justify-content-center bg-secondary-subtle text-secondary rounded-circle border shadow-sm" style="width:90px;height:90px;">
+													<i class="bi bi-person-fill fs-1"></i>
+												</div>
+											<?php endif; ?>
+										</div>
+									</div>
 									<div class="row mb-3">
 										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">E-mail <span class="text-danger">*</span></label>
 										<div class="col-12 col-sm-9 col-lg-6">
-											<input type="email" class="form-control" name="email" value="<?php echo $email; ?>">
+											<input type="email" class="form-control" name="email" value="<?= htmlspecialchars($email); ?>" required>
 										</div>
 									</div>
 									<div class="row mb-3">
 										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Telefone</label>
 										<div class="col-12 col-sm-9 col-lg-6">
-											<input type="text" class="form-control" name="phone" value="<?php echo $phone; ?>">
+											<input type="text" class="form-control" name="phone" value="<?= htmlspecialchars($phone); ?>">
 										</div>
 									</div>
 									<div class="row mb-3">
 										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Permissão <span class="text-danger">*</span></label>
 										<div class="col-12 col-sm-9 col-lg-6">
-											<select name="role" class="form-control">
-												<option value="Admin" <?php if($role == 'Admin') {echo 'selected';} ?>>Admin</option>
-												<option value="Publisher" <?php if($role == 'Publisher') {echo 'selected';} ?>>Publisher</option>
+											<select name="role" class="form-select">
+												<option value="Admin" <?= ($role == 'Admin') ? 'selected' : ''; ?>>Administrador</option>
+												<option value="Publisher" <?= ($role == 'Publisher') ? 'selected' : ''; ?>>Editor / Publicador</option>
 											</select>
 										</div>
 									</div>
-							        <div class="row mb-3">
-							            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Ativo?</label>
-							            <div class="col-12 col-sm-9 col-lg-6">
-							                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Active" <?php if($status == 'Active') { echo 'checked'; } ?>> <label class="form-check-label">Yes</label></div>
-							                <div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="status" value="Inactive" <?php if($status == 'Inactive') { echo 'checked'; } ?>> <label class="form-check-label">No</label></div>
-							            </div>
-							        </div>
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Status <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="status" id="status_active" value="Active" <?= ($status == 'Active') ? 'checked' : ''; ?>>
+												<label class="form-check-label" for="status_active">Ativo</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="status" id="status_inactive" value="Inactive" <?= ($status == 'Inactive') ? 'checked' : ''; ?>>
+												<label class="form-check-label" for="status_inactive">Inativo</label>
+											</div>
+										</div>
+									</div>
+									<div class="row mb-3">
+										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
+										<div class="col-12 col-sm-9 col-lg-6 d-flex gap-2">
+											<button type="submit" class="btn btn-primary px-4 shadow-sm" name="form1">
+												<i class="bi bi-check-lg me-1"></i> Salvar Informações
+											</button>
+											<a href="user.php" class="btn btn-outline-secondary">Cancelar</a>
+										</div>
+									</div>
+								</form>
+							</div>
+
+							<!-- ABA 2: ATUALIZAR FOTO -->
+							<div class="tab-pane fade <?= ($active_tab == 'tab_2') ? 'show active' : ''; ?>" id="tab_2" role="tabpanel" aria-labelledby="tab-photo-tab">
+								<form action="" method="post" enctype="multipart/form-data">
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto Atual</label>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<?php if(!empty($photo) && file_exists('../assets/uploads/' . $photo)): ?>
+												<img src="../assets/uploads/<?= htmlspecialchars($photo); ?>" class="rounded-circle border shadow-sm object-fit-cover mb-2" width="100" height="100" alt="Foto">
+											<?php else: ?>
+												<div class="d-inline-flex align-items-center justify-content-center bg-secondary-subtle text-secondary rounded-circle border shadow-sm mb-2" style="width:100px;height:100px;">
+													<i class="bi bi-person-fill fs-1"></i>
+												</div>
+											<?php endif; ?>
+										</div>
+									</div>
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nova Foto <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<input type="file" name="photo" class="form-control" accept="image/*" required>
+											<div class="form-text text-muted small mt-1">Formatos aceitos: JPG, PNG, GIF ou WEBP.</div>
+										</div>
+									</div>
 									<div class="row mb-3">
 										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
 										<div class="col-12 col-sm-9 col-lg-6">
-											<button type="submit" class="btn btn-primary px-4" name="form1"><i class="bi bi-check-lg me-1"></i>Atualizar Informações</button>
-<a href="user.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
+											<button type="submit" class="btn btn-primary px-4 shadow-sm" name="form2">
+												<i class="bi bi-upload me-1"></i> Atualizar Foto
+											</button>
 										</div>
 									</div>
-								</div>
+								</form>
 							</div>
-							</form>
 
-
-          				</div>
-          				<div class="tab-pane" id="tab_2">
-							
-							<form action="" method="post" enctype="multipart/form-data">
-							<div class="card card-outline card-primary shadow-sm mb-4">
-								<div class="card-body">
+							<!-- ABA 3: ATUALIZAR SENHA -->
+							<div class="tab-pane fade <?= ($active_tab == 'tab_3') ? 'show active' : ''; ?>" id="tab_3" role="tabpanel" aria-labelledby="tab-pass-tab">
+								<form action="" method="post">
 									<div class="row mb-3">
-							            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nova Foto</label>
-							            <div class="col-12 col-sm-9 col-lg-6">
-							                <input type="file" name="photo">
-							            </div>
-							        </div>
-							        <div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nova Senha <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<input type="password" class="form-control" name="password" placeholder="Digite a nova senha" required autocomplete="new-password">
+										</div>
+									</div>
+									<div class="row mb-3">
+										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Confirmar Senha <span class="text-danger">*</span></label>
+										<div class="col-12 col-sm-9 col-lg-6">
+											<input type="password" class="form-control" name="re_password" placeholder="Digite a senha novamente" required autocomplete="new-password">
+										</div>
+									</div>
+									<div class="row mb-3">
 										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
 										<div class="col-12 col-sm-9 col-lg-6">
-											<button type="submit" class="btn btn-primary px-4" name="form2"><i class="bi bi-check-lg me-1"></i>Atualizar Foto</button>
+											<button type="submit" class="btn btn-primary px-4 shadow-sm" name="form3">
+												<i class="bi bi-shield-check me-1"></i> Alterar Senha
+											</button>
 										</div>
 									</div>
-								</div>
+								</form>
 							</div>
-							</form>
 
-
-          				</div>
-          				<div class="tab-pane" id="tab_3">
-
-							<form action="" method="post">
-							<div class="card card-outline card-primary shadow-sm mb-4">
-								<div class="card-body">
-									<div class="row mb-3">
-										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Senha</label>
-										<div class="col-12 col-sm-9 col-lg-6">
-											<input type="password" class="form-control" name="password">
-										</div>
-									</div>
-									<div class="row mb-3">
-										<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Repita a Senha</label>
-										<div class="col-12 col-sm-9 col-lg-6">
-											<input type="password" class="form-control" name="re_password">
-										</div>
-									</div>
-							        <div class="row mb-3">
-										<div class="col-sm-3 col-lg-2 d-none d-sm-block"></div>
-										<div class="col-12 col-sm-9 col-lg-6">
-											<button type="submit" class="btn btn-primary px-4" name="form3"><i class="bi bi-check-lg me-1"></i>Atualizar Senha</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							</form>
-
-          				</div>
-          			</div>
+						</div>
+					</div>
 				</div>
-			
+			</div>
 		</div>
 	</div>
-
-
-</div>
 </div>
 
 <?php require_once('footer.php'); ?>
