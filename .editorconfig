@@ -1,0 +1,13 @@
+# EditorConfig - Padronização Estrita de Codificação
+# Este arquivo garante que qualquer editor, IDE ou agente de IA salve arquivos em UTF-8 SEM BOM.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = false
+
+[*.{php,js,css,html,json,sql,md,xml,webmanifest}]
+charset = utf-8
+end_of_line = lf

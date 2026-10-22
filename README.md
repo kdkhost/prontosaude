@@ -168,9 +168,14 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - Consultas otimizadas com comandos atômicos e consultas indexadas, evitando loops N+1.
 - Compatibilidade estrita e testada com **PHP 8.4**.
 
-## 👨‍💻 Boas Práticas (Desenvolvimento)
+## 👨‍💻 Boas Práticas (Desenvolvimento e Agentes de IA)
 
-- Sempre utilizar `charset=utf8mb4` no MySQL para suportar caracteres especiais e acentuação da língua portuguesa.
-- Nunca utilizar o `alert()` ou `confirm()` padrão do navegador; utilizar o utilitário global `window.notificar` (Toastr) ou `Swal.fire` (SweetAlert2).
-- Toda comunicação, commits e documentação devem ser mantidos em português brasileiro.
+- **REGRA CRÍTICA DE CODIFICAÇÃO (NUNCA USAR UTF-8 COM BOM):**
+  - **É terminantemente proibido o uso de UTF-8 com BOM (`\xEF\xBB\xBF`)** em qualquer arquivo do projeto (`.php`, `.js`, `.css`, `.json`, etc.).
+  - O BOM descarrega bytes invisíveis antes do cabeçalho PHP, gerando erros de `headers already sent`, quebrando payloads JSON de APIs/AJAX e corrompendo caracteres acentuados da língua portuguesa.
+  - Para validação e correção automática, execute: `php tools/check_no_bom.php`.
+  - Configurações obrigatórias registradas em `.editorconfig`, `.gitattributes`, `.agents/rules/utf8_no_bom.md` e `AGENTS.md`.
+- **Charset do Banco:** Sempre utilizar `utf8mb4` com collation `utf8mb4_unicode_ci` no MySQL para preservar a integridade ortográfica.
+- **Alertas e Confirmações:** Nunca utilizar o `alert()` ou `confirm()` padrão do navegador; utilizar o utilitário global `window.notificar` (Toastr) ou `Swal.fire` (SweetAlert2).
+- **Idioma:** Toda comunicação, commits e documentação devem ser mantidos em português brasileiro.
 - Manter o arquivo `CHANGELOG.md` atualizado com o histórico de versões mais recente no topo.
