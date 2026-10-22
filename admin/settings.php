@@ -139,9 +139,41 @@ if(isset($_POST['form5'])) {
 	$success_message = 'As quantidades de notícias para rodapé, barra lateral e home foram atualizadas com sucesso.';
 }
 
-// Form 6: SEO / Meta Tags
+// Form 6: SEO / Meta Tags & Open Graph
 if(isset($_POST['form6'])) {
 	$active_tab = 'tab_6';
+
+	// Garante coluna og_image em tbl_settings se ainda não existir
+	try {
+		$pdo->query("SELECT og_image FROM tbl_settings LIMIT 1");
+	} catch (Exception $e) {
+		try {
+			$pdo->exec("ALTER TABLE tbl_settings ADD COLUMN og_image VARCHAR(255) NULL DEFAULT NULL AFTER meta_description_home");
+		} catch (Exception $ex) {}
+	}
+
+	$path = $_FILES['og_image_home']['name'] ?? '';
+	$path_tmp = $_FILES['og_image_home']['tmp_name'] ?? '';
+
+	if(!empty($path)) {
+		$ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+		if(in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+			$og_img_name = 'og-home-' . time() . '.' . $ext;
+			if(move_uploaded_file($path_tmp, '../assets/uploads/' . $og_img_name)) {
+				// Remove imagem antiga se for arquivo gerado e não default
+				$st_old = $pdo->query("SELECT og_image FROM tbl_settings WHERE id=1");
+				$old_data = $st_old->fetch(PDO::FETCH_ASSOC);
+				if(!empty($old_data['og_image']) && file_exists('../assets/uploads/' . $old_data['og_image'])) {
+					@unlink('../assets/uploads/' . $old_data['og_image']);
+				}
+				$st_img = $pdo->prepare("UPDATE tbl_settings SET og_image=? WHERE id=1");
+				$st_img->execute([$og_img_name]);
+			}
+		} else {
+			$error_message .= 'Formato inválido para imagem social. Utilize JPG, PNG ou WEBP.<br>';
+		}
+	}
+
 	$statement = $pdo->prepare("UPDATE tbl_settings SET meta_title_home=?, meta_keyword_home=?, meta_description_home=? WHERE id=1");
 	$statement->execute(array(
 		$_POST['meta_title_home'] ?? '',
@@ -149,7 +181,9 @@ if(isset($_POST['form6'])) {
 		$_POST['meta_description_home'] ?? ''
 	));
 
-	$success_message = 'As configurações de SEO e meta tags da página inicial foram salvas com sucesso.';
+	if(empty($error_message)) {
+		$success_message = 'As configurações de SEO, Open Graph e meta tags da página inicial foram salvas com sucesso.';
+	}
 }
 
 // Form 7: Seções da Home
@@ -275,6 +309,7 @@ $total_recent_news_home_page     = $row['total_recent_news_home_page'] ?? 3;
 $meta_title_home                 = $row['meta_title_home'] ?? '';
 $meta_keyword_home               = $row['meta_keyword_home'] ?? '';
 $meta_description_home           = $row['meta_description_home'] ?? '';
+$og_image_home                   = $row['og_image'] ?? '';
 $home_title_service              = $row['home_title_service'] ?? '';
 $home_subtitle_service           = $row['home_subtitle_service'] ?? '';
 $home_status_service             = $row['home_status_service'] ?? 0;
@@ -749,25 +784,91 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 					     ABA 6: SEO & METADADOS DA HOME
 					     ======================================================== -->
 					<div class="tab-pane fade <?= ($active_tab == 'tab_6') ? 'show active' : ''; ?>" id="tab_6" role="tabpanel" aria-labelledby="tab6-btn">
-						<form action="" method="post">
+						<form action="" method="post" enctype="multipart/form-data">
 							<input type="hidden" name="active_tab" value="tab_6">
 
-							<!-- Simulador de Busca do Google (SERP Preview) -->
-							<div class="card border mb-4 shadow-xs">
-								<div class="card-header bg-body-tertiary py-2 px-3 fw-bold text-primary">
-									<i class="bi bi-google me-1"></i> Prévia nos Resultados de Busca (Google SERP Preview)
+							<!-- Prévias lado a lado: Google SERP + Card Social WhatsApp/Redes -->
+							<div class="row g-4 mb-4">
+								<!-- Simulador de Busca do Google (SERP Preview) -->
+								<div class="col-lg-6">
+									<div class="card border h-100 shadow-xs">
+										<div class="card-header bg-body-tertiary py-2 px-3 fw-bold text-primary d-flex align-items-center justify-content-between">
+											<span><i class="bi bi-google me-1"></i> Prévia no Google (SERP)</span>
+											<span class="badge bg-secondary-subtle text-secondary small">Busca Orgânica</span>
+										</div>
+										<div class="card-body bg-body">
+											<div class="p-3 border rounded-3 bg-body-tertiary h-100">
+												<div class="small text-body-secondary d-flex align-items-center gap-1 mb-1">
+													<i class="bi bi-globe"></i>
+													<span><?= BASE_URL; ?></span>
+												</div>
+												<div class="h5 text-primary mb-1 fw-semibold text-truncate" id="serpTitlePreview">
+													<?= !empty($meta_title_home) ? htmlspecialchars($meta_title_home) : 'Pronto Saúde • Cuidados Médicos e Especialidades'; ?>
+												</div>
+												<div class="small text-body-secondary" id="serpDescPreview" style="line-height: 1.4;">
+													<?= !empty($meta_description_home) ? htmlspecialchars($meta_description_home) : 'Clínica médica moderna com especialidades integradas, agendamento de consultas e exames rápidos.'; ?>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="card-body bg-body">
-									<div class="p-3 border rounded-3 bg-body-tertiary" style="max-width: 650px;">
-										<div class="small text-body-secondary d-flex align-items-center gap-1 mb-1">
-											<i class="bi bi-globe"></i>
-											<span><?= BASE_URL; ?></span>
+
+								<!-- Simulador de Compartilhamento Social (WhatsApp, Facebook, LinkedIn) -->
+								<div class="col-lg-6">
+									<div class="card border h-100 shadow-xs">
+										<div class="card-header bg-body-tertiary py-2 px-3 fw-bold text-success d-flex align-items-center justify-content-between">
+											<span><i class="bi bi-whatsapp me-1"></i> Prévia Social (WhatsApp / Redes)</span>
+											<span class="badge bg-success-subtle text-success small">Proporção 1.91:1</span>
 										</div>
-										<div class="h5 text-primary mb-1 fw-semibold text-truncate" id="serpTitlePreview">
-											<?= !empty($meta_title_home) ? htmlspecialchars($meta_title_home) : 'Pronto Saúde • Cuidados Médicos e Especialidades'; ?>
+										<div class="card-body bg-body">
+											<div class="border rounded-3 overflow-hidden bg-body-tertiary shadow-xs">
+												<div class="ratio ratio-16x9 bg-dark position-relative" style="max-height: 180px;">
+													<?php
+													$current_og_url = !empty($og_image_home) && file_exists('../assets/uploads/' . $og_image_home)
+														? '../assets/uploads/' . $og_image_home
+														: '../assets/uploads/department-1.png';
+													?>
+													<img src="<?= $current_og_url; ?>" id="ogImagePreviewHome" class="w-100 h-100 object-fit-cover" alt="Prévia Social Home">
+												</div>
+												<div class="p-3 bg-body">
+													<div class="small text-uppercase text-body-secondary fw-semibold letter-spacing-1 mb-1">
+														<?= parse_url(BASE_URL, PHP_URL_HOST) ?: 'prontosaude.com.br'; ?>
+													</div>
+													<div class="fw-bold text-body text-truncate mb-1" id="socialTitlePreviewHome">
+														<?= !empty($meta_title_home) ? htmlspecialchars($meta_title_home) : 'Pronto Saúde • Cuidados Médicos e Especialidades'; ?>
+													</div>
+													<div class="small text-body-secondary text-truncate" id="socialDescPreviewHome">
+														<?= !empty($meta_description_home) ? htmlspecialchars($meta_description_home) : 'Clínica médica moderna com especialidades integradas, agendamento de consultas e exames rápidos.'; ?>
+													</div>
+												</div>
+											</div>
 										</div>
-										<div class="small text-body-secondary" id="serpDescPreview">
-											<?= !empty($meta_description_home) ? htmlspecialchars($meta_description_home) : 'Clínica médica moderna com especialidades integradas, agendamento de consultas e exames rápidos.'; ?>
+									</div>
+								</div>
+							</div>
+
+							<!-- Upload da Imagem com Dimensões e Proporções Oficiais -->
+							<div class="card border-primary border-opacity-25 shadow-xs mb-4 bg-primary bg-opacity-10 rounded-3">
+								<div class="card-body p-3">
+									<div class="row align-items-center g-3">
+										<div class="col-md-7">
+											<div class="d-flex align-items-center gap-2 mb-1">
+												<i class="bi bi-image-fill fs-5 text-primary"></i>
+												<h6 class="mb-0 fw-bold text-primary">Imagem de Compartilhamento Social (Open Graph / og:image)</h6>
+											</div>
+											<p class="small text-body-secondary mb-2">
+												Esta é a imagem exibida automaticamente em tamanho grande quando links do portal são compartilhados no <strong>WhatsApp, Facebook, LinkedIn e Twitter/X</strong>.
+											</p>
+											<div class="d-flex flex-wrap gap-2 small">
+												<span class="badge bg-primary text-white"><i class="bi bi-aspect-ratio me-1"></i> Proporção Ideal: 1.91:1</span>
+												<span class="badge bg-dark text-white"><i class="bi bi-arrows-fullscreen me-1"></i> Tamanho Recomendado: 1200 x 630 px</span>
+												<span class="badge bg-light text-dark border"><i class="bi bi-file-earmark-check me-1"></i> Formatos: JPG, PNG, WEBP</span>
+											</div>
+										</div>
+										<div class="col-md-5">
+											<label class="form-label fw-semibold small text-body mb-1">Trocar Imagem de Compartilhamento da Home</label>
+											<input type="file" name="og_image_home" id="ogImageFileInputHome" class="form-control" accept="image/png, image/jpeg, image/webp">
+											<div class="form-text small mt-1">Dica: mantenha textos e logomarcas centralizados.</div>
 										</div>
 									</div>
 								</div>
@@ -801,7 +902,7 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 
 							<div class="mt-4">
 								<button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 shadow-sm" name="form6">
-									<i class="bi bi-check-circle-fill"></i> Salvar Metadados de SEO
+									<i class="bi bi-check-circle-fill"></i> Salvar Metadados e Imagem de SEO
 								</button>
 							</div>
 						</form>
@@ -1240,27 +1341,51 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 	const descInput = document.getElementById('metaDescInput');
 	const serpTitle = document.getElementById('serpTitlePreview');
 	const serpDesc = document.getElementById('serpDescPreview');
+	const socialTitle = document.getElementById('socialTitlePreviewHome');
+	const socialDesc = document.getElementById('socialDescPreviewHome');
 	const titleCount = document.getElementById('titleCharCount');
 	const descCount = document.getElementById('descCharCount');
+	const ogFileInput = document.getElementById('ogImageFileInputHome');
+	const ogImgElem = document.getElementById('ogImagePreviewHome');
 
 	function updateSEOPreview() {
+		const titleVal = titleInput ? (titleInput.value.trim() || 'Pronto Saúde • Cuidados Médicos e Especialidades') : '';
+		const descVal = descInput ? (descInput.value.trim() || 'Clínica médica moderna com especialidades integradas, agendamento de consultas e exames rápidos.') : '';
+
 		if(titleInput && serpTitle && titleCount) {
 			const len = titleInput.value.length;
 			titleCount.textContent = len + ' / 60';
 			titleCount.className = len > 60 ? 'small text-danger fw-bold' : 'small text-body-secondary';
-			serpTitle.textContent = titleInput.value.trim() || 'Pronto Saúde • Cuidados Médicos e Especialidades';
+			serpTitle.textContent = titleVal;
 		}
+		if(socialTitle) socialTitle.textContent = titleVal;
+
 		if(descInput && serpDesc && descCount) {
 			const len = descInput.value.length;
 			descCount.textContent = len + ' / 160';
 			descCount.className = len > 160 ? 'small text-danger fw-bold' : 'small text-body-secondary';
-			serpDesc.textContent = descInput.value.trim() || 'Clínica médica moderna com especialidades integradas, agendamento de consultas e exames rápidos.';
+			serpDesc.textContent = descVal;
 		}
+		if(socialDesc) socialDesc.textContent = descVal;
 	}
 
 	if(titleInput) titleInput.addEventListener('input', updateSEOPreview);
 	if(descInput) descInput.addEventListener('input', updateSEOPreview);
 	updateSEOPreview();
+
+	// Preview instantâneo da Imagem Open Graph
+	if(ogFileInput && ogImgElem) {
+		ogFileInput.addEventListener('change', function() {
+			const file = this.files && this.files[0];
+			if(file) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					ogImgElem.src = e.target.result;
+				};
+				reader.readAsDataURL(file);
+			}
+		});
+	}
 
 	// Sincronização Síncrona e Definitiva de Abas integrada ao motor global SPA
 	function activateTab(tabId) {

@@ -195,7 +195,15 @@ if(isset($_POST['form1'])) {
 						<div class="row mb-3">
 				            <label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto em destaque</label>
 				            <div class="col-12 col-sm-9 col-lg-6">
-				                <input type="file" name="photo">
+				                <input type="file" name="photo" class="form-control mb-2" accept="image/*">
+				                <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+				                	<span class="badge bg-primary text-white"><i class="bi bi-aspect-ratio me-1"></i> Proporção Ideal: 1.91:1</span>
+				                	<span class="badge bg-dark text-white"><i class="bi bi-arrows-fullscreen me-1"></i> Tamanho Recomendado: 1200 x 630 px</span>
+				                	<span class="badge bg-secondary-subtle text-body border">WhatsApp / Redes</span>
+				                </div>
+				                <div class="form-text small text-body-secondary">
+				                	Esta foto é exibida como capa da notícia e na <strong>prévia de compartilhamento em redes sociais (WhatsApp, Facebook, Twitter/X)</strong>.
+				                </div>
 				            </div>
 				        </div>
 						<div class="row mb-3">

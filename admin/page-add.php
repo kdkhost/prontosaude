@@ -22,11 +22,11 @@ if(isset($_POST['form1'])) {
     $path_tmp = $_FILES['banner']['tmp_name'];
 
     if($path!='') {
-        $ext = pathinfo( $path, PATHINFO_EXTENSION );
+        $ext = strtolower(pathinfo( $path, PATHINFO_EXTENSION ));
         $file_name = basename( $path, '.' . $ext );
-        if( $ext!='jpg' && $ext!='png' && $ext!='jpeg' && $ext!='gif' ) {
+        if( $ext!='jpg' && $ext!='png' && $ext!='jpeg' && $ext!='gif' && $ext!='webp' ) {
             $valid = 0;
-            $error_message .= 'Você deve fazer o upload do arquivo jpg, jpeg, gif ou png para banner<br>';
+            $error_message .= 'Você deve fazer o upload de arquivo jpg, jpeg, png, gif ou webp para o banner<br>';
         }
     } else {
     	$valid = 0;
@@ -153,9 +153,23 @@ if(isset($_POST['form1'])) {
 							</div>
 						</div>	
 						<div class="row mb-3">
-							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner <span class="text-danger">*</span></label>
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Banner / Imagem Social <span class="text-danger">*</span></label>
 							<div class="col-12 col-sm-9 col-lg-9">
-								<input type="file" name="banner"><div class="form-text">Apenas jpg, jpeg, gif e png são permitidos</div>
+								<input type="file" name="banner" class="form-control mb-2" id="pageBannerInput" accept="image/png, image/jpeg, image/webp, image/gif">
+								<div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+									<span class="badge bg-primary text-white"><i class="bi bi-aspect-ratio me-1"></i> Proporção Ideal: 1.91:1</span>
+									<span class="badge bg-dark text-white"><i class="bi bi-arrows-fullscreen me-1"></i> Dimensão Recomendada: 1200 x 630 px</span>
+									<span class="badge bg-secondary-subtle text-body border"><i class="bi bi-file-earmark-check me-1"></i> Formatos: JPG, PNG, WEBP</span>
+								</div>
+								<div class="form-text small text-body-secondary">
+									Esta imagem é utilizada como topo da página e gerada automaticamente como <strong>capa no WhatsApp, Facebook, LinkedIn e Twitter/X</strong> ao compartilhar.
+								</div>
+								<div id="pageBannerPreviewContainer" class="mt-3 p-2 border rounded-3 bg-body-tertiary d-none" style="max-width: 380px;">
+									<div class="small fw-semibold text-body-secondary mb-1"><i class="bi bi-eye me-1"></i> Prévia do Banner (Proporção 1.91:1):</div>
+									<div class="ratio ratio-16x9 rounded overflow-hidden border bg-dark">
+										<img id="pageBannerPreviewImg" src="" alt="Prévia" class="w-100 h-100 object-fit-cover">
+									</div>
+								</div>
 							</div>
 						</div>					
 						<div class="row mb-3">
@@ -203,5 +217,28 @@ if(isset($_POST['form1'])) {
 
 </div>
 </div>
+
+<script>
+(function() {
+	const fileInput = document.getElementById('pageBannerInput');
+	const container = document.getElementById('pageBannerPreviewContainer');
+	const img = document.getElementById('pageBannerPreviewImg');
+	if(fileInput && container && img) {
+		fileInput.addEventListener('change', function() {
+			const file = this.files && this.files[0];
+			if(file) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					img.src = e.target.result;
+					container.classList.remove('d-none');
+				};
+				reader.readAsDataURL(file);
+			} else {
+				container.classList.add('d-none');
+			}
+		});
+	}
+})();
+</script>
 
 <?php require_once('footer.php'); ?>

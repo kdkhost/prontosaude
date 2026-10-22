@@ -84,10 +84,12 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - **Benefícios Inclusos:** Edição simplificada de tópicos/benefícios (um por linha no painel) com renderização automática de ícones de checkmark nos cards do portal.
   - **Botões e Links Customizáveis:** Personalização do texto da ação (ex: *Contratar Agora*, *Agendar Consulta*, *Saiba Mais*) e URL de destino flexível (WhatsApp direto, link de checkout ou página de detalhes).
   - **Destaque e Selos (Badges):** Opção de marcar planos recomendados com efeito de elevação e selos dinâmicos (*Mais Popular*, *Recomendado*).
-- **Central Completa de Auditoria & Otimização de SEO (`admin/seo.php`):**
-  - Auditoria técnica em tempo real com cálculo de pontuação (0 a 100) para páginas fixas e dinâmicas.
-  - Simuladores ao vivo do Google SERP (Desktop e Mobile) e de Cartões de Redes Sociais / Open Graph (WhatsApp, Facebook, LinkedIn).
-  - Salvamento assíncrono via AJAX sem recarregar a tela.
+- **Central Completa de Auditoria, SEO & Compartilhamento Social (`admin/seo.php`):**
+  - **Gestão Individual de SEO para Cada Página:** Seletor lateral de páginas com filtro de busca em tempo real que abre instantaneamente os dados de qualquer página (Home, páginas institucionais dinâmicas e páginas fixas como Fidelidade, Serviços, Odontologia, Corpo Clínico, Trabalhe Conosco e Blog).
+  - **Imagens Sociais nas Dimensões e Proporções Oficiais:** Gestão de imagem de compartilhamento Open Graph com especificação e orientação clara das proporções ideais: **1.91:1 (1200 x 630 pixels)** para visualização perfeita em tela cheia no **WhatsApp, Facebook, LinkedIn e Twitter/X (Summary Large Image)** sem cortes ou tarjas pretas.
+  - **Padronização Global em Todo o Sistema:** Orientações e badges de 1200 x 630 px (1.91:1) com previews visuais integrados em todos os pontos de upload do sistema (`admin/seo.php`, `admin/settings.php` Aba 6, `admin/page-add.php`, `admin/page-edit.php`, `admin/news-add.php` e `admin/news-edit.php`).
+  - **Motor Frontend Unificado de Metadados (`header.php`):** Emissão automática e padronizada das tags `<meta property="og:*">` (`og:locale`, `og:type`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:width="1200"`, `og:image:height="630"`, `og:image:type`) e Twitter Cards com URLs absolutas canônicas em todas as páginas públicas do portal.
+  - **Auditoria Técnica & Simuladores ao Vivo:** Cálculo dinâmico de pontuação (0 a 100), checklist de boas práticas, simulação interativa nos resultados de busca do Google (SERP Desktop e Mobile) e prévia em tempo real do card de redes sociais com persistência instantânea via AJAX sem recarregar a tela.
 - **Menu Deslizante Offcanvas do Site Público (Slide da Esquerda para a Direita):**
   - Menu mobile/tablet deslizante de alta performance acelerado por hardware (`translate3d`), com animação elástica suave.
   - Suporte completo a gestos de toque (*swipe* para a esquerda para fechar), tecla `ESC`, botão `X` e backdrop blur com desfoque de vidro.

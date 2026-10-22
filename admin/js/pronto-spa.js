@@ -274,6 +274,13 @@
       window.renderDashboardCharts(isDark);
     }
 
+    // K. Módulo de Otimização & SEO Completo
+    if (window.initSEOModule && (container.querySelector('#seoPagesList') || container.querySelector('#formSEO'))) {
+      const seoList = container.querySelector('#seoPagesList');
+      if (seoList) seoList.dataset.seoInit = 'false';
+      window.initSEOModule(container);
+    }
+
     // K. Restauração de Tabs ativas via Hash
     restoreTabFromHash(container);
 
@@ -450,6 +457,19 @@
       if (mainContainer && newContent) {
         mainContainer.innerHTML = newContent.innerHTML;
         mainContainer.style.opacity = '1';
+
+        // Executa scripts inline específicos da nova página carregada via SPA
+        const inlineScripts = mainContainer.querySelectorAll('script');
+        inlineScripts.forEach(oldScript => {
+          if (!oldScript.src) {
+            try {
+              const newScript = document.createElement('script');
+              Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+              newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+              oldScript.parentNode.replaceChild(newScript, oldScript);
+            } catch (e) {}
+          }
+        });
       }
 
       // Atualiza URL no histórico
@@ -592,6 +612,18 @@
 
         if (mainContainer && newContent) {
           mainContainer.innerHTML = newContent.innerHTML;
+
+          const inlineScripts = mainContainer.querySelectorAll('script');
+          inlineScripts.forEach(oldScript => {
+            if (!oldScript.src) {
+              try {
+                const newScript = document.createElement('script');
+                Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+              } catch (e) {}
+            }
+          });
         }
 
         window.history.pushState({ url: finalUrl }, newTitle, finalUrl);

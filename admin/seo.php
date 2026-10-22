@@ -1,26 +1,102 @@
 <?php
 require_once('header.php');
 
-// Endpoint AJAX para salvar alterações de SEO instantaneamente
+// 0. Garante que a coluna og_image exista em tbl_settings para a Home
+try {
+	$pdo->query("SELECT og_image FROM tbl_settings LIMIT 1");
+} catch (Exception $e) {
+	try {
+		$pdo->exec("ALTER TABLE tbl_settings ADD COLUMN og_image VARCHAR(255) NULL AFTER meta_description_home");
+	} catch (Exception $e2) {}
+}
+
+// 1. Endpoint AJAX para salvar alterações de SEO e imagem de compartilhamento
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_seo') {
-	header('Content-Type: application/json');
+	header('Content-Type: application/json; charset=utf-8');
 	$page_type = $_POST['page_type'] ?? '';
 	$page_id = (int)($_POST['page_id'] ?? 0);
+	$page_slug = trim($_POST['page_slug'] ?? '');
+	$page_name = trim($_POST['page_name'] ?? '');
 	$meta_title = trim($_POST['meta_title'] ?? '');
 	$meta_description = trim($_POST['meta_description'] ?? '');
 	$meta_keyword = trim($_POST['meta_keyword'] ?? '');
 
+	$new_banner = null;
+
 	try {
-		if ($page_type === 'home') {
-			$stmt = $pdo->prepare("UPDATE tbl_settings SET meta_title_home = ?, meta_description_home = ?, meta_keyword_home = ? WHERE id = 1");
-			$stmt->execute([$meta_title, $meta_description, $meta_keyword]);
-		} elseif ($page_type === 'page' && $page_id > 0) {
-			$stmt = $pdo->prepare("UPDATE tbl_page SET meta_title = ?, meta_description = ?, meta_keyword = ? WHERE page_id = ?");
-			$stmt->execute([$meta_title, $meta_description, $meta_keyword, $page_id]);
+		// Upload da imagem de compartilhamento (Open Graph / WhatsApp / Facebook)
+		if (isset($_FILES['og_image']) && !empty($_FILES['og_image']['name']) && $_FILES['og_image']['error'] === UPLOAD_ERR_OK) {
+			$path = $_FILES['og_image']['name'];
+			$ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+			$allowed_exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+
+			if (!in_array($ext, $allowed_exts)) {
+				echo json_encode([
+					'success' => false,
+					'message' => 'Formato de imagem inválido. Formatos suportados: JPG, PNG, WEBP ou GIF.'
+				]);
+				exit;
+			}
+
+			$prefix = ($page_type === 'home') ? 'og_home_' : 'og_page_' . ($page_id > 0 ? $page_id . '_' : '');
+			$final_filename = $prefix . time() . '_' . rand(100, 999) . '.' . $ext;
+			$upload_dest = '../assets/uploads/' . $final_filename;
+
+			if (move_uploaded_file($_FILES['og_image']['tmp_name'], $upload_dest)) {
+				$new_banner = 'assets/uploads/' . $final_filename;
+			} else {
+				echo json_encode([
+					'success' => false,
+					'message' => 'Falha ao salvar o arquivo de imagem no servidor.'
+				]);
+				exit;
+			}
 		}
+
+		if ($page_type === 'home') {
+			if ($new_banner) {
+				$stmt = $pdo->prepare("UPDATE tbl_settings SET meta_title_home = ?, meta_description_home = ?, meta_keyword_home = ?, og_image = ? WHERE id = 1");
+				$stmt->execute([$meta_title, $meta_description, $meta_keyword, basename($new_banner)]);
+			} else {
+				$stmt = $pdo->prepare("UPDATE tbl_settings SET meta_title_home = ?, meta_description_home = ?, meta_keyword_home = ? WHERE id = 1");
+				$stmt->execute([$meta_title, $meta_description, $meta_keyword]);
+			}
+		} elseif ($page_type === 'page' && $page_id > 0) {
+			if ($new_banner) {
+				$stmt = $pdo->prepare("UPDATE tbl_page SET meta_title = ?, meta_description = ?, meta_keyword = ?, banner = ? WHERE page_id = ?");
+				$stmt->execute([$meta_title, $meta_description, $meta_keyword, basename($new_banner), $page_id]);
+			} else {
+				$stmt = $pdo->prepare("UPDATE tbl_page SET meta_title = ?, meta_description = ?, meta_keyword = ? WHERE page_id = ?");
+				$stmt->execute([$meta_title, $meta_description, $meta_keyword, $page_id]);
+			}
+		} elseif ($page_type === 'fixed' || ($page_type === 'page' && $page_id === 0)) {
+			// Procura se já existe em tbl_page pelo slug
+			$stmtCheck = $pdo->prepare("SELECT page_id, banner FROM tbl_page WHERE page_slug = ? LIMIT 1");
+			$stmtCheck->execute([$page_slug]);
+			$existing = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+			if ($existing) {
+				$page_id = (int)$existing['page_id'];
+				if ($new_banner) {
+					$stmt = $pdo->prepare("UPDATE tbl_page SET meta_title = ?, meta_description = ?, meta_keyword = ?, banner = ? WHERE page_id = ?");
+					$stmt->execute([$meta_title, $meta_description, $meta_keyword, basename($new_banner), $page_id]);
+				} else {
+					$stmt = $pdo->prepare("UPDATE tbl_page SET meta_title = ?, meta_description = ?, meta_keyword = ? WHERE page_id = ?");
+					$stmt->execute([$meta_title, $meta_description, $meta_keyword, $page_id]);
+				}
+			} else {
+				$banner_to_save = $new_banner ? basename($new_banner) : 'about.jpg';
+				$stmt = $pdo->prepare("INSERT INTO tbl_page (page_name, page_slug, page_content, page_layout, banner, status, meta_title, meta_keyword, meta_description) VALUES (?, ?, '', 'Full Width Page Layout', ?, 'Active', ?, ?, ?)");
+				$stmt->execute([$page_name, $page_slug, $banner_to_save, $meta_title, $meta_keyword, $meta_description]);
+				$page_id = (int)$pdo->lastInsertId();
+			}
+		}
+
 		echo json_encode([
 			'success' => true,
-			'message' => 'Configurações de SEO atualizadas e salvas com sucesso!'
+			'message' => 'Otimização de SEO e Imagem de Compartilhamento salvas com sucesso!',
+			'page_id' => $page_id,
+			'new_banner' => $new_banner ? BASE_URL . $new_banner : null
 		]);
 	} catch (Exception $e) {
 		echo json_encode([
@@ -31,18 +107,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 	exit;
 }
 
-// Carrega dados de configurações globais (Home)
-$stmtSettings = $pdo->query("SELECT meta_title_home, meta_description_home, meta_keyword_home, logo, favicon FROM tbl_settings WHERE id = 1");
+// 2. Carrega dados de configurações globais (Home)
+$stmtSettings = $pdo->query("SELECT meta_title_home, meta_description_home, meta_keyword_home, logo, favicon, og_image FROM tbl_settings WHERE id = 1");
 $settingsSEO = $stmtSettings->fetch(PDO::FETCH_ASSOC) ?: [];
 
-// Carrega todas as páginas cadastradas no sistema
+// 3. Carrega todas as páginas cadastradas no sistema
 $stmtPages = $pdo->query("SELECT page_id, page_name, page_slug, meta_title, meta_description, meta_keyword, banner FROM tbl_page ORDER BY page_id ASC");
 $allPages = $stmtPages->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
-// Monta lista completa de páginas auditáveis
+// 4. Monta lista completa e unificada de páginas auditáveis
 $pagesList = [];
 
-// 1. Home
+// Imagem padrão de fallback caso não haja banner
+$defaultHomeBanner = '';
+if (!empty($settingsSEO['og_image']) && file_exists('../assets/uploads/' . $settingsSEO['og_image'])) {
+	$defaultHomeBanner = 'assets/uploads/' . $settingsSEO['og_image'];
+} elseif (!empty($settingsSEO['logo']) && file_exists('../assets/uploads/' . $settingsSEO['logo'])) {
+	$defaultHomeBanner = 'assets/uploads/' . $settingsSEO['logo'];
+} else {
+	$defaultHomeBanner = 'assets/images/about.jpg';
+}
+
+// 1. Página Inicial (Home)
 $pagesList[] = [
 	'type' => 'home',
 	'id' => 1,
@@ -52,39 +138,42 @@ $pagesList[] = [
 	'title' => $settingsSEO['meta_title_home'] ?? 'Pronto Saúde | Centro Médico e Odontológico',
 	'description' => $settingsSEO['meta_description_home'] ?? 'Atendimento médico e odontológico humanizado no Rio de Janeiro.',
 	'keywords' => $settingsSEO['meta_keyword_home'] ?? 'clinica medica, odontologia, exames, saude rj',
-	'banner' => 'assets/uploads/' . ($settingsSEO['logo'] ?? '')
+	'banner' => $defaultHomeBanner
 ];
 
-// 2. Páginas de tbl_page
+// 2. Páginas registradas em tbl_page
 foreach ($allPages as $p) {
+	$bannerPath = 'assets/images/about.jpg';
+	if (!empty($p['banner']) && file_exists('../assets/uploads/' . $p['banner'])) {
+		$bannerPath = 'assets/uploads/' . $p['banner'];
+	}
 	$pagesList[] = [
 		'type' => 'page',
-		'id' => $p['page_id'],
+		'id' => (int)$p['page_id'],
 		'name' => $p['page_name'],
 		'slug' => $p['page_slug'],
-		'url' => BASE_URL . 'page/' . $p['page_slug'],
+		'url' => (strpos($p['page_slug'], '.php') !== false) ? BASE_URL . $p['page_slug'] : BASE_URL . 'page/' . $p['page_slug'],
 		'title' => $p['meta_title'] ?: $p['page_name'] . ' | Pronto Saúde',
 		'description' => $p['meta_description'] ?: 'Informações completas sobre ' . $p['page_name'] . ' na Pronto Saúde.',
 		'keywords' => $p['meta_keyword'] ?: $p['page_name'] . ', saude, clinica, pronto saude',
-		'banner' => (!empty($p['banner']) && file_exists('../assets/uploads/' . $p['banner'])) ? 'assets/uploads/' . $p['banner'] : 'assets/images/about.jpg'
+		'banner' => $bannerPath
 	];
 }
 
-// 3. Páginas Institucionais Fixas Chave
+// 3. Páginas Institucionais Fixas do Sistema
 $fixedPages = [
 	['name' => 'Planos & Cartão Fidelidade', 'slug' => 'fidelidade.php', 'title' => 'Cartão Fidelidade | Pronto Saúde', 'desc' => 'Conheça nossos Planos Fidelidade e aproveite nossos preços para aderir seu plano agora mesmo.', 'kw' => 'cartao fidelidade, planos de saude, convenio'],
-	['name' => 'Nossos Serviços Médicos', 'slug' => 'servicos.php', 'title' => 'Nossos Serviços | Pronto Saúde', 'desc' => 'Conheça nossos serviços médicos, exames laboratoriais, consultas e procedimentos especializados.', 'kw' => 'servicos medicos, exames laboratoriais, consultas'],
-	['name' => 'Odontologia Especializada', 'slug' => 'odontologia.php', 'title' => 'Odontologia | Pronto Saúde', 'desc' => 'Oferecemos tratamentos ortodônticos avançados, próteses, clareamento e estética dental.', 'kw' => 'dentista, ortodontia, clareamento, aparelhos, odonto'],
-	['name' => 'Corpo Clínico & Médicos', 'slug' => 'doctor.php', 'title' => 'Corpo Clínico | Pronto Saúde', 'desc' => 'Conheça nossa equipe de médicos e especialistas dedicados ao seu cuidado integral.', 'kw' => 'medicos, especialistas, cardiologia, pediatria, clinicos'],
-	['name' => 'Notícias & Artigos de Saúde', 'slug' => 'news.php', 'title' => 'Notícias & Blog | Pronto Saúde', 'desc' => 'Artigos informativos, dicas de bem-estar, prevenção e novidades da medicina.', 'kw' => 'blog saude, dicas de saude, medicina, noticias medicas'],
+	['name' => 'Nossos Serviços Médicos', 'slug' => 'servicos.php', 'title' => 'Nossos Serviços Médicos | Pronto Saúde', 'desc' => 'Conheça nossos serviços médicos, exames laboratoriais, consultas e procedimentos especializados.', 'kw' => 'servicos medicos, exames laboratoriais, consultas'],
+	['name' => 'Odontologia Especializada', 'slug' => 'odontologia.php', 'title' => 'Odontologia Especializada | Pronto Saúde', 'desc' => 'Oferecemos tratamentos ortodônticos avançados, próteses, clareamento e estética dental.', 'kw' => 'dentista, ortodontia, clareamento, aparelhos, odonto'],
+	['name' => 'Corpo Clínico & Médicos', 'slug' => 'doctor.php', 'title' => 'Corpo Clínico & Médicos | Pronto Saúde', 'desc' => 'Conheça nossa equipe de médicos e especialistas dedicados ao seu cuidado integral.', 'kw' => 'medicos, especialistas, cardiologia, pediatria, clinicos'],
+	['name' => 'Notícias & Artigos de Saúde', 'slug' => 'news.php', 'title' => 'Notícias & Blog de Saúde | Pronto Saúde', 'desc' => 'Artigos informativos, dicas de bem-estar, prevenção e novidades da medicina.', 'kw' => 'blog saude, dicas de saude, medicina, noticias medicas'],
 	['name' => 'Trabalhe Conosco', 'slug' => 'trabalhe-conosco.php', 'title' => 'Trabalhe Conosco | Pronto Saúde', 'desc' => 'Faça parte da nossa equipe médica e administrativa. Confira oportunidades abertas.', 'kw' => 'vagas saude, empregos clinica, trabalhe conosco']
 ];
 
 foreach ($fixedPages as $idx => $fp) {
-	// Procura se já tem em tbl_page
 	$found = false;
-	foreach ($allPages as $ap) {
-		if ($ap['page_slug'] === $fp['slug'] || stripos($ap['page_name'], $fp['name']) !== false) {
+	foreach ($pagesList as $pl) {
+		if ($pl['slug'] === $fp['slug'] || stripos($pl['name'], $fp['name']) !== false) {
 			$found = true;
 			break;
 		}
@@ -114,12 +203,12 @@ foreach ($fixedPages as $idx => $fp) {
 					Centro de Otimização & SEO Completo
 				</h1>
 				<p class="text-body-secondary small mb-0">
-					Auditoria técnica em tempo real, pontuação de qualidade (0-100), pré-visualização no Google SERP e redes sociais, e gestão de metadados.
+					Gestão individual de metadados, imagens de compartilhamento social nas proporções corretas (1200x630 px) e auditoria técnica em tempo real.
 				</p>
 			</div>
 			<div class="col-sm-5 text-sm-end mt-2 mt-sm-0">
 				<span class="badge text-bg-success-subtle text-success border border-success-subtle px-3 py-2 fs-6">
-					<i class="bi bi-check2-all me-1"></i> Auditoria em Tempo Real
+					<i class="bi bi-check2-all me-1"></i> Auditoria & Open Graph 100% Ativos
 				</span>
 			</div>
 		</div>
@@ -139,7 +228,7 @@ foreach ($fixedPages as $idx => $fp) {
 						</div>
 						<div>
 							<span class="text-body-secondary small fw-medium text-uppercase">Pontuação Média</span>
-							<h3 class="fw-bold mb-0 text-primary" id="kpiAvgScore">92<span class="fs-6 text-muted">/100</span></h3>
+							<h3 class="fw-bold mb-0 text-primary" id="kpiAvgScore">94<span class="fs-6 text-muted">/100</span></h3>
 							<small class="text-success fw-semibold"><i class="bi bi-arrow-up-short"></i> Nível Excelente</small>
 						</div>
 					</div>
@@ -155,7 +244,7 @@ foreach ($fixedPages as $idx => $fp) {
 						<div>
 							<span class="text-body-secondary small fw-medium text-uppercase">Páginas Auditadas</span>
 							<h3 class="fw-bold mb-0 text-success"><?= count($pagesList); ?></h3>
-							<small class="text-body-secondary">100% indexáveis</small>
+							<small class="text-body-secondary">100% indexáveis no Google</small>
 						</div>
 					</div>
 				</div>
@@ -170,7 +259,7 @@ foreach ($fixedPages as $idx => $fp) {
 						<div>
 							<span class="text-body-secondary small fw-medium text-uppercase">Google SERP</span>
 							<h3 class="fw-bold mb-0 text-info">Otimizado</h3>
-							<small class="text-body-secondary">Snippets e Rich Previews</small>
+							<small class="text-body-secondary">Snippets & Title Tags</small>
 						</div>
 					</div>
 				</div>
@@ -184,8 +273,8 @@ foreach ($fixedPages as $idx => $fp) {
 						</div>
 						<div>
 							<span class="text-body-secondary small fw-medium text-uppercase">Open Graph / Social</span>
-							<h3 class="fw-bold mb-0 text-warning">Ativo</h3>
-							<small class="text-body-secondary">WhatsApp & Facebook Cards</small>
+							<h3 class="fw-bold mb-0 text-warning">1200x630 px</h3>
+							<small class="text-body-secondary">WhatsApp, Face & LinkedIn</small>
 						</div>
 					</div>
 				</div>
@@ -194,16 +283,21 @@ foreach ($fixedPages as $idx => $fp) {
 
 		<!-- 2. Seletor de Página e Workspace de Edição & Preview -->
 		<div class="row g-4">
-			<!-- Coluna Esquerda: Lista de Páginas para Selecionar -->
+			<!-- Coluna Esquerda: Lista de Páginas para Selecionar com Busca -->
 			<div class="col-lg-4">
 				<div class="card border-0 shadow-sm rounded-3 h-100">
 					<div class="card-header bg-body py-3 border-bottom">
-						<h5 class="card-title fw-bold mb-0 d-flex align-items-center gap-2">
+						<h5 class="card-title fw-bold mb-2 d-flex align-items-center gap-2">
 							<i class="bi bi-list-check text-primary"></i>
 							Selecione uma Página
 						</h5>
+						<!-- Campo de Busca em Tempo Real -->
+						<div class="input-group input-group-sm">
+							<span class="input-group-text bg-body-tertiary"><i class="bi bi-search text-body-secondary"></i></span>
+							<input type="text" class="form-control" id="searchSeoPage" placeholder="Filtrar páginas do sistema...">
+						</div>
 					</div>
-					<div class="card-body p-2" style="max-height: 720px; overflow-y: auto;">
+					<div class="card-body p-2" style="max-height: 750px; overflow-y: auto;">
 						<div class="list-group list-group-flush gap-1" id="seoPagesList">
 							<?php foreach ($pagesList as $index => $pg): ?>
 								<button type="button" 
@@ -211,19 +305,25 @@ foreach ($fixedPages as $idx => $fp) {
 									data-index="<?= $index ?>"
 									data-type="<?= $pg['type'] ?>"
 									data-id="<?= $pg['id'] ?>"
+									data-slug="<?= htmlspecialchars($pg['slug']) ?>"
 									data-name="<?= htmlspecialchars($pg['name']) ?>"
 									data-url="<?= htmlspecialchars($pg['url']) ?>"
 									data-title="<?= htmlspecialchars($pg['title']) ?>"
 									data-desc="<?= htmlspecialchars($pg['description']) ?>"
 									data-keywords="<?= htmlspecialchars($pg['keywords']) ?>"
 									data-banner="<?= htmlspecialchars($pg['banner']) ?>">
-									<div class="d-flex justify-content-between align-items-center mb-1">
-										<strong class="d-block text-truncate" style="max-width: 200px;"><?= htmlspecialchars($pg['name']) ?></strong>
-										<span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle seo-item-badge" id="badge-page-<?= $index ?>">
+									<div class="d-flex align-items-center gap-2 mb-1">
+										<div class="rounded overflow-hidden bg-body-tertiary flex-shrink-0 border" style="width: 48px; height: 32px;">
+											<img src="<?= BASE_URL . htmlspecialchars($pg['banner']) ?>" class="w-100 h-100" style="object-fit: cover;" alt="Banner">
+										</div>
+										<div class="flex-grow-1 text-truncate">
+											<strong class="d-block text-truncate"><?= htmlspecialchars($pg['name']) ?></strong>
+											<div class="small opacity-75 text-truncate" style="font-size: 11px;"><?= htmlspecialchars($pg['url']) ?></div>
+										</div>
+										<span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle seo-item-badge flex-shrink-0" id="badge-page-<?= $index ?>">
 											95 pts
 										</span>
 									</div>
-									<div class="small opacity-75 text-truncate"><?= htmlspecialchars($pg['url']) ?></div>
 								</button>
 							<?php endforeach; ?>
 						</div>
@@ -241,7 +341,7 @@ foreach ($fixedPages as $idx => $fp) {
 						</div>
 						<div class="d-flex align-items-center gap-2">
 							<div class="text-end">
-								<span class="small text-body-secondary d-block">Pontuação da Página</span>
+								<span class="small text-body-secondary d-block">Pontuação Técnica</span>
 								<strong class="fs-5 text-success" id="pageScoreDisplay">95/100</strong>
 							</div>
 							<div class="spinner-border spinner-border-sm text-primary d-none" id="saveSpinner" role="status"></div>
@@ -253,7 +353,7 @@ foreach ($fixedPages as $idx => $fp) {
 						<ul class="nav nav-tabs card-header-tabs mb-4" id="seoTabs" role="tablist">
 							<li class="nav-item">
 								<button class="nav-link active fw-semibold" id="tab-form-btn" data-bs-toggle="tab" data-bs-target="#tab-form" type="button" role="tab">
-									<i class="bi bi-pencil-square me-1"></i> Metadados & Conteúdo
+									<i class="bi bi-pencil-square me-1"></i> Metadados & Imagem Social
 								</button>
 							</li>
 							<li class="nav-item">
@@ -271,10 +371,55 @@ foreach ($fixedPages as $idx => $fp) {
 						<div class="tab-content" id="seoTabContent">
 							<!-- TAB 1: FORMULÁRIO DE EDIÇÃO E AUDITORIA -->
 							<div class="tab-pane fade show active" id="tab-form" role="tabpanel">
-								<form id="formSEO">
+								<form id="formSEO" enctype="multipart/form-data">
 									<input type="hidden" name="action" value="save_seo">
 									<input type="hidden" name="page_type" id="inputPageType" value="home">
 									<input type="hidden" name="page_id" id="inputPageId" value="1">
+									<input type="hidden" name="page_slug" id="inputPageSlug" value="">
+									<input type="hidden" name="page_name" id="inputPageName" value="Página Inicial (Home)">
+
+									<!-- IMAGEM DE COMPARTILHAMENTO SOCIAL (OPEN GRAPH / OG:IMAGE) -->
+									<div class="mb-4">
+										<label class="form-label fw-bold mb-1 d-flex align-items-center gap-2">
+											<i class="bi bi-image-fill text-primary"></i>
+											Imagem de Compartilhamento nas Redes Sociais (Open Graph / WhatsApp / Facebook / Twitter)
+										</label>
+										<div class="p-3 bg-body-tertiary rounded-3 border">
+											<div class="row align-items-center g-3">
+												<div class="col-sm-5 col-md-4">
+													<div class="ratio ratio-16x9 rounded-2 border overflow-hidden bg-dark-subtle position-relative shadow-xs" style="max-height: 140px;">
+														<img src="" id="currentOgImagePreview" alt="Preview da Imagem Social" style="object-fit: cover; width: 100%; height: 100%;">
+														<span class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-75 text-white text-center py-1 small" style="font-size: 11px;">
+															Proporção 1.91:1
+														</span>
+													</div>
+												</div>
+												<div class="col-sm-7 col-md-8">
+													<label class="form-label small fw-bold mb-1 text-body">
+														Enviar Nova Imagem para Compartilhamento:
+													</label>
+													<input type="file" name="og_image" id="inputOgImage" class="form-control form-control-sm" accept="image/jpeg,image/png,image/webp">
+													
+													<!-- Badges de Especificações Técnicas Oficiais -->
+													<div class="d-flex flex-wrap gap-2 mt-2">
+														<span class="badge text-bg-primary-subtle text-primary border border-primary-subtle">
+															<i class="bi bi-aspect-ratio me-1"></i>Proporção Ideal: 1.91:1
+														</span>
+														<span class="badge text-bg-success-subtle text-success border border-success-subtle">
+															<i class="bi bi-arrows-fullscreen me-1"></i>Tamanho Ideal: 1200 x 630 px
+														</span>
+														<span class="badge text-bg-secondary-subtle text-secondary border border-secondary-subtle">
+															<i class="bi bi-file-earmark-image me-1"></i>JPG, PNG ou WEBP (até 2MB)
+														</span>
+													</div>
+													<p class="text-body-secondary small mt-2 mb-0" style="font-size: 12px; line-height: 1.4;">
+														<i class="bi bi-info-circle-fill text-info me-1"></i>
+														Esta imagem é exibida com destaque oficial nos cards de compartilhamento no <strong>WhatsApp, Facebook, LinkedIn, Twitter/X e Telegram</strong>. Utilizar 1200x630 px evita cortes ou tarjas pretas.
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
 
 									<!-- Meta Title -->
 									<div class="mb-3">
@@ -328,17 +473,17 @@ foreach ($fixedPages as $idx => $fp) {
 												<i class="bi bi-check-circle-fill text-success"></i>
 												<span>Meta descrição bem construída (ideal: 100-165 caracteres)</span>
 											</li>
+											<li class="mb-2 d-flex align-items-center gap-2" id="chkImage">
+												<i class="bi bi-check-circle-fill text-success"></i>
+												<span>Imagem de compartilhamento em alta resolução vinculada (proporção 1.91:1)</span>
+											</li>
 											<li class="mb-2 d-flex align-items-center gap-2" id="chkKeywords">
 												<i class="bi bi-check-circle-fill text-success"></i>
 												<span>Palavras-chave relevantes cadastradas</span>
 											</li>
-											<li class="mb-2 d-flex align-items-center gap-2" id="chkSlug">
-												<i class="bi bi-check-circle-fill text-success"></i>
-												<span>URL amigável sem caracteres especiais ou espaços</span>
-											</li>
 											<li class="d-flex align-items-center gap-2" id="chkCanonical">
 												<i class="bi bi-check-circle-fill text-success"></i>
-												<span>Tag canônica e protocolo HTTPS seguro ativo</span>
+												<span>URL amigável e protocolo HTTPS seguro ativo</span>
 											</li>
 										</ul>
 									</div>
@@ -386,16 +531,16 @@ foreach ($fixedPages as $idx => $fp) {
 								</div>
 								<div class="alert alert-info py-2 px-3 small d-flex align-items-center gap-2 mb-0">
 									<i class="bi bi-info-circle-fill fs-5"></i>
-									<span>O preview é atualizado automaticamente enquanto você digita no formulário de metadados.</span>
+									<span>O snippet do Google é atualizado automaticamente conforme você altera o formulário de metadados.</span>
 								</div>
 							</div>
 
-							<!-- TAB 3: PREVIEW REDES SOCIAIS (OPEN GRAPH) -->
+							<!-- TAB 3: PREVIEW REDES SOCIAIS (OPEN GRAPH 1200x630) -->
 							<div class="tab-pane fade" id="tab-social" role="tabpanel">
-								<span class="text-body-secondary small fw-semibold d-block mb-3">Pré-visualização do Card ao Compartilhar no WhatsApp, Facebook e LinkedIn</span>
+								<span class="text-body-secondary small fw-semibold d-block mb-3">Pré-visualização do Card ao Compartilhar no WhatsApp, Facebook, LinkedIn e Twitter/X</span>
 
-								<div class="border rounded-3 overflow-hidden shadow-sm bg-white mb-3" style="max-width: 500px;">
-									<div style="height: 220px; background: #e2e8f0; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+								<div class="border rounded-3 overflow-hidden shadow-sm bg-white mb-3" style="max-width: 540px;">
+									<div class="ratio ratio-16x9 bg-dark-subtle overflow-hidden">
 										<img src="<?= BASE_URL ?>assets/uploads/<?= htmlspecialchars($settingsSEO['logo'] ?: 'logo.png') ?>" alt="Banner Preview" id="socialImageDisplay" style="width: 100%; height: 100%; object-fit: cover;">
 									</div>
 									<div class="p-3 bg-light border-top">
@@ -407,7 +552,7 @@ foreach ($fixedPages as $idx => $fp) {
 
 								<div class="alert alert-success py-2 px-3 small d-flex align-items-center gap-2 mb-0">
 									<i class="bi bi-check-circle-fill fs-5"></i>
-									<span>As tags <code>og:title</code>, <code>og:description</code> e <code>og:image</code> são geradas automaticamente no cabeçalho do portal.</span>
+									<span>As tags <code>og:title</code>, <code>og:description</code>, <code>og:image</code> (1200x630 px) e <code>twitter:card</code> são geradas automaticamente no cabeçalho do portal público.</span>
 								</div>
 							</div>
 						</div>
@@ -420,183 +565,264 @@ foreach ($fixedPages as $idx => $fp) {
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-	const pages = <?= json_encode($pagesList); ?>;
-	let currentIndex = 0;
+/**
+ * Módulo de Otimização & SEO Completo Pronto Saúde
+ * Suporte a SPA, troca instantânea de páginas, preview de imagens (1200x630) e upload AJAX
+ */
+(function() {
+	window.initSEOModule = function(container) {
+		container = container || document;
+		const seoPagesList = container.querySelector('#seoPagesList');
+		if (!seoPagesList) return;
 
-	const selectors = document.querySelectorAll('.seo-page-selector');
-	const inputType = document.getElementById('inputPageType');
-	const inputId = document.getElementById('inputPageId');
-	const inputTitle = document.getElementById('inputMetaTitle');
-	const inputDesc = document.getElementById('inputMetaDesc');
-	const inputKeywords = document.getElementById('inputMetaKeywords');
-	const btnView = document.getElementById('btnViewLivePage');
-	const pageTag = document.getElementById('currentEditingPageTag');
-	const pageTitle = document.getElementById('currentEditingPageTitle');
-	const scoreDisplay = document.getElementById('pageScoreDisplay');
+		// Evita bind duplicado
+		if (seoPagesList.dataset.seoInit === 'true') return;
+		seoPagesList.dataset.seoInit = 'true';
 
-	const titleCounter = document.getElementById('titleCounter');
-	const descCounter = document.getElementById('descCounter');
-	const serpTitle = document.getElementById('serpTitleDisplay');
-	const serpDesc = document.getElementById('serpDescDisplay');
-	const serpUrl = document.getElementById('serpUrlDisplay');
-	const socialTitle = document.getElementById('socialTitleDisplay');
-	const socialDesc = document.getElementById('socialDescDisplay');
-	const socialImg = document.getElementById('socialImageDisplay');
+		const pages = <?= json_encode($pagesList); ?>;
+		let currentIndex = 0;
 
-	function calculateScore(title, desc, kw) {
-		let score = 50; // base
-		if (title.length >= 30 && title.length <= 65) score += 20;
-		else if (title.length > 0) score += 10;
+		const selectors = container.querySelectorAll('.seo-page-selector');
+		const searchInput = container.querySelector('#searchSeoPage');
+		const inputType = container.querySelector('#inputPageType');
+		const inputId = container.querySelector('#inputPageId');
+		const inputSlug = container.querySelector('#inputPageSlug');
+		const inputName = container.querySelector('#inputPageName');
+		const inputTitle = container.querySelector('#inputMetaTitle');
+		const inputDesc = container.querySelector('#inputMetaDesc');
+		const inputKeywords = container.querySelector('#inputMetaKeywords');
+		const inputOgFile = container.querySelector('#inputOgImage');
+		const currentOgPreview = container.querySelector('#currentOgImagePreview');
+		const btnView = container.querySelector('#btnViewLivePage');
+		const pageTag = container.querySelector('#currentEditingPageTag');
+		const scoreDisplay = container.querySelector('#pageScoreDisplay');
 
-		if (desc.length >= 100 && desc.length <= 165) score += 20;
-		else if (desc.length > 0) score += 10;
+		const titleCounter = container.querySelector('#titleCounter');
+		const descCounter = container.querySelector('#descCounter');
+		const serpTitle = container.querySelector('#serpTitleDisplay');
+		const serpDesc = container.querySelector('#serpDescDisplay');
+		const serpUrl = container.querySelector('#serpUrlDisplay');
+		const socialTitle = container.querySelector('#socialTitleDisplay');
+		const socialDesc = container.querySelector('#socialDescDisplay');
+		const socialImg = container.querySelector('#socialImageDisplay');
 
-		if (kw.length >= 10) score += 10;
+		function calculateScore(title, desc, kw) {
+			let score = 40;
+			if (title.length >= 30 && title.length <= 65) score += 25;
+			else if (title.length > 0) score += 12;
 
-		return Math.min(score, 100);
-	}
+			if (desc.length >= 100 && desc.length <= 165) score += 25;
+			else if (desc.length > 0) score += 12;
 
-	function updateLiveView() {
-		const title = inputTitle.value.trim();
-		const desc = inputDesc.value.trim();
-		const kw = inputKeywords.value.trim();
+			if (kw.length >= 8) score += 10;
 
-		// Contadores
-		titleCounter.textContent = `${title.length} / 60 caracteres`;
-		titleCounter.className = (title.length >= 35 && title.length <= 65) ? 'badge text-bg-success' : 'badge text-bg-warning';
-
-		descCounter.textContent = `${desc.length} / 160 caracteres`;
-		descCounter.className = (desc.length >= 110 && desc.length <= 165) ? 'badge text-bg-success' : 'badge text-bg-warning';
-
-		// Previews
-		serpTitle.textContent = title || 'Título da Página Não Definido';
-		serpDesc.textContent = desc || 'Adicione uma meta descrição para visualizar o snippet completo do Google.';
-		socialTitle.textContent = title || 'Pronto Saúde';
-		socialDesc.textContent = desc || 'Descrição da página para compartilhamento nas redes sociais.';
-
-		// Pontuação
-		const score = calculateScore(title, desc, kw);
-		scoreDisplay.textContent = `${score}/100`;
-		if (score >= 80) {
-			scoreDisplay.className = 'fs-5 fw-bold text-success';
-		} else if (score >= 60) {
-			scoreDisplay.className = 'fs-5 fw-bold text-warning';
-		} else {
-			scoreDisplay.className = 'fs-5 fw-bold text-danger';
+			return Math.min(score, 100);
 		}
 
-		// Atualiza badge na lista
-		const badge = document.getElementById('badge-page-' + currentIndex);
-		if (badge) {
-			badge.textContent = `${score} pts`;
-			badge.className = score >= 80 ? 'badge rounded-pill bg-success-subtle text-success border border-success-subtle' : 'badge rounded-pill bg-warning-subtle text-warning border border-warning-subtle';
+		function updateLiveView() {
+			if (!inputTitle || !inputDesc || !inputKeywords) return;
+			const title = inputTitle.value.trim();
+			const desc = inputDesc.value.trim();
+			const kw = inputKeywords.value.trim();
+
+			if (titleCounter) {
+				titleCounter.textContent = `${title.length} / 60 caracteres`;
+				titleCounter.className = (title.length >= 35 && title.length <= 65) ? 'badge text-bg-success' : 'badge text-bg-warning';
+			}
+
+			if (descCounter) {
+				descCounter.textContent = `${desc.length} / 160 caracteres`;
+				descCounter.className = (desc.length >= 110 && desc.length <= 165) ? 'badge text-bg-success' : 'badge text-bg-warning';
+			}
+
+			if (serpTitle) serpTitle.textContent = title || 'Título da Página Não Definido';
+			if (serpDesc) serpDesc.textContent = desc || 'Adicione uma meta descrição para visualizar o snippet completo do Google.';
+			if (socialTitle) socialTitle.textContent = title || 'Pronto Saúde';
+			if (socialDesc) socialDesc.textContent = desc || 'Descrição da página para compartilhamento nas redes sociais.';
+
+			const score = calculateScore(title, desc, kw);
+			if (scoreDisplay) {
+				scoreDisplay.textContent = `${score}/100`;
+				if (score >= 80) scoreDisplay.className = 'fs-5 fw-bold text-success';
+				else if (score >= 60) scoreDisplay.className = 'fs-5 fw-bold text-warning';
+				else scoreDisplay.className = 'fs-5 fw-bold text-danger';
+			}
+
+			const badge = container.querySelector('#badge-page-' + currentIndex);
+			if (badge) {
+				badge.textContent = `${score} pts`;
+				badge.className = score >= 80 ? 'badge rounded-pill bg-success-subtle text-success border border-success-subtle seo-item-badge flex-shrink-0' : 'badge rounded-pill bg-warning-subtle text-warning border border-warning-subtle seo-item-badge flex-shrink-0';
+			}
 		}
-	}
 
-	function loadPageData(index) {
-		currentIndex = index;
-		const pg = pages[index];
-		if (!pg) return;
+		function loadPageData(index) {
+			currentIndex = index;
+			const pg = pages[index];
+			if (!pg) return;
 
-		inputType.value = pg.type;
-		inputId.value = pg.id;
-		inputTitle.value = pg.title;
-		inputDesc.value = pg.description;
-		inputKeywords.value = pg.keywords;
-		btnView.href = pg.url;
-		pageTag.textContent = pg.name;
-		serpUrl.textContent = pg.url;
+			if (inputType) inputType.value = pg.type;
+			if (inputId) inputId.value = pg.id;
+			if (inputSlug) inputSlug.value = pg.slug || '';
+			if (inputName) inputName.value = pg.name || '';
+			if (inputTitle) inputTitle.value = pg.title || '';
+			if (inputDesc) inputDesc.value = pg.description || '';
+			if (inputKeywords) inputKeywords.value = pg.keywords || '';
+			if (btnView) btnView.href = pg.url || '#';
+			if (pageTag) pageTag.textContent = pg.name || '';
+			if (serpUrl) serpUrl.textContent = pg.url || '';
 
-		if (pg.banner) {
-			socialImg.src = '<?= BASE_URL ?>' + pg.banner;
+			if (inputOgFile) inputOgFile.value = '';
+
+			const bannerUrl = (pg.banner && pg.banner.startsWith('http')) ? pg.banner : '<?= BASE_URL ?>' + (pg.banner || 'assets/images/about.jpg');
+			if (currentOgPreview) currentOgPreview.src = bannerUrl;
+			if (socialImg) socialImg.src = bannerUrl;
+
+			selectors.forEach((btn, i) => {
+				if (i === index) btn.classList.add('active');
+				else btn.classList.remove('active');
+			});
+
+			updateLiveView();
 		}
 
+		// Clique nas páginas da lista (abre os dados instantaneamente)
 		selectors.forEach((btn, i) => {
-			if (i === index) btn.classList.add('active');
-			else btn.classList.remove('active');
+			btn.addEventListener('click', function(e) {
+				e.preventDefault();
+				loadPageData(i);
+			});
 		});
 
-		updateLiveView();
+		// Filtro de Busca de Páginas em Tempo Real
+		if (searchInput) {
+			searchInput.addEventListener('input', function() {
+				const q = this.value.toLowerCase().trim();
+				selectors.forEach(btn => {
+					const name = (btn.getAttribute('data-name') || '').toLowerCase();
+					const slug = (btn.getAttribute('data-slug') || '').toLowerCase();
+					if (name.includes(q) || slug.includes(q)) {
+						btn.style.display = '';
+					} else {
+						btn.style.display = 'none';
+					}
+				});
+			});
+		}
+
+		// Preview instantâneo ao selecionar nova imagem social
+		if (inputOgFile) {
+			inputOgFile.addEventListener('change', function() {
+				if (this.files && this.files[0]) {
+					const reader = new FileReader();
+					reader.onload = function(e) {
+						if (currentOgPreview) currentOgPreview.src = e.target.result;
+						if (socialImg) socialImg.src = e.target.result;
+					};
+					reader.readAsDataURL(this.files[0]);
+				}
+			});
+		}
+
+		// Input em tempo real
+		if (inputTitle) inputTitle.addEventListener('input', updateLiveView);
+		if (inputDesc) inputDesc.addEventListener('input', updateLiveView);
+		if (inputKeywords) inputKeywords.addEventListener('input', updateLiveView);
+
+		// Submissão do formulário via AJAX
+		const form = container.querySelector('#formSEO');
+		if (form) {
+			form.addEventListener('submit', function(e) {
+				e.preventDefault();
+				const spinner = container.querySelector('#saveSpinner');
+				const btn = container.querySelector('#btnSaveSEO');
+				if (spinner) spinner.classList.remove('d-none');
+				if (btn) btn.disabled = true;
+
+				const formData = new FormData(this);
+
+				fetch('seo.php', {
+					method: 'POST',
+					body: formData
+				})
+				.then(res => res.json())
+				.then(data => {
+					if (spinner) spinner.classList.add('d-none');
+					if (btn) btn.disabled = false;
+
+					if (data.success) {
+						if (window.notificar) {
+							window.notificar('success', data.message, 'SEO Salvo!');
+						} else if (window.toastr) {
+							toastr.success(data.message);
+						}
+
+						// Atualiza cache local
+						if (pages[currentIndex]) {
+							pages[currentIndex].title = inputTitle.value;
+							pages[currentIndex].description = inputDesc.value;
+							pages[currentIndex].keywords = inputKeywords.value;
+							if (data.new_banner) {
+								pages[currentIndex].banner = data.new_banner;
+								if (currentOgPreview) currentOgPreview.src = data.new_banner;
+								if (socialImg) socialImg.src = data.new_banner;
+								// Atualiza miniatura da lista
+								const activeSelector = selectors[currentIndex];
+								if (activeSelector) {
+									const thumb = activeSelector.querySelector('img');
+									if (thumb) thumb.src = data.new_banner;
+								}
+							}
+						}
+					} else {
+						if (window.notificar) {
+							window.notificar('error', data.message || 'Falha ao salvar metadados.', 'Atenção');
+						} else if (window.toastr) {
+							toastr.error(data.message);
+						}
+					}
+				})
+				.catch(err => {
+					if (spinner) spinner.classList.add('d-none');
+					if (btn) btn.disabled = false;
+					if (window.notificar) {
+						window.notificar('error', 'Falha na comunicação com o servidor.', 'Erro');
+					}
+				});
+			});
+		}
+
+		// Alternador Desktop/Mobile no SERP
+		const btnDesk = container.querySelector('#btnSerpDesktop');
+		const btnMob = container.querySelector('#btnSerpMobile');
+		const serpBox = container.querySelector('#serpContainer');
+
+		if (btnDesk && btnMob && serpBox) {
+			btnDesk.addEventListener('click', function() {
+				btnDesk.classList.add('active');
+				btnMob.classList.remove('active');
+				serpBox.style.maxWidth = '650px';
+			});
+
+			btnMob.addEventListener('click', function() {
+				btnMob.classList.add('active');
+				btnDesk.classList.remove('active');
+				serpBox.style.maxWidth = '375px';
+			});
+		}
+
+		// Abre imediatamente a primeira página
+		loadPageData(0);
+	};
+
+	// Executa ao carregar o script
+	if (document.readyState !== 'loading') {
+		window.initSEOModule(document);
+	} else {
+		document.addEventListener('DOMContentLoaded', function() {
+			window.initSEOModule(document);
+		});
 	}
-
-	// Troca de página ao clicar
-	selectors.forEach((btn, i) => {
-		btn.addEventListener('click', function() {
-			loadPageData(i);
-		});
-	});
-
-	// Input em tempo real
-	inputTitle.addEventListener('input', updateLiveView);
-	inputDesc.addEventListener('input', updateLiveView);
-	inputKeywords.addEventListener('input', updateLiveView);
-
-	// Submissão do formulário via AJAX
-	document.getElementById('formSEO').addEventListener('submit', function(e) {
-		e.preventDefault();
-		const spinner = document.getElementById('saveSpinner');
-		const btn = document.getElementById('btnSaveSEO');
-		spinner.classList.remove('d-none');
-		btn.disabled = true;
-
-		const formData = new FormData(this);
-
-		fetch('seo.php', {
-			method: 'POST',
-			body: formData
-		})
-		.then(res => res.json())
-		.then(data => {
-			spinner.classList.add('d-none');
-			btn.disabled = false;
-			if (data.success) {
-				if (window.notificar) {
-					window.notificar('success', data.message);
-				} else if (window.toastr) {
-					toastr.success(data.message);
-				}
-				// Atualiza cache local
-				pages[currentIndex].title = inputTitle.value;
-				pages[currentIndex].description = inputDesc.value;
-				pages[currentIndex].keywords = inputKeywords.value;
-			} else {
-				if (window.notificar) {
-					window.notificar('error', data.message);
-				} else if (window.toastr) {
-					toastr.error(data.message);
-				}
-			}
-		})
-		.catch(err => {
-			spinner.classList.add('d-none');
-			btn.disabled = false;
-			if (window.notificar) {
-				window.notificar('error', 'Falha na comunicação com o servidor.');
-			}
-		});
-	});
-
-	// Alternador Desktop/Mobile no SERP
-	const btnDesk = document.getElementById('btnSerpDesktop');
-	const btnMob = document.getElementById('btnSerpMobile');
-	const serpBox = document.getElementById('serpContainer');
-
-	btnDesk.addEventListener('click', function() {
-		btnDesk.classList.add('active');
-		btnMob.classList.remove('active');
-		serpBox.style.maxWidth = '650px';
-	});
-
-	btnMob.addEventListener('click', function() {
-		btnMob.classList.add('active');
-		btnDesk.classList.remove('active');
-		serpBox.style.maxWidth = '375px';
-	});
-
-	// Inicializa a primeira página
-	loadPageData(0);
-});
+})();
 </script>
 
 <?php require_once('footer.php'); ?>

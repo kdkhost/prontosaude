@@ -56,6 +56,7 @@ $total_recent_news_home_page = $row['total_recent_news_home_page'] ?? 3;
 $meta_description_home       = $row['meta_description_home'] ?? '';
 $meta_keyword_home           = $row['meta_keyword_home'] ?? '';
 $meta_title_home             = $row['meta_title_home'] ?? '';
+$og_image_home               = $row['og_image'] ?? '';
 $home_title_service          = $row['home_title_service'] ?? '';
 $home_subtitle_service       = $row['home_subtitle_service'] ?? '';
 $home_status_service         = $row['home_status_service'] ?? 0;
@@ -97,206 +98,196 @@ $email   = $row2['dep_email'] ?? '';
         <meta name="robots" content="index, follow" />
         <meta name="theme-color" content="#0a6b74">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <link href="../assets/uploads/favicon.png" rel="shortcut icon" type="image/png">
-        
-
-        <!-- Showing the SEO related meta tags data -->
+        <!-- ========================================================
+             SISTEMA UNIFICADO DE SEO, OPEN GRAPH & REDES SOCIAIS
+             Padrão Oficial: 1200 x 630 pixels (Proporção 1.91:1)
+             Compatível com: WhatsApp, Facebook, LinkedIn, Twitter/X
+             ======================================================== -->
         <?php
-// Getting the current page URL
-        $cur_page = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], "/") + 1);
-        $req_slug = $_REQUEST['slug'] ?? '';
+        $cur_page = basename($_SERVER['SCRIPT_NAME'] ?? '');
+        $req_slug = trim($_REQUEST['slug'] ?? '');
 
-        $og_photo = '';
-        $og_title = '';
-        $og_slug = '';
-        $og_description = '';
-        $titulo = $meta_title_home;
-        $detalhes = '';
-        $atualizado = date('Y-m-d');
-        $banner = '';
+        // Determina URL Canônica
+        $page_protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
+        $page_host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $page_uri = $_SERVER['REQUEST_URI'] ?? '/';
+        $page_canonical = $page_protocol . $page_host . $page_uri;
 
+        // Metadados Padrão (Fallback da Home)
+        $seo_title = !empty($meta_title_home) ? $meta_title_home : 'Pronto Saúde • Cuidados Médicos e Especialidades';
+        $seo_desc = !empty($meta_description_home) ? $meta_description_home : 'Clínica médica moderna com diversas especialidades integradas, agendamento de consultas e exames de ponta.';
+        $seo_keywords = !empty($meta_keyword_home) ? $meta_keyword_home : 'saúde, clínica médica, exames, consultas, prontosaude';
+        $seo_og_type = 'website';
+        $seo_image = !empty($og_image_home) ? $og_image_home : 'department-1.png';
+
+        // Lógica por tipo de página
         if ($cur_page == 'news.php') {
             if (!empty($req_slug)) {
-                $statement = $pdo->prepare("SELECT * FROM tbl_news WHERE news_slug=?");
-                $statement->execute(array($req_slug));
-                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($result as $row) {
-                    $og_photo = $row['photo'] ?? '';
-                    $og_title = $row['news_title'] ?? '';
-                    $og_slug = $row['news_slug'] ?? '';
-                    $og_description = substr(strip_tags($row['news_content'] ?? ''), 0, 200) . '...';
-                    echo '<meta name="description" content="' . htmlspecialchars($row['meta_description'] ?? '') . '">';
-                    echo '<meta name="keywords" content="' . htmlspecialchars($row['meta_keyword'] ?? '') . '">';
-                    echo '<title>' . htmlspecialchars($row['meta_title'] ?? '') . '</title>';
-                    echo '<meta property="og:type" content="article" />
-                          <meta property="og:image" content="' . BASE_URL . 'assets/uploads/' . htmlspecialchars($og_photo) . '" />
-                          <meta property="og:image:alt" content="' . htmlspecialchars($og_title) . '" />
-                          <meta property="og:url" content="' . BASE_URL . 'news/' . htmlspecialchars($og_slug) . '" />';
+                $statement = $pdo->prepare("SELECT * FROM tbl_news WHERE news_slug=? LIMIT 1");
+                $statement->execute([$req_slug]);
+                $post = $statement->fetch(PDO::FETCH_ASSOC);
+                if ($post) {
+                    $seo_title = !empty($post['meta_title']) ? $post['meta_title'] : $post['news_title'] . ' | Pronto Saúde';
+                    $seo_desc = !empty($post['meta_description']) ? $post['meta_description'] : substr(strip_tags($post['news_content'] ?? ''), 0, 160) . '...';
+                    $seo_keywords = !empty($post['meta_keyword']) ? $post['meta_keyword'] : $seo_keywords;
+                    $seo_og_type = 'article';
+                    if (!empty($post['photo'])) {
+                        $seo_image = $post['photo'];
+                    }
+                }
+            } else {
+                $seo_title = 'Notícias & Artigos de Saúde | ' . (!empty($meta_title_home) ? $meta_title_home : 'Pronto Saúde');
+                $seo_desc = 'Fique por dentro das novidades, dicas de prevenção, campanhas de vacinação e artigos dos nossos especialistas.';
+                $st_news = $pdo->prepare("SELECT banner, meta_title, meta_description, meta_keyword FROM tbl_page WHERE page_slug='news' LIMIT 1");
+                $st_news->execute();
+                $p_news = $st_news->fetch(PDO::FETCH_ASSOC);
+                if ($p_news) {
+                    if (!empty($p_news['meta_title'])) $seo_title = $p_news['meta_title'];
+                    if (!empty($p_news['meta_description'])) $seo_desc = $p_news['meta_description'];
+                    if (!empty($p_news['meta_keyword'])) $seo_keywords = $p_news['meta_keyword'];
+                    if (!empty($p_news['banner'])) $seo_image = $p_news['banner'];
                 }
             }
-            if (empty($og_title)) {
-                echo '<title>Notícias | ' . htmlspecialchars($meta_title_home) . '</title>';
+        } elseif ($cur_page == 'page.php') {
+            if (!empty($req_slug)) {
+                $statement = $pdo->prepare("SELECT * FROM tbl_page WHERE page_slug=? LIMIT 1");
+                $statement->execute([$req_slug]);
+                $p_dyn = $statement->fetch(PDO::FETCH_ASSOC);
+                if ($p_dyn) {
+                    $seo_title = !empty($p_dyn['meta_title']) ? $p_dyn['meta_title'] : $p_dyn['page_name'] . ' | ' . (!empty($meta_title_home) ? $meta_title_home : 'Pronto Saúde');
+                    $seo_desc = !empty($p_dyn['meta_description']) ? $p_dyn['meta_description'] : substr(strip_tags($p_dyn['page_content'] ?? ''), 0, 160) . '...';
+                    $seo_keywords = !empty($p_dyn['meta_keyword']) ? $p_dyn['meta_keyword'] : $seo_keywords;
+                    if (!empty($p_dyn['banner'])) {
+                        $seo_image = $p_dyn['banner'];
+                    }
+                }
+            }
+        } elseif ($cur_page == 'service.php') {
+            if (!empty($req_slug)) {
+                $statement = $pdo->prepare("SELECT * FROM tbl_service WHERE slug=? LIMIT 1");
+                $statement->execute([$req_slug]);
+                $srv = $statement->fetch(PDO::FETCH_ASSOC);
+                if ($srv) {
+                    $seo_title = $srv['name'] . ' | Pronto Saúde Especialidades';
+                    $seo_desc = !empty($srv['short_description']) ? strip_tags($srv['short_description']) : substr(strip_tags($srv['description'] ?? ''), 0, 160) . '...';
+                    if (!empty($srv['photo'])) {
+                        $seo_image = $srv['photo'];
+                    }
+                }
+            } else {
+                $seo_title = 'Serviços & Especialidades Médicas | Pronto Saúde';
+            }
+        } elseif ($cur_page == 'category.php') {
+            if (!empty($req_slug)) {
+                $statement = $pdo->prepare("SELECT * FROM tbl_category WHERE category_slug=? LIMIT 1");
+                $statement->execute([$req_slug]);
+                $cat = $statement->fetch(PDO::FETCH_ASSOC);
+                if ($cat) {
+                    $seo_title = (!empty($cat['meta_title']) ? $cat['meta_title'] : $cat['category_name']) . ' | Pronto Saúde';
+                    if (!empty($cat['meta_description'])) $seo_desc = $cat['meta_description'];
+                    if (!empty($cat['meta_keyword'])) $seo_keywords = $cat['meta_keyword'];
+                }
+            }
+        } elseif ($cur_page != 'index.php' && !empty($cur_page)) {
+            // Páginas fixas do portal (odontologia.php, fidelidade.php, servicos.php, trabalhe-conosco.php, convenio.php, privacidade.php, rsocial.php, doctor.php, etc.)
+            $fixed_slug = str_replace('.php', '', $cur_page);
+            $st_fixed = $pdo->prepare("SELECT * FROM tbl_page WHERE page_slug=? LIMIT 1");
+            $st_fixed->execute([$fixed_slug]);
+            $p_fixed = $st_fixed->fetch(PDO::FETCH_ASSOC);
+
+            if ($p_fixed) {
+                if (!empty($p_fixed['meta_title'])) $seo_title = $p_fixed['meta_title'];
+                else $seo_title = $p_fixed['page_name'] . ' | ' . (!empty($meta_title_home) ? $meta_title_home : 'Pronto Saúde');
+
+                if (!empty($p_fixed['meta_description'])) $seo_desc = $p_fixed['meta_description'];
+                elseif (!empty($p_fixed['page_content'])) $seo_desc = substr(strip_tags($p_fixed['page_content']), 0, 160) . '...';
+
+                if (!empty($p_fixed['meta_keyword'])) $seo_keywords = $p_fixed['meta_keyword'];
+                if (!empty($p_fixed['banner'])) $seo_image = $p_fixed['banner'];
+            } else {
+                // Fallbacks padrão caso ainda não haja registro salvo em tbl_page
+                switch ($cur_page) {
+                    case 'odontologia.php':
+                        $seo_title = 'Odontologia Avançada | Pronto Saúde';
+                        $seo_desc = 'Tratamentos ortodônticos avançados, implantes, profilaxia e estética dental com profissionais altamente qualificados.';
+                        break;
+                    case 'fidelidade.php':
+                        $seo_title = 'Cartão Fidelidade | Pronto Saúde';
+                        $seo_desc = 'Conheça nossos Planos Fidelidade e aproveite descontos e benefícios exclusivos em consultas e exames.';
+                        break;
+                    case 'servicos.php':
+                        $seo_title = 'Serviços Médicos Integrados | Pronto Saúde';
+                        $seo_desc = 'Consultas especializadas, exames laboratoriais e diagnósticos com precisão, agilidade e carinho.';
+                        break;
+                    case 'trabalhe-conosco.php':
+                        $seo_title = 'Trabalhe Conosco | Pronto Saúde';
+                        $seo_desc = 'Venha fazer parte da equipe Pronto Saúde. Oportunidades para médicos, enfermagem e setor administrativo.';
+                        break;
+                    case 'convenio.php':
+                        $seo_title = 'Convênio Livre Escolha | Pronto Saúde';
+                        $seo_desc = 'Atendimento por sistema de livre escolha com reembolso e facilidades para conveniados de diversos planos.';
+                        break;
+                    case 'privacidade.php':
+                        $seo_title = 'Política de Privacidade | Pronto Saúde';
+                        $seo_desc = 'Conheça como tratamos e protegemos seus dados pessoais de acordo com a LGPD.';
+                        break;
+                    case 'rsocial.php':
+                        $seo_title = 'Termos de Uso | Pronto Saúde';
+                        $seo_desc = 'Termos e condições gerais de uso dos canais e serviços do Pronto Saúde.';
+                        break;
+                    case 'doctor.php':
+                        $seo_title = 'Corpo Clínico & Médicos | Pronto Saúde';
+                        $seo_desc = 'Conheça nossa equipe de médicos e especialistas dedicados a cuidar de você e da sua família.';
+                        break;
+                }
             }
         }
 
-        if ($cur_page == 'page.php') {
-            if (!empty($req_slug)) {
-                $statement = $pdo->prepare("SELECT * FROM tbl_page WHERE page_slug=?");
-                $statement->execute(array($req_slug));
-                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($result as $row) {
-                    echo '<meta name="description" content="' . htmlspecialchars($row['meta_description'] ?? '') . '">';
-                    echo '<meta name="keywords" content="' . htmlspecialchars($row['meta_keyword'] ?? '') . '">';
-                    echo '<title>' . htmlspecialchars($row['meta_title'] ?? '') . '</title>';
-                }
-            }
+        // Montagem da URL Completa da Imagem para Redes Sociais (WhatsApp, Facebook, Twitter, LinkedIn)
+        // Proporção ideal: 1.91:1 (1200 x 630 pixels)
+        if (!empty($seo_image) && (strpos($seo_image, 'http://') === 0 || strpos($seo_image, 'https://') === 0)) {
+            $og_image_url = $seo_image;
+        } elseif (!empty($seo_image) && file_exists(__DIR__ . '/assets/uploads/' . $seo_image)) {
+            $og_image_url = rtrim(BASE_URL, '/') . '/assets/uploads/' . ltrim($seo_image, '/');
+        } elseif (!empty($og_image_home) && file_exists(__DIR__ . '/assets/uploads/' . $og_image_home)) {
+            $og_image_url = rtrim(BASE_URL, '/') . '/assets/uploads/' . ltrim($og_image_home, '/');
+        } else {
+            $og_image_url = rtrim(BASE_URL, '/') . '/assets/uploads/department-1.png';
         }
 
-        if ($cur_page == 'category.php') {
-            if (!empty($req_slug)) {
-                $statement = $pdo->prepare("SELECT * FROM tbl_category WHERE category_slug=?");
-                $statement->execute(array($req_slug));
-                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($result as $row) {
-                    echo '<meta name="description" content="' . htmlspecialchars($row['meta_description'] ?? '') . '">';
-                    echo '<meta name="keywords" content="' . htmlspecialchars($row['meta_keyword'] ?? '') . '">';
-                    echo '<title>' . htmlspecialchars($row['meta_title'] ?? '') . '</title>';
-                    echo '<meta property="og:type" content="website" />
-                          <meta property="og:image" content="" />
-                          <meta property="og:image:alt" content="' . htmlspecialchars($row['category_name'] ?? '') . '" />
-                          <meta property="og:url" content="" />';
-                }
-            }
-        }
-
-        if ($cur_page == 'index.php') {
-                echo '<meta name="description" content="' . htmlspecialchars($meta_description_home) . '">';
-                echo '<meta name="keywords" content="' . htmlspecialchars($meta_keyword_home) . '">';
-                echo '<title>' . htmlspecialchars($meta_title_home) . '</title>';
-                echo '<meta property="og:type" content="website" />
-                      <meta property="og:image" content="' . BASE_URL . 'assets/uploads/department-1.png" />
-                      <meta property="og:url" content="' . BASE_URL . '" />
-                      <meta property="og:title" content="' . htmlspecialchars($meta_title_home) . '" />
-                      <meta property="og:description" content="' . htmlspecialchars($meta_description_home) . '" />';
-                $titulo = $meta_title_home;
-        }
-        if ($cur_page == "service.php") {
-            if (!empty($req_slug)) {
-                $statement = $pdo->prepare("SELECT * FROM tbl_service WHERE slug=?");
-                $statement->execute(array($req_slug));
-                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($result as $row) {
-                    echo '<meta name="description" content="">';
-                    echo '<title>' . htmlspecialchars($row['name'] ?? '') . '</title>';
-                    echo '<meta property="og:type" content="website" />
-                          <meta property="og:image" content="'. BASE_URL . 'assets/uploads/'. htmlspecialchars($row['photo'] ?? '') .'" />
-                          <meta property="og:url" content=" " />
-                          <meta property="og:title" content="' . htmlspecialchars($row['name'] ?? '') . '" />
-                          <meta property="og:description" content="" />';
-                }
-            }
-        }
-        if ($cur_page == "odontologia.php") {
-            echo "<title>Odontologia | Pronto Saúde</title>";
-            echo "<meta name='description' content='Oferecemos tratamentos ortodônticos avançados, que corrigem a dentição, alinham a mordida e protegem os dentes. 
-            Temos aparelhos que se encaixam perfeitamente ao seu estilo: colorido para quem quer causar ou estético para quem é mais discreto!'>";
-            echo '<meta property="og:type" content="website" />
-                  <meta property="og:image" content="" />
-                  <meta property="og:image:alt" content="Odontologia" />
-                  <meta property="og:url" content="" />';
-        }
-        if($cur_page == "privacidade.php"){
-            $statement = $pdo->prepare("SELECT * FROM tbl_privacidade WHERE status=1");
-            $statement->execute();
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row){
-                $titulo         = $row['titulo'] ?? 'Política de Privacidade';
-                $detalhes       = $row['detalhes'] ?? '';
-                $atualizado     = $row['modificado'] ?? date('Y-m-d');
-                $banner         = $row['banner'] ?? '';
-            }
-            
-            echo '<title>' . htmlspecialchars($titulo) . '</title>';
-            echo '<meta property="og:type" content="website" />
-                  <meta property="og:image" content="" />
-                  <meta property="og:image:alt" content="' . htmlspecialchars($titulo) . '" />
-                  <meta property="og:url" content="" />
-                  <meta property="og:title" content="' . htmlspecialchars($titulo) . '" />
-                  <meta property="og:description" content="" />';
-        }
-        if($cur_page == "rsocial.php"){
-            $statement = $pdo->prepare("SELECT * FROM tbl_termos WHERE status=1");
-            $statement->execute();
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row){
-                $titulo         = $row['titulo'] ?? 'Termos de Uso';
-                $detalhes       = $row['detalhes'] ?? '';
-                $atualizado     = $row['modificado'] ?? date('Y-m-d');
-                $banner         = $row['banner'] ?? '';
-            }
-            
-            echo '<title>' . htmlspecialchars($titulo) . '</title>';
-        }
-        
-        if($cur_page == "trabalhe-conosco.php"){
-            $statement = $pdo->prepare("SELECT * FROM tbl_trabalhe WHERE status=1");
-            $statement->execute();
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row){
-                $titulo         = $row['titulo'] ?? 'Trabalhe Conosco';
-                $detalhes       = $row['detalhes'] ?? '';
-                $atualizado     = $row['modificado'] ?? date('Y-m-d');
-            }
-            echo '<title>Trabalhe Conosco | Pronto Saúde</title>';
-            echo "<meta name='description' content='Oferecemos vagas para diversos segmentos dentro da rede Pronto Saúde; 
-            Vagas que podem mudar sua vida e ajudar no seu crescimento profissional e melhorias no seu estágio ...'>";
-            echo '<meta property="og:type" content="website" />
-                  <meta property="og:image" content="" />
-                  <meta property="og:image:alt" content="Trabalhe Conosco" />
-                  <meta property="og:url" content="" />
-                  <meta property="og:description" content="" />';
-        }
-        
-        if($cur_page == "convenio.php"){
-            $statement = $pdo->prepare("SELECT * FROM tbl_convenio WHERE status=1");
-            $statement->execute();
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row){
-                $titulo         = $row['titulo'] ?? 'Convênio Livre Escolha';
-                $detalhes       = $row['detalhes'] ?? '';
-                $atualizado     = $row['modificado'] ?? date('Y-m-d');
-            }
-            echo '<title>Convênio Livre Escolha | Pronto Saúde</title>';
-            echo "<meta name='description' content='Sistema de Livre escolha utilizado nos planos de saude. Neste tipo de contratação o plano de saude oferece ao consumidor a liberdade de escolher os profissionais ou os serviços que não pertençam à rede de prestadores de serviços da operadora.'>";
-            echo '<meta property="og:type" content="website" />
-                  <meta property="og:image" content="" />
-                  <meta property="og:image:alt" content="Convênio Livre Escolha" />
-                  <meta property="og:url" content="" />
-                  <meta property="og:description" content="" />';
-        }
-        
-        if ($cur_page == "servicos.php") {
-            echo '<title>Serviços | Pronto Saúde</title>';
-            echo '<meta name="description" content="">';
-            echo '<meta property="og:type" content="website" />
-                  <meta property="og:image" content="" />
-                  <meta property="og:image:alt" content="Serviços" />
-                  <meta property="og:url" content="" />
-                  <meta property="og:description" content="" />';
-        }
-        
-        if ($cur_page == "fidelidade.php") {
-            echo '<title>Cartão Fidelidade | Pronto Saúde</title>';
-            echo '<meta name="description" content="Conheça nossos Planos Fidelidade e aproveite nossos preços para aderir seu plano agora mesmo">';
-            echo '<meta property="og:type" content="website" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image" content="" />
-                      <meta property="og:image:alt" content="Cartão Fidelidade" />
-                      <meta property="og:url" content="" />
-                      <meta property="og:description" content="" />';
-            }
+        $image_ext = strtolower(pathinfo($og_image_url, PATHINFO_EXTENSION));
+        $og_mime = 'image/jpeg';
+        if ($image_ext === 'png') $og_mime = 'image/png';
+        elseif ($image_ext === 'webp') $og_mime = 'image/webp';
+        elseif ($image_ext === 'gif') $og_mime = 'image/gif';
         ?>
+
+        <!-- Título e Metadados Básicos -->
+        <title><?= htmlspecialchars($seo_title); ?></title>
+        <meta name="description" content="<?= htmlspecialchars($seo_desc); ?>">
+        <meta name="keywords" content="<?= htmlspecialchars($seo_keywords); ?>">
+        <link rel="canonical" href="<?= htmlspecialchars($page_canonical); ?>">
+
+        <!-- Metadados Open Graph (WhatsApp, Facebook, LinkedIn - Proporção Ideal 1.91:1 / 1200x630 px) -->
+        <meta property="og:locale" content="pt_BR">
+        <meta property="og:type" content="<?= htmlspecialchars($seo_og_type); ?>">
+        <meta property="og:title" content="<?= htmlspecialchars($seo_title); ?>">
+        <meta property="og:description" content="<?= htmlspecialchars($seo_desc); ?>">
+        <meta property="og:url" content="<?= htmlspecialchars($page_canonical); ?>">
+        <meta property="og:site_name" content="Pronto Saúde">
+        <meta property="og:image" content="<?= htmlspecialchars($og_image_url); ?>">
+        <meta property="og:image:secure_url" content="<?= htmlspecialchars($og_image_url); ?>">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta property="og:image:type" content="<?= $og_mime; ?>">
+        <meta property="og:image:alt" content="<?= htmlspecialchars($seo_title); ?>">
+
+        <!-- Metadados Twitter / X Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="<?= htmlspecialchars($seo_title); ?>">
+        <meta name="twitter:description" content="<?= htmlspecialchars($seo_desc); ?>">
+        <meta name="twitter:image" content="<?= htmlspecialchars($og_image_url); ?>">
+        <meta name="twitter:image:alt" content="<?= htmlspecialchars($seo_title); ?>">
 
 
         <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/cookie.css" />
