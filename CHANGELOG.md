@@ -4,6 +4,43 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.13.0] - 2026-10-22
+
+### Reformulado & Corrigido
+- **Reformulação Integral de Todas as Páginas com Abas (Tabs) do Painel Administrativo**:
+  - **Configurações Gerais do Sistema (`admin/settings.php`)**:
+    - Reestruturação das 10 abas (Logo, Favicon, Conteúdo Geral, E-mail, Notícias, SEO/Meta, Seções da Home, Cores, Preloader, reCAPTCHA) com a arquitetura oficial `.card.card-primary.card-outline.card-outline-tabs` e botões semânticos do Bootstrap 5.3.
+    - Persistência e restauração automática da aba ativa (`$active_tab = 'tab_1'` até `'tab_10'`) em cada formulário submetido.
+    - Modernização do acordeão de seções da Home com `.accordion.accordion-flush` nativo do Bootstrap 5 e switches dinâmicos.
+    - Unificação do container `.app-content` eliminando wrappers duplicados.
+  - **Adição de Menus (`admin/menu-add.php`)**:
+    - Migração das 3 abas (Categoria como Menu, Página como Menu, Link Personalizado) para `.card-outline-tabs` com persistência de `$active_tab`.
+    - Tradução completa de textos, rótulos e mensagens de retorno para o português brasileiro.
+  - **Banners da Home (`admin/advertisement-home.php`)**:
+    - Migração das 2 abas (No Cabeçalho e Abaixo das Notícias) para abas oficiais AdminLTE 4 com suporte a WEBP, visualização em cards elegantes e persistência da aba ativa.
+  - **Gestão de Menus (`admin/menu.php`) e Categorias (`admin/category.php`)**:
+    - Modernização da listagem com badges de identificação de tipo (`bg-primary`, `bg-info`, `bg-secondary`), botões de ação padronizados e exclusão com SweetAlert2.
+    - Remoção de modais legados aninhados irregularmente dentro de tags `<tbody>`.
+- **Correção Geral de Tipografia, Fontes Pequenas e Botões Fora de Padrão (`admin/css/adminlte4-compat.css`)**:
+  - **Aumento e Padronização de Fontes**:
+    - `body`: Ajustado para `0.95rem` (15.2px) com contraste otimizado.
+    - `.table thead th`: Elevado de `0.8125rem` para `0.875rem` (14px) com padding aprimorado.
+    - `.table tbody td`: Elevado de `0.875rem` para `0.935rem` (15px) para leitura nítida de dados.
+    - Formulários e labels (`.form-control`, `.form-select`, `.control-label`): Elevados para `0.925rem` (14.8px).
+    - DataTables (Busca, paginação e info): Aumentados para `0.875rem` - `0.925rem`.
+  - **Padronização Universal de Botões**:
+    - Substituição das regras restritivas antigas que forçavam `font-size: 0.8125rem !important` e `0.8rem` em `.btn-sm` e `.btn-xs`.
+    - `.btn-sm`: Padronizado para `0.875rem` (14px) com padding confortável de `0.35rem 0.75rem`.
+    - `.btn` geral: Padronizado para `0.925rem` (14.8px) com padding de `0.5rem 1.15rem`.
+    - `.btn-lg`: Padronizado para `1.05rem` com padding de `0.75rem 1.5rem`.
+- **Eliminação Definitiva de `confirm()` Nativo e Aplicação Global do SweetAlert2**:
+  - Remoção de todas as chamadas remanescentes a `confirm()` em `admin/service.php`, `admin/pricing-plan.php` e `admin/dental.php`.
+  - Adição de interceptador global de `window.confirm` em `admin/js/pronto-global.js`, garantindo que nenhuma rotina legada invoque diálogos padrão do navegador.
+- **Validação Completa**:
+  - 100% dos arquivos PHP do painel verificados sem nenhum erro de sintaxe.
+
+---
+
 ## [2.12.0] - 2026-10-22
 
 ### Reformulado & Modernizado

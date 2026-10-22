@@ -136,9 +136,7 @@ document.addEventListener('click', function(e) {
 			}
 		});
 	} else {
-		if (confirm(`Confirma a exclusão do procedimento ${name}?`)) {
-			window.location.href = href;
-		}
+		window.location.href = href;
 	}
 });
 </script>

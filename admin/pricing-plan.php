@@ -214,9 +214,7 @@ document.addEventListener('click', function(e) {
 			}
 		});
 	} else {
-		if (confirm(`Confirma a exclusão do plano ${name}?`)) {
-			window.location.href = href;
-		}
+		window.location.href = href;
 	}
 });
 </script>

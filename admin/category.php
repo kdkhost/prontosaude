@@ -48,10 +48,10 @@
             		?>
 					<tr>
 	                    <td><?php echo $i; ?></td>
-	                    <td><?php echo $row['category_name']; ?></td>
-	                    <td><?php echo $row['category_slug']; ?></td>
+	                    <td><?php echo htmlspecialchars($row['category_name']); ?></td>
+	                    <td><code><?php echo htmlspecialchars($row['category_slug']); ?></code></td>
 	                    <td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="category-edit.php?id=<?php echo $row['category_id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Editar</a>
-	                        <a href="#" class="btn btn-danger btn-sm" data-href="category-delete.php?id=<?php echo $row['category_id']; ?>" data-target="#confirm-delete"><i class="bi bi-trash3"></i> Excluir</a></div></td>
+	                        <a href="category-delete.php?id=<?php echo $row['category_id']; ?>" class="btn btn-danger btn-sm" data-name="<?php echo htmlspecialchars($row['category_name']); ?>"><i class="bi bi-trash3"></i> Excluir</a></div></td>
 	                </tr>
             		<?php
             	}

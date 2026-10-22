@@ -17,7 +17,8 @@
 
 body {
   font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-  font-size: 0.925rem;
+  font-size: 0.95rem;
+  color: var(--bs-body-color, #334155);
 }
 
 /* Scrollbar refinada */
@@ -359,17 +360,17 @@ body {
   background-color: rgba(0, 0, 0, 0.035);
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   letter-spacing: 0.04em;
   color: var(--bs-secondary-color, #475569);
   border-bottom: 2px solid var(--bs-border-color, #cbd5e1);
-  padding: 0.75rem 0.85rem;
+  padding: 0.85rem 1rem;
   white-space: nowrap !important;
 }
 .table tbody td {
-  padding: 0.75rem 0.85rem;
+  padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--bs-border-color, #e2e8f0);
-  font-size: 0.875rem;
+  font-size: 0.935rem;
   vertical-align: middle;
 }
 .table tbody tr:hover {
@@ -505,7 +506,7 @@ table.dataTable > tbody > tr.child span.dtr-data {
    Controles do DataTables (Busca, Tamanho da Página, Paginação e Informações)
    ========================================================================== */
 .dataTables_wrapper {
-  font-size: 0.875rem;
+  font-size: 0.925rem;
 }
 .dataTables_wrapper .dataTables_length,
 .dataTables_wrapper .dataTables_filter {
@@ -514,7 +515,7 @@ table.dataTable > tbody > tr.child span.dtr-data {
 .dataTables_wrapper .dataTables_length label,
 .dataTables_wrapper .dataTables_filter label {
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: 0.925rem;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -522,17 +523,17 @@ table.dataTable > tbody > tr.child span.dtr-data {
 }
 .dataTables_wrapper .dataTables_length select {
   border-radius: 0.4rem;
-  padding: 0.35rem 1.75rem 0.35rem 0.65rem;
+  padding: 0.4rem 2rem 0.4rem 0.75rem;
   border: 1px solid var(--bs-border-color, #cbd5e1);
-  font-size: 0.875rem;
+  font-size: 0.925rem;
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
 }
 .dataTables_wrapper .dataTables_filter input {
   border-radius: 0.4rem;
-  padding: 0.35rem 0.75rem;
+  padding: 0.4rem 0.85rem;
   border: 1px solid var(--bs-border-color, #cbd5e1);
-  font-size: 0.875rem;
+  font-size: 0.925rem;
   margin-left: 0.25rem;
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
@@ -544,7 +545,7 @@ table.dataTable > tbody > tr.child span.dtr-data {
   box-shadow: 0 0 0 0.2rem rgba(10, 107, 116, 0.15);
 }
 .dataTables_wrapper .dataTables_info {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: var(--bs-secondary-color, #64748b);
   padding-top: 0.85rem;
 }
@@ -553,12 +554,12 @@ table.dataTable > tbody > tr.child span.dtr-data {
 }
 .dataTables_wrapper .dataTables_paginate .pagination {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 .dataTables_wrapper .dataTables_paginate .page-item .page-link {
   border-radius: 0.35rem;
   margin: 0 0.15rem;
-  padding: 0.35rem 0.75rem;
+  padding: 0.4rem 0.85rem;
   color: var(--ps-primary);
 }
 .dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
@@ -573,13 +574,13 @@ table.dataTable > tbody > tr.child span.dtr-data {
 .btn {
   border-radius: 0.5rem;
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: 0.925rem;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  line-height: 1.4;
+  gap: 0.45rem;
+  line-height: 1.5;
   vertical-align: middle;
 }
 .btn:hover {
@@ -588,12 +589,12 @@ table.dataTable > tbody > tr.child span.dtr-data {
 
 /* Botões Pequenos (btn-sm / btn-xs) para Tabelas e Ações */
 .btn-sm, .btn-xs {
-  padding: 0.3rem 0.65rem !important;
-  font-size: 0.8125rem !important;
+  padding: 0.35rem 0.75rem !important;
+  font-size: 0.875rem !important;
   border-radius: 0.4rem !important;
   font-weight: 500 !important;
   gap: 0.35rem !important;
-  line-height: 1.4 !important;
+  line-height: 1.45 !important;
 }
 
 /* Botões Primários e de Destaque */
@@ -676,8 +677,8 @@ table td a.btn-info:not(:has(i))::before {
 .form-control, .form-select {
   border-radius: 0.5rem;
   border: 1px solid var(--bs-border-color, #cbd5e1);
-  padding: 0.5rem 0.85rem;
-  font-size: 0.875rem;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.925rem;
   color: var(--bs-body-color);
   background-color: var(--bs-body-bg);
 }
@@ -694,9 +695,9 @@ table td a.btn-info:not(:has(i))::before {
   align-items: center;
   margin-bottom: 1.25rem;
 }
-.control-label {
+.control-label, .col-form-label {
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.925rem;
   margin-bottom: 0.35rem;
   color: var(--bs-body-color);
 }
@@ -916,10 +917,10 @@ table td a.btn-info:not(:has(i))::before {
 .nav-tabs > li > a {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.65rem 1.15rem;
+  gap: 0.45rem;
+  padding: 0.75rem 1.25rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--bs-secondary-color, #64748b);
   border: 2px solid transparent;
   border-bottom-width: 3px;
@@ -1010,25 +1011,25 @@ table td a.btn-info:not(:has(i))::before {
 .btn {
   font-weight: 500;
   border-radius: 0.5rem;
-  padding: 0.45rem 1rem;
-  font-size: 0.885rem;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.925rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   transition: all 0.2s ease;
   line-height: 1.5;
 }
 
 .btn-sm {
-  padding: 0.28rem 0.65rem;
-  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem !important;
+  font-size: 0.875rem !important;
   border-radius: 0.4rem;
 }
 
 .btn-lg {
-  padding: 0.65rem 1.4rem;
-  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.05rem;
   border-radius: 0.6rem;
 }
 

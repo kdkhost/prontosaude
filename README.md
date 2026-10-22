@@ -57,8 +57,13 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - **Padronização Visual Completa, Reformulação de Modelos de Páginas e Alinhamento de Botões:**
   - Modernização integral de mais de 90 páginas administrativas (`*-add.php`, `*-edit.php`, listagens e configurações) convertidas para os padrões oficiais do **AdminLTE 4** e **Bootstrap 5.3**.
   - Erradicação definitiva de classes legadas (`.box`, `.box-header`, `.box-body`, `<section class="content">`), adotando containers `.app-content-header`, `.app-content`, `.card card-outline`, cabeçalhos com breadcrumbs com ícones e rodapé padronizado.
-  - Tipografia unificada estritamente em 14px (`Source Sans 3`), alinhamento automático de botões de ação nas tabelas (Editar, Deletar, Visualizar) lado a lado sem quebra feia, cabeçalhos de página proporcionais e grid de formulários perfeitamente alinhado.
+  - Tipografia unificada e confortável (`0.95rem` no corpo, `0.875rem` em cabeçalhos de tabela, `0.935rem` em dados e `0.875rem` em `.btn-sm`), eliminando fontes minúsculas de 12px e botões desproporcionais.
+  - Alinhamento automático de botões de ação nas tabelas (Editar, Deletar, Visualizar) lado a lado sem quebra feia, cabeçalhos de página proporcionais e grid de formulários perfeitamente alinhado.
   - Tela de recuperação de senha (`admin/recover.php`) completamente modernizada com Glassmorphism, Floating Labels e confirmações via SweetAlert2 no mesmo padrão do login.
+- **Arquitetura Oficial de Abas (Tabs) e Resolução Definitiva de Navegação:**
+  - Migração completa de todas as páginas com abas (`admin/settings.php`, `admin/menu-add.php`, `admin/advertisement-home.php`, `admin/profile-edit.php` e `admin/user-edit.php`) para a estrutura oficial `.card.card-primary.card-outline.card-outline-tabs`.
+  - Persistência e restauração automática da aba ativa (`$active_tab`) em todos os formulários submetidos via POST.
+  - Interceptação global de `window.alert` e `window.confirm` com SweetAlert2 e Toastr em 100% dos fluxos do sistema.
 - **Gestão e Customização Total de Cards (Serviços, Planos e Produtos):**
   - **100% Configurável pelo Painel Admin:** Fim de imagens, links e textos fixos no código-fonte. Tudo é editável em tempo real nos módulos de Serviços (`admin/service.php`), Planos (`admin/pricing-plan.php`) e Odontologia (`admin/dental.php`).
   - **Upload Dinâmico com Preview:** Upload por arrastar e soltar (Drag & Drop) de fotos e ilustrações sem dependência de caminhos estáticos.
