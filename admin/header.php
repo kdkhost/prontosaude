@@ -99,8 +99,8 @@ $logo = $row['logo'] ?? '';
 	<link rel="stylesheet" href="css/responsive.dataTables.min.css">
 	
 	<!-- Folha de Estilos de Compatibilidade e Customizações AdminLTE 4 -->
-	<link rel="stylesheet" href="css/adminlte4-compat.css">
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="css/adminlte4-compat.css?v=<?= time(); ?>">
+	<link rel="stylesheet" href="style.css?v=<?= time(); ?>">
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">

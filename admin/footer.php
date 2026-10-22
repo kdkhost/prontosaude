@@ -38,15 +38,20 @@
 	<script src="js/jscolor.js"></script>
 	<script src="js/on-off-switch.js"></script>
 	<script src="ckeditor/ckeditor.js"></script>
+	<script>
+	if (window.jQuery && !window.jQuery.fn.tooltip) {
+		window.jQuery.fn.tooltip = function () { return this; };
+	}
+	</script>
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 
 	<!-- Utilitário Global Pronto Saúde (SweetAlert2, Toastr, DarkMode, Confirmações) -->
-	<script src="js/pronto-global.js"></script>
-	<script src="js/pronto-uploader.js"></script>
-	<script src="js/pronto-slug.js"></script>
-	<script src="js/pronto-masks.js"></script>
-	<script src="js/pronto-security.js"></script>
-	<script src="js/pronto-spa.js"></script>
+	<script src="js/pronto-global.js?v=<?= time(); ?>"></script>
+	<script src="js/pronto-uploader.js?v=<?= time(); ?>"></script>
+	<script src="js/pronto-slug.js?v=<?= time(); ?>"></script>
+	<script src="js/pronto-masks.js?v=<?= time(); ?>"></script>
+	<script src="js/pronto-security.js?v=<?= time(); ?>"></script>
+	<script src="js/pronto-spa.js?v=<?= time(); ?>"></script>
 
 	<script>
 	$(function () {

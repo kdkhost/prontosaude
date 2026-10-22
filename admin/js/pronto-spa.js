@@ -131,6 +131,9 @@
     // C. Summernote Global
     if (window.jQuery && jQuery.fn.summernote) {
       try {
+        if (!window.jQuery.fn.tooltip) {
+          window.jQuery.fn.tooltip = function () { return this; };
+        }
         const editorSelector = '.summernote, [id="1"], [id="2"], [id="3"], textarea.editor, textarea#editor1, textarea[name="content"], textarea[name="news_content"], textarea[name="page_content"], textarea[name="description"], textarea[name="detail"], textarea[name="detalhes"], textarea[name="requisitos"], textarea[name="beneficios"], textarea[name="faq_content"], textarea[name="comment"]';
         const editors = container.querySelectorAll(editorSelector);
         editors.forEach(ed => {
