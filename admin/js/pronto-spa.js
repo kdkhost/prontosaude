@@ -71,87 +71,120 @@
 
     // B. DataTables em Português com Extensão Responsiva (Estilo AdminLTE 3 / 4)
     if (window.jQuery && jQuery.fn.dataTable) {
-      const tables = container.querySelectorAll('table.table:not(.dataTable):not(.no-datatable), #example1, #example2, table.table-bordered, table.table-striped, table.table-datatable');
+      const tables = container.querySelectorAll(
+        'table.table:not(.dataTable):not(.no-datatable):not(.ps-datatable-init), ' +
+        '#example1:not(.ps-datatable-init), #example2:not(.ps-datatable-init), ' +
+        'table.table-bordered:not(.dataTable):not(.no-datatable):not(.ps-datatable-init), ' +
+        'table.table-striped:not(.dataTable):not(.no-datatable):not(.ps-datatable-init), ' +
+        'table.table-datatable:not(.dataTable):not(.no-datatable):not(.ps-datatable-init)'
+      );
       tables.forEach(tbl => {
         try {
-          if (!jQuery.fn.DataTable.isDataTable(tbl)) {
-            tbl.classList.add('dt-responsive', 'nowrap');
-            tbl.style.width = '100%';
-
-            // Permite ao DataTables Responsive acionar os breakpoints sem corte de scroll
-            const parentResponsive = tbl.closest('.table-responsive');
-            if (parentResponsive) {
-              parentResponsive.style.overflowX = 'clip';
-              parentResponsive.style.overflowY = 'visible';
-            }
-
-            const dtInstance = jQuery(tbl).DataTable({
-              language: {
-                sEmptyTable: "Nenhum registro encontrado",
-                sInfo: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                sInfoEmpty: "Mostrando 0 até 0 de 0 registros",
-                sInfoFiltered: "(Filtrados de _MAX_ registros)",
-                sLengthMenu: "_MENU_ registros por página",
-                sLoadingRecords: "Carregando...",
-                sProcessing: "Processando...",
-                sZeroRecords: "Nenhum registro encontrado",
-                sSearch: "Pesquisar:",
-                oPaginate: {
-                  sNext: "Próximo",
-                  sPrevious: "Anterior",
-                  sFirst: "Primeiro",
-                  sLast: "Último"
-                },
-                oAria: {
-                  sSortAscending: ": Ordenar colunas de forma ascendente",
-                  sSortDescending: ": Ordenar colunas de forma descendente"
-                }
-              },
-              paging: true,
-              lengthChange: true,
-              searching: true,
-              ordering: true,
-              info: true,
-              autoWidth: false,
-              responsive: true,
-              columnDefs: [
-                { responsivePriority: 1, targets: 0 },
-                { responsivePriority: 2, targets: -1 }
-              ]
-            });
-
-            setTimeout(() => {
-              try { dtInstance.columns.adjust().responsive.recalc(); } catch (e) {}
-            }, 120);
+          if (jQuery.fn.DataTable.isDataTable(tbl) || tbl.classList.contains('ps-datatable-init') || tbl.classList.contains('dataTable')) {
+            return;
           }
+          tbl.classList.add('ps-datatable-init');
+          tbl.classList.add('dt-responsive', 'nowrap');
+          tbl.style.width = '100%';
+
+          // Permite ao DataTables Responsive acionar os breakpoints sem corte de scroll
+          const parentResponsive = tbl.closest('.table-responsive');
+          if (parentResponsive) {
+            parentResponsive.style.overflowX = 'clip';
+            parentResponsive.style.overflowY = 'visible';
+          }
+
+          const dtInstance = jQuery(tbl).DataTable({
+            language: {
+              sEmptyTable: "Nenhum registro encontrado",
+              sInfo: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+              sInfoEmpty: "Mostrando 0 até 0 de 0 registros",
+              sInfoFiltered: "(Filtrados de _MAX_ registros)",
+              sLengthMenu: "_MENU_ registros por página",
+              sLoadingRecords: "Carregando...",
+              sProcessing: "Processando...",
+              sZeroRecords: "Nenhum registro encontrado",
+              sSearch: "Pesquisar:",
+              oPaginate: {
+                sNext: "Próximo",
+                sPrevious: "Anterior",
+                sFirst: "Primeiro",
+                sLast: "Último"
+              },
+              oAria: {
+                sSortAscending: ": Ordenar colunas de forma ascendente",
+                sSortDescending: ": Ordenar colunas de forma descendente"
+              }
+            },
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [
+              { responsivePriority: 1, targets: 0 },
+              { responsivePriority: 2, targets: -1 }
+            ]
+          });
+
+          setTimeout(() => {
+            try { dtInstance.columns.adjust().responsive.recalc(); } catch (e) {}
+          }, 120);
         } catch (e) {}
       });
     }
 
-    // C. Summernote Universal como padrão em todos os textareas
+    // C. Summernote Universal como padrão em todos os textareas (Blindado contra Duplicação)
     if (window.jQuery && jQuery.fn.summernote) {
       try {
         if (!window.jQuery.fn.tooltip) {
           window.jQuery.fn.tooltip = function () { return this; };
         }
-        const textareas = container.querySelectorAll('textarea');
+
+        // Seletor restritivo: NUNCA seleciona textareas internos do summernote (.note-codable) nem campos marcados
+        const textareas = container.querySelectorAll(
+          'textarea:not(.note-codable):not(.no-summernote):not(.no-editor):not(.font-monospace):not([data-no-summernote]):not([data-no-editor])'
+        );
+
         textareas.forEach(ed => {
           try {
             const $ed = jQuery(ed);
-            if ($ed.next().hasClass('note-editor') ||
-                $ed.hasClass('no-summernote') ||
-                $ed.hasClass('no-editor') ||
-                $ed.attr('data-no-summernote') !== undefined ||
-                $ed.attr('data-no-editor') !== undefined) {
+
+            // Guarda de segurança absoluta anti-duplicação:
+            // 1. Se já tem classe de inicialização
+            // 2. Se já tem instância de summernote no jQuery.data
+            // 3. Se está dentro de uma .note-editor (codeview ou plugin interno)
+            // 4. Se já possui um irmão .note-editor ao lado
+            if (
+              $ed.hasClass('ps-summernote-init') ||
+              $ed.data('summernote') ||
+              $ed.closest('.note-editor').length > 0 ||
+              $ed.siblings('.note-editor').length > 0 ||
+              $ed.next('.note-editor').length > 0
+            ) {
               return;
             }
 
+            // Pula campos técnicos que não devem ter HTML rico (código iframe, listas brutas de IP, meta tags SEO)
             const name = ($ed.attr('name') || '').toLowerCase();
             const id = ($ed.attr('id') || '').toLowerCase();
-            if (name.includes('iframe') || name.includes('ip_') || id.includes('iframe') || $ed.hasClass('font-monospace')) {
+            if (
+              name.includes('iframe') || 
+              name.includes('ip_') || 
+              name.includes('meta_') || 
+              id.includes('iframe') || 
+              id.includes('meta') || 
+              $ed.hasClass('font-monospace')
+            ) {
               return;
             }
 
+            // Marca imediatamente para evitar corridas assíncronas
+            $ed.addClass('ps-summernote-init');
+
+            // Configuração dinâmica de altura baseada em rows ou padrão
             const rows = parseInt($ed.attr('rows') || '5', 10);
             const calculatedHeight = Math.min(450, Math.max(180, rows * 36));
 
@@ -170,30 +203,47 @@
                 ['table', ['table']],
                 ['insert', ['link', 'picture', 'video', 'hr']],
                 ['view', ['fullscreen', 'codeview', 'help']]
-              ]
+              ],
+              callbacks: {
+                onChange: function(contents) {
+                  $ed.val(contents);
+                }
+              }
             });
           } catch (e) {}
         });
       } catch (e) {}
     }
 
-    // D. Select2
+    // D. Select2 com Guarda Anti-Duplicação
     if (window.jQuery && jQuery.fn.select2) {
       try {
-        jQuery(container).find('.select2').select2({
-          width: '100%',
-          language: 'pt-BR'
+        jQuery(container).find('.select2:not(.select2-hidden-accessible):not(.ps-select2-init)').each(function() {
+          const $sel = jQuery(this);
+          if ($sel.hasClass('select2-hidden-accessible') || $sel.hasClass('ps-select2-init') || $sel.data('select2')) {
+            return;
+          }
+          $sel.addClass('ps-select2-init');
+          $sel.select2({
+            width: '100%',
+            language: 'pt-BR'
+          });
         });
       } catch (e) {}
     }
 
-    // E. Datepicker
+    // E. Datepicker com Guarda Anti-Duplicação
     if (window.jQuery && jQuery.fn.datepicker) {
       try {
-        jQuery(container).find('#datepicker, #datepicker1').datepicker({
-          autoclose: true,
-          format: 'dd-mm-yyyy',
-          todayBtn: 'linked'
+        jQuery(container).find('#datepicker:not(.ps-datepicker-init), #datepicker1:not(.ps-datepicker-init)').each(function() {
+          const $dp = jQuery(this);
+          if ($dp.hasClass('ps-datepicker-init') || $dp.data('datepicker')) return;
+          $dp.addClass('ps-datepicker-init');
+          $dp.datepicker({
+            autoclose: true,
+            format: 'dd-mm-yyyy',
+            todayBtn: 'linked'
+          });
         });
       } catch (e) {}
     }
@@ -496,11 +546,13 @@
 
       // Sincroniza qualquer editor Summernote com o textarea antes de empacotar o FormData
       if (window.jQuery && jQuery.fn.summernote) {
-        jQuery(form).find('textarea').each(function () {
+        jQuery(form).find('textarea.ps-summernote-init').each(function () {
           const $ta = jQuery(this);
-          if ($ta.next().hasClass('note-editor') && $ta.summernote) {
-            $ta.val($ta.summernote('code'));
-          }
+          try {
+            if ($ta.data('summernote')) {
+              $ta.val($ta.summernote('code'));
+            }
+          } catch (e) {}
         });
       }
 

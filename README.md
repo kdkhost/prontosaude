@@ -28,11 +28,11 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - Navegação fluida entre rotas sem refresh de página e sem cintilação (`admin/js/pronto-spa.js`).
   - Cabeçalho, menu lateral (sidebar), navbar e rodapé desacoplados, com transições instantâneas e barra de progresso no topo.
   - Submissão de formulários e uploads via `FormData` e `fetch` assíncrono.
-  - Re-inicialização automática de tooltips, tabelas DataTables, Summernote, seletores e gráficos.
+  - **Ciclo de Vida Unificado e Blindagem Anti-Duplicação:** Inicialização centralizada de componentes (`reinitAllComponents`) com guardas atômicas e restritivas (`ps-summernote-init`, `ps-datatable-init`, `ps-select2-init`, `ps-datepicker-init`), eliminando por completo ferramentas duplicadas, toolbars sobrepostas ou conflitos entre abas.
 - **Upload Drag & Drop com Preview em Tempo Real:**
   - Utilitário universal (`admin/js/pronto-uploader.js`) que transforma todos os campos de imagem em zonas modernas de arrastar e soltar com preview visual instantâneo e informações do arquivo.
-- **Editor Rico Summernote Global:**
-  - Integrado globalmente em todas as áreas de texto do painel administrativo, com sincronização automática pré-envio.
+- **Editor Rico Summernote Global Idempotente:**
+  - Integrado globalmente em todas as áreas de texto elegíveis do painel administrativo, com isolamento contra textareas internos de codeview (`.note-codable`), sincronização bidirecional em tempo real e antes do envio de formulários.
 - **Geração Automática de Slugs em Tempo Real:**
   - Digitação automática de URLs amigáveis conforme títulos e nomes são digitados nos módulos de Clínicas, Páginas, Notícias, Categorias, Serviços e Médicos.
   - Bloqueio de ajuste manual (`readonly`) para prevenir inconsistências, acentos inválidos e quebra de rotas no sistema.

@@ -263,6 +263,8 @@ if (file_exists(__DIR__ . '/../.maintenance')) {
 document.addEventListener('DOMContentLoaded', function () {
 	const switches = document.querySelectorAll('.switch-ajax');
 	switches.forEach(sw => {
+		if (sw.dataset.switchBound === 'true') return;
+		sw.dataset.switchBound = 'true';
 		sw.addEventListener('change', function () {
 			const secao = this.getAttribute('data-secao');
 			const status = this.checked ? 1 : 0;

@@ -1262,47 +1262,20 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 	if(descInput) descInput.addEventListener('input', updateSEOPreview);
 	updateSEOPreview();
 
-	// Sincronização Síncrona e Universal de Abas (Hash e Click)
+	// Sincronização Síncrona e Definitiva de Abas integrada ao motor global SPA
 	function activateTab(tabId) {
 		if(!tabId) return;
 		tabId = tabId.replace('#', '');
 		const targetBtn = document.querySelector(`a[href="#${tabId}"], button[data-bs-target="#${tabId}"]`);
-		const targetPane = document.getElementById(tabId);
-		
-		if(targetBtn && targetPane) {
-			// Desativa todas
-			document.querySelectorAll('#settingsTabs .nav-link').forEach(btn => {
-				btn.classList.remove('active');
-				btn.setAttribute('aria-selected', 'false');
-			});
-			document.querySelectorAll('#settingsTabsContent .tab-pane').forEach(pane => {
-				pane.classList.remove('show', 'active');
-			});
-
-			// Ativa selecionada
-			targetBtn.classList.add('active');
-			targetBtn.setAttribute('aria-selected', 'true');
-			targetPane.classList.add('show', 'active');
-
-			// Rola a aba para a visão caso esteja oculta no scroll horizontal
-			targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+		if (targetBtn) {
+			if (window.switchProntoTab) {
+				window.switchProntoTab(targetBtn);
+			}
+			try {
+				targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+			} catch(e) {}
 		}
 	}
-
-	// Clique nas abas
-	document.querySelectorAll('#settingsTabs a, #settingsTabs button').forEach(el => {
-		el.addEventListener('click', function(e) {
-			const target = this.getAttribute('href') || this.getAttribute('data-bs-target');
-			if(target && target.startsWith('#')) {
-				e.preventDefault();
-				const tabId = target.replace('#', '');
-				activateTab(tabId);
-				if(history.replaceState) {
-					history.replaceState(null, null, '#' + tabId);
-				}
-			}
-		});
-	});
 
 	// Ao carregar a página
 	document.addEventListener('DOMContentLoaded', function() {
@@ -1312,14 +1285,6 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 		} else {
 			const activePhpTab = '<?= $active_tab; ?>';
 			if(activePhpTab) activateTab(activePhpTab);
-		}
-	});
-
-	// Escuta mudanças de hash na URL
-	window.addEventListener('hashchange', function() {
-		const hash = window.location.hash;
-		if(hash && hash.startsWith('#tab_')) {
-			activateTab(hash);
 		}
 	});
 })();
