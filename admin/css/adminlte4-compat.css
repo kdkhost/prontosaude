@@ -50,53 +50,167 @@ body {
   font-weight: 500;
 }
 
-/* Brand e Sidebar */
+/* Brand e Sidebar Moderna com Scroll Nativo e Treeview Accordion */
+.app-sidebar {
+  position: fixed !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  height: 100vh !important;
+  overflow: hidden !important;
+  z-index: 1038;
+}
+
 .app-sidebar .sidebar-brand {
   min-height: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: inherit;
 }
 .app-sidebar .sidebar-brand img {
-  max-height: 40px;
+  max-height: 38px;
   width: auto;
 }
+
+.app-sidebar .sidebar-wrapper {
+  height: calc(100vh - 56px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-bottom: 3.5rem !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  scroll-behavior: smooth;
+}
+
+.app-sidebar .sidebar-wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+.app-sidebar .sidebar-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+.app-sidebar .sidebar-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+.app-sidebar .sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
 .sidebar-menu .nav-header {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.45);
-  padding: 0.75rem 1rem 0.25rem 1rem;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 0.85rem 1rem 0.25rem 1rem;
   font-weight: 700;
 }
+
 .sidebar-menu .nav-link {
   border-radius: 0.5rem;
-  margin: 0.15rem 0.5rem;
-  padding: 0.55rem 0.85rem;
+  margin: 0.12rem 0.5rem;
+  padding: 0.52rem 0.85rem;
   transition: all 0.2s ease-in-out;
   display: flex;
   align-items: center;
   font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
 }
+.sidebar-menu .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
 .sidebar-menu .nav-link i.nav-icon {
   font-size: 1.1rem;
   margin-right: 0.65rem;
   width: 20px;
   text-align: center;
+  flex-shrink: 0;
 }
-.sidebar-menu .nav-link.active {
-  background-color: var(--ps-primary) !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 10px rgba(10, 107, 116, 0.35);
+
+.sidebar-menu .nav-link p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+/* Seta do Treeview e Rotação suave */
+.sidebar-menu .nav-link .nav-arrow {
+  margin-left: auto;
+  font-size: 0.75rem;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.7;
+}
+.sidebar-menu .nav-item.menu-open > .nav-link .nav-arrow {
+  transform: rotate(90deg);
+  opacity: 1;
+}
+
+/* Comportamento Treeview (Recolhido / Expandido) */
+.sidebar-menu .nav-item:not(.menu-open) > .nav-treeview {
+  display: none !important;
+}
+.sidebar-menu .nav-item.menu-open > .nav-treeview {
+  display: block !important;
+  animation: psSidebarSlide 0.22s ease-out;
+}
+
+@keyframes psSidebarSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .sidebar-menu .nav-treeview {
-  padding-left: 1rem;
+  padding-left: 0.85rem;
+  list-style: none;
+  margin: 0.15rem 0;
 }
 .sidebar-menu .nav-treeview .nav-link {
   font-size: 0.825rem;
-  padding: 0.45rem 0.75rem;
+  padding: 0.42rem 0.75rem;
+  margin: 0.1rem 0.5rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+.sidebar-menu .nav-treeview .nav-link:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+/* Destaque Ativo: Menu Pai */
+.sidebar-menu .nav-item.menu-open > .nav-link.active-parent,
+.sidebar-menu .nav-item.menu-open > .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  border-left: 3px solid var(--ps-primary) !important;
+  box-shadow: none !important;
+}
+
+/* Destaque Ativo: Item Filho ou Link Direto */
+.sidebar-menu .nav-treeview .nav-link.active,
+.sidebar-menu > .nav-item > .nav-link.active:not(:has(+ .nav-treeview)) {
+  background-color: var(--ps-primary) !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: 0 3px 8px rgba(10, 107, 116, 0.38) !important;
+}
+.sidebar-menu .nav-treeview .nav-link.active i.nav-icon {
+  color: #ffffff !important;
 }
 
 /* Compatibilidade do Cabeçalho de Conteúdo */

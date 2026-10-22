@@ -229,32 +229,42 @@
 
   window.reinitAllComponents = reinitAllComponents;
 
-  // 3. ATUALIZAÇÃO DO MENU LATERAL ATIVO COM MAPEAMENTO TREEVIEW
+  // 3. ATUALIZAÇÃO DO MENU LATERAL ATIVO COM MAPEAMENTO TREEVIEW E ACORDEÃO
   function updateActiveSidebar(url) {
+    if (!url) return;
     const filename = url.split('/').pop().split('?')[0];
 
     // Mapeia páginas de adição/edição para o arquivo base da sidebar
     let targetFile = filename;
-    if (targetFile.includes('-add.php') || targetFile.includes('-edit.php')) {
-      targetFile = targetFile.replace('-add.php', '.php').replace('-edit.php', '.php');
+    if (targetFile.includes('-add.php') || targetFile.includes('-edit.php') || targetFile.includes('-update.php')) {
+      targetFile = targetFile.replace('-add.php', '.php').replace('-edit.php', '.php').replace('-update.php', '.php');
     }
-    if (targetFile === 'vagas.php') {
+    if (targetFile === 'vagas.php' || filename === 'vagas-add.php' || filename === 'vagas-edit.php') {
       targetFile = 'trabalhe-conosco.php';
     }
+    if (filename === 'subscriber-csv.php') {
+      targetFile = 'subscriber.php';
+    }
 
-    const sidebarLinks = document.querySelectorAll('.sidebar-menu a.nav-link');
+    const sidebar = document.querySelector('.sidebar-menu');
+    if (!sidebar) return;
 
-    // Remove active anterior
+    const sidebarLinks = sidebar.querySelectorAll('a.nav-link');
+
+    // Remove active anterior e fecha menus para modo acordeão
     sidebarLinks.forEach(link => link.classList.remove('active'));
-    document.querySelectorAll('.sidebar-menu .nav-item.menu-open').forEach(item => {
+    sidebar.querySelectorAll('.nav-item.menu-open').forEach(item => {
       item.classList.remove('menu-open');
     });
+
+    let matchedLink = null;
 
     sidebarLinks.forEach(link => {
       const href = link.getAttribute('href') || '';
       const linkFilename = href.split('/').pop().split('?')[0];
 
       if (linkFilename && (linkFilename === filename || linkFilename === targetFile)) {
+        matchedLink = link;
         link.classList.add('active');
 
         // Se estiver dentro de um treeview, abre o treeview e ativa o menu pai
@@ -263,22 +273,59 @@
           const parentNavItem = parentTreeview.closest('.nav-item');
           if (parentNavItem) {
             parentNavItem.classList.add('menu-open');
-            const parentLink = parentNavItem.querySelector('a.nav-link');
+            const parentLink = parentNavItem.querySelector(':scope > a.nav-link');
             if (parentLink) parentLink.classList.add('active');
           }
         }
       }
     });
+
+    // Se encontrou o link ativo, garante visibilidade suave dentro do scroll da sidebar
+    if (matchedLink) {
+      setTimeout(() => {
+        try {
+          matchedLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } catch (e) {}
+      }, 100);
+    }
   }
 
-  // Suporte ao clique manual para alternar menus treeview
+  // Suporte ao clique manual para alternar menus treeview com MODO ACORDEÃO
   document.addEventListener('click', function(e) {
-    const treeviewToggle = e.target.closest('.sidebar-menu .nav-item > a.nav-link[href="#"]');
+    const treeviewToggle = e.target.closest('.sidebar-menu .nav-item.has-treeview > a.nav-link, .sidebar-menu .nav-item > a.nav-link[href="#"]');
     if (!treeviewToggle) return;
+
+    const href = treeviewToggle.getAttribute('href');
+    if (href && href !== '#' && href !== 'javascript:;') return;
+
     e.preventDefault();
     const parentNavItem = treeviewToggle.closest('.nav-item');
-    if (parentNavItem) {
-      parentNavItem.classList.toggle('menu-open');
+    if (!parentNavItem) return;
+
+    const isAlreadyOpen = parentNavItem.classList.contains('menu-open');
+    const menuRoot = parentNavItem.closest('.sidebar-menu');
+
+    // Comportamento ACORDEÃO: Fecha todos os outros nav-items de primeiro nível
+    if (menuRoot) {
+      const openSiblings = menuRoot.querySelectorAll(':scope > .nav-item.menu-open');
+      openSiblings.forEach(item => {
+        if (item !== parentNavItem) {
+          item.classList.remove('menu-open');
+          const itemLink = item.querySelector(':scope > a.nav-link');
+          if (itemLink && !item.querySelector('.nav-treeview a.nav-link.active')) {
+            itemLink.classList.remove('active');
+          }
+        }
+      });
+    }
+
+    if (isAlreadyOpen) {
+      parentNavItem.classList.remove('menu-open');
+      if (!parentNavItem.querySelector('.nav-treeview a.nav-link.active')) {
+        treeviewToggle.classList.remove('active');
+      }
+    } else {
+      parentNavItem.classList.add('menu-open');
     }
   });
 
