@@ -32,6 +32,7 @@
 								<th width="100">Designação</th>
 								<th width="100">Empres</th>
 								<th>Depoimento</th>
+								<th width="110" class="text-center">Status</th>
 								<th width="80">Ação</th>
 							</tr>
 						</thead>
@@ -45,7 +46,8 @@
 														designation,
 														company,
 														photo,
-														comment
+														comment,
+														status
 
 							                           	FROM tbl_testimonial
 							                           	
@@ -62,6 +64,16 @@
 									<td><?= $row['designation']; ?></td>
 									<td><?= $row['company']; ?></td>
 									<td><?= $row['comment']; ?></td>
+									<td class="text-center">
+										<div class="d-inline-flex align-items-center gap-2">
+											<div class="form-check form-switch mb-0">
+												<input class="form-check-input pronto-status-switch" type="checkbox" role="switch" data-entity="testimonial" data-id="<?= $row['id']; ?>" data-name="<?= htmlspecialchars($row['name']); ?>" <?= ($row['status'] ?? 'Active') === 'Active' ? 'checked' : ''; ?> title="Ativar ou desativar este depoimento">
+											</div>
+											<span class="badge status-badge <?= ($row['status'] ?? 'Active') === 'Active' ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle'; ?> rounded-pill small">
+												<?= ($row['status'] ?? 'Active') === 'Active' ? 'Ativo' : 'Inativo'; ?>
+											</span>
+										</div>
+									</td>
 									<td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="testimonial-edit.php?id=<?= $row['id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Editar</a>
 										<a href="#" class="btn btn-danger btn-sm" data-href="testimonial-delete.php?id=<?= $row['id']; ?>" data-target="#confirm-delete-<?= $row['id']; ?>"><i class="bi bi-trash3"></i> Excluir</a></div></td>
 								</tr>

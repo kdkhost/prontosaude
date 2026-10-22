@@ -35,6 +35,7 @@
 			        <th width="140">Título FAQ</th>
 			        <th>Conteúdo FAQ</th>
 			        <th width="120">Categoria FAQ</th>
+			        <th width="110" class="text-center">Status</th>
 			        <th width="80">Ação</th>
 			    </tr>
 			</thead>
@@ -47,6 +48,7 @@
 												t1.faq_title,
 												t1.faq_content,
 												t1.faq_category_id,
+												t1.status,
 
 												t2.faq_category_id,
 												t2.faq_category_name
@@ -64,6 +66,16 @@
 			                <td><?= $row['faq_title']; ?></td>
 			                <td><?= $row['faq_content']; ?></td>
 			                <td><?= $row['faq_category_name']; ?></td>
+			                <td class="text-center">
+			                	<div class="d-inline-flex align-items-center gap-2">
+			                		<div class="form-check form-switch mb-0">
+			                			<input class="form-check-input pronto-status-switch" type="checkbox" role="switch" data-entity="faq" data-id="<?= $row['faq_id']; ?>" data-name="<?= htmlspecialchars($row['faq_title'] ?: 'FAQ #' . $i); ?>" data-active-text="Visível" data-inactive-text="Oculto" <?= (($row['status'] ?? 'Active') == 'Active') ? 'checked' : ''; ?> title="Ativar ou desativar esta dúvida frequente no site">
+			                		</div>
+			                		<span class="badge status-badge <?= (($row['status'] ?? 'Active') == 'Active') ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle'; ?> rounded-pill small">
+			                			<?= (($row['status'] ?? 'Active') == 'Active') ? 'Visível' : 'Oculto'; ?>
+			                		</span>
+			                	</div>
+			                </td>
 			                <td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="faq-edit.php?id=<?= $row['faq_id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Editar</a>
 			                    <a href="#" class="btn btn-danger btn-sm" data-href="faq-delete.php?id=<?= $row['faq_id']; ?>" data-target="#confirm-delete-<?=$row['faq_id']?>"><i class="bi bi-trash3"></i> Excluir</a></div></td>
 			            </tr>

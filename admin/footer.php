@@ -57,6 +57,7 @@
 	<script src="js/pronto-slug.js?v=<?= time(); ?>"></script>
 	<script src="js/pronto-masks.js?v=<?= time(); ?>"></script>
 	<script src="js/pronto-security.js?v=<?= time(); ?>"></script>
+	<script src="js/pronto-switches.js?v=<?= time(); ?>"></script>
 	<script src="js/pronto-spa.js?v=<?= time(); ?>"></script>
 
 	<script>

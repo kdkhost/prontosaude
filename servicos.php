@@ -44,7 +44,7 @@ foreach ($result as $row) {
 		</div>
 		<div class="row">
 			<?php
-			$statement = $pdo->prepare("SELECT * FROM tbl_service ORDER BY id ASC");
+			$statement = $pdo->prepare("SELECT * FROM tbl_service WHERE status = 'Active' ORDER BY id ASC");
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 			foreach ($result as $row) {

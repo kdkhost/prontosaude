@@ -7,26 +7,7 @@
 		// $total_recent_news_home_page
 		?>
 		
-		<script>
-        window.cookieconsent.initialise({
-          "palette": {
-            "popup": {
-              "background": "#f5f5f5",
-              "text": "#000000"
-            },
-            "button": {
-              "background": "#f00",
-              "text": "#ffffff"
-            }
-          },
-          "content": {
-            "message": "Este site usa cookies para garantir que você obtenha a melhor experiência de navegação. Desativar os cookies do site pode prejudicar a funcionalidade de alguns recursos.",
-            "dismiss": "Concordar e Fechar",
-            "link": "Ler mais",
-            "href": "/privacidade.php"
-          }
-        });
-        </script>
+
 		<!-- Footer Social Start -->
 		<section class="footer-social">
 			<div class="container">
@@ -239,6 +220,89 @@
 		<i class="fa fa-whatsapp"></i>
 		<span class="ps-floating-whatsapp-tooltip">Agende sua Consulta</span>
 	</a>
+
+	<!-- Banner LGPD Moderno (Glassmorphism & Conformidade com a Lei Geral de Proteção de Dados) -->
+	<div class="ps-lgpd-banner" id="psLgpdBanner">
+		<div class="ps-lgpd-content">
+			<div class="ps-lgpd-icon">
+				<i class="fa fa-shield"></i>
+			</div>
+			<div class="ps-lgpd-text">
+				<h6>Privacidade e Cookies</h6>
+				<p>Utilizamos cookies para aprimorar sua experiência e oferecer serviços médicos personalizados. Ao continuar, você concorda com nossa <a href="<?= BASE_URL; ?>privacidade.php">Política de Privacidade</a>.</p>
+			</div>
+			<div class="ps-lgpd-actions">
+				<button type="button" class="btn-ps-lgpd-prefs" id="btnLgpdPreferences">Preferências</button>
+				<button type="button" class="btn-ps-lgpd-accept" id="btnAcceptLgpd">Aceitar Todos</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal de Preferências LGPD -->
+	<div class="ps-lgpd-modal-overlay" id="psLgpdModal">
+		<div class="ps-lgpd-modal-card">
+			<div class="d-flex justify-content-between align-items-center mb-3">
+				<h5 class="fw-bold mb-0 text-dark"><i class="fa fa-sliders text-primary mr-2"></i> Preferências de Privacidade</h5>
+				<button type="button" class="btn-close" id="btnCloseLgpdModal" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+			</div>
+			<p class="text-muted small mb-3">Escolha quais categorias de cookies você deseja permitir em sua navegação:</p>
+			<div class="mb-3 p-3 bg-light rounded" style="background: #f8fafc; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+				<div class="d-flex justify-content-between align-items-center mb-1">
+					<strong class="text-dark small">Cookies Essenciais</strong>
+					<span class="badge bg-secondary small" style="background: #64748b; color: #fff; padding: 3px 8px; border-radius: 6px;">Sempre Ativos</span>
+				</div>
+				<p class="text-muted small mb-0" style="font-size: 0.8rem; color: #64748b; margin-top: 4px;">Necessários para o funcionamento básico, segurança e sessões do portal.</p>
+			</div>
+			<div class="mb-4 p-3 bg-light rounded" style="background: #f8fafc; border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+				<div class="d-flex justify-content-between align-items-center mb-1">
+					<strong class="text-dark small">Cookies de Desempenho & Análise</strong>
+					<input type="checkbox" id="lgpdOptAnalytics" checked style="width: 18px; height: 18px; cursor: pointer;">
+				</div>
+				<p class="text-muted small mb-0" style="font-size: 0.8rem; color: #64748b; margin-top: 4px;">Ajudam-nos a mensurar a audiência e melhorar os serviços de saúde oferecidos.</p>
+			</div>
+			<button type="button" class="btn-ps-lgpd-accept w-100 py-2" id="btnSaveLgpdPrefs" style="width: 100%;">Salvar Preferências</button>
+		</div>
+	</div>
+
+	<?php if (!empty($pwa_status) && $pwa_status == 1): ?>
+	<!-- Toast de Instalação do Aplicativo PWA -->
+	<div class="ps-pwa-install-toast" id="psPwaInstallToast">
+		<img src="<?= htmlspecialchars($pwa_icon_192, ENT_QUOTES, 'UTF-8'); ?>" alt="App" class="ps-pwa-app-icon">
+		<div class="ps-pwa-toast-info">
+			<strong>Instale o Aplicativo</strong>
+			<span>Acesso rápido e consultas na palma da mão</span>
+		</div>
+		<button type="button" class="btn-ps-pwa-install" id="btnInstallPwaApp">Instalar</button>
+		<button type="button" class="btn-ps-pwa-close" id="btnDismissPwaApp" title="Dispensar">&times;</button>
+	</div>
+	<?php endif; ?>
+
+	<?php 
+	$cur_page_name = basename($_SERVER['SCRIPT_NAME'] ?? '');
+	if (!empty($popup_status) && $popup_status == 1 && ($cur_page_name === 'index.php' || $cur_page_name === '')): 
+	?>
+	<!-- Banner de Popup Promocional & Avisos da Home -->
+	<div class="ps-promo-popup-overlay" id="psPromoPopup" data-active="1" data-delay="<?= $popup_delay; ?>" data-expire-hours="<?= $popup_expire_hours; ?>">
+		<div class="ps-promo-popup-card">
+			<button type="button" class="ps-popup-close-btn ps-close-popup" aria-label="Fechar">&times;</button>
+			<?php if (!empty($popup_image)): ?>
+				<img src="<?= htmlspecialchars($popup_image, ENT_QUOTES, 'UTF-8'); ?>" alt="<?= htmlspecialchars($popup_title, ENT_QUOTES, 'UTF-8'); ?>" class="ps-popup-banner-img">
+			<?php endif; ?>
+			<div class="ps-popup-body">
+				<h4><?= htmlspecialchars($popup_title, ENT_QUOTES, 'UTF-8'); ?></h4>
+				<p><?= nl2br(htmlspecialchars($popup_text, ENT_QUOTES, 'UTF-8')); ?></p>
+				<?php if (!empty($popup_button_text)): ?>
+					<a href="<?= !empty($popup_button_url) ? htmlspecialchars($popup_button_url, ENT_QUOTES, 'UTF-8') : '#'; ?>" class="btn-ps-popup-action">
+						<?= htmlspecialchars($popup_button_text, ENT_QUOTES, 'UTF-8'); ?> <i class="fa fa-arrow-right ml-1"></i>
+					</a>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+	<?php endif; ?>
+
+	<!-- Recursos Modernos: PWA, LGPD, Popup & Lazy Loading Assíncrono -->
+	<script src="<?php echo BASE_URL; ?>assets/js/pronto-frontend-features.js?v=<?= time(); ?>"></script>
 
 </body>
 </html>

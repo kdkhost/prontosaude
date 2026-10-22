@@ -35,6 +35,7 @@
 			        <th>Título</th>
 			        <th>Foto</th>
 			        <th>Categoria</th>
+			        <th class="text-center" width="110">Status</th>
 			        <th>Ação</th>
 			    </tr>
 			</thead>
@@ -47,6 +48,7 @@
                                                 t1.photo_caption,
                                                 t1.photo_name,
                                                 t1.p_category_id,
+                                                t1.status,
                                                 t2.p_category_id,
                                                 t2.p_category_name
                                             FROM
@@ -67,6 +69,16 @@
 	                    	<img class="rounded border object-fit-cover" src="../assets/uploads/<?php echo $row['photo_name']; ?>" height="80" width="80">
 	                    </td>
 	                    <td><?php echo $row['p_category_name']; ?></td>
+	                    <td class="text-center">
+	                    	<div class="d-inline-flex align-items-center gap-2">
+	                    		<div class="form-check form-switch mb-0">
+	                    			<input class="form-check-input pronto-status-switch" type="checkbox" role="switch" data-entity="photo" data-id="<?php echo $row['photo_id']; ?>" data-name="<?php echo htmlspecialchars($row['photo_caption'] ?: 'Foto #' . $i); ?>" data-active-text="Visível" data-inactive-text="Oculta" <?php echo (($row['status'] ?? 'Active') == 'Active') ? 'checked' : ''; ?> title="Ativar ou desativar esta foto na galeria">
+	                    		</div>
+	                    		<span class="badge status-badge <?php echo (($row['status'] ?? 'Active') == 'Active') ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle'; ?> rounded-pill small">
+	                    			<?php echo (($row['status'] ?? 'Active') == 'Active') ? 'Visível' : 'Oculta'; ?>
+	                    		</span>
+	                    	</div>
+	                    </td>
 	                    <td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="photo-edit.php?id=<?php echo $row['photo_id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Editar</a>
 	                        <a href="#" class="btn btn-danger btn-sm" 
 	                        data-target="#confirm-delete-<?php echo $row['photo_id']; ?>"><i class="bi bi-trash3"></i> Excluir</a></div></td>

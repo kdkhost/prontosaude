@@ -76,8 +76,23 @@ $home_title_news             = $row['home_title_news'] ?? '';
 $home_subtitle_news          = $row['home_subtitle_news'] ?? '';
 $home_status_news            = $row['home_status_news'] ?? 0;
 $home_title_partner          = $row['home_title_partner'] ?? '';
-$home_subtitle_partner       = $row['home_subtitle_partner'] ?? '';
 $home_status_partner         = $row['home_status_partner'] ?? 0;
+
+// Parâmetros PWA & Popup Promocional
+$pwa_status      = (int)($row['pwa_status'] ?? 1);
+$pwa_app_name    = $row['pwa_app_name'] ?? 'Pronto Saúde | Centro Médico & Odontológico';
+$pwa_short_name  = $row['pwa_short_name'] ?? 'Pronto Saúde';
+$pwa_theme_color = $row['pwa_theme_color'] ?? '#0a6b74';
+$pwa_icon_192    = !empty($row['pwa_icon_192']) ? BASE_URL . 'assets/uploads/' . $row['pwa_icon_192'] : BASE_URL . 'assets/uploads/' . ($favicon ?: 'favicon.png');
+
+$popup_status    = (int)($row['popup_status'] ?? 0);
+$popup_title     = $row['popup_title'] ?? '';
+$popup_text      = $row['popup_text'] ?? '';
+$popup_image     = !empty($row['popup_image']) ? BASE_URL . 'assets/uploads/' . $row['popup_image'] : '';
+$popup_button_text = $row['popup_button_text'] ?? 'Saiba Mais';
+$popup_button_url = $row['popup_button_url'] ?? '';
+$popup_delay     = max(500, (int)($row['popup_delay'] ?? 2000));
+$popup_expire_hours = max(1, (int)($row['popup_expire_hours'] ?? 24));
 
 // Getting the basic data for the website from database
 $statement = $pdo->prepare("SELECT * FROM tbl_department WHERE dep_id=1");
@@ -346,9 +361,16 @@ $email   = $row2['dep_email'] ?? '';
         <meta name="twitter:image:alt" content="<?= pronto_clean_meta_string($seo_title, 70); ?>">
 
 
-        <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/cookie.css" />
-	    <script src="<?= BASE_URL; ?>assets/js/cookie.js" data-cfasync="false"></script>
-	    
+        <!-- Progressive Web App (PWA) Tags Configuráveis pelo Painel Admin -->
+        <?php if ($pwa_status == 1): ?>
+        <link rel="manifest" href="<?= BASE_URL; ?>manifest.webmanifest.php">
+        <meta name="theme-color" content="<?= htmlspecialchars($pwa_theme_color, ENT_QUOTES, 'UTF-8'); ?>">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-title" content="<?= htmlspecialchars($pwa_short_name, ENT_QUOTES, 'UTF-8'); ?>">
+        <link rel="apple-touch-icon" href="<?= htmlspecialchars($pwa_icon_192, ENT_QUOTES, 'UTF-8'); ?>">
+        <?php endif; ?>
+
         <!-- Favicon -->
         <link href="<?= BASE_URL; ?>assets/uploads/<?= $favicon; ?>" rel="shortcut icon" type="image/png">
         

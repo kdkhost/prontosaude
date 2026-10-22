@@ -36,6 +36,7 @@
 								<th width="180">Título</th>
 								<th width="280">Detalhes</th>
 								<th>Categoria</th>
+								<th class="text-center" width="110">Status</th>
 								<th>Ação</th>
 							</tr>
 						</thead>
@@ -49,6 +50,7 @@
 														t1.news_content,
 														t1.photo,
 														t1.category_id,
+														t1.status,
 
 														t2.category_id,
 														t2.category_name
@@ -80,6 +82,16 @@
 									<td><?php if(strlen($row['news_content']) > 180){echo substr($row['news_content'],0,180).' ...';} else {echo $row['news_content'];} ?></td>
 									<td>
 										<?php echo $row['category_name']; ?>
+									</td>
+									<td class="text-center">
+										<div class="d-inline-flex align-items-center gap-2">
+											<div class="form-check form-switch mb-0">
+												<input class="form-check-input pronto-status-switch" type="checkbox" role="switch" data-entity="news" data-id="<?php echo $row['news_id']; ?>" data-name="<?php echo htmlspecialchars($row['news_title']); ?>" data-active-text="Publicada" data-inactive-text="Rascunho" <?php echo (($row['status'] ?? 'Active') == 'Active') ? 'checked' : ''; ?> title="Publicar ou salvar como rascunho">
+											</div>
+											<span class="badge status-badge <?php echo (($row['status'] ?? 'Active') == 'Active') ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-secondary-subtle text-secondary border border-secondary-subtle'; ?> rounded-pill small">
+												<?php echo (($row['status'] ?? 'Active') == 'Active') ? 'Publicada' : 'Rascunho'; ?>
+											</span>
+										</div>
 									</td>
 									<td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="news-edit.php?id=<?php echo $row['news_id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Editar</a>
 										<a href="#" class="btn btn-danger btn-sm" data-href="news-delete.php?id=<?php echo $row['news_id']; ?>" data-target="#confirm-delete-<?$row['news_id']?>"><i class="bi bi-trash3"></i> Excluir</a></div></td>

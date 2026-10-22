@@ -83,7 +83,7 @@ if (function_exists('pronto_is_page_active')) {
 		</div>
 		<div class="row">
 			<?php
-			$statement = $pdo->prepare("SELECT * FROM tbl_service ORDER BY id ASC LIMIT 3");
+			$statement = $pdo->prepare("SELECT * FROM tbl_service WHERE status = 'Active' ORDER BY id ASC LIMIT 3");
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 			foreach ($result as $row) {
@@ -448,7 +448,7 @@ if (function_exists('pronto_is_page_active')) {
 				<!-- Testimonial Carousel Start -->
 				<div class="testimonial-carousel">
 					<?php
-					$statement = $pdo->prepare("SELECT * FROM tbl_testimonial ORDER BY id ASC");
+					$statement = $pdo->prepare("SELECT * FROM tbl_testimonial WHERE status = 'Active' ORDER BY id ASC");
 					$statement->execute();
 					$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 					foreach ($result as $row) {
@@ -521,7 +521,7 @@ if (function_exists('pronto_is_page_active')) {
 
 					<?php
 					$i=0;
-					$statement = $pdo->prepare("SELECT * FROM tbl_news ORDER BY news_id DESC");
+					$statement = $pdo->prepare("SELECT * FROM tbl_news WHERE status = 'Active' ORDER BY news_id DESC");
 					$statement->execute();
 					$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 					foreach ($result as $row) {

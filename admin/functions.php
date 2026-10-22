@@ -188,6 +188,48 @@ if (!function_exists('pronto_sync_system_pages')) {
                 // Silencioso em caso de restrição momentânea
             }
         }
+
+        // Auto-migração das colunas de status em tabelas do sistema
+        $statusTables = ['tbl_service', 'tbl_testimonial', 'tbl_news', 'tbl_photo', 'tbl_video', 'tbl_faq'];
+        foreach ($statusTables as $stTable) {
+            try {
+                $pdo->query("SELECT status FROM {$stTable} LIMIT 1");
+            } catch (Exception $e) {
+                try {
+                    $pdo->query("ALTER TABLE {$stTable} ADD COLUMN status VARCHAR(30) DEFAULT 'Active'");
+                    $pdo->query("UPDATE {$stTable} SET status = 'Active' WHERE status IS NULL OR status = ''");
+                } catch (Exception $e2) {}
+            }
+        }
+
+        // Auto-migração dos campos PWA e Popup em tbl_settings
+        $settingFields = [
+            'popup_status' => "TINYINT(1) DEFAULT 0",
+            'popup_title' => "VARCHAR(255) DEFAULT 'Novidades & Promoções Exclusivas'",
+            'popup_text' => "TEXT",
+            'popup_image' => "VARCHAR(255) DEFAULT ''",
+            'popup_button_text' => "VARCHAR(100) DEFAULT 'Aproveitar Benefícios'",
+            'popup_button_url' => "VARCHAR(255) DEFAULT '#'",
+            'popup_delay' => "INT DEFAULT 2000",
+            'popup_expire_hours' => "INT DEFAULT 24",
+            'pwa_status' => "TINYINT(1) DEFAULT 1",
+            'pwa_app_name' => "VARCHAR(255) DEFAULT 'Pronto Saúde | Centro Médico & Odontológico'",
+            'pwa_short_name' => "VARCHAR(100) DEFAULT 'Pronto Saúde'",
+            'pwa_theme_color' => "VARCHAR(20) DEFAULT '#0a6b74'",
+            'pwa_bg_color' => "VARCHAR(20) DEFAULT '#ffffff'",
+            'pwa_icon_192' => "VARCHAR(255) DEFAULT ''",
+            'pwa_icon_512' => "VARCHAR(255) DEFAULT ''",
+            'pwa_description' => "VARCHAR(255) DEFAULT 'Aplicativo oficial Pronto Saúde: consultas, exames, corpo clínico e cartão fidelidade.'"
+        ];
+        foreach ($settingFields as $sCol => $sDef) {
+            try {
+                $pdo->query("SELECT {$sCol} FROM tbl_settings LIMIT 1");
+            } catch (Exception $e) {
+                try {
+                    $pdo->query("ALTER TABLE tbl_settings ADD COLUMN {$sCol} {$sDef}");
+                } catch (Exception $e2) {}
+            }
+        }
     }
 }
 

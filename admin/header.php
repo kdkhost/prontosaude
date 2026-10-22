@@ -210,6 +210,7 @@ $logo = $row['logo'] ?? '';
 					$admin_pages = [
 						'settings.php', 'seguranca.php', 'secoes.php', 'seo.php',
 						'page.php', 'page-add.php', 'page-edit.php', 
+						'pwa.php', 'popup.php',
 						'menu.php', 'menu-add.php', 'menu-edit.php', 
 						'user.php', 'user-add.php', 'user-edit.php'
 					];
@@ -335,6 +336,18 @@ $logo = $row['logo'] ?? '';
 									<a href="page.php" class="nav-link <?= in_array($cur_page, ['page.php', 'page-add.php', 'page-edit.php']) ? 'active' : '' ?>">
 										<i class="nav-icon bi bi-file-earmark-text-fill text-warning"></i>
 										<p>Gestor de Páginas</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="pwa.php" class="nav-link <?= ($cur_page == 'pwa.php') ? 'active' : '' ?>">
+										<i class="nav-icon bi bi-phone-fill text-primary"></i>
+										<p>Aplicativo PWA</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="popup.php" class="nav-link <?= ($cur_page == 'popup.php') ? 'active' : '' ?>">
+										<i class="nav-icon bi bi-window-stack text-info"></i>
+										<p>Banner de Popup</p>
 									</a>
 								</li>
 								<?php if($user_role == 'Super Admin'): ?>

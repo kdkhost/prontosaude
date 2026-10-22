@@ -3,6 +3,9 @@ require_once('header.php');
 
 // Endpoint AJAX para alternar status do Cartão Fidelidade / Plano
 if(isset($_POST['action']) && $_POST['action'] === 'toggle_status') {
+	while (ob_get_level()) {
+		ob_end_clean();
+	}
 	header('Content-Type: application/json');
 	$id = (int)($_POST['id'] ?? 0);
 	$status = (int)($_POST['status'] ?? 0);
@@ -117,9 +120,9 @@ if(isset($_POST['action']) && $_POST['action'] === 'toggle_status') {
 								<td>
 									<div class="d-flex align-items-center gap-2">
 										<div class="form-check form-switch mb-0">
-											<input class="form-check-input switch-plan-status" type="checkbox" role="switch" data-id="<?= $row['pricing_plan_id']; ?>" <?= ($row['status'] ?? 1) == 1 ? 'checked' : ''; ?> title="Ativar ou Desativar Plano">
+											<input class="form-check-input pronto-status-switch" type="checkbox" role="switch" data-entity="pricing_plan" data-id="<?= $row['pricing_plan_id']; ?>" data-name="<?= htmlspecialchars($row['pricing_plan_name']); ?>" data-status-type="int" data-active-text="Ativo" data-inactive-text="Inativo" <?= ($row['status'] ?? 1) == 1 ? 'checked' : ''; ?> title="Ativar ou Desativar Plano">
 										</div>
-										<span class="badge status-badge-<?= $row['pricing_plan_id']; ?> <?= ($row['status'] ?? 1) == 1 ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-secondary-subtle text-secondary border border-secondary-subtle'; ?>">
+										<span class="badge status-badge-<?= $row['pricing_plan_id']; ?> status-badge <?= ($row['status'] ?? 1) == 1 ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle'; ?>">
 											<?= ($row['status'] ?? 1) == 1 ? 'Ativo' : 'Inativo'; ?>
 										</span>
 									</div>

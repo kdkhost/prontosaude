@@ -84,6 +84,36 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - **Benefícios Inclusos:** Edição simplificada de tópicos/benefícios (um por linha no painel) com renderização automática de ícones de checkmark nos cards do portal.
   - **Botões e Links Customizáveis:** Personalização do texto da ação (ex: *Contratar Agora*, *Agendar Consulta*, *Saiba Mais*) e URL de destino flexível (WhatsApp direto, link de checkout ou página de detalhes).
   - **Destaque e Selos (Badges):** Opção de marcar planos recomendados com efeito de elevação e selos dinâmicos (*Mais Popular*, *Recomendado*).
+- **Padronização Universal de Atalhos Rápidos (Switches Toggle AJAX) no Painel:**
+  - **Correção Definitiva de Comunicação:** Resolução completa da falha de buffer em endpoints AJAX que gerava mensagens de "Falha na comunicação com o servidor". Esvaziamento proativo de buffers (`ob_end_clean()`) e criação do controlador universal `admin/toggle-ajax.php`.
+  - **Switches de Status em Todo o Sistema:** Implementação padronizada de switches toggle instantâneos (`.form-switch`) em **100% das tabelas do painel**, permitindo ativar e desativar qualquer registro com 1 clique sem recarregar a tela:
+    - **Páginas do Portal (`admin/page.php`):** Ativação/desativação e remoção automática de menus.
+    - **Corpo Clínico & Médicos (`admin/doctor.php`):** Ativação instantânea de médicos no site.
+    - **Serviços Médicos (`admin/service.php`):** Controle em tempo real da exibição de especialidades e cards.
+    - **Sliders da Home (`admin/slider.php`):** Ligar/desligar slides do carrossel principal.
+    - **Planos e Cartão Fidelidade (`admin/pricing-plan.php`):** Controle de exibição de planos e preços.
+    - **Depoimentos de Pacientes (`admin/testimonial.php`):** Gestão rápida de avaliações aprovadas.
+    - **Notícias & Blog (`admin/news.php`):** Alternância entre Publicada e Rascunho.
+    - **Galeria de Fotos (`admin/photo.php`) & Vídeos (`admin/video.php`):** Visibilidade em tempo real.
+    - **Perguntas Frequentes (`admin/faq.php`):** Controle de exibição de dúvidas frequentes.
+  - **Script Global `admin/js/pronto-switches.js`:** Gerenciador universal com suporte a DataTables (mesmo com busca e paginação ativa), atualização dinâmica de badges, feedback por Toastr / SweetAlert2 e reversão automática em caso de instabilidade.
+- **Aplicativo PWA (Progressive Web App) 100% Configurável (`admin/pwa.php`):**
+  - **Painel Administrativo Próprio:** Personalização completa de nome do app, nome curto, descrição, cores do tema (`theme_color`), cor de fundo da splash (`background_color`) e upload de ícones em alta resolução (192x192 e 512x512) com mockup em tempo real de smartphone.
+  - **Manifesto Web Dinâmico (`manifest.webmanifest.php`):** Emissão automática e em tempo real dos metadados W3C PWA direto do banco de dados com atalhos de aplicativo integrados.
+  - **Service Worker Inteligente (`sw.js`):** Cache avançado com estratégias *Network First* para páginas dinâmicas e *Stale-While-Revalidate* para assets estáticos (CSS, JS, imagens, fontes), garantindo menor tempo de abertura e navegação acelerada mesmo com oscilações de sinal.
+  - **Instalação Amigável no Frontend:** Toast flutuante moderno convidando o visitante a instalar o aplicativo no celular ou desktop, com controle de intervalo para não ser invasivo.
+- **Banner de Popup Promocional & Avisos da Home (`admin/popup.php`):**
+  - Gestão de campanhas sazonais, avisos de feriados, vacinação e promoções do cartão fidelidade.
+  - Personalização de título, mensagem, banner ilustrativo, botão com link personalizado, tempo de espera para abertura (delay em ms) e frequência de exibição (controle de expiração via cookies).
+  - Preview ao vivo em modal simulado direto no painel administrativo.
+- **Sistema LGPD Moderno com Glassmorphism (`footer.php`):**
+  - Banner de consentimento com efeito de vidro fosco (`backdrop-filter: blur(16px)`), bordas suaves e paleta médica turquesa.
+  - Modal intuitivo de preferências para cookies essenciais e analíticos em estrita conformidade com a Lei Geral de Proteção de Dados (LGPD).
+  - Armazenamento persistente e seguro das preferências no navegador (`localStorage`).
+- **Reformulação Visual, Performance & Carregamento Assíncrono do Site Público:**
+  - **Design System Inovador de 2026 (`assets/css/pronto-modern-frontend.css`):** Cores tailored (`#0a6b74` e `#00b4d8`), tipografia contemporânea Plus Jakarta Sans, sombras volumétricas suaves, bordas arredondadas e micro-animações interativas nos cards.
+  - **Carregamento Assíncrono Universal (Lazy Loading):** Atributos nativos `loading="lazy"` e `decoding="async"` aliados a `IntersectionObserver` progressivo com transições suaves de fade-in em fotos e vídeos.
+  - **Otimização de Performance:** Menor tempo de abertura de páginas, eliminação de scripts bloqueantes legados, pré-conexão com repositórios de fontes e aceleração de hardware em carrosséis e no menu drawer offcanvas.
 - **Gestor de Páginas & Controle de Visibilidade Individual (`admin/page.php`):**
   - **Ativação e Desativação Instantânea em Tempo Real:** Chaves switch AJAX (`.form-switch`) para cada página do portal (página de médicos e todas as demais páginas do sistema e personalizadas), permitindo ligar e desligar a visibilidade de qualquer página a qualquer momento sem recarregar a tela.
   - **Ocultação Automática dos Menus de Navegação:** Ao desativar uma página (ex: *Corpo Clínico & Médicos*), o link é automaticamente removido do menu desktop principal e do menu móvel deslizante (drawer offcanvas), evitando links quebrados.

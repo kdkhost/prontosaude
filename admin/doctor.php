@@ -75,13 +75,14 @@
 									<td><?php echo $row['name']; ?></td>
 									<td><?php echo $row['designation_name']; ?></td>
 									<td class="text-center">
-									    <?php 
-									        if($row['status'] == "Active"){
-									            echo '<span class="badge text-bg-success">Ativo</span>';
-									        }else{
-									            echo '<span class="badge text-bg-secondary">Inativo</span>';
-									        } 
-									    ?>
+										<div class="d-inline-flex align-items-center gap-2">
+											<div class="form-check form-switch mb-0">
+												<input class="form-check-input pronto-status-switch" type="checkbox" role="switch" data-entity="doctor" data-id="<?php echo $row['id']; ?>" data-name="<?php echo htmlspecialchars($row['name']); ?>" <?php echo ($row['status'] == 'Active') ? 'checked' : ''; ?> title="Ativar ou desativar médico no site">
+											</div>
+											<span class="badge status-badge <?php echo ($row['status'] == 'Active') ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle'; ?> rounded-pill small">
+												<?php echo ($row['status'] == 'Active') ? 'Ativo' : 'Inativo'; ?>
+											</span>
+										</div>
 									</td>
 									<td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="doctor-edit.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Editar</a>
 										<a href="#" class="btn btn-danger btn-sm" data-href="doctor-delete.php?id=<?php echo $row['id']; ?>" data-target="#confirm-delete"><i class="bi bi-trash3"></i> Excluir</a></div></td>

@@ -69,8 +69,16 @@
 									<td><?php echo $row['content']; ?></td>
 									<td><?php echo $row['button_text']; ?></td>
 									<td><?php echo $row['button_url']; ?></td>
-									<td><?php echo $row['position']; ?></td>
-									<td><?php echo $row['status']; ?></td>
+									<td class="text-center">
+										<div class="d-inline-flex align-items-center gap-2">
+											<div class="form-check form-switch mb-0">
+												<input class="form-check-input pronto-status-switch" type="checkbox" role="switch" data-entity="slider" data-id="<?php echo $row['id']; ?>" data-name="<?php echo htmlspecialchars($row['heading'] ?: 'Slide #' . $i); ?>" <?php echo ($row['status'] == 'Active') ? 'checked' : ''; ?> title="Ativar ou desativar este slide na home">
+											</div>
+											<span class="badge status-badge <?php echo ($row['status'] == 'Active') ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle'; ?> rounded-pill small">
+												<?php echo ($row['status'] == 'Active') ? 'Ativo' : 'Inativo'; ?>
+											</span>
+										</div>
+									</td>
 									<td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="slider-edit.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Editar</a>
 										<a href="#" class="btn btn-danger btn-sm" data-href="slider-delete.php?id=<?php echo $row['id']; ?>" data-target="#confirm-delete"><i class="bi bi-trash3"></i> Excluir</a></div></td>
 								</tr>

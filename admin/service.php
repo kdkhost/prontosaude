@@ -32,6 +32,7 @@
 								<th>Valor no Card</th>
 								<th>Benefícios</th>
 								<th>Botão / Destino</th>
+								<th style="width: 110px;" class="text-center">Status</th>
 								<th style="width: 140px;">Ações</th>
 							</tr>
 						</thead>
@@ -82,6 +83,16 @@
 									<?php else: ?>
 										<small class="text-muted d-block mt-1">Padrão: service/<?= htmlspecialchars($row['slug']); ?></small>
 									<?php endif; ?>
+								</td>
+								<td class="text-center">
+									<div class="d-inline-flex align-items-center gap-2">
+										<div class="form-check form-switch mb-0">
+											<input class="form-check-input pronto-status-switch" type="checkbox" role="switch" data-entity="service" data-id="<?= $row['id']; ?>" data-name="<?= htmlspecialchars($row['name']); ?>" <?= ($row['status'] ?? 'Active') === 'Active' ? 'checked' : ''; ?> title="Ativar ou desativar este serviço no site">
+										</div>
+										<span class="badge status-badge <?= ($row['status'] ?? 'Active') === 'Active' ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle'; ?> rounded-pill small">
+											<?= ($row['status'] ?? 'Active') === 'Active' ? 'Ativo' : 'Inativo'; ?>
+										</span>
+									</div>
 								</td>
 								<td>
 									<div class="d-flex align-items-center gap-1">

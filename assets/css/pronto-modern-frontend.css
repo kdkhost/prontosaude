@@ -2321,4 +2321,381 @@ body.ps-drawer-open .ps-offcanvas-drawer {
     box-shadow: 0 4px 12px rgba(10, 107, 116, 0.25);
 }
 
+/* ==========================================================================
+   BANCO DE ESTILOS: LGPD MODERNO COM GLASSMORPHISM
+   ========================================================================== */
+.ps-lgpd-banner {
+    position: fixed;
+    bottom: -150px;
+    left: 20px;
+    right: 20px;
+    max-width: 640px;
+    margin: 0 auto;
+    z-index: 99999;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(10, 107, 116, 0.18);
+    border-radius: var(--ps-radius-xl, 24px);
+    box-shadow: 0 20px 48px rgba(10, 107, 116, 0.18);
+    padding: 20px 24px;
+    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    pointer-events: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.ps-lgpd-banner.ps-lgpd-visible {
+    bottom: 24px;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.ps-lgpd-content {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.ps-lgpd-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(10, 107, 116, 0.12), rgba(0, 180, 216, 0.18));
+    color: var(--ps-primary, #0a6b74);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.ps-lgpd-text {
+    flex: 1;
+    min-width: 260px;
+}
+
+.ps-lgpd-text h6 {
+    margin: 0 0 4px 0;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--ps-dark, #0f172a);
+}
+
+.ps-lgpd-text p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--ps-body-text, #475569);
+    line-height: 1.45;
+}
+
+.ps-lgpd-text a {
+    color: var(--ps-primary, #0a6b74);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.ps-lgpd-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.btn-ps-lgpd-accept {
+    background: linear-gradient(135deg, #0a6b74, #08838f);
+    color: #ffffff !important;
+    border: none;
+    padding: 9px 22px;
+    border-radius: var(--ps-radius-pill, 9999px);
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.28);
+    transition: var(--ps-transition, all 0.25s ease);
+}
+
+.btn-ps-lgpd-accept:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(10, 107, 116, 0.38);
+}
+
+.btn-ps-lgpd-prefs {
+    background: transparent;
+    color: var(--ps-body-text, #475569);
+    border: 1px solid var(--ps-border, #cbd5e1);
+    padding: 8px 16px;
+    border-radius: var(--ps-radius-pill, 9999px);
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--ps-transition, all 0.25s ease);
+}
+
+.btn-ps-lgpd-prefs:hover {
+    background: #f1f5f9;
+    color: var(--ps-dark, #0f172a);
+}
+
+/* Modal de Preferências de Cookies LGPD */
+.ps-lgpd-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(8px);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+}
+
+.ps-lgpd-modal-overlay.ps-modal-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.ps-lgpd-modal-card {
+    background: #ffffff;
+    max-width: 520px;
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+    padding: 28px;
+    transform: translateY(20px) scale(0.96);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ps-lgpd-modal-overlay.ps-modal-open .ps-lgpd-modal-card {
+    transform: translateY(0) scale(1);
+}
+
+/* ==========================================================================
+   POPUP PROMOCIONAL / INFORMATIVO DA HOME
+   ========================================================================== */
+.ps-promo-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 100010;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    padding: 20px;
+}
+
+.ps-promo-popup-overlay.ps-popup-active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.ps-promo-popup-card {
+    background: #ffffff;
+    max-width: 440px;
+    width: 100%;
+    border-radius: 24px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    position: relative;
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.ps-promo-popup-overlay.ps-popup-active .ps-promo-popup-card {
+    transform: scale(1) translateY(0);
+}
+
+.ps-popup-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #334155;
+    cursor: pointer;
+    z-index: 10;
+    transition: var(--ps-transition, all 0.25s ease);
+}
+
+.ps-popup-close-btn:hover {
+    background: #ffffff;
+    color: #ef4444;
+    transform: scale(1.1);
+}
+
+.ps-popup-banner-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.ps-popup-body {
+    padding: 24px;
+    text-align: center;
+}
+
+.ps-popup-body h4 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--ps-dark, #0f172a);
+    margin: 0 0 10px 0;
+}
+
+.ps-popup-body p {
+    font-size: 0.92rem;
+    color: var(--ps-body-text, #475569);
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+}
+
+.btn-ps-popup-action {
+    display: inline-block;
+    width: 100%;
+    background: linear-gradient(135deg, #0a6b74, #00b4d8);
+    color: #ffffff !important;
+    padding: 12px 24px;
+    border-radius: var(--ps-radius-pill, 9999px);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(10, 107, 116, 0.28);
+    transition: var(--ps-transition, all 0.25s ease);
+}
+
+.btn-ps-popup-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(10, 107, 116, 0.38);
+}
+
+/* ==========================================================================
+   TOAST DE INSTALAÇÃO DO APP PWA
+   ========================================================================== */
+.ps-pwa-install-toast {
+    position: fixed;
+    top: -120px;
+    right: 20px;
+    z-index: 99998;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(10, 107, 116, 0.2);
+    border-radius: var(--ps-radius-lg, 16px);
+    box-shadow: 0 14px 34px rgba(10, 107, 116, 0.16);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 420px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.ps-pwa-install-toast.ps-pwa-show {
+    top: 24px;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.ps-pwa-app-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ps-pwa-toast-info {
+    flex: 1;
+}
+
+.ps-pwa-toast-info strong {
+    display: block;
+    font-size: 0.92rem;
+    color: var(--ps-dark, #0f172a);
+}
+
+.ps-pwa-toast-info span {
+    font-size: 0.8rem;
+    color: var(--ps-body-text, #64748b);
+}
+
+.btn-ps-pwa-install {
+    background: var(--ps-primary, #0a6b74);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--ps-radius-pill, 9999px);
+    padding: 7px 15px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--ps-transition, all 0.25s ease);
+}
+
+.btn-ps-pwa-install:hover {
+    background: #085a62;
+}
+
+.btn-ps-pwa-close {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+/* ==========================================================================
+   ANIMAÇÕES SUAVES E CARREGAMENTO PROGRESSIVO
+   ========================================================================== */
+.ps-fade-up-element {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ps-fade-up-element.ps-in-viewport {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+img {
+    transition: opacity 0.4s ease;
+}
+
+img:not(.ps-img-loaded) {
+    opacity: 0.9;
+}
+
+img.ps-img-loaded {
+    opacity: 1;
+}
+
+
 

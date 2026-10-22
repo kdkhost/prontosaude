@@ -8,6 +8,9 @@ if (function_exists('pronto_sync_system_pages')) {
 
 // Endpoint AJAX para alternar status da página (Active / Inactive) em tempo real
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'toggle_page_status') {
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
     header('Content-Type: application/json; charset=utf-8');
     $page_id = (int)($_POST['page_id'] ?? 0);
     $new_status = ($_POST['status'] ?? '') === 'Active' ? 'Active' : 'Inactive';
@@ -379,15 +382,18 @@ foreach ($pages as $p) {
 				this.disabled = true;
 
 				const formData = new FormData();
-				formData.append('action', 'toggle_page_status');
-				formData.append('page_id', pageId);
+				formData.append('entity', 'page');
+				formData.append('id', pageId);
 				formData.append('status', newStatus);
 
-				fetch('page.php', {
+				fetch('toggle-ajax.php', {
 					method: 'POST',
 					body: formData
 				})
-				.then(res => res.json())
+				.then(res => {
+					if (!res.ok) throw new Error('HTTP ' + res.status);
+					return res.json();
+				})
 				.then(data => {
 					this.disabled = false;
 					if (data.success) {
