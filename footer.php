@@ -201,6 +201,7 @@
 	<script src="<?php echo BASE_URL; ?>assets/js/sweetalert2.all.min.js"></script>
 	<script src="<?php echo BASE_URL; ?>assets/js/toastr.min.js"></script>
 	<script src="<?php echo BASE_URL; ?>assets/js/pronto-global.js"></script>
+	<script src="<?php echo BASE_URL; ?>assets/js/pronto-drawer.js"></script>
 
 	
 	<script>

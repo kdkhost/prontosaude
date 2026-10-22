@@ -326,7 +326,7 @@
 		<div class="row">
 
 			<?php
-			$statement = $pdo->prepare("SELECT * FROM tbl_pricing_plan ORDER BY pricing_plan_id ASC LIMIT 3");
+			$statement = $pdo->prepare("SELECT * FROM tbl_pricing_plan WHERE status = 1 ORDER BY pricing_plan_id ASC LIMIT 3");
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 			foreach ($result as $row) {

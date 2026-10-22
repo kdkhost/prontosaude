@@ -29,6 +29,7 @@ addColumnIfNotExists($pdo, 'tbl_pricing_plan', 'pricing_plan_photo', 'VARCHAR(25
 addColumnIfNotExists($pdo, 'tbl_pricing_plan', 'pricing_plan_period', 'VARCHAR(50) NULL DEFAULT "/mês" AFTER `pricing_plan_price`');
 addColumnIfNotExists($pdo, 'tbl_pricing_plan', 'pricing_plan_badge', 'VARCHAR(100) NULL DEFAULT "" AFTER `pricing_plan_name`');
 addColumnIfNotExists($pdo, 'tbl_pricing_plan', 'pricing_plan_popular', 'TINYINT(1) NOT NULL DEFAULT 0 AFTER `pricing_plan_badge`');
+addColumnIfNotExists($pdo, 'tbl_pricing_plan', 'status', 'TINYINT(1) NOT NULL DEFAULT 1 AFTER `pricing_plan_popular`');
 
 // 2. Tabela tbl_service
 addColumnIfNotExists($pdo, 'tbl_service', 'price', 'VARCHAR(100) NULL DEFAULT "" AFTER `name`');
@@ -39,6 +40,11 @@ addColumnIfNotExists($pdo, 'tbl_service', 'button_url', 'VARCHAR(255) NULL DEFAU
 // 3. Tabela tbl_dental
 addColumnIfNotExists($pdo, 'tbl_dental', 'beneficios', 'TEXT NULL DEFAULT NULL AFTER `descricao`');
 addColumnIfNotExists($pdo, 'tbl_dental', 'button_text', 'VARCHAR(100) NULL DEFAULT "Agendar Avaliação" AFTER `link`');
+
+// 4. Tabela tbl_settings (reCAPTCHA)
+addColumnIfNotExists($pdo, 'tbl_settings', 'recaptcha_status', 'TINYINT(1) NOT NULL DEFAULT 0 AFTER `maintenance_mode`');
+addColumnIfNotExists($pdo, 'tbl_settings', 'recaptcha_site_key', 'VARCHAR(255) NULL DEFAULT "" AFTER `recaptcha_status`');
+addColumnIfNotExists($pdo, 'tbl_settings', 'recaptcha_secret_key', 'VARCHAR(255) NULL DEFAULT "" AFTER `recaptcha_site_key`');
 
 // Atualiza planos existentes com imagens iniciais se estiverem vazios
 try {

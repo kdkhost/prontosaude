@@ -24,6 +24,7 @@ if(isset($_POST['form1'])) {
     $period = trim($_POST['pricing_plan_period'] ?? '/mês');
     $badge = trim($_POST['pricing_plan_badge'] ?? '');
     $popular = isset($_POST['pricing_plan_popular']) ? 1 : 0;
+    $status = isset($_POST['status']) ? 1 : 0;
     $button_text = trim($_POST['pricing_plan_button_text'] ?? 'Contratar Agora');
     $button_url = trim($_POST['pricing_plan_button_url'] ?? '');
     $benefits_text = trim($_POST['pricing_plan_benefits'] ?? '');
@@ -85,7 +86,8 @@ if(isset($_POST['form1'])) {
             pricing_plan_price = ?,
             pricing_plan_period = ?,
             pricing_plan_button_text = ?,
-            pricing_plan_button_url = ?
+            pricing_plan_button_url = ?,
+            status = ?
             WHERE pricing_plan_id = ?");
 
 		$statement->execute([
@@ -97,6 +99,7 @@ if(isset($_POST['form1'])) {
             $period,
             $button_text,
             $button_url,
+            $status,
             $_REQUEST['id']
         ]);
 
@@ -184,6 +187,17 @@ $current_benefits_str = implode("\n", $current_items);
                                 <div class="form-check form-switch pt-2">
                                     <input class="form-check-input" type="checkbox" role="switch" id="pricing_plan_popular" name="pricing_plan_popular" value="1" <?= (!empty($current_plan['pricing_plan_popular'])) ? 'checked' : ''; ?>>
                                     <label class="form-check-label" for="pricing_plan_popular">Destacar visualmente este plano com moldura especial no site</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status do Plano / Cartão -->
+                        <div class="form-group mb-3">
+                            <label class="col-sm-3 control-label fw-bold">Status de Exibição</label>
+                            <div class="col-sm-6">
+                                <div class="form-check form-switch pt-2">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="1" <?= (($current_plan['status'] ?? 1) == 1) ? 'checked' : ''; ?>>
+                                    <label class="form-check-label fw-semibold" for="status">Plano Ativo (visível no site)</label>
                                 </div>
                             </div>
                         </div>

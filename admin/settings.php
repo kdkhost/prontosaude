@@ -226,6 +226,17 @@ if(isset($_POST['form8'])) {
 
 	$success_message = 'A cor foi atualizada com sucesso.';
 }
+
+if(isset($_POST['form_recaptcha'])) {
+	$recaptcha_status = isset($_POST['recaptcha_status']) ? 1 : 0;
+	$recaptcha_site_key = trim($_POST['recaptcha_site_key'] ?? '');
+	$recaptcha_secret_key = trim($_POST['recaptcha_secret_key'] ?? '');
+
+	$statement = $pdo->prepare("UPDATE tbl_settings SET recaptcha_status=?, recaptcha_site_key=?, recaptcha_secret_key=? WHERE id=1");
+	$statement->execute(array($recaptcha_status, $recaptcha_site_key, $recaptcha_secret_key));
+
+	$success_message = 'As configurações do Google reCAPTCHA foram atualizadas com sucesso.';
+}
 ?>
 
 <section class="content-header">
@@ -282,6 +293,9 @@ foreach ($result as $row) {
 	$home_status_partner             = $row['home_status_partner'];
 	$color                           = $row['color'];
 	$preloader                       = $row['preloader'];
+	$recaptcha_status                = $row['recaptcha_status'] ?? 0;
+	$recaptcha_site_key              = $row['recaptcha_site_key'] ?? '';
+	$recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 }
 
 if(isset($_POST['BtnPreloader'])){
@@ -345,6 +359,7 @@ if(isset($_POST['BtnPreloader'])){
 						<li><a href="#tab_7" data-toggle="tab">Título e legendas da página inicial</a></li>
 						<li><a href="#tab_8" data-toggle="tab">Cor</a></li>
 						<li><a href="#tab_9" data-toggle="tab">Preloader</a></li>
+						<li><a href="#tab_10" data-toggle="tab"><i class="bi bi-shield-check text-primary me-1"></i> reCAPTCHA</a></li>
 					</ul>
 					<div class="tab-content">
           				<div class="tab-pane active" id="tab_1">
@@ -928,9 +943,76 @@ if(isset($_POST['BtnPreloader'])){
 							</div>
 							</form>
           				</div>
+          				
+          				<div class="tab-pane" id="tab_10">
+          					<form class="form-horizontal" action="" method="post">
+							<div class="card card-outline card-primary shadow-sm border-0 my-3">
+								<div class="card-header bg-body-tertiary d-flex align-items-center justify-content-between">
+									<h5 class="card-title fw-bold text-primary mb-0">
+										<i class="bi bi-shield-lock-fill me-2"></i> Proteção contra Robôs & Spam (Google reCAPTCHA v2 / v3)
+									</h5>
+									<span class="badge <?= ($recaptcha_status == 1) ? 'bg-success' : 'bg-secondary'; ?>">
+										<?= ($recaptcha_status == 1) ? 'Ativo no Site' : 'Desativado'; ?>
+									</span>
+								</div>
+								<div class="card-body p-4">
+									<div class="alert alert-info d-flex align-items-center gap-3 mb-4 rounded-3 border-0 shadow-sm" style="background: rgba(13, 202, 240, 0.12); color: #055160;">
+										<i class="bi bi-info-circle-fill fs-3 text-info"></i>
+										<div class="small">
+											O <strong>Google reCAPTCHA</strong> previne ataques de robôs e envio em massa de spam em formulários públicos (Contato, Mensagens, etc).<br>
+											Para obter gratuitamente suas chaves, acesse o console oficial do <a href="https://www.google.com/recaptcha/admin" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-underline text-info-emphasis">Google reCAPTCHA Admin</a>.
+										</div>
+									</div>
 
+									<div class="row mb-4 align-items-center">
+										<label class="col-sm-3 col-form-label fw-bold">Status do reCAPTCHA:</label>
+										<div class="col-sm-9">
+											<div class="form-check form-switch form-switch-md">
+												<input class="form-check-input" type="checkbox" name="recaptcha_status" id="recaptcha_status" value="1" <?= ($recaptcha_status == 1) ? 'checked' : ''; ?>>
+												<label class="form-check-label fw-semibold" for="recaptcha_status">
+													<?= ($recaptcha_status == 1) ? '<span class="text-success fw-bold">Ativado nos Formulários</span>' : '<span class="text-muted">Desativado</span>'; ?>
+												</label>
+											</div>
+											<small class="text-muted d-block mt-1">Ao desativar, os formulários públicos funcionarão normalmente sem exigir desafio de captcha.</small>
+										</div>
+									</div>
 
-          			</div>
+									<div class="row mb-3">
+										<label for="recaptcha_site_key" class="col-sm-3 col-form-label fw-bold">Chave do Site (Site Key):</label>
+										<div class="col-sm-9">
+											<div class="input-group">
+												<span class="input-group-text bg-body-secondary"><i class="bi bi-key-fill text-primary"></i></span>
+												<input type="text" name="recaptcha_site_key" id="recaptcha_site_key" class="form-control" value="<?= htmlspecialchars($recaptcha_site_key); ?>" placeholder="Ex: 6LdXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX">
+											</div>
+											<small class="text-muted">Chave pública utilizada para carregar e renderizar o widget no site público.</small>
+										</div>
+									</div>
+
+									<div class="row mb-4">
+										<label for="recaptcha_secret_key" class="col-sm-3 col-form-label fw-bold">Chave Secreta (Secret Key):</label>
+										<div class="col-sm-9">
+											<div class="input-group">
+												<span class="input-group-text bg-body-secondary"><i class="bi bi-shield-fill-check text-success"></i></span>
+												<input type="password" name="recaptcha_secret_key" id="recaptcha_secret_key" class="form-control" value="<?= htmlspecialchars($recaptcha_secret_key); ?>" placeholder="Ex: 6LdYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY">
+												<button class="btn btn-outline-secondary" type="button" onclick="const f=document.getElementById('recaptcha_secret_key'); f.type = (f.type==='password')?'text':'password'; this.querySelector('i').classList.toggle('bi-eye'); this.querySelector('i').classList.toggle('bi-eye-slash');">
+													<i class="bi bi-eye"></i>
+												</button>
+											</div>
+											<small class="text-muted">Chave privada utilizada pelo backend para validar as respostas com a API do Google.</small>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-sm-9 offset-sm-3">
+											<button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 shadow-sm" name="form_recaptcha">
+												<i class="bi bi-check-circle-fill"></i> Salvar Configurações do reCAPTCHA
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							</form>
+          				</div>
 				</div>
 
 				

@@ -869,3 +869,193 @@ table td a.btn-info:not(:has(i))::before {
   display: none !important;
 }
 
+/* ==========================================================================
+   PADRONIZAÇÃO OFICIAL ADMINLTE 4: TABS & ABAS DE NAVEGAÇÃO
+   ========================================================================== */
+.nav-tabs-custom,
+.card-outline-tabs {
+  background: var(--bs-card-bg, #ffffff);
+  border-radius: var(--ps-radius);
+  border: 1px solid var(--bs-border-color, #e2e8f0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.nav-tabs-custom > .nav-tabs,
+.card-outline-tabs > .card-header .nav-tabs,
+.nav-tabs {
+  border-bottom: 2px solid var(--bs-border-color, #e2e8f0);
+  background: var(--bs-tertiary-bg, #f8fafc);
+  padding: 0.5rem 0.75rem 0 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.nav-tabs-custom > .nav-tabs > li,
+.nav-tabs > .nav-item,
+.nav-tabs > li {
+  margin-bottom: -2px;
+}
+
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs > .nav-item > .nav-link,
+.nav-tabs > li > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.65rem 1.15rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--bs-secondary-color, #64748b);
+  border: 2px solid transparent;
+  border-bottom-width: 3px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background: transparent;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.nav-tabs-custom > .nav-tabs > li > a:hover,
+.nav-tabs > .nav-item > .nav-link:hover,
+.nav-tabs > li > a:hover {
+  color: var(--ps-primary, #0a6b74);
+  background: rgba(10, 107, 116, 0.05);
+  border-bottom-color: rgba(10, 107, 116, 0.3);
+}
+
+.nav-tabs-custom > .nav-tabs > li.active > a,
+.nav-tabs > .nav-item > .nav-link.active,
+.nav-tabs > li.active > a,
+.nav-tabs-custom > .nav-tabs > li > a.active {
+  color: var(--ps-primary, #0a6b74) !important;
+  background: var(--bs-card-bg, #ffffff) !important;
+  border-color: transparent transparent var(--ps-primary, #0a6b74) transparent !important;
+  border-bottom-width: 3px !important;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.nav-tabs-custom > .tab-content,
+.card-outline-tabs > .card-body > .tab-content,
+.tab-content {
+  background: var(--bs-card-bg, #ffffff);
+  padding: 1.5rem;
+  border-bottom-left-radius: var(--ps-radius);
+  border-bottom-right-radius: var(--ps-radius);
+}
+
+.tab-pane {
+  display: none;
+}
+.tab-pane.active,
+.tab-pane.show {
+  display: block;
+  animation: psTabFadeIn 0.25s ease;
+}
+
+@keyframes psTabFadeIn {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   PADRONIZAÇÃO OFICIAL ADMINLTE 4: BOTÕES E ALINHAMENTOS
+   ========================================================================== */
+.btn {
+  font-weight: 500;
+  border-radius: 0.5rem;
+  padding: 0.45rem 1rem;
+  font-size: 0.885rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  line-height: 1.5;
+}
+
+.btn-sm {
+  padding: 0.28rem 0.65rem;
+  font-size: 0.8rem;
+  border-radius: 0.4rem;
+}
+
+.btn-lg {
+  padding: 0.65rem 1.4rem;
+  font-size: 1rem;
+  border-radius: 0.6rem;
+}
+
+.btn-primary {
+  background-color: var(--ps-primary, #0a6b74);
+  border-color: var(--ps-primary, #0a6b74);
+  color: #ffffff;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--ps-primary-hover, #075259);
+  border-color: var(--ps-primary-hover, #075259);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(10, 107, 116, 0.25);
+}
+
+.btn-success {
+  background-color: #198754;
+  border-color: #198754;
+  color: #ffffff;
+}
+.btn-success:hover {
+  background-color: #157347;
+  border-color: #146c43;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(25, 135, 84, 0.25);
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #ffffff;
+}
+.btn-danger:hover {
+  background-color: #bb2d3b;
+  border-color: #b02a37;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.25);
+}
+
+/* Alinhamento de botões de Ações em Tabelas */
+.table-actions,
+td .btn-group,
+td .d-flex {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  white-space: nowrap !important;
+}
+
+/* Alinhamento de botões de rodapé de formulários */
+.form-footer-actions,
+.box-footer,
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 1rem 1.5rem;
+  background: var(--bs-tertiary-bg, #f8fafc);
+  border-top: 1px solid var(--bs-border-color, #e2e8f0);
+}
+
+/* Alinhamento de botões nos cabeçalhos de cards */
+.card-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+

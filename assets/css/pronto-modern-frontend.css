@@ -1,0 +1,436 @@
+/**
+ * Pronto Saúde - Modernização do Site Público e Menu Deslizante Offcanvas
+ * Efeito: Slide suave da esquerda para a direita (Hardware Accelerated)
+ * Responsividade completa para smartphones, tablets e desktops
+ */
+
+/* ==========================================================================
+   1. BACKDROP & DRAWER CONTAINER (OFFCANVAS)
+   ========================================================================== */
+.ps-drawer-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 25, 35, 0.65);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 99998;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+}
+
+.ps-drawer-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.ps-offcanvas-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 320px;
+    max-width: 86vw;
+    height: 100vh;
+    height: 100dvh;
+    background: #ffffff;
+    z-index: 99999;
+    box-shadow: 15px 0 40px rgba(0, 0, 0, 0.28);
+    display: flex;
+    flex-direction: column;
+    transform: translate3d(-100%, 0, 0);
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+    overflow: hidden;
+}
+
+/* Quando o drawer está aberto */
+body.ps-drawer-open {
+    overflow: hidden !important;
+}
+
+body.ps-drawer-open .ps-offcanvas-drawer {
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+}
+
+/* ==========================================================================
+   2. CABEÇALHO DO DRAWER
+   ========================================================================== */
+.ps-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    background: #0a6b74;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ps-drawer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ps-drawer-logo {
+    max-height: 40px;
+    width: auto;
+    object-fit: contain;
+    background: #ffffff;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.ps-drawer-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.ps-drawer-close-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #ffffff;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.ps-drawer-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+/* ==========================================================================
+   3. CTA RÁPIDO NO TOPO DO DRAWER
+   ========================================================================== */
+.ps-drawer-quick-cta {
+    padding: 14px 18px;
+    background: #f1f8f8;
+    border-bottom: 1px solid #e1eeef;
+}
+
+.ps-drawer-cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #25d366;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-weight: 600;
+    font-size: 0.925rem;
+    padding: 10px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.25);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.ps-drawer-cta-btn:hover {
+    background: #1ebc59;
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   4. CORPO E LINKS DE NAVEGAÇÃO
+   ========================================================================== */
+.ps-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 0;
+}
+
+.ps-drawer-body::-webkit-scrollbar {
+    width: 4px;
+}
+.ps-drawer-body::-webkit-scrollbar-thumb {
+    background: #0a6b7440;
+    border-radius: 4px;
+}
+
+.ps-drawer-menu,
+.ps-drawer-submenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ps-drawer-item {
+    border-bottom: 1px solid #f0f4f5;
+}
+
+.ps-drawer-link-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.15s ease;
+}
+
+.ps-drawer-link-row:hover {
+    background: #f7fafb;
+}
+
+.ps-drawer-link {
+    flex: 1;
+    display: block;
+    padding: 14px 20px;
+    color: #1e293b !important;
+    text-decoration: none !important;
+    font-size: 0.985rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.ps-drawer-link:hover {
+    color: #0a6b74 !important;
+}
+
+.ps-drawer-toggle-sub {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    padding: 14px 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: transform 0.3s ease, color 0.2s ease;
+}
+
+.ps-drawer-item.open > .ps-drawer-link-row .ps-drawer-toggle-sub {
+    transform: rotate(180deg);
+    color: #0a6b74;
+}
+
+/* Submenu em cascata suave */
+.ps-drawer-submenu {
+    max-height: 0;
+    overflow: hidden;
+    background: #f8fafc;
+    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ps-drawer-item.open > .ps-drawer-submenu {
+    max-height: 500px;
+}
+
+.ps-drawer-sublink {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 20px 11px 34px;
+    color: #475569 !important;
+    text-decoration: none !important;
+    font-size: 0.92rem;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.ps-drawer-sublink:hover {
+    color: #0a6b74 !important;
+    background: #edf6f7;
+    border-left-color: #0a6b74;
+    padding-left: 38px;
+}
+
+.ps-drawer-sublink i {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+/* ==========================================================================
+   5. RODAPÉ DO DRAWER
+   ========================================================================== */
+.ps-drawer-footer {
+    padding: 16px 20px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+}
+
+.ps-drawer-contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.ps-drawer-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: #64748b;
+}
+
+.ps-drawer-contact-item i {
+    color: #0a6b74;
+    width: 16px;
+    text-align: center;
+}
+
+.ps-drawer-contact-item a {
+    color: #334155 !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease;
+}
+
+.ps-drawer-contact-item a:hover {
+    color: #0a6b74 !important;
+}
+
+.ps-drawer-socials {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.ps-drawer-socials a {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #0a6b74;
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    text-decoration: none !important;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.ps-drawer-socials a:hover {
+    background: #075259;
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   6. BOTÃO HAMBURGER NO HEADER & AJUSTES RESPONSIVOS
+   ========================================================================== */
+.ps-mobile-toggle-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    background: #0a6b74;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(10, 107, 116, 0.25);
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.ps-mobile-toggle-btn:hover {
+    background: #075259;
+    transform: scale(1.03);
+}
+
+.ps-mobile-toggle-btn:active {
+    transform: scale(0.97);
+}
+
+.ps-hamburger-bar {
+    display: block;
+    width: 22px;
+    height: 2.5px;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Responsividade Header */
+@media (max-width: 991px) {
+    .ps-mobile-toggle-btn {
+        display: inline-flex !important;
+    }
+
+    .slicknav_menu {
+        display: none !important; /* Desativa slicknav para usar o drawer moderno */
+    }
+
+    header .logo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 10px 15px;
+    }
+
+    header .nav-wrapper {
+        display: none !important;
+    }
+
+    .header-mobile-flex {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   7. MODERNIZAÇÕES GERAIS DO SITE PÚBLICO
+   ========================================================================== */
+/* Botões mais elegantes com transição e micro-sombras */
+.btn-success,
+.btn-primary,
+.cform-1 input[type="submit"],
+.service-v1 .item .text a,
+.pricing-item .pricing-btn a {
+    border-radius: 6px !important;
+    transition: all 0.25s ease !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.2px;
+}
+
+.btn-success:hover,
+.cform-1 input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(10, 107, 116, 0.25);
+}
+
+/* Cards de Serviços, Planos e Médicos com elevação suave */
+.service-v1 .item,
+.doctor-v1 .item,
+.pricing-item,
+.service-card-box {
+    border-radius: 10px !important;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.service-v1 .item:hover,
+.doctor-v1 .item:hover,
+.pricing-item:hover,
+.service-card-box:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 14px 30px rgba(10, 107, 116, 0.12) !important;
+}
+
+/* Suavização de formulários */
+.cform-1 .form-control {
+    border-radius: 6px !important;
+    border: 1px solid #cbd5e1 !important;
+    padding: 10px 14px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.cform-1 .form-control:focus {
+    border-color: #0a6b74 !important;
+    box-shadow: 0 0 0 3px rgba(10, 107, 116, 0.15) !important;
+}

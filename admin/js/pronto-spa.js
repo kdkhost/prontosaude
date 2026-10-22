@@ -206,7 +206,10 @@
       window.renderDashboardCharts(isDark);
     }
 
-    // K. Notificações Toastr a partir de Callouts (Converte qualquer mensagem em Toastr e remove da tela)
+    // K. Restauração de Tabs ativas via Hash
+    restoreTabFromHash(container);
+
+    // L. Notificações Toastr a partir de Callouts (Converte qualquer mensagem em Toastr e remove da tela)
     let hadCalloutNotification = false;
     const callouts = container.querySelectorAll('.callout, .alert:not(.alert-keep):not(.alert-info)');
     callouts.forEach(c => {
@@ -299,6 +302,7 @@
     if (href && href !== '#' && href !== 'javascript:;') return;
 
     e.preventDefault();
+    e.stopPropagation();
     const parentNavItem = treeviewToggle.closest('.nav-item');
     if (!parentNavItem) return;
 
@@ -561,5 +565,58 @@
     window.history.replaceState({ url: window.location.href }, document.title, window.location.href);
     reinitAllComponents(document);
   });
+
+  // 9. SUPORTE UNIVERSAL A TABS NO ADMINLTE 4 (BOOTSTRAP 5 + LEGADO DATA-TOGGLE)
+  document.addEventListener('click', function (e) {
+    const tabLink = e.target.closest('[data-toggle="tab"], [data-bs-toggle="tab"], [data-toggle="pill"], [data-bs-toggle="pill"], .nav-tabs > li > a, .nav-tabs > .nav-item > a');
+    if (!tabLink) return;
+
+    const targetSelector = tabLink.getAttribute('href') || tabLink.getAttribute('data-bs-target') || tabLink.getAttribute('data-target');
+    if (!targetSelector || !targetSelector.startsWith('#')) return;
+
+    const targetPane = document.querySelector(targetSelector);
+    if (!targetPane) return;
+
+    e.preventDefault();
+
+    // Desativa tabs irmãs
+    const navList = tabLink.closest('.nav-tabs, .nav-pills, .nav');
+    if (navList) {
+      navList.querySelectorAll('li, .nav-item, .nav-link, a').forEach(el => el.classList.remove('active'));
+    }
+
+    // Ativa tab atual e item li
+    tabLink.classList.add('active');
+    const parentLi = tabLink.closest('li, .nav-item');
+    if (parentLi) parentLi.classList.add('active');
+
+    // Desativa panes irmãos
+    const tabContent = targetPane.closest('.tab-content');
+    if (tabContent) {
+      tabContent.querySelectorAll(':scope > .tab-pane').forEach(p => {
+        p.classList.remove('active', 'show');
+      });
+    }
+
+    // Ativa painel alvo com animação suave
+    targetPane.classList.add('active', 'show');
+
+    // Preserva o hash na URL sem forçar scroll abrupto
+    try {
+      history.replaceState(null, null, targetSelector);
+    } catch (err) {}
+  });
+
+  // Função para ativar aba baseada no hash da URL
+  function restoreTabFromHash(container) {
+    const root = container || document;
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#tab_')) {
+      const activeTab = root.querySelector(`[href="${hash}"], [data-bs-target="${hash}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  }
 
 })();

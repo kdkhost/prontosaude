@@ -14,6 +14,11 @@
 			<strong>&copy; <?= date('Y'); ?> <a href="<?= BASE_URL ?>" target="_blank" class="text-decoration-none text-primary fw-semibold"><?= htmlspecialchars($empresa); ?></a>.</strong> Sistema Hospitalar e Clínico Integrado.
 		</footer>
 
+		<!-- Botão Flutuante Voltar ao Topo no Painel Admin -->
+		<button type="button" id="adminBackToTop" class="btn btn-primary shadow-lg rounded-circle" title="Voltar ao Topo" aria-label="Voltar ao Topo" style="position: fixed; bottom: 25px; right: 25px; width: 44px; height: 44px; display: none; align-items: center; justify-content: center; z-index: 1045; transition: opacity 0.3s ease, transform 0.2s ease; border: 2px solid rgba(255,255,255,0.25);">
+			<i class="bi bi-arrow-up fs-5"></i>
+		</button>
+
 	</div><!-- ./app-wrapper -->
 
 	<!-- Bibliotecas Core do AdminLTE 4 -->
@@ -147,6 +152,25 @@
 						]
 					});
 				}
+			});
+		}
+		// Controle do Botão Voltar ao Topo no Painel Admin
+		const btnAdminTop = document.getElementById('adminBackToTop');
+		if (btnAdminTop) {
+			window.addEventListener('scroll', function () {
+				if (window.scrollY > 200) {
+					btnAdminTop.style.display = 'flex';
+					btnAdminTop.style.opacity = '1';
+				} else {
+					btnAdminTop.style.opacity = '0';
+					setTimeout(function () {
+						if (window.scrollY <= 200) btnAdminTop.style.display = 'none';
+					}, 250);
+				}
+			});
+			btnAdminTop.addEventListener('click', function (e) {
+				e.preventDefault();
+				window.scrollTo({ top: 0, behavior: 'smooth' });
 			});
 		}
 	});

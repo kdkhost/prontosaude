@@ -1,11 +1,28 @@
-<?php require_once('header.php'); ?>
+<?php 
+require_once('header.php'); 
+
+// Endpoint AJAX para alternar status do Cartão Fidelidade / Plano
+if(isset($_POST['action']) && $_POST['action'] === 'toggle_status') {
+	header('Content-Type: application/json');
+	$id = (int)($_POST['id'] ?? 0);
+	$status = (int)($_POST['status'] ?? 0);
+	$stmt = $pdo->prepare("UPDATE tbl_pricing_plan SET status = ? WHERE pricing_plan_id = ?");
+	$stmt->execute([$status, $id]);
+	echo json_encode([
+		'success' => true,
+		'status' => $status,
+		'message' => $status == 1 ? 'Cartão Fidelidade / Plano ATIVADO com sucesso!' : 'Cartão Fidelidade / Plano DESATIVADO com sucesso!'
+	]);
+	exit;
+}
+?>
 
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Gerenciar Planos de Saúde e Fidelidade</h1>
+		<h1>Gerenciar Planos de Saúde e Cartão Fidelidade</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="pricing-plan-add.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i> Adicionar Novo Plano</a>
+		<a href="pricing-plan-add.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i> Adicionar Novo Cartão / Plano</a>
 	</div>
 </section>
 
@@ -17,13 +34,14 @@
 					<table id="example1" class="table table-bordered table-striped dt-responsive nowrap">
 						<thead>
 							<tr>
-								<th style="width: 50px;">ID</th>
-								<th style="width: 100px;">Imagem</th>
-								<th>Nome do Plano</th>
+								<th style="width: 40px;">ID</th>
+								<th style="width: 80px;">Imagem</th>
+								<th>Nome do Plano / Cartão</th>
 								<th>Preço / Período</th>
 								<th>Benefícios</th>
 								<th>Botão / Destino</th>
-								<th style="width: 140px;">Ações</th>
+								<th style="width: 100px;">Status</th>
+								<th style="width: 120px;">Ações</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -88,6 +106,16 @@
 									<?php endif; ?>
 								</td>
 								<td>
+									<div class="d-flex align-items-center gap-2">
+										<div class="form-check form-switch mb-0">
+											<input class="form-check-input switch-plan-status" type="checkbox" role="switch" data-id="<?= $row['pricing_plan_id']; ?>" <?= ($row['status'] ?? 1) == 1 ? 'checked' : ''; ?> title="Ativar ou Desativar Plano">
+										</div>
+										<span class="badge status-badge-<?= $row['pricing_plan_id']; ?> <?= ($row['status'] ?? 1) == 1 ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-secondary-subtle text-secondary border border-secondary-subtle'; ?>">
+											<?= ($row['status'] ?? 1) == 1 ? 'Ativo' : 'Inativo'; ?>
+										</span>
+									</div>
+								</td>
+								<td>
 									<div class="d-flex align-items-center gap-1">
 										<a href="pricing-plan-edit.php?id=<?= $row['pricing_plan_id']; ?>" class="btn btn-primary btn-sm" title="Editar Plano e Benefícios">
 											<i class="bi bi-pencil-square"></i>
@@ -108,6 +136,46 @@
 </section>
 
 <script>
+// Toggle de Status Ativo / Inativo via AJAX com feedback instantâneo
+document.addEventListener('change', function(e) {
+	const toggle = e.target.closest('.switch-plan-status');
+	if (!toggle) return;
+	const id = toggle.getAttribute('data-id');
+	const isChecked = toggle.checked ? 1 : 0;
+	const badge = document.querySelector('.status-badge-' + id);
+
+	fetch('pricing-plan.php', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		body: new URLSearchParams({ action: 'toggle_status', id: id, status: isChecked })
+	})
+	.then(res => res.json())
+	.then(data => {
+		if (data.success) {
+			if (window.notificar) {
+				window.notificar('success', data.message);
+			} else if (window.toastr) {
+				toastr.success(data.message);
+			}
+			if (badge) {
+				if (isChecked) {
+					badge.className = 'badge status-badge-' + id + ' bg-success-subtle text-success border border-success-subtle';
+					badge.textContent = 'Ativo';
+				} else {
+					badge.className = 'badge status-badge-' + id + ' bg-secondary-subtle text-secondary border border-secondary-subtle';
+					badge.textContent = 'Inativo';
+				}
+			}
+		}
+	})
+	.catch(() => {
+		toggle.checked = !isChecked;
+		if (window.notificar) {
+			window.notificar('error', 'Erro ao alterar o status do plano.');
+		}
+	});
+});
+
 document.addEventListener('click', function(e) {
 	const btn = e.target.closest('.btn-delete-plan');
 	if(!btn) return;

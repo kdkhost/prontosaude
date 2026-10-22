@@ -4,6 +4,36 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.0] - 2026-10-21
+
+### Adicionado & Aprimorado
+- **Menu Deslizante Offcanvas do Site Público (Slide da Esquerda para a Direita)**:
+  - **Experiência Mobile Premium:** Menu deslizante suave e moderno substituindo menus tradicionais, com aceleração de hardware (`translate3d`), curva cúbica elástica (`cubic-bezier(0.16, 1, 0.3, 1)`) e backdrop translúcido com desfoque de vidro (`backdrop-filter: blur(5px)`).
+  - **Interatividade & Gestos:** Suporte nativo a gestos de toque móvel (*touch swipe* para fechar deslizando para a esquerda), tecla `ESC`, botão `X` rotativo e clique fora.
+  - **Submenus Retráteis com Acordeão:** Navegação hierárquica fluida com chevrons animados e fechamento automático de seções irmãs.
+  - **Acesso Rápido a Contatos:** Botão de agendamento via WhatsApp em destaque, telefones com discagem em 1 clique e ícones das redes sociais no rodapé do drawer.
+  - **Botão Hamburger Responsivo:** Ativador de 3 barras no cabeçalho com feedback visual de clique e elevação.
+- **Central Completa de Auditoria & Otimização de SEO (`admin/seo.php`)**:
+  - **Painel de Controle SEO Inteligente:** Métricas consolidadas (Média de pontuação, total de páginas auditadas, status de indexação e cobertura Open Graph).
+  - **Pontuação de Saúde Técnica em Tempo Real (0 a 100):** Cálculo ponderado baseado em tamanho de título, densidade e tamanho de meta descrição, presença de palavras-chave, imagem Open Graph e canonical URL.
+  - **Pré-Visualização ao Vivo do Google SERP:** Simulador visual fiel aos padrões atuais do Google para dispositivos Desktop e Celulares/Smartphones.
+  - **Pré-Visualização de Redes Sociais (Open Graph):** Visualização em tempo real do cartão compartilhado no WhatsApp, Facebook e LinkedIn.
+  - **Salvar sem Recarregar (AJAX):** Atualização instantânea dos metadados com feedback via notificações Toastr.
+- **Gestão Integral do Cartão Fidelidade no Painel Admin (`admin/pricing-plan.php`)**:
+  - **Ativação e Desativação Instantânea via Switch:** Coluna de status em tempo real com alternador `.form-switch` que atualiza via AJAX e reflete imediatamente no portal público (`fidelidade.php` e `index.php`).
+  - **CRUD Completo:** Criação, edição, exclusão segura e listagem detalhada de planos com miniaturas, valores e tópicos de benefícios.
+- **Proteção contra Robôs & Spam com Google reCAPTCHA e Armadilha Honeypot**:
+  - **Configuração Centralizada em `admin/settings.php`:** Nova aba dedicada com chave do site, chave secreta e switch de ativação rápida.
+  - **Integração no Formulário de Contato (`page.php`):** Widget oficial reCAPTCHA renderizado quando ativo e validação no servidor via cURL com a API do Google.
+  - **Defesa Dupla com Honeypot:** Campo invisível para captura e bloqueio silencioso de spambots automatizados.
+- **Padronização Oficial AdminLTE 4 no Painel Administrativo**:
+  - **Correção Definitiva do Sidebar Treeview:** Resolução do conflito entre o script oficial do AdminLTE 4 e a navegação SPA, garantindo abertura e fechamento perfeitos dos submenus com modo acordeão.
+  - **Padronização Universal de Abas (Tabs):** Estilização visual elegante de abas `.nav-tabs` e `.nav-tabs-custom`, alternância dinâmica compatível com Bootstrap 5 e persistência da aba ativa no hash da URL.
+  - **Alinhamento & Padronização de Botões:** Grupos de botões padronizados em `.btn-sm`, espaçamento uniforme (`gap-2`) em ações de tabelas e formulários.
+  - **Botão Flutuante Voltar ao Topo (`#adminBackToTop`):** Navegação vertical suave de volta ao topo no painel administrativo.
+
+---
+
 ## [2.10.0] - 2026-10-21
 
 ### Adicionado & Aprimorado

@@ -94,9 +94,17 @@ if(isset($_POST['form_contact']))
 		$receive_email = $row['receive_email'];
 		$receive_email_subject = $row['receive_email_subject'];
 		$receive_email_thank_you_message = $row['receive_email_thank_you_message'];
+		$recaptcha_status = $row['recaptcha_status'] ?? 0;
+		$recaptcha_secret_key = $row['recaptcha_secret_key'] ?? '';
 	}
 
     $valid = 1;
+
+	// 1. Proteção Honeypot Anti-Spam (invisível para humanos, preenchido por robôs)
+	if(!empty($_POST['website_hp'])) {
+		$valid = 0;
+		$error_message .= 'Envio bloqueado por suspeita de automação maliciosa.<br>';
+	}
 
     if(empty($_POST['visitor_name']))
     {
@@ -131,6 +139,34 @@ if(isset($_POST['form_contact']))
         $valid = 0;
         $error_message .= 'Por favor, insira seu comentário.<br>';
     }
+
+	// 2. Validação do Google reCAPTCHA se ativado no painel
+	if($valid == 1 && !empty($recaptcha_status) && !empty($recaptcha_secret_key)) {
+		$recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
+		if(empty($recaptcha_response)) {
+			$valid = 0;
+			$error_message .= 'Por favor, confirme que você não é um robô resolvendo o reCAPTCHA.<br>';
+		} else {
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+				'secret'   => $recaptcha_secret_key,
+				'response' => $recaptcha_response,
+				'remoteip' => $_SERVER['REMOTE_ADDR'] ?? ''
+			]));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 6);
+			$verify_response = curl_exec($ch);
+			curl_close($ch);
+
+			$captcha_obj = json_decode($verify_response);
+			if(!$captcha_obj || empty($captcha_obj->success)) {
+				$valid = 0;
+				$error_message .= 'Falha na verificação de segurança do reCAPTCHA. Por favor, tente novamente.<br>';
+			}
+		}
+	}
 
     if($valid == 1)
     {
@@ -193,26 +229,39 @@ $visitor_email = $_POST['visitor_email'];
 
 
 				<form action="<?php echo BASE_URL; ?>page/<?php echo $_REQUEST['slug']; ?>" class="form-horizontal cform-1" method="post">
+					<!-- Campo Honeypot Invisível Anti-Spam -->
+					<input type="text" name="website_hp" style="display:none !important; position:absolute; left:-9999px;" tabindex="-1" autocomplete="off">
+
 					<div class="form-group">
                         <div class="col-sm-12">
-                            <input type="text" class="form-control" placeholder="Nome" name="visitor_name">
+                            <input type="text" class="form-control" placeholder="Nome" name="visitor_name" required>
                         </div>
                     </div>
 					<div class="form-group">
                         <div class="col-sm-12">
-                            <input type="email" class="form-control" placeholder="Email" name="visitor_email">
+                            <input type="email" class="form-control" placeholder="Email" name="visitor_email" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <input type="text" class="form-control" placeholder="Telefone" name="visitor_phone">
+                            <input type="text" class="form-control" placeholder="Telefone" name="visitor_phone" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <textarea name="visitor_comment" class="form-control" cols="30" rows="11" placeholder="Mensagem"></textarea>
+                            <textarea name="visitor_comment" class="form-control" cols="30" rows="8" placeholder="Mensagem" required></textarea>
                         </div>
                     </div>
+
+					<?php if(!empty($recaptcha_status) && !empty($recaptcha_site_key)): ?>
+					<div class="form-group">
+						<div class="col-sm-12">
+							<div class="g-recaptcha mb-2" data-sitekey="<?php echo htmlspecialchars($recaptcha_site_key); ?>"></div>
+							<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+						</div>
+					</div>
+					<?php endif; ?>
+
                     <div class="form-group">
 	                    <div class="col-sm-12">
 	                        <input type="submit" value="Enviar Mensagem" class="btn btn-success" name="form_contact">

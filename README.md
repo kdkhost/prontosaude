@@ -63,6 +63,18 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - **Benefícios Inclusos:** Edição simplificada de tópicos/benefícios (um por linha no painel) com renderização automática de ícones de checkmark nos cards do portal.
   - **Botões e Links Customizáveis:** Personalização do texto da ação (ex: *Contratar Agora*, *Agendar Consulta*, *Saiba Mais*) e URL de destino flexível (WhatsApp direto, link de checkout ou página de detalhes).
   - **Destaque e Selos (Badges):** Opção de marcar planos recomendados com efeito de elevação e selos dinâmicos (*Mais Popular*, *Recomendado*).
+- **Central Completa de Auditoria & Otimização de SEO (`admin/seo.php`):**
+  - Auditoria técnica em tempo real com cálculo de pontuação (0 a 100) para páginas fixas e dinâmicas.
+  - Simuladores ao vivo do Google SERP (Desktop e Mobile) e de Cartões de Redes Sociais / Open Graph (WhatsApp, Facebook, LinkedIn).
+  - Salvamento assíncrono via AJAX sem recarregar a tela.
+- **Menu Deslizante Offcanvas do Site Público (Slide da Esquerda para a Direita):**
+  - Menu mobile/tablet deslizante de alta performance acelerado por hardware (`translate3d`), com animação elástica suave.
+  - Suporte completo a gestos de toque (*swipe* para a esquerda para fechar), tecla `ESC`, botão `X` e backdrop blur com desfoque de vidro.
+  - Submenus em formato acordeão com chevrons rotativos e canais de contato rápido integrados.
+- **Gestão Integral do Cartão Fidelidade (`admin/pricing-plan.php`):**
+  - Criação, edição, exclusão e chave de ativação/desativação instantânea com `.form-switch` via AJAX com impacto imediato no portal público (`fidelidade.php` e `index.php`).
+- **Defesa Global Anti-Robô com Google reCAPTCHA e Honeypot:**
+  - Configuração no painel (`admin/settings.php`), integração com a API oficial do Google via backend (cURL) e honeypot invisível para descarte automático de spambots.
 - **Correção Abrangente de Acentuação e Encoding:**
   - Banco de dados e arquivos 100% saneados em UTF-8 (`utf8mb4`), eliminando caracteres corrompidos (`?`) e garantindo ortografia correta da língua portuguesa.
 - **KPIs Modernos e Interativos:**

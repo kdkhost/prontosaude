@@ -41,6 +41,9 @@ $contact_email = $row['contact_email'] ?? '';
 $contact_phone = $row['contact_phone'] ?? '';
 $color = $row['color'] ?? '';
 $preloader  =   $row['preloader'] ?? 0;
+$recaptcha_status    = $row['recaptcha_status'] ?? 0;
+$recaptcha_site_key  = $row['recaptcha_site_key'] ?? '';
+$recaptcha_secret_key= $row['recaptcha_secret_key'] ?? '';
 $footer_about                = $row['footer_about'] ?? '';
 $footer_copyright            = $row['footer_copyright'] ?? '';
 $contact_address             = $row['contact_address'] ?? '';
@@ -314,6 +317,7 @@ $email   = $row2['dep_email'] ?? '';
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/magnific-popup.css">
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/style.css">
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/responsive.css">
+        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/pronto-modern-frontend.css">
         <script src="<?= BASE_URL; ?>assets/js/modernizr.min.js"></script>
 
         <?php if ($cur_page == 'news.php' && !empty($og_title)): ?>
@@ -706,68 +710,181 @@ $email   = $row2['dep_email'] ?? '';
             </div>
             <!-- Top Bar End -->
 
+            <!-- Backdrop do Menu Deslizante -->
+            <div class="ps-drawer-backdrop" id="psDrawerBackdrop"></div>
+
+            <?php
+            // Carregamento otimizado de menus
+            $statement = $pdo->prepare("SELECT * FROM tbl_menu ORDER BY menu_order ASC");
+            $statement->execute();
+            $all_menus = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            $parent_menus = [];
+            $children_menus = [];
+            foreach ($all_menus as $m) {
+                if ($m['menu_parent'] == 0) {
+                    $parent_menus[] = $m;
+                } else {
+                    $children_menus[$m['menu_parent']][] = $m;
+                }
+            }
+            ?>
+
+            <!-- Drawer Deslizante da Esquerda para a Direita -->
+            <aside class="ps-offcanvas-drawer" id="psOffcanvasDrawer" role="dialog" aria-modal="true" aria-label="Menu Principal">
+                <div class="ps-drawer-header">
+                    <div class="ps-drawer-brand">
+                        <?php if(!empty($logo)): ?>
+                            <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" class="ps-drawer-logo">
+                        <?php else: ?>
+                            <span class="ps-drawer-title"><i class="fa fa-hospital-o me-2"></i> Pronto Saúde</span>
+                        <?php endif; ?>
+                    </div>
+                    <button class="ps-drawer-close-btn" id="btnCloseMobileDrawer" type="button" aria-label="Fechar Menu">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="ps-drawer-quick-cta">
+                    <a href="https://wa.me/+5521985831464?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta" target="_blank" rel="noopener noreferrer" class="ps-drawer-cta-btn">
+                        <i class="fa fa-whatsapp"></i> Agendamento via WhatsApp
+                    </a>
+                </div>
+
+                <nav class="ps-drawer-body">
+                    <ul class="ps-drawer-menu">
+                        <?php foreach ($parent_menus as $p_item): 
+                            $has_subs = !empty($children_menus[$p_item['menu_id']]);
+                            $p_url = '#';
+                            if ($p_item['menu_type'] == 'Category') {
+                                $p_url = BASE_URL . 'category/' . $p_item['category_or_page_slug'];
+                            } elseif ($p_item['menu_type'] == 'Page') {
+                                $p_url = BASE_URL . 'page/' . $p_item['category_or_page_slug'];
+                            } elseif ($p_item['menu_type'] == 'Other') {
+                                $p_url = $p_item['menu_url'];
+                            }
+                        ?>
+                        <li class="ps-drawer-item <?= $has_subs ? 'has-sub' : ''; ?>">
+                            <div class="ps-drawer-link-row">
+                                <a href="<?= $p_url; ?>" class="ps-drawer-link <?= $has_subs ? 'has-children' : ''; ?>">
+                                    <?= htmlspecialchars($p_item['menu_name']); ?>
+                                </a>
+                                <?php if($has_subs): ?>
+                                <button class="ps-drawer-toggle-sub" type="button" aria-label="Expandir submenu">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <?php endif; ?>
+                            </div>
+
+                            <?php if($has_subs): ?>
+                            <ul class="ps-drawer-submenu">
+                                <?php foreach ($children_menus[$p_item['menu_id']] as $sub_item): 
+                                    $s_url = '#';
+                                    if ($sub_item['menu_type'] == 'Category') {
+                                        $s_url = BASE_URL . 'category/' . $sub_item['category_or_page_slug'];
+                                    } elseif ($sub_item['menu_type'] == 'Page') {
+                                        $s_url = BASE_URL . 'page/' . $sub_item['category_or_page_slug'];
+                                    } elseif ($sub_item['menu_type'] == 'Other') {
+                                        $s_url = $sub_item['menu_url'];
+                                    }
+                                ?>
+                                <li>
+                                    <a href="<?= $s_url; ?>" class="ps-drawer-sublink">
+                                        <i class="fa fa-angle-right"></i>
+                                        <span><?= htmlspecialchars($sub_item['menu_name']); ?></span>
+                                    </a>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <?php endif; ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </nav>
+
+                <div class="ps-drawer-footer">
+                    <div class="ps-drawer-contact-list">
+                        <?php if(!empty($contact_phone)): ?>
+                        <div class="ps-drawer-contact-item">
+                            <i class="fa fa-phone"></i>
+                            <a href="tel:+55<?= preg_replace('/[^0-9]/', '', $contact_phone); ?>"><?= htmlspecialchars($contact_phone); ?></a>
+                        </div>
+                        <?php endif; ?>
+                        <?php if(!empty($contact_email)): ?>
+                        <div class="ps-drawer-contact-item">
+                            <i class="fa fa-envelope-o"></i>
+                            <a href="mailto:<?= htmlspecialchars($contact_email); ?>"><?= htmlspecialchars($contact_email); ?></a>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="ps-drawer-socials">
+                        <?php
+                        if (isset($social_data)) {
+                            foreach ($social_data as $s_row) {
+                                if (!empty($s_row['social_url'])) {
+                                    echo '<a href="' . $s_row['social_url'] . '" target="_blank" rel="noopener noreferrer"><i class="' . $s_row['social_icon'] . '"></i></a>';
+                                }
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </aside>
+
             <!-- Header Start -->
             <header>
                 <div class="container">
-                    <div class="row">
-                        <div class="col-md-4 logo">
+                    <div class="row align-items-center">
+                        <div class="col-xs-9 col-sm-9 col-md-4 logo">
                             <a href="<?= BASE_URL; ?>">
-                                <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="">
+                                <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde">
                             </a>
                         </div>
-                        <div class="col-md-8 nav-wrapper">
+                        <div class="col-xs-3 col-sm-3 visible-xs visible-sm text-right" style="padding-top: 15px;">
+                            <button class="ps-mobile-toggle-btn" id="btnOpenMobileDrawer" type="button" aria-label="Abrir Menu">
+                                <span class="ps-hamburger-bar"></span>
+                                <span class="ps-hamburger-bar"></span>
+                                <span class="ps-hamburger-bar"></span>
+                            </button>
+                        </div>
+                        <div class="col-md-8 nav-wrapper hidden-xs hidden-sm">
 
                             <!-- Nav Start -->
                             <div class="nav">
                                 <ul class="sf-menu">
-
-                                    <?php
-                                    // Showing the menu dynamically from the database
-                                    $statement = $pdo->prepare("SELECT * FROM tbl_menu ORDER BY menu_order ASC");
-                                    $statement->execute();
-                                    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                                    foreach ($result as $row) {
-                                        echo '<li>';
-                                        if ($row['menu_parent'] == 0) {
-                                            if ($row['menu_type'] == 'Category') {
-                                                echo '<a href="' . BASE_URL . 'category/' . $row['category_or_page_slug'] . '"> 
-                                                <span class="menu-title">' . $row['menu_name'] . '</span></a>';
-                                            }
-                                            if ($row['menu_type'] == 'Page') {
-                                                echo '<a href="' . BASE_URL . 'page/' . $row['category_or_page_slug'] . '">
-                                                <span class="menu-title">' . $row['menu_name'] . '</span></a>';
-                                            }
-                                            if ($row['menu_type'] == 'Other') {
-                                                echo '<a href="' . $row['menu_url'] . '"><span class="menu-title">' . $row['menu_name'] . '</span></a>';
-                                            }
+                                    <?php foreach ($parent_menus as $row): 
+                                        $has_sub = !empty($children_menus[$row['menu_id']]);
+                                        $m_url = '#';
+                                        if ($row['menu_type'] == 'Category') {
+                                            $m_url = BASE_URL . 'category/' . $row['category_or_page_slug'];
+                                        } elseif ($row['menu_type'] == 'Page') {
+                                            $m_url = BASE_URL . 'page/' . $row['category_or_page_slug'];
+                                        } elseif ($row['menu_type'] == 'Other') {
+                                            $m_url = $row['menu_url'];
                                         }
-
-                                        $statement1 = $pdo->prepare("SELECT * FROM tbl_menu WHERE menu_parent=?");
-                                        $statement1->execute(array($row['menu_id']));
-                                        $total = $statement1->rowCount();
-                                        if ($total) {
-                                            echo '<ul>';
-                                            $result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
-                                            foreach ($result1 as $row1) {
-                                                echo '<li>';
-                                                if ($row1['menu_type'] == 'Category') {
-                                                    echo '<a href="' . BASE_URL . 'category/' . $row1['category_or_page_slug'] . '">';
-                                                }
-                                                if ($row1['menu_type'] == 'Page') {
-                                                    echo '<a href="' . BASE_URL . 'page/' . $row1['category_or_page_slug'] . '">';
-                                                }
-                                                if ($row1['menu_type'] == 'Other') {
-                                                    echo '<a href="' . $row1['menu_url'] . '">';
-                                                }
-                                                echo $row1['menu_name'];
-                                                echo '</a>';
-                                                echo '</li>';
-                                            }
-                                            echo '</ul>';
-                                        }
-                                        echo '</li>';
-                                    }
                                     ?>
+                                    <li>
+                                        <a href="<?= $m_url; ?>"><span class="menu-title"><?= htmlspecialchars($row['menu_name']); ?></span></a>
+                                        <?php if($has_sub): ?>
+                                        <ul>
+                                            <?php foreach ($children_menus[$row['menu_id']] as $row1): 
+                                                $s_url = '#';
+                                                if ($row1['menu_type'] == 'Category') {
+                                                    $s_url = BASE_URL . 'category/' . $row1['category_or_page_slug'];
+                                                } elseif ($row1['menu_type'] == 'Page') {
+                                                    $s_url = BASE_URL . 'page/' . $row1['category_or_page_slug'];
+                                                } elseif ($row1['menu_type'] == 'Other') {
+                                                    $s_url = $row1['menu_url'];
+                                                }
+                                            ?>
+                                            <li>
+                                                <a href="<?= $s_url; ?>"><?= htmlspecialchars($row1['menu_name']); ?></a>
+                                            </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                        <?php endif; ?>
+                                    </li>
+                                    <?php endforeach; ?>
                                 </ul>
                             </div>
                             <!-- Nav End -->

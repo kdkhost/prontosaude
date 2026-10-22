@@ -208,7 +208,7 @@ $logo = $row['logo'] ?? '';
 
 					// 1. Administração
 					$admin_pages = [
-						'settings.php', 'seguranca.php', 'secoes.php', 
+						'settings.php', 'seguranca.php', 'secoes.php', 'seo.php',
 						'page.php', 'page-add.php', 'page-edit.php', 
 						'menu.php', 'menu-add.php', 'menu-edit.php', 
 						'user.php', 'user-add.php', 'user-edit.php'
@@ -286,7 +286,7 @@ $logo = $row['logo'] ?? '';
 					$is_engage_open = in_array($cur_page, $engage_pages);
 				?>
 				<nav class="mt-2 mb-4">
-					<ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="true">
+					<ul class="nav sidebar-menu flex-column" role="menu" data-accordion="true">
 						
 						<!-- 1. PAINEL PRINCIPAL -->
 						<li class="nav-item">
@@ -323,6 +323,12 @@ $logo = $row['logo'] ?? '';
 									<a href="secoes.php" class="nav-link <?= ($cur_page == 'secoes.php') ? 'active' : '' ?>">
 										<i class="nav-icon bi bi-toggles text-success"></i>
 										<p>Controle de Seções</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="seo.php" class="nav-link <?= ($cur_page == 'seo.php') ? 'active' : '' ?>">
+										<i class="nav-icon bi bi-graph-up-arrow text-info"></i>
+										<p>Otimização de SEO</p>
 									</a>
 								</li>
 								<li class="nav-item">
