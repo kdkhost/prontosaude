@@ -913,64 +913,105 @@ $email   = $row2['dep_email'] ?? '';
                 </div>
             </aside>
 
-            <!-- Header Start -->
-            <header>
+            <!-- Topbar Ultra Clean Estilo Foco7 -->
+            <div class="ps-foco-topbar hidden-xs hidden-sm">
                 <div class="container">
                     <div class="row align-items-center">
-                        <div class="col-xs-9 col-sm-9 col-md-4 logo">
+                        <div class="col-md-8">
+                            <div class="ps-topbar-info">
+                                <span class="ps-topbar-info-item">
+                                    <i class="fa fa-clock-o text-success"></i> 
+                                    <span>Seg a Sex: 07h às 19h | Sáb: 07h às 13h</span>
+                                </span>
+                                <?php if(!empty($contact_phone)): ?>
+                                <span class="ps-topbar-info-item">
+                                    <i class="fa fa-phone" style="color: #0a6b74;"></i> 
+                                    <a href="tel:+55<?= preg_replace('/[^0-9]/', '', $contact_phone); ?>"><?= htmlspecialchars($contact_phone); ?></a>
+                                </span>
+                                <?php endif; ?>
+                                <span class="ps-topbar-info-item">
+                                    <i class="fa fa-whatsapp text-success"></i> 
+                                    <a href="https://wa.me/+5521985831464?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta" target="_blank" rel="noopener">WhatsApp Oficial</a>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <div class="ps-topbar-right">
+                                <div class="ps-topbar-socials">
+                                    <?php
+                                    if (isset($social_data)) {
+                                        foreach ($social_data as $s_row) {
+                                            if (!empty($s_row['social_url'])) {
+                                                echo '<a href="' . $s_row['social_url'] . '" target="_blank" rel="noopener noreferrer" class="ps-topbar-social-btn"><i class="' . $s_row['social_icon'] . '"></i></a>';
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                                <a href="<?= BASE_URL; ?>admin/login.php" class="ps-topbar-patient-btn">
+                                    <i class="fa fa-user-circle-o"></i> Área do Cliente / Painel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navbar Sticky Estilo Foco7 -->
+            <header class="ps-foco-navbar">
+                <div class="container">
+                    <div class="ps-navbar-container">
+                        <!-- Logo -->
+                        <div class="ps-brand-logo">
                             <a href="<?= BASE_URL; ?>">
                                 <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde">
                             </a>
                         </div>
-                        <div class="col-xs-3 col-sm-3 visible-xs visible-sm text-right" style="padding-top: 15px;">
+
+                        <!-- Menu Centralizado Foco7 -->
+                        <nav class="hidden-xs hidden-sm">
+                            <ul class="ps-nav-links">
+                                <?php 
+                                $current_url = $_SERVER['REQUEST_URI'] ?? '';
+                                foreach ($parent_menus as $row): 
+                                    $has_sub = !empty($children_menus[$row['menu_id']]);
+                                    $m_url = '#';
+                                    if ($row['menu_type'] == 'Category') {
+                                        $m_url = BASE_URL . 'category/' . $row['category_or_page_slug'];
+                                    } elseif ($row['menu_type'] == 'Page') {
+                                        $m_url = BASE_URL . 'page/' . $row['category_or_page_slug'];
+                                    } elseif ($row['menu_type'] == 'Other') {
+                                        $m_url = $row['menu_url'];
+                                    }
+                                    $is_active = (strpos($current_url, (string)$row['category_or_page_slug']) !== false && !empty($row['category_or_page_slug'])) 
+                                        || ($current_url == '/' && ($row['category_or_page_slug'] == 'home' || $m_url == BASE_URL));
+                                ?>
+                                <li class="<?= $is_active ? 'active' : ''; ?>">
+                                    <a href="<?= $m_url; ?>" class="<?= $is_active ? 'active' : ''; ?>">
+                                        <?= htmlspecialchars($row['menu_name']); ?>
+                                    </a>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </nav>
+
+                        <!-- Ações Rápidas Foco7 -->
+                        <div class="ps-navbar-actions hidden-xs hidden-sm">
+                            <a href="<?= BASE_URL; ?>servicos.php" class="btn-foco-outline">
+                                <i class="fa fa-stethoscope"></i> Especialidades
+                            </a>
+                            <a href="https://wa.me/+5521985831464?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta" target="_blank" rel="noopener" class="btn-foco-primary">
+                                <i class="fa fa-calendar-check-o"></i> Agendar Consulta
+                            </a>
+                        </div>
+
+                        <!-- Botão Hambúrguer Mobile -->
+                        <div class="visible-xs visible-sm">
                             <button class="ps-mobile-toggle-btn" id="btnOpenMobileDrawer" type="button" aria-label="Abrir Menu">
                                 <span class="ps-hamburger-bar"></span>
                                 <span class="ps-hamburger-bar"></span>
                                 <span class="ps-hamburger-bar"></span>
                             </button>
-                        </div>
-                        <div class="col-md-8 nav-wrapper hidden-xs hidden-sm">
-
-                            <!-- Nav Start -->
-                            <div class="nav">
-                                <ul class="sf-menu">
-                                    <?php foreach ($parent_menus as $row): 
-                                        $has_sub = !empty($children_menus[$row['menu_id']]);
-                                        $m_url = '#';
-                                        if ($row['menu_type'] == 'Category') {
-                                            $m_url = BASE_URL . 'category/' . $row['category_or_page_slug'];
-                                        } elseif ($row['menu_type'] == 'Page') {
-                                            $m_url = BASE_URL . 'page/' . $row['category_or_page_slug'];
-                                        } elseif ($row['menu_type'] == 'Other') {
-                                            $m_url = $row['menu_url'];
-                                        }
-                                    ?>
-                                    <li>
-                                        <a href="<?= $m_url; ?>"><span class="menu-title"><?= htmlspecialchars($row['menu_name']); ?></span></a>
-                                        <?php if($has_sub): ?>
-                                        <ul>
-                                            <?php foreach ($children_menus[$row['menu_id']] as $row1): 
-                                                $s_url = '#';
-                                                if ($row1['menu_type'] == 'Category') {
-                                                    $s_url = BASE_URL . 'category/' . $row1['category_or_page_slug'];
-                                                } elseif ($row1['menu_type'] == 'Page') {
-                                                    $s_url = BASE_URL . 'page/' . $row1['category_or_page_slug'];
-                                                } elseif ($row1['menu_type'] == 'Other') {
-                                                    $s_url = $row1['menu_url'];
-                                                }
-                                            ?>
-                                            <li>
-                                                <a href="<?= $s_url; ?>"><?= htmlspecialchars($row1['menu_name']); ?></a>
-                                            </li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                        <?php endif; ?>
-                                    </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                            <!-- Nav End -->
-
                         </div>
                     </div>
                 </div>

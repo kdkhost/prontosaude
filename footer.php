@@ -8,163 +8,105 @@
 		?>
 		
 
-		<!-- Footer Social Start -->
-		<section class="footer-social">
+		<!-- Rodapé Premium Escuro Estilo Foco7 -->
+		<footer class="ps-foco-footer">
 			<div class="container">
 				<div class="row">
-					<div class="col-md-12">
-					    <div>
-					        
-					    </div>
-						<div class="item">
-							<ul>
-								<?php
-								// Reutilizando dados de redes sociais já carregados no header
-								if(isset($social_data)) {
-									foreach ($social_data as $social_row) {
-										if($social_row['social_url']!='')
-										{
-											echo '<li><a href="'.$social_row['social_url'].'"><i class="'.$social_row['social_icon'].'"></i></a></li>';
-										}
+					<!-- Coluna 1: Marca e Redes Sociais -->
+					<div class="col-lg-4 col-md-6 mb-4 ps-footer-col ps-footer-about">
+						<?php if(!empty($logo)): ?>
+							<img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" style="max-height: 48px; width: auto; margin-bottom: 18px; filter: brightness(0) invert(1);">
+						<?php else: ?>
+							<h3 style="margin-bottom: 14px;"><i class="fa fa-hospital-o text-success me-2"></i> Pronto Saúde</h3>
+						<?php endif; ?>
+						<p>
+							<?php echo !empty($footer_about) ? nl2br($footer_about) : 'Centro médico e odontológico completo para cuidar de você e da sua família com excelência, rapidez e acolhimento humanizado.'; ?>
+						</p>
+						<div class="ps-topbar-socials" style="margin-top: 18px;">
+							<?php
+							if(isset($social_data)) {
+								foreach ($social_data as $social_row) {
+									if(!empty($social_row['social_url'])) {
+										echo '<a href="'.$social_row['social_url'].'" target="_blank" rel="noopener noreferrer" class="ps-topbar-social-btn" style="background: rgba(255,255,255,0.1); color: #ffffff;"><i class="'.$social_row['social_icon'].'"></i></a>';
 									}
 								}
-								?>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<!-- Footer Social End -->
-
-		
-		<!-- Footer Main Start -->
-		<section class="footer-main">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-6 col-md-3 col-lg-3 footer-col">
-						<h3>Sobre Nós</h3>
-						<p>
-							<?php echo nl2br($footer_about); ?>
-						</p>
-					</div>
-					<div class="col-sm-6 col-md-3 col-lg-3 footer-col">
-						<h3>Últimas Notícias</h3>
-						<?php
-						$statement = $pdo->prepare("SELECT * FROM tbl_news ORDER BY news_id DESC LIMIT " . (int)$total_recent_news_footer);
-						$statement->execute();
-						$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
-						foreach ($result as $row) {
+							}
 							?>
-							<div class="news-item">
-								<div class="news-title">
-								    <a href="<?php echo BASE_URL; ?>news/<?php echo $row['news_slug']; ?>">
-								        <?php echo $row['news_title']; ?>
-								    </a>
-								</div>
-							</div>
-							<?php
-						}
-						?>
+						</div>
 					</div>
-					<div class="col-sm-6 col-md-3 col-lg-3 footer-col">
-						<h3>Notícias Populares</h3>
-						<?php
-						$statement = $pdo->prepare("SELECT * FROM tbl_news ORDER BY total_view DESC LIMIT " . (int)$total_popular_news_footer);
-						$statement->execute();
-						$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
-						foreach ($result as $row) {
+
+					<!-- Coluna 2: Especialidades Médicas -->
+					<div class="col-lg-2 col-md-6 mb-4 ps-footer-col">
+						<h3>Especialidades</h3>
+						<ul class="ps-footer-links">
+							<?php
+							$st_serv = $pdo->query("SELECT name, slug FROM tbl_service WHERE status = 'Active' ORDER BY id ASC LIMIT 5");
+							while($srv = $st_serv->fetch(PDO::FETCH_ASSOC)) {
+								echo '<li><a href="'.BASE_URL.'servicos.php"><i class="fa fa-angle-right"></i> '.htmlspecialchars($srv['name']).'</a></li>';
+							}
 							?>
-							<div class="news-item">
-								<div class="news-title">
-								    <a href="<?php echo BASE_URL; ?>news/<?php echo $row['news_slug']; ?>">
-								        <?php echo $row['news_title']; ?>
-								    </a>
-								</div>
-							</div>
-							<?php
-						}
-						?>
+							<li><a href="<?= BASE_URL; ?>servicos.php"><i class="fa fa-th-large text-success"></i> Ver Todas</a></li>
+						</ul>
 					</div>
-					<div class="col-sm-6 col-md-3 col-lg-3 footer-col">
-						<h3>Contato</h3>
-						<div class="contact-item">
-							<div class="text">
-							    <i class="fa fa-map mr-2"></i>
-							    <?php echo $contact_address; ?>
-							</div>
-						</div>
-						<div class="contact-item">
-							<div class="text">
-							    <i class="fa fa-phone mr-2"></i>
-							    <?php echo $contact_phone; ?>
-							</div>
-						</div>
-						<?php if(function_exists('pronto_is_page_active') && pronto_is_page_active('trabalhe-conosco')): ?>
-						<div class="contact-item">
-							<div class="text">
-							    <a href="../trabalhe-conosco.php" id="link">
-							        <i class="fa fa-briefcase mr-2"></i>
-							        Trabalhe Conosco
-							    </a>
-							</div>
-						</div>
-						<?php endif; ?>
-						<div class="contact-item">
-							<div class="text">
-							    <i class="fa fa-envelope-o mr-2"></i>
-							    <?php echo $contact_email; ?>
-							</div>
-						</div>
-						<?php if(function_exists('pronto_is_page_active') && pronto_is_page_active('privacidade')): ?>
-						<div class="contact-item">
-							<div class="text">
-							    <a href="privacidade.php" id="link">
-							        <i class="fa fa-hand-o-right mr-2"></i>
-							        Política de Privacidade
-							    </a>
-							</div>
+
+					<!-- Coluna 3: Links Institucionais -->
+					<div class="col-lg-3 col-md-6 mb-4 ps-footer-col">
+						<h3>Links Rápidos</h3>
+						<ul class="ps-footer-links">
+							<li><a href="<?= BASE_URL; ?>#home"><i class="fa fa-angle-right"></i> Início</a></li>
+							<li><a href="<?= BASE_URL; ?>#sobre"><i class="fa fa-angle-right"></i> Sobre a Clínica</a></li>
+							<li><a href="<?= BASE_URL; ?>doctor.php"><i class="fa fa-angle-right"></i> Corpo Clínico</a></li>
+							<li><a href="<?= BASE_URL; ?>#fidelidade"><i class="fa fa-angle-right"></i> Cartão Fidelidade</a></li>
+							<li><a href="<?= BASE_URL; ?>#faq"><i class="fa fa-angle-right"></i> Perguntas Frequentes</a></li>
+							<?php if(function_exists('pronto_is_page_active') && pronto_is_page_active('privacidade')): ?>
+								<li><a href="<?= BASE_URL; ?>privacidade.php"><i class="fa fa-angle-right"></i> Política de Privacidade</a></li>
+							<?php endif; ?>
+						</ul>
+					</div>
+
+					<!-- Coluna 4: Onde Estamos e Contato -->
+					<div class="col-lg-3 col-md-6 mb-4 ps-footer-col">
+						<h3>Onde Estamos</h3>
+						<?php if(!empty($contact_address)): ?>
+						<div class="ps-footer-contact-item">
+							<i class="fa fa-map-marker"></i>
+							<span><?= htmlspecialchars($contact_address); ?></span>
 						</div>
 						<?php endif; ?>
-						<?php if(function_exists('pronto_is_page_active') && pronto_is_page_active('rsocial')): ?>
-						<div class="contact-item">
-							<div class="text">
-							   <a href="rsocial.php" id="link">
-							        <i class="fa fa-hand-o-right mr-2"></i>
-							       Responsabilidade Social
-							   </a>
-							</div>
+						<?php if(!empty($contact_phone)): ?>
+						<div class="ps-footer-contact-item">
+							<i class="fa fa-phone"></i>
+							<a href="tel:+55<?= preg_replace('/[^0-9]/', '', $contact_phone); ?>" style="color: #cbd5e1; text-decoration: none;"><?= htmlspecialchars($contact_phone); ?></a>
+						</div>
+						<?php endif; ?>
+						<div class="ps-footer-contact-item">
+							<i class="fa fa-clock-o"></i>
+							<span>Seg a Sex: 07h às 19h | Sáb: 07h às 13h</span>
+						</div>
+						<?php if(!empty($contact_map_iframe)): ?>
+						<div style="border-radius: 10px; overflow: hidden; margin-top: 14px; max-height: 140px; box-shadow: 0 4px 12px rgba(0,0,0,0.25);">
+							<?= str_replace('height="450"', 'height="140"', $contact_map_iframe); ?>
 						</div>
 						<?php endif; ?>
 					</div>
 				</div>
 			</div>
-		</section>
-		<!-- Footer Main End -->
 
-
-
-		<!-- Footer Bottom Start -->
-		<section class="footer-bottom">
-		    
-			<div class="container">
-				<div class="row">
-				    <div class="col-md-6">
-                        <a href="https://ethestrategias.com.br" target="_blank" style="color:#ffffff;">
-                            <img src="<?php echo BASE_URL; ?>/assets/img/yellow.png" 
-                            alt="Eth! Estratégias" 
-                            data-toggle="tooltip" 
-                            data-placement="top" 
-                            title="Eth! Estratégias" style="max-width:100%;height:48px; margin-bottom:0px;">
-                        </a>
-				    </div>
-					<div class="col-md-6 copyright" style="text-align: right;">
-						<?php echo $footer_copyright; ?>
+			<!-- Rodapé Inferior -->
+			<div class="ps-footer-bottom">
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-md-7 text-left">
+							<?= $footer_copyright ?: '© ' . date('Y') . ' Pronto Saúde - Centro Médico & Odontológico. Todos os direitos reservados.'; ?>
+						</div>
+						<div class="col-md-5 text-right">
+							<span style="font-size: 0.8rem; color: #64748b;">Tecnologia & Inovação em Saúde</span>
+						</div>
 					</div>
 				</div>
 			</div>
-		</section>
-		<!-- Footer Bottom End -->
+		</footer>
+		<!-- Fim do Rodapé Foco7 -->
 
 		<a href="#" class="scrollup">
 			<i class="fa fa-angle-up"></i>
