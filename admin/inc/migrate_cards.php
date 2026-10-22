@@ -42,9 +42,9 @@ addColumnIfNotExists($pdo, 'tbl_dental', 'beneficios', 'TEXT NULL DEFAULT NULL A
 addColumnIfNotExists($pdo, 'tbl_dental', 'button_text', 'VARCHAR(100) NULL DEFAULT "Agendar Avaliação" AFTER `link`');
 
 // 4. Tabela tbl_settings (reCAPTCHA)
-addColumnIfNotExists($pdo, 'tbl_settings', 'recaptcha_status', 'TINYINT(1) NOT NULL DEFAULT 0 AFTER `maintenance_mode`');
-addColumnIfNotExists($pdo, 'tbl_settings', 'recaptcha_site_key', 'VARCHAR(255) NULL DEFAULT "" AFTER `recaptcha_status`');
-addColumnIfNotExists($pdo, 'tbl_settings', 'recaptcha_secret_key', 'VARCHAR(255) NULL DEFAULT "" AFTER `recaptcha_site_key`');
+addColumnIfNotExists($pdo, 'tbl_settings', 'recaptcha_status', 'TINYINT(1) NOT NULL DEFAULT 0');
+addColumnIfNotExists($pdo, 'tbl_settings', 'recaptcha_site_key', 'VARCHAR(255) NULL DEFAULT ""');
+addColumnIfNotExists($pdo, 'tbl_settings', 'recaptcha_secret_key', 'VARCHAR(255) NULL DEFAULT ""');
 
 // Atualiza planos existentes com imagens iniciais se estiverem vazios
 try {
