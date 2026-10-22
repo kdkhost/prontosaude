@@ -82,17 +82,23 @@ if(isset($_POST['form1'])) {
 			$news_slug = $news_slug.'-1';
 		}
 
+		$clean_title = trim(strip_tags($_POST['meta_title'] ?? ''));
+		$clean_kw = trim(strip_tags($_POST['meta_keyword'] ?? ''));
+		$clean_desc = trim(strip_tags($_POST['meta_description'] ?? ''));
+		$clean_desc = preg_replace('/[\r\n\t]+/', ' ', $clean_desc);
+		$clean_desc = preg_replace('/\s+/', ' ', $clean_desc);
+
 		if($path=='') {
 			// When no photo will be selected
 			$statement = $pdo->prepare("INSERT INTO tbl_news (news_title,news_slug,news_content,news_date,photo,category_id,publisher,total_view,meta_title,meta_keyword,meta_description) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-			$statement->execute(array($_POST['news_title'],$news_slug,$_POST['news_content'],$_POST['news_date'],'',$_POST['category_id'],$publisher,0,$_POST['meta_title'],$_POST['meta_keyword'],$_POST['meta_description']));
+			$statement->execute(array($_POST['news_title'],$news_slug,$_POST['news_content'],$_POST['news_date'],'',$_POST['category_id'],$publisher,0,$clean_title,$clean_kw,$clean_desc));
 		} else {
     		// uploading the photo into the main location and giving it a final name
     		$final_name = 'news-'.$ai_id.'.'.$ext;
             move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
 
             $statement = $pdo->prepare("INSERT INTO tbl_news (news_title,news_slug,news_content,news_date,photo,category_id,publisher,total_view,meta_title,meta_keyword,meta_description) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-			$statement->execute(array($_POST['news_title'],$news_slug,$_POST['news_content'],$_POST['news_date'],$final_name,$_POST['category_id'],$publisher,0,$_POST['meta_title'],$_POST['meta_keyword'],$_POST['meta_description']));
+			$statement->execute(array($_POST['news_title'],$news_slug,$_POST['news_content'],$_POST['news_date'],$final_name,$_POST['category_id'],$publisher,0,$clean_title,$clean_kw,$clean_desc));
 		}
 
 
@@ -247,7 +253,7 @@ if(isset($_POST['form1'])) {
 						<div class="row mb-3">
 							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Descrição</label>
 							<div class="col-12 col-sm-9 col-lg-9">
-								<textarea class="form-control" name="meta_description" style="height:200px;"></textarea>
+								<textarea class="form-control no-summernote" data-no-summernote="true" name="meta_description" style="height:120px;"></textarea>
 							</div>
 						</div>
 						<div class="row mb-3">

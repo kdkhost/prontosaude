@@ -26,9 +26,6 @@ $statement->execute(array($_REQUEST['slug']));
 $result = $statement->fetchAll(PDO::FETCH_ASSOC);				
 foreach ($result as $row) {
     extract($row);
-    echo '<meta name="description" content="'.htmlspecialchars($row['meta_description'] ?? '').'">';
-    echo '<meta name="keywords" content="'.htmlspecialchars($row['meta_keyword'] ?? '').'">';
-    echo '<title>'.htmlspecialchars($row['meta_title'] ?? $row['name']).'</title>';
 }
 
 $statement = $pdo->prepare("SELECT * FROM tbl_designation WHERE designation_id=?");

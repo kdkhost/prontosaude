@@ -143,13 +143,20 @@
           window.jQuery.fn.tooltip = function () { return this; };
         }
 
-        // Seletor restritivo: NUNCA seleciona textareas internos do summernote (.note-codable) nem campos marcados
+        // Seletor restritivo: NUNCA seleciona textareas internos do summernote nem campos de SEO/Metadados/Código
         const textareas = container.querySelectorAll(
-          'textarea:not(.note-codable):not(.no-summernote):not(.no-editor):not(.font-monospace):not([data-no-summernote]):not([data-no-editor])'
+          'textarea:not(.note-codable):not(.no-summernote):not(.no-editor):not(.font-monospace):not([data-no-summernote]):not([data-no-editor]):not([name*="meta"]):not([name*="keyword"]):not([name*="slug"])'
         );
 
         textareas.forEach(ed => {
           try {
+            // Ignora campos de metadados por segurança adicional
+            const fieldName = (ed.getAttribute('name') || '').toLowerCase();
+            const fieldId = (ed.getAttribute('id') || '').toLowerCase();
+            if (fieldName.includes('meta') || fieldName.includes('keyword') || fieldId.includes('meta') || fieldId.includes('seo')) {
+              return;
+            }
+
             const $ed = jQuery(ed);
 
             // Guarda de segurança absoluta anti-duplicação:

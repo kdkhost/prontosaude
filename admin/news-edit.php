@@ -87,10 +87,16 @@ if(isset($_POST['form1'])) {
 	    	$statement->execute(array($_POST['news_title'],$news_slug,$_POST['news_content'],$_POST['news_date'],$_POST['category_id'],$publisher,$_POST['meta_title'],$_POST['meta_keyword'],$_POST['meta_description'],$_REQUEST['id']));
 	    }
 
+		$clean_title = trim(strip_tags($_POST['meta_title'] ?? ''));
+		$clean_kw = trim(strip_tags($_POST['meta_keyword'] ?? ''));
+		$clean_desc = trim(strip_tags($_POST['meta_description'] ?? ''));
+		$clean_desc = preg_replace('/[\r\n\t]+/', ' ', $clean_desc);
+		$clean_desc = preg_replace('/\s+/', ' ', $clean_desc);
+
 		// If previous image found and user do not want to change the photo
 	    if($previous_photo != '' && $path == '') {
 	    	$statement = $pdo->prepare("UPDATE tbl_news SET news_title=?, news_slug=?, news_content=?, news_date=?, category_id=?, publisher=?, meta_title=?, meta_keyword=?, meta_description=? WHERE news_id=?");
-	    	$statement->execute(array($_POST['news_title'],$news_slug,$_POST['news_content'],$_POST['news_date'],$_POST['category_id'],$publisher,$_POST['meta_title'],$_POST['meta_keyword'],$_POST['meta_description'],$_REQUEST['id']));
+	    	$statement->execute(array($_POST['news_title'],$news_slug,$_POST['news_content'],$_POST['news_date'],$_POST['category_id'],$publisher,$clean_title,$clean_kw,$clean_desc,$_REQUEST['id']));
 	    }
 
 
@@ -101,20 +107,22 @@ if(isset($_POST['form1'])) {
             move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
 
 	    	$statement = $pdo->prepare("UPDATE tbl_news SET news_title=?, news_slug=?, news_content=?, news_date=?, photo=?, category_id=?, publisher=?, meta_title=?, meta_keyword=?, meta_description=? WHERE news_id=?");
-	    	$statement->execute(array($_POST['news_title'],$news_slug,$_POST['news_content'],$_POST['news_date'],$final_name,$_POST['category_id'],$publisher,$_POST['meta_title'],$_POST['meta_keyword'],$_POST['meta_description'],$_REQUEST['id']));
+	    	$statement->execute(array($_POST['news_title'],$news_slug,$_POST['news_content'],$_POST['news_date'],$final_name,$_POST['category_id'],$publisher,$clean_title,$clean_kw,$clean_desc,$_REQUEST['id']));
 	    }
 
 	    
 	    // If previous image found and user want to change the photo
 		if($previous_photo != '' && $path != '') {
 
-	    	unlink('../assets/uploads/'.$previous_photo);
+	    	if(file_exists('../assets/uploads/'.$previous_photo)) {
+	    		unlink('../assets/uploads/'.$previous_photo);
+	    	}
 
 	    	$final_name = 'news-'.$_REQUEST['id'].'.'.$ext;
             move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
 
 	    	$statement = $pdo->prepare("UPDATE tbl_news SET news_title=?, news_slug=?, news_content=?, news_date=?, photo=?, category_id=?, publisher=?, meta_title=?, meta_keyword=?, meta_description=? WHERE news_id=?");
-	    	$statement->execute(array($_POST['news_title'],$news_slug,$_POST['news_content'],$_POST['news_date'],$final_name,$_POST['category_id'],$publisher,$_POST['meta_title'],$_POST['meta_keyword'],$_POST['meta_description'],$_REQUEST['id']));
+	    	$statement->execute(array($_POST['news_title'],$news_slug,$_POST['news_content'],$_POST['news_date'],$final_name,$_POST['category_id'],$publisher,$clean_title,$clean_kw,$clean_desc,$_REQUEST['id']));
 	    }
 
 	    $success_message = 'News is updated successfully!';
@@ -293,7 +301,7 @@ foreach ($result as $row) {
 						<div class="row mb-3">
 							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Descrição</label>
 							<div class="col-12 col-sm-9 col-lg-9">
-								<textarea class="form-control" name="meta_description" style="height:200px;"><?php echo $meta_description; ?></textarea>
+								<textarea class="form-control no-summernote" data-no-summernote="true" name="meta_description" style="height:120px;"><?php echo htmlspecialchars(trim(preg_replace('/\s+/', ' ', strip_tags($meta_description)))); ?></textarea>
 							</div>
 						</div>
 						<div class="row mb-3">

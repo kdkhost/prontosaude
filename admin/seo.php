@@ -10,6 +10,22 @@ try {
 	} catch (Exception $e2) {}
 }
 
+// Função de limpeza estrita de metadados contra HTML escapando
+if (!function_exists('seo_clean_text')) {
+	function seo_clean_text($text) {
+		if (empty($text) && !is_numeric($text)) return '';
+		$text = preg_replace('/<(script|style)[^>]*?>.*?<\/\\1>/si', '', (string)$text);
+		$text = preg_replace('/<br\s*\/?>/i', ' ', $text);
+		$text = preg_replace('/<\/(p|div|h[1-6]|li)>/i', ' ', $text);
+		$text = strip_tags($text);
+		$text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+		$text = str_replace(["\xc2\xa0", '&nbsp;'], ' ', $text);
+		$text = preg_replace('/[\r\n\t]+/', ' ', $text);
+		$text = preg_replace('/\s+/', ' ', $text);
+		return trim($text);
+	}
+}
+
 // 1. Endpoint AJAX para salvar alterações de SEO e imagem de compartilhamento
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_seo') {
 	header('Content-Type: application/json; charset=utf-8');
@@ -17,9 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 	$page_id = (int)($_POST['page_id'] ?? 0);
 	$page_slug = trim($_POST['page_slug'] ?? '');
 	$page_name = trim($_POST['page_name'] ?? '');
-	$meta_title = trim($_POST['meta_title'] ?? '');
-	$meta_description = trim($_POST['meta_description'] ?? '');
-	$meta_keyword = trim($_POST['meta_keyword'] ?? '');
+	$meta_title = seo_clean_text($_POST['meta_title'] ?? '');
+	$meta_description = seo_clean_text($_POST['meta_description'] ?? '');
+	$meta_keyword = seo_clean_text($_POST['meta_keyword'] ?? '');
 
 	$new_banner = null;
 
@@ -135,9 +151,9 @@ $pagesList[] = [
 	'name' => 'Página Inicial (Home)',
 	'slug' => '',
 	'url' => BASE_URL,
-	'title' => $settingsSEO['meta_title_home'] ?? 'Pronto Saúde | Centro Médico e Odontológico',
-	'description' => $settingsSEO['meta_description_home'] ?? 'Atendimento médico e odontológico humanizado no Rio de Janeiro.',
-	'keywords' => $settingsSEO['meta_keyword_home'] ?? 'clinica medica, odontologia, exames, saude rj',
+	'title' => seo_clean_text($settingsSEO['meta_title_home'] ?? 'Pronto Saúde | Centro Médico e Odontológico'),
+	'description' => seo_clean_text($settingsSEO['meta_description_home'] ?? 'Atendimento médico e odontológico humanizado no Rio de Janeiro.'),
+	'keywords' => seo_clean_text($settingsSEO['meta_keyword_home'] ?? 'clinica medica, odontologia, exames, saude rj'),
 	'banner' => $defaultHomeBanner
 ];
 
@@ -153,9 +169,9 @@ foreach ($allPages as $p) {
 		'name' => $p['page_name'],
 		'slug' => $p['page_slug'],
 		'url' => (strpos($p['page_slug'], '.php') !== false) ? BASE_URL . $p['page_slug'] : BASE_URL . 'page/' . $p['page_slug'],
-		'title' => $p['meta_title'] ?: $p['page_name'] . ' | Pronto Saúde',
-		'description' => $p['meta_description'] ?: 'Informações completas sobre ' . $p['page_name'] . ' na Pronto Saúde.',
-		'keywords' => $p['meta_keyword'] ?: $p['page_name'] . ', saude, clinica, pronto saude',
+		'title' => seo_clean_text($p['meta_title'] ?: $p['page_name'] . ' | Pronto Saúde'),
+		'description' => seo_clean_text($p['meta_description'] ?: 'Informações completas sobre ' . $p['page_name'] . ' na Pronto Saúde.'),
+		'keywords' => seo_clean_text($p['meta_keyword'] ?: $p['page_name'] . ', saude, clinica, pronto saude'),
 		'banner' => $bannerPath
 	];
 }
@@ -378,44 +394,76 @@ foreach ($fixedPages as $idx => $fp) {
 									<input type="hidden" name="page_slug" id="inputPageSlug" value="">
 									<input type="hidden" name="page_name" id="inputPageName" value="Página Inicial (Home)">
 
-									<!-- IMAGEM DE COMPARTILHAMENTO SOCIAL (OPEN GRAPH / OG:IMAGE) -->
+									<!-- DROPZONE UNIVERSAL DRAG & DROP PARA IMAGEM DE COMPARTILHAMENTO SOCIAL (OPEN GRAPH) -->
 									<div class="mb-4">
-										<label class="form-label fw-bold mb-1 d-flex align-items-center gap-2">
-											<i class="bi bi-image-fill text-primary"></i>
-											Imagem de Compartilhamento nas Redes Sociais (Open Graph / WhatsApp / Facebook / Twitter)
-										</label>
-										<div class="p-3 bg-body-tertiary rounded-3 border">
-											<div class="row align-items-center g-3">
-												<div class="col-sm-5 col-md-4">
-													<div class="ratio ratio-16x9 rounded-2 border overflow-hidden bg-dark-subtle position-relative shadow-xs" style="max-height: 140px;">
-														<img src="" id="currentOgImagePreview" alt="Preview da Imagem Social" style="object-fit: cover; width: 100%; height: 100%;">
-														<span class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-75 text-white text-center py-1 small" style="font-size: 11px;">
-															Proporção 1.91:1
+										<div class="d-flex justify-content-between align-items-center mb-2">
+											<label class="form-label fw-bold mb-0 d-flex align-items-center gap-2">
+												<i class="bi bi-image-fill text-primary"></i>
+												Imagem de Compartilhamento Social (Open Graph / WhatsApp / Facebook / Twitter)
+											</label>
+											<span class="badge bg-primary text-white small px-2 py-1">
+												<i class="bi bi-aspect-ratio me-1"></i>Proporção Oficial 1.91:1
+											</span>
+										</div>
+
+										<div class="ps-seo-dropzone-container p-3 bg-body-tertiary rounded-3 border">
+											<!-- Dropzone Interativa Drag & Drop -->
+											<div class="ps-seo-dropzone border border-2 border-dashed rounded-3 p-4 text-center bg-body position-relative mb-3" 
+												 id="seoDropzone" 
+												 style="cursor: pointer; transition: all 0.25s ease; border-color: var(--bs-primary-border-subtle, #b6d4fe) !important;">
+												
+												<!-- Conteúdo Padrão de Chamada para Ação -->
+												<div id="dropzoneEmptyContent" class="py-2">
+													<div class="text-primary fs-1 mb-2">
+														<i class="bi bi-cloud-arrow-up-fill"></i>
+													</div>
+													<h6 class="fw-bold mb-1 text-body">
+														Arraste e solte a imagem de compartilhamento desta página aqui
+													</h6>
+													<p class="text-body-secondary small mb-3">
+														ou <span class="text-primary text-decoration-underline fw-semibold">clique para selecionar do seu dispositivo</span>
+													</p>
+
+													<!-- Badges com Proporções e Dimensões Oficiais Claramente Descritas -->
+													<div class="d-flex flex-wrap justify-content-center gap-2">
+														<span class="badge bg-primary text-white px-2 py-1">
+															<i class="bi bi-aspect-ratio me-1"></i> Proporção Ideal: 1.91:1
+														</span>
+														<span class="badge bg-dark text-white px-2 py-1">
+															<i class="bi bi-arrows-fullscreen me-1"></i> Tamanho Recomendado: 1200 x 630 px
+														</span>
+														<span class="badge bg-secondary-subtle text-body border px-2 py-1">
+															<i class="bi bi-file-earmark-check me-1"></i> JPG, PNG, WEBP (máx. 2MB)
 														</span>
 													</div>
 												</div>
-												<div class="col-sm-7 col-md-8">
-													<label class="form-label small fw-bold mb-1 text-body">
-														Enviar Nova Imagem para Compartilhamento:
-													</label>
-													<input type="file" name="og_image" id="inputOgImage" class="form-control form-control-sm" accept="image/jpeg,image/png,image/webp">
-													
-													<!-- Badges de Especificações Técnicas Oficiais -->
-													<div class="d-flex flex-wrap gap-2 mt-2">
-														<span class="badge text-bg-primary-subtle text-primary border border-primary-subtle">
-															<i class="bi bi-aspect-ratio me-1"></i>Proporção Ideal: 1.91:1
+
+												<!-- Input File Oculto (acessível via clique ou drag&drop) -->
+												<input type="file" name="og_image" id="inputOgImage" class="d-none" accept="image/jpeg,image/png,image/webp">
+											</div>
+
+											<!-- Card de Preview Ativo com Dimensões em Proporção 1.91:1 -->
+											<div class="card border rounded-3 overflow-hidden shadow-xs bg-body" id="seoPreviewCard">
+												<div class="card-header bg-body-tertiary py-2 px-3 d-flex align-items-center justify-content-between">
+													<span class="small fw-bold text-body-secondary d-flex align-items-center gap-1" id="seoPreviewStatusText">
+														<i class="bi bi-image text-primary"></i> Imagem Ativa desta Página
+													</span>
+													<div class="d-flex align-items-center gap-2">
+														<span class="badge bg-success-subtle text-success border border-success-subtle small" id="seoPreviewBadge">
+															1200 x 630 px (1.91:1)
 														</span>
-														<span class="badge text-bg-success-subtle text-success border border-success-subtle">
-															<i class="bi bi-arrows-fullscreen me-1"></i>Tamanho Ideal: 1200 x 630 px
-														</span>
-														<span class="badge text-bg-secondary-subtle text-secondary border border-secondary-subtle">
-															<i class="bi bi-file-earmark-image me-1"></i>JPG, PNG ou WEBP (até 2MB)
-														</span>
+														<button type="button" class="btn btn-sm btn-outline-danger p-0 px-2 d-none" id="btnRemoveCustomOg" title="Restaurar imagem original da página">
+															<i class="bi bi-x-lg"></i> Cancelar
+														</button>
 													</div>
-													<p class="text-body-secondary small mt-2 mb-0" style="font-size: 12px; line-height: 1.4;">
-														<i class="bi bi-info-circle-fill text-info me-1"></i>
-														Esta imagem é exibida com destaque oficial nos cards de compartilhamento no <strong>WhatsApp, Facebook, LinkedIn, Twitter/X e Telegram</strong>. Utilizar 1200x630 px evita cortes ou tarjas pretas.
-													</p>
+												</div>
+												<div class="card-body p-2 text-center bg-dark-subtle position-relative">
+													<div class="ratio ratio-16x9 rounded overflow-hidden mx-auto shadow-xs" style="max-height: 200px; max-width: 382px;">
+														<img src="" id="currentOgImagePreview" alt="Preview da Imagem Social" style="object-fit: cover; width: 100%; height: 100%;">
+													</div>
+													<div class="small text-body-secondary mt-2 fw-medium" id="seoFileNameInfo">
+														Proporção Widescreen 1.91:1 • Otimizada para WhatsApp e Redes Sociais
+													</div>
 												</div>
 											</div>
 										</div>
@@ -443,9 +491,9 @@ foreach ($fixedPages as $idx => $fp) {
 											</label>
 											<span class="badge text-bg-light border" id="descCounter">0 / 160 caracteres</span>
 										</div>
-										<textarea class="form-control" name="meta_description" id="inputMetaDesc" rows="3" placeholder="Ex: Atendimento humanizado com mais de 30 especialidades, exames laboratoriais, cartão fidelidade e planos corporativos. Agende sua consulta!" required></textarea>
+										<textarea class="form-control no-summernote" data-no-summernote="true" name="meta_description" id="inputMetaDesc" rows="3" placeholder="Ex: Atendimento humanizado com mais de 30 especialidades, exames laboratoriais, cartão fidelidade e planos corporativos. Agende sua consulta!" required></textarea>
 										<div class="form-text small" id="descFeedback">
-											Tamanho recomendado: entre 120 e 160 caracteres. Resuma a proposta de valor para atrair cliques.
+											Tamanho recomendado: entre 120 e 160 caracteres. Resuma a proposta de valor sem tags HTML.
 										</div>
 									</div>
 
@@ -454,7 +502,7 @@ foreach ($fixedPages as $idx => $fp) {
 										<label class="form-label fw-bold mb-1">
 											Palavras-chave (Meta Keywords)
 										</label>
-										<input type="text" class="form-control" name="meta_keyword" id="inputMetaKeywords" placeholder="Ex: clinica medica rj, exames laboratoriais, dentista, pronto saude">
+										<input type="text" class="form-control no-summernote" data-no-summernote="true" name="meta_keyword" id="inputMetaKeywords" placeholder="Ex: clinica medica rj, exames laboratoriais, dentista, pronto saude">
 										<div class="form-text small">Separe as palavras-chave principais por vírgula.</div>
 									</div>
 
@@ -655,6 +703,28 @@ foreach ($fixedPages as $idx => $fp) {
 			}
 		}
 
+		// Elementos da Dropzone Drag & Drop
+		const seoDropzone = container.querySelector('#seoDropzone');
+		const seoPreviewStatusText = container.querySelector('#seoPreviewStatusText');
+		const seoFileNameInfo = container.querySelector('#seoFileNameInfo');
+		const btnRemoveCustomOg = container.querySelector('#btnRemoveCustomOg');
+
+		function resetDropzoneToOriginal() {
+			if (inputOgFile) inputOgFile.value = '';
+			const pg = pages[currentIndex];
+			if (!pg) return;
+			const bannerUrl = (pg.banner && pg.banner.startsWith('http')) ? pg.banner : '<?= BASE_URL ?>' + (pg.banner || 'assets/images/about.jpg');
+			if (currentOgPreview) currentOgPreview.src = bannerUrl;
+			if (socialImg) socialImg.src = bannerUrl;
+			if (seoPreviewStatusText) {
+				seoPreviewStatusText.innerHTML = '<i class="bi bi-image text-primary"></i> Imagem Ativa desta Página';
+			}
+			if (seoFileNameInfo) {
+				seoFileNameInfo.textContent = 'Proporção Widescreen 1.91:1 • Otimizada para WhatsApp e Redes Sociais';
+			}
+			if (btnRemoveCustomOg) btnRemoveCustomOg.classList.add('d-none');
+		}
+
 		function loadPageData(index) {
 			currentIndex = index;
 			const pg = pages[index];
@@ -682,6 +752,7 @@ foreach ($fixedPages as $idx => $fp) {
 				else btn.classList.remove('active');
 			});
 
+			resetDropzoneToOriginal();
 			updateLiveView();
 		}
 
@@ -709,17 +780,89 @@ foreach ($fixedPages as $idx => $fp) {
 			});
 		}
 
-		// Preview instantâneo ao selecionar nova imagem social
+		function handleNewOgFile(file) {
+			if (!file) return;
+			if (!file.type.startsWith('image/')) {
+				if (window.notificar) {
+					window.notificar('error', 'Selecione apenas arquivos de imagem válidos (JPG, PNG ou WEBP).', 'Formato Inválido');
+				} else if (typeof toastr !== 'undefined') {
+					toastr.error('Selecione apenas arquivos de imagem válidos (JPG, PNG ou WEBP).');
+				}
+				return;
+			}
+
+			const reader = new FileReader();
+			reader.onload = function(e) {
+				if (currentOgPreview) currentOgPreview.src = e.target.result;
+				if (socialImg) socialImg.src = e.target.result;
+
+				const activeSelector = selectors[currentIndex];
+				if (activeSelector) {
+					const thumb = activeSelector.querySelector('img');
+					if (thumb) thumb.src = e.target.result;
+				}
+
+				if (seoPreviewStatusText) {
+					seoPreviewStatusText.innerHTML = '<i class="bi bi-check-circle-fill text-success"></i> Nova Imagem Selecionada (1.91:1)';
+				}
+				if (seoFileNameInfo) {
+					const sizeKb = (file.size / 1024).toFixed(1);
+					seoFileNameInfo.innerHTML = `<strong>${file.name}</strong> (${sizeKb} KB) • Pronta para salvar nesta página`;
+				}
+				if (btnRemoveCustomOg) btnRemoveCustomOg.classList.remove('d-none');
+
+				if (window.notificar) {
+					window.notificar('info', `Imagem carregada: ${file.name} (Proporção 1.91:1)`, 'Preview Pronto');
+				}
+			};
+			reader.readAsDataURL(file);
+		}
+
+		// Drag and Drop Events na Dropzone
+		if (seoDropzone) {
+			seoDropzone.addEventListener('click', function(e) {
+				if (inputOgFile) inputOgFile.click();
+			});
+
+			['dragenter', 'dragover'].forEach(evt => {
+				seoDropzone.addEventListener(evt, function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+					seoDropzone.classList.add('border-primary', 'bg-primary-subtle');
+					seoDropzone.style.transform = 'scale(1.01)';
+				});
+			});
+
+			['dragleave', 'drop'].forEach(evt => {
+				seoDropzone.addEventListener(evt, function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+					seoDropzone.classList.remove('border-primary', 'bg-primary-subtle');
+					seoDropzone.style.transform = 'none';
+				});
+			});
+
+			seoDropzone.addEventListener('drop', function(e) {
+				const dt = e.dataTransfer;
+				if (dt && dt.files && dt.files.length > 0) {
+					if (inputOgFile) inputOgFile.files = dt.files;
+					handleNewOgFile(dt.files[0]);
+				}
+			});
+		}
+
 		if (inputOgFile) {
 			inputOgFile.addEventListener('change', function() {
 				if (this.files && this.files[0]) {
-					const reader = new FileReader();
-					reader.onload = function(e) {
-						if (currentOgPreview) currentOgPreview.src = e.target.result;
-						if (socialImg) socialImg.src = e.target.result;
-					};
-					reader.readAsDataURL(this.files[0]);
+					handleNewOgFile(this.files[0]);
 				}
+			});
+		}
+
+		if (btnRemoveCustomOg) {
+			btnRemoveCustomOg.addEventListener('click', function(e) {
+				e.stopPropagation();
+				resetDropzoneToOriginal();
 			});
 		}
 

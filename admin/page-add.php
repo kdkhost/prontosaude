@@ -64,8 +64,14 @@ if(isset($_POST['form1'])) {
         move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
     	
 		// saving into the database
+		$clean_title = trim(strip_tags($_POST['meta_title'] ?? ''));
+		$clean_kw = trim(strip_tags($_POST['meta_keyword'] ?? ''));
+		$clean_desc = trim(strip_tags($_POST['meta_description'] ?? ''));
+		$clean_desc = preg_replace('/[\r\n\t]+/', ' ', $clean_desc);
+		$clean_desc = preg_replace('/\s+/', ' ', $clean_desc);
+
 		$statement = $pdo->prepare("INSERT INTO tbl_page (page_name,page_slug,page_content,page_layout,banner,status,meta_title,meta_keyword,meta_description) VALUES (?,?,?,?,?,?,?,?,?)");
-		$statement->execute(array($_POST['page_name'],$page_slug,$_POST['page_content'],$_POST['page_layout'],$final_name,$_POST['status'],$_POST['meta_title'],$_POST['meta_keyword'],$_POST['meta_description']));
+		$statement->execute(array($_POST['page_name'],$page_slug,$_POST['page_content'],$_POST['page_layout'],$final_name,$_POST['status'],$clean_title,$clean_kw,$clean_desc));
 
     	$success_message = 'A página foi adicionada com sucesso.';
     }
@@ -189,13 +195,13 @@ if(isset($_POST['form1'])) {
 						<div class="row mb-3">
 							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Palavras-chave</label>
 							<div class="col-12 col-sm-9 col-lg-9">
-								<textarea class="form-control" name="meta_keyword" style="height:100px;"></textarea>
+								<textarea class="form-control no-summernote" data-no-summernote="true" name="meta_keyword" style="height:80px;"></textarea>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Meta Descrição</label>
 							<div class="col-12 col-sm-9 col-lg-9">
-								<textarea class="form-control" id="2" name="meta_description" style="height:100px;"></textarea>
+								<textarea class="form-control no-summernote" data-no-summernote="true" id="meta_description" name="meta_description" style="height:100px;"></textarea>
 							</div>
 						</div>
 						<div class="row mb-3">

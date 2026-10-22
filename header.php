@@ -188,6 +188,24 @@ $email   = $row2['dep_email'] ?? '';
                     if (!empty($cat['meta_keyword'])) $seo_keywords = $cat['meta_keyword'];
                 }
             }
+        } elseif ($cur_page == 'doctor.php') {
+            if (!empty($req_slug)) {
+                $statement = $pdo->prepare("SELECT d.*, dg.designation_name FROM tbl_doctor d LEFT JOIN tbl_designation dg ON d.designation_id = dg.designation_id WHERE d.slug=? LIMIT 1");
+                $statement->execute([$req_slug]);
+                $doc = $statement->fetch(PDO::FETCH_ASSOC);
+                if ($doc) {
+                    $doc_role = !empty($doc['designation_name']) ? ' - ' . $doc['designation_name'] : '';
+                    $seo_title = !empty($doc['meta_title']) ? $doc['meta_title'] : $doc['name'] . $doc_role . ' | Pronto Saúde';
+                    $seo_desc = !empty($doc['meta_description']) ? $doc['meta_description'] : 'Conheça o perfil, especialidade e agende sua consulta com ' . $doc['name'] . $doc_role . ' na Pronto Saúde.';
+                    $seo_keywords = !empty($doc['meta_keyword']) ? $doc['meta_keyword'] : ($doc['name'] . ', ' . ($doc['designation_name'] ?? '') . ', medico rj, consulta');
+                    if (!empty($doc['photo'])) {
+                        $seo_image = $doc['photo'];
+                    }
+                }
+            } else {
+                $seo_title = 'Corpo Clínico & Médicos Especialistas | Pronto Saúde';
+                $seo_desc = 'Conheça nossa equipe de médicos e especialistas dedicados a cuidar da sua saúde integral com atendimento humanizado.';
+            }
         } elseif ($cur_page != 'index.php' && !empty($cur_page)) {
             // Páginas fixas do portal (odontologia.php, fidelidade.php, servicos.php, trabalhe-conosco.php, convenio.php, privacidade.php, rsocial.php, doctor.php, etc.)
             $fixed_slug = str_replace('.php', '', $cur_page);
@@ -260,34 +278,52 @@ $email   = $row2['dep_email'] ?? '';
         if ($image_ext === 'png') $og_mime = 'image/png';
         elseif ($image_ext === 'webp') $og_mime = 'image/webp';
         elseif ($image_ext === 'gif') $og_mime = 'image/gif';
+        if (!function_exists('pronto_clean_meta_string')) {
+            function pronto_clean_meta_string($text, $max_len = 0) {
+                if (empty($text) && !is_numeric($text)) return '';
+                $text = preg_replace('/<(script|style)[^>]*?>.*?<\/\\1>/si', '', (string)$text);
+                $text = preg_replace('/<br\s*\/?>/i', ' ', $text);
+                $text = preg_replace('/<\/(p|div|h[1-6]|li)>/i', ' ', $text);
+                $text = strip_tags($text);
+                $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $text = str_replace(["\xc2\xa0", '&nbsp;'], ' ', $text);
+                $text = preg_replace('/[\r\n\t]+/', ' ', $text);
+                $text = preg_replace('/\s+/', ' ', $text);
+                $text = trim($text);
+                if ($max_len > 0 && mb_strlen($text, 'UTF-8') > $max_len) {
+                    $text = mb_substr($text, 0, $max_len - 3, 'UTF-8') . '...';
+                }
+                return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+            }
+        }
         ?>
 
-        <!-- Título e Metadados Básicos -->
-        <title><?= htmlspecialchars($seo_title); ?></title>
-        <meta name="description" content="<?= htmlspecialchars($seo_desc); ?>">
-        <meta name="keywords" content="<?= htmlspecialchars($seo_keywords); ?>">
-        <link rel="canonical" href="<?= htmlspecialchars($page_canonical); ?>">
+        <!-- Título e Metadados Básicos (Totalmente Sanitizados sem HTML) -->
+        <title><?= pronto_clean_meta_string($seo_title, 70); ?></title>
+        <meta name="description" content="<?= pronto_clean_meta_string($seo_desc, 160); ?>">
+        <meta name="keywords" content="<?= pronto_clean_meta_string($seo_keywords, 255); ?>">
+        <link rel="canonical" href="<?= htmlspecialchars($page_canonical, ENT_QUOTES, 'UTF-8'); ?>">
 
         <!-- Metadados Open Graph (WhatsApp, Facebook, LinkedIn - Proporção Ideal 1.91:1 / 1200x630 px) -->
         <meta property="og:locale" content="pt_BR">
-        <meta property="og:type" content="<?= htmlspecialchars($seo_og_type); ?>">
-        <meta property="og:title" content="<?= htmlspecialchars($seo_title); ?>">
-        <meta property="og:description" content="<?= htmlspecialchars($seo_desc); ?>">
-        <meta property="og:url" content="<?= htmlspecialchars($page_canonical); ?>">
+        <meta property="og:type" content="<?= htmlspecialchars($seo_og_type, ENT_QUOTES, 'UTF-8'); ?>">
+        <meta property="og:title" content="<?= pronto_clean_meta_string($seo_title, 70); ?>">
+        <meta property="og:description" content="<?= pronto_clean_meta_string($seo_desc, 200); ?>">
+        <meta property="og:url" content="<?= htmlspecialchars($page_canonical, ENT_QUOTES, 'UTF-8'); ?>">
         <meta property="og:site_name" content="Pronto Saúde">
-        <meta property="og:image" content="<?= htmlspecialchars($og_image_url); ?>">
-        <meta property="og:image:secure_url" content="<?= htmlspecialchars($og_image_url); ?>">
+        <meta property="og:image" content="<?= htmlspecialchars($og_image_url, ENT_QUOTES, 'UTF-8'); ?>">
+        <meta property="og:image:secure_url" content="<?= htmlspecialchars($og_image_url, ENT_QUOTES, 'UTF-8'); ?>">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:image:type" content="<?= $og_mime; ?>">
-        <meta property="og:image:alt" content="<?= htmlspecialchars($seo_title); ?>">
+        <meta property="og:image:alt" content="<?= pronto_clean_meta_string($seo_title, 70); ?>">
 
         <!-- Metadados Twitter / X Card -->
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="<?= htmlspecialchars($seo_title); ?>">
-        <meta name="twitter:description" content="<?= htmlspecialchars($seo_desc); ?>">
-        <meta name="twitter:image" content="<?= htmlspecialchars($og_image_url); ?>">
-        <meta name="twitter:image:alt" content="<?= htmlspecialchars($seo_title); ?>">
+        <meta name="twitter:title" content="<?= pronto_clean_meta_string($seo_title, 70); ?>">
+        <meta name="twitter:description" content="<?= pronto_clean_meta_string($seo_desc, 200); ?>">
+        <meta name="twitter:image" content="<?= htmlspecialchars($og_image_url, ENT_QUOTES, 'UTF-8'); ?>">
+        <meta name="twitter:image:alt" content="<?= pronto_clean_meta_string($seo_title, 70); ?>">
 
 
         <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/cookie.css" />
@@ -316,13 +352,7 @@ $email   = $row2['dep_email'] ?? '';
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/pronto-modern-frontend.css?v=<?= time(); ?>">
         <script src="<?= BASE_URL; ?>assets/js/modernizr.min.js"></script>
 
-        <?php if ($cur_page == 'news.php' && !empty($og_title)): ?>
-            <meta property="og:title" content="<?= htmlspecialchars($og_title); ?>">
-            <meta property="og:type" content="website">
-            <meta property="og:url" content="<?= BASE_URL; ?>news/<?= htmlspecialchars($og_slug); ?>">
-            <meta property="og:description" content="<?= htmlspecialchars($og_description); ?>">
-            <meta property="og:image" content="<?= BASE_URL; ?>assets/uploads/<?= htmlspecialchars($og_photo); ?>">
-        <?php endif; ?>
+
 
         <style>
 

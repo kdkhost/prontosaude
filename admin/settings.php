@@ -174,11 +174,17 @@ if(isset($_POST['form6'])) {
 		}
 	}
 
+	$clean_title = trim(strip_tags($_POST['meta_title_home'] ?? ''));
+	$clean_keyword = trim(strip_tags($_POST['meta_keyword_home'] ?? ''));
+	$clean_desc = trim(strip_tags($_POST['meta_description_home'] ?? ''));
+	$clean_desc = preg_replace('/[\r\n\t]+/', ' ', $clean_desc);
+	$clean_desc = preg_replace('/\s+/', ' ', $clean_desc);
+
 	$statement = $pdo->prepare("UPDATE tbl_settings SET meta_title_home=?, meta_keyword_home=?, meta_description_home=? WHERE id=1");
 	$statement->execute(array(
-		$_POST['meta_title_home'] ?? '',
-		$_POST['meta_keyword_home'] ?? '',
-		$_POST['meta_description_home'] ?? ''
+		$clean_title,
+		$clean_keyword,
+		$clean_desc
 	));
 
 	if(empty($error_message)) {
@@ -886,7 +892,7 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 
 								<div class="col-12">
 									<label class="form-label fw-semibold text-body mb-1">Palavras-chave (Meta Keywords)</label>
-									<textarea class="form-control" name="meta_keyword_home" rows="2" placeholder="saúde, clínica médica, exames, consultas, cardiologia, pediatria..."><?= htmlspecialchars($meta_keyword_home); ?></textarea>
+									<textarea class="form-control no-summernote" data-no-summernote="true" name="meta_keyword_home" rows="2" placeholder="saúde, clínica médica, exames, consultas, cardiologia, pediatria..."><?= htmlspecialchars(strip_tags($meta_keyword_home)); ?></textarea>
 									<div class="form-text small">Separe as palavras-chave por vírgulas.</div>
 								</div>
 
@@ -895,8 +901,8 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 										<label class="form-label fw-semibold text-body mb-1">Meta Descrição da Página Inicial (Meta Description)</label>
 										<span class="small text-body-secondary" id="descCharCount">0 / 160</span>
 									</div>
-									<textarea class="form-control" name="meta_description_home" id="metaDescInput" rows="3" maxlength="200" placeholder="Resumo atrativo da clínica para os pacientes que encontram o site no Google..."><?= htmlspecialchars($meta_description_home); ?></textarea>
-									<div class="form-text small">Recomendado entre 140 e 160 caracteres.</div>
+									<textarea class="form-control no-summernote" data-no-summernote="true" name="meta_description_home" id="metaDescInput" rows="3" maxlength="200" placeholder="Resumo atrativo da clínica para os pacientes que encontram o site no Google..."><?= htmlspecialchars(trim(preg_replace('/\s+/', ' ', strip_tags($meta_description_home)))); ?></textarea>
+									<div class="form-text small">Recomendado entre 140 e 160 caracteres (sem tags HTML).</div>
 								</div>
 							</div>
 
