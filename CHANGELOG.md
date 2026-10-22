@@ -4,6 +4,38 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.0] - 2026-10-21
+
+### Adicionado & Aprimorado
+- **Reestruturação e Agrupamento da Sidebar em Menus Treeview Estruturados**:
+  - Eliminação de itens excessivos soltos que transbordavam e cortavam o menu no rodapé da tela.
+  - Agrupamento inteligente e lógico em 10 categorias temáticas principais com ícones dedicados:
+    1. *Painel Principal* (`index.php`)
+    2. *Administração & Configurações* (Configurações Gerais, Segurança WAF, Controle de Seções, Gestor de Páginas, Menus do Site, Usuários)
+    3. *Portal de Notícias & Blog* (Artigos, Categorias do Blog, Moderação de Comentários)
+    4. *Corpo Clínico & Atendimento* (Médicos Cadastrados, Especialidades Médicas, Horários & Atendimentos)
+    5. *Serviços & Clínicas* (Serviços Médicos, Odontologia, Clínicas/Departamentos, Convênios Atendidos)
+    6. *Planos & Preços* (Planos de Saúde, Itens & Benefícios)
+    7. *Galeria & Mídias* (Galeria de Fotos, Categorias de Fotos, Galeria de Vídeos, Categorias de Vídeos, Upload de Arquivos)
+    8. *Elementos do Portal* (Sliders/Destaques, Depoimentos, Parceiros, Vagas de Emprego, FAQ, Categorias de FAQ, Privacidade, Termos)
+    9. *Banners Publicitários* (Banner Inicial, Banner Barra Lateral, Categorias de Anúncios)
+    10. *Engajamento & Comunicação* (Redes Sociais, Inscritos na Newsletter)
+    11. *Minha Conta & Sessão* (Editar Meus Dados, Encerrar Sessão)
+- **Comportamento Treeview com Modo Acordeão Estrito (Accordion)**:
+  - Implementação de lógica de acordeão tanto no PHP quanto no motor SPA JavaScript (`admin/js/pronto-spa.js`).
+  - Ao expandir qualquer menu pai, todos os outros menus treeview de primeiro nível abertos se fecham automaticamente, prevenindo expansão excessiva e mantendo o menu sempre compacto e 100% visível.
+  - Seta indicadora (`.nav-arrow`) com rotação suave de 90 graus via CSS (`transition: transform 0.25s`).
+- **Marcação e Destaque Visual da Página Ativa**:
+  - Destaque refinado para o link filho ativo com cor de destaque (`--ps-primary`), ícone contrastado e sombra elegante.
+  - Indicação no menu pai correspondente com borda lateral esquerda e fundo translúcido para fácil localização hierárquica.
+  - Mapeamento universal automático das rotas de adição (`-add.php`) e edição (`-edit.php`) para suas páginas-mãe.
+  - Chamada `scrollIntoView({ behavior: 'smooth', block: 'nearest' })` garantindo que o item ativo seja mantido confortavelmente na área visível da barra lateral.
+- **Scroll Nativo e Suave na Barra Lateral (`sidebar-wrapper`)**:
+  - Configuração de `overflow-y: auto !important` com scrollbar estilizada e fina (`scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) transparent`).
+  - `padding-bottom: 3.5rem` garantindo que o botão "Encerrar Sessão" e os itens inferiores nunca sejam cortados ou fiquem inacessíveis.
+
+---
+
 ## [2.8.0] - 2026-10-21
 
 ### Adicionado & Aprimorado

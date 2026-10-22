@@ -40,9 +40,12 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - **Controle de Acesso por IP & Quarentena Dinâmica:** Gestão integrada de Lista Branca (Whitelist), Lista Negra (Blacklist) e desbloqueio imediato de IPs bloqueados via painel administrativo.
   - **Auditoria e Logs em Tempo Real:** Registro detalhado de todos os incidentes com identificação de IP, endpoint atacado, severidade da ameaça e payload interceptado.
 - **Design de Última Geração e Modo Escuro/Claro:** Construído sobre o **AdminLTE 4** e **Bootstrap 5.3**, com alternador dinâmico de tema (Claro / Escuro / Automático) na barra superior, tipografia nativa **Source Sans 3** e espaçamentos padronizados sem estilos legados.
-- **Cabeçalho Fixo e Sidebar com Menu Treeview:**
+- **Cabeçalho Fixo e Sidebar com Menus Treeview Agrupados & Modo Acordeão:**
   - Barra de navegação superior fixa (`sticky-top`) com efeito de desfoque de fundo (`backdrop-filter`).
-  - Menu lateral dinâmico com abertura automática de seções treeview e marcação de página ativa inclusive em rotas filhas de adição e edição.
+  - Menu lateral 100% categorizado em grupos lógicos compactos (Administração, Notícias, Corpo Clínico, Serviços, Planos, Mídias, Elementos do Portal, Banners, Engajamento e Minha Conta).
+  - **Modo Acordeão (Treeview Accordion):** Ao abrir qualquer menu pai, os outros menus abertos se fecham automaticamente, prevenindo menus extensos demais.
+  - **Marcação Dinâmica de Página Ativa:** Destaque visual colorido no item filho e indicador no menu pai correspondente, sincronizados em PHP e no motor SPA via AJAX.
+  - **Scroll Nativo e Suave (`sidebar-wrapper`):** Rolagem interna independente com scrollbar fina, impedindo cortes de menus ou botões no rodapé da página.
 - **Sistema Universal de Máscaras de Entrada (`admin/js/pronto-masks.js`):**
   - Formatação em tempo real para Telefone/WhatsApp, CEP, CPF, CNPJ, Documento Dinâmico, Data, Hora e Moeda Brasileira (R$).
 - **Preenchimento Automático via CEP com Auto Focus no Número:**
