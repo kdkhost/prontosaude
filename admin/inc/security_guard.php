@@ -438,14 +438,35 @@ if (!defined('PRONTO_SECURITY_LOADED')) {
                 continue;
             }
 
-            // Exceção controlada para campos de texto rico (Summernote) permitindo tags normais de formatação
-            $isSummernoteField = (
-                strpos($inputKey, 'content') !== false || 
-                strpos($inputKey, 'detail') !== false || 
-                strpos($inputKey, 'description') !== false ||
-                strpos($inputKey, 'detalhes') !== false ||
-                strpos($inputKey, 'requisitos') !== false
+            // Identifica se a sessão é de um administrador autenticado no painel
+            if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+                @session_start();
+            }
+            $isAdminAuthenticated = (!empty($_SESSION['user']) && !empty($_SESSION['user']['role_id']));
+
+            // Identifica se o campo é de conteúdo rico (Summernote, descrição, conteúdo HTML, mapa ou institucional)
+            $lowerKey = strtolower($inputKey);
+            $isRichContentField = (
+                strpos($lowerKey, 'content') !== false || 
+                strpos($lowerKey, 'detail') !== false || 
+                strpos($lowerKey, 'description') !== false ||
+                strpos($lowerKey, 'detalhes') !== false ||
+                strpos($lowerKey, 'requisitos') !== false ||
+                strpos($lowerKey, 'map') !== false ||
+                strpos($lowerKey, 'iframe') !== false ||
+                strpos($lowerKey, 'about') !== false ||
+                strpos($lowerKey, 'copyright') !== false ||
+                strpos($lowerKey, 'privacy') !== false ||
+                strpos($lowerKey, 'term') !== false ||
+                strpos($lowerKey, 'header') !== false ||
+                strpos($lowerKey, 'footer') !== false
             );
+
+            // Verifica se o valor é um embed legítimo de mapa ou mídia confiável (Google Maps, OSM, YouTube, Vimeo)
+            $isSafeEmbed = false;
+            if (preg_match('/<iframe\b[^>]*\bsrc=[\'"]https?:\/\/(www\.)?(google\.com(\.br)?\/maps|maps\.google\.com|youtube\.com\/embed|youtube-nocookie\.com\/embed|player\.vimeo\.com|openstreetmap\.org|waze\.com)\b[^>]*>/i', $inputValue)) {
+                $isSafeEmbed = true;
+            }
 
             // 1. Anti-SQL Injection
             if (!empty($settings['block_sql_injection'])) {
@@ -457,10 +478,19 @@ if (!defined('PRONTO_SECURITY_LOADED')) {
                 }
             }
 
-            // 2. Anti-XSS
+            // 2. Anti-XSS (com liberação para Google Maps e embeds confiáveis)
             if (!empty($settings['block_xss'])) {
                 foreach ($xssPatterns as $regex => $desc) {
-                    // Para Summernote, permitimos tags HTML válidas mas nunca <script>, onerror=, javascript: ou document.cookie
+                    // Liberação segura para iframes de mapas (Google Maps, OpenStreetMap) e mídias autorizadas
+                    if ($desc === 'XSS Iframe Injection' && ($isSafeEmbed || $isRichContentField || $isAdminAuthenticated)) {
+                        continue;
+                    }
+
+                    // Se for campo de conteúdo rico (Summernote) ou admin autenticado, permite embeds HTML
+                    if (($isRichContentField || $isAdminAuthenticated) && in_array($desc, ['XSS Iframe Injection', 'XSS Object/Embed Injection'], true)) {
+                        continue;
+                    }
+
                     if (@preg_match($regex, $inputValue)) {
                         $incId = pronto_security_log_incident($pdo, $ip, 'XSS_ATTACK', 'ALTA', "[$inputKey] $inputValue");
                         pronto_security_render_blocked_screen("Script malicioso detectado ($desc).", 'XSS_ATTACK', $incId, $ip);
