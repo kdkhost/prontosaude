@@ -424,7 +424,9 @@
       link.hasAttribute('data-toggle') ||
       link.getAttribute('role') === 'tab' ||
       link.closest('.nav-tabs') ||
-      link.closest('.nav-pills')
+      link.closest('.nav-pills') ||
+      link.closest('.card-outline-tabs') ||
+      link.closest('.nav-tabs-custom')
     ) {
       return;
     }
@@ -577,31 +579,27 @@
     reinitAllComponents(document);
   });
 
-  // 9. SUPORTE UNIVERSAL A TABS NO ADMINLTE 4 (BOOTSTRAP 5 + LEGADO DATA-TOGGLE)
-  document.addEventListener('click', function (e) {
-    const tabLink = e.target.closest('[data-toggle="tab"], [data-bs-toggle="tab"], [data-toggle="pill"], [data-bs-toggle="pill"], .nav-tabs > li > a, .nav-tabs > .nav-item > a, .nav-tabs .nav-link, .nav-pills .nav-link');
-    if (!tabLink) return;
+  // 9. FUNÇÃO UNIVERSAL PARA ALTERNAR ABAS DE FORMA SÍNCRONA E DEFINITIVA
+  function switchTab(tabTrigger) {
+    if (!tabTrigger) return false;
 
-    const targetSelector = tabLink.getAttribute('data-bs-target') || tabLink.getAttribute('href') || tabLink.getAttribute('data-target');
-    if (!targetSelector || !targetSelector.startsWith('#')) return;
+    const targetSelector = tabTrigger.getAttribute('data-bs-target') || 
+                           tabTrigger.getAttribute('data-target') || 
+                           tabTrigger.getAttribute('href');
 
+    if (!targetSelector || !targetSelector.startsWith('#')) return false;
+
+    // Encontra o painel alvo
     const targetPane = document.querySelector(targetSelector);
-    if (!targetPane) return;
+    if (!targetPane) return false;
 
-    e.preventDefault();
+    // 1. Encontra a lista de abas (container dos botões/links)
+    const navList = tabTrigger.closest('.nav-tabs, .nav-pills, .nav, .nav-tabs-custom') || 
+                    tabTrigger.parentElement.parentElement;
 
-    // Se a biblioteca oficial do Bootstrap 5 estiver presente, aciona a instância oficial
-    if (window.bootstrap && window.bootstrap.Tab) {
-      try {
-        const bsTab = window.bootstrap.Tab.getOrCreateInstance(tabLink);
-        if (bsTab) bsTab.show();
-      } catch (err) {}
-    }
-
-    // Desativa tabs irmãs
-    const navList = tabLink.closest('.nav-tabs, .nav-pills, .nav');
     if (navList) {
-      navList.querySelectorAll('li, .nav-item, .nav-link, a, button').forEach(el => {
+      // Desativa todos os botões/links do grupo
+      navList.querySelectorAll('.nav-link, button, a, li, .nav-item').forEach(el => {
         el.classList.remove('active');
         if (el.tagName === 'BUTTON' || el.tagName === 'A') {
           el.setAttribute('aria-selected', 'false');
@@ -609,45 +607,119 @@
       });
     }
 
-    // Ativa tab atual e item li
-    tabLink.classList.add('active');
-    tabLink.setAttribute('aria-selected', 'true');
-    const parentLi = tabLink.closest('li, .nav-item');
+    // 2. Ativa o botão/link clicado e o li pai se existir
+    tabTrigger.classList.add('active');
+    tabTrigger.setAttribute('aria-selected', 'true');
+    const parentLi = tabTrigger.closest('li, .nav-item');
     if (parentLi) parentLi.classList.add('active');
 
-    // Desativa panes irmãos
-    const tabContent = targetPane.closest('.tab-content');
+    // 3. Localiza e desativa todos os painéis irmãos
+    const tabContent = targetPane.closest('.tab-content') || targetPane.parentElement;
+    const cardScope = tabTrigger.closest('.card, .card-outline-tabs, .nav-tabs-custom');
+
     if (tabContent) {
-      tabContent.querySelectorAll(':scope > .tab-pane').forEach(p => {
-        p.classList.remove('active', 'show');
+      tabContent.querySelectorAll('.tab-pane').forEach(pane => {
+        pane.classList.remove('active', 'show');
+        pane.style.setProperty('display', 'none', 'important');
+        pane.style.setProperty('opacity', '0', 'important');
       });
     }
 
-    // Ativa painel alvo com animação suave
-    targetPane.classList.add('active', 'show');
+    if (cardScope) {
+      cardScope.querySelectorAll('.tab-pane').forEach(pane => {
+        if (pane !== targetPane) {
+          pane.classList.remove('active', 'show');
+          pane.style.setProperty('display', 'none', 'important');
+          pane.style.setProperty('opacity', '0', 'important');
+        }
+      });
+    }
 
-    // Preserva o hash na URL sem forçar scroll abrupto
+    // 4. ATIVA O PAINEL ALVO COM MÁXIMA FORÇA E EXIBIÇÃO DIRETA
+    targetPane.classList.add('active', 'show');
+    targetPane.style.setProperty('display', 'block', 'important');
+    targetPane.style.setProperty('opacity', '1', 'important');
+    targetPane.style.setProperty('visibility', 'visible', 'important');
+    targetPane.style.setProperty('height', 'auto', 'important');
+
+    // 5. Preserva o hash na URL sem provocar salto de tela
     try {
       history.replaceState(null, null, targetSelector);
     } catch (err) {}
-  });
 
-  // Função para ativar aba baseada no hash da URL
+    // 6. Recalcula tabelas DataTables ou outros componentes gráficos dentro da aba recém-aberta
+    if (window.jQuery && jQuery.fn.dataTable) {
+      try {
+        jQuery(targetPane).find('table.dataTable').each(function () {
+          jQuery(this).DataTable().columns.adjust().responsive.recalc();
+        });
+      } catch (err) {}
+    }
+
+    // 7. Dispara evento compatível com Bootstrap
+    try {
+      tabTrigger.dispatchEvent(new CustomEvent('shown.bs.tab', { bubbles: true, detail: { relatedTarget: null } }));
+    } catch (err) {}
+
+    return true;
+  }
+
+  window.switchProntoTab = switchTab;
+
+  // Interceptador Global Prioritário (Capture Phase) para cliques em qualquer Aba
+  document.addEventListener('click', function (e) {
+    const tabTrigger = e.target.closest(
+      '[data-toggle="tab"], [data-bs-toggle="tab"], [data-toggle="pill"], [data-bs-toggle="pill"], ' +
+      '.nav-tabs button, .nav-tabs a, .nav-pills button, .nav-pills a, ' +
+      '.card-outline-tabs .nav-link, .nav-tabs-custom .nav-link, .nav-tabs-custom li > a'
+    );
+    if (!tabTrigger) return;
+
+    const targetSelector = tabTrigger.getAttribute('data-bs-target') || 
+                           tabTrigger.getAttribute('data-target') || 
+                           tabTrigger.getAttribute('href');
+
+    if (!targetSelector || !targetSelector.startsWith('#')) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    switchTab(tabTrigger);
+  }, true);
+
+  // 10. FUNÇÃO PARA ATIVAR ABA BASEADA NO HASH DA URL OU NO ESTADO INICIAL DO PHP
   function restoreTabFromHash(container) {
     const root = container || document;
     const hash = window.location.hash;
+    let activated = false;
+
     if (hash && (hash.startsWith('#tab_') || hash.startsWith('#tab-') || hash.includes('tab'))) {
       const activeTab = root.querySelector(`[data-bs-target="${hash}"], [href="${hash}"], [data-target="${hash}"]`);
       if (activeTab) {
-        if (window.bootstrap && window.bootstrap.Tab) {
-          try {
-            const bsTab = window.bootstrap.Tab.getOrCreateInstance(activeTab);
-            if (bsTab) bsTab.show();
-          } catch (e) {}
-        }
-        activeTab.click();
+        activated = switchTab(activeTab);
       }
+    }
+
+    // Se nenhuma aba foi ativada pelo hash, sincroniza a aba marcada como ativa pelo PHP
+    if (!activated) {
+      root.querySelectorAll('.nav-tabs, .nav-pills').forEach(nav => {
+        let activeTab = nav.querySelector('.nav-link.active, button.active, a.active');
+        if (!activeTab) {
+          activeTab = nav.querySelector('.nav-link, button, a');
+        }
+        if (activeTab) {
+          switchTab(activeTab);
+        }
+      });
     }
   }
 
+  window.restoreTabFromHash = restoreTabFromHash;
+
+  // Garante a restauração logo no onload final
+  window.addEventListener('load', function () {
+    restoreTabFromHash(document);
+  });
+
 })();
+

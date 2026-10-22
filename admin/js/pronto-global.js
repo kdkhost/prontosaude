@@ -257,6 +257,59 @@
         }
       });
     }, true);
+
+    // Suporte Global Imediato para Alternância de Abas em qualquer tela
+    document.addEventListener('click', function (e) {
+      const tabTrigger = e.target.closest(
+        '[data-toggle="tab"], [data-bs-toggle="tab"], [data-toggle="pill"], [data-bs-toggle="pill"], ' +
+        '.nav-tabs button, .nav-tabs a, .nav-pills button, .nav-pills a, ' +
+        '.card-outline-tabs .nav-link, .nav-tabs-custom .nav-link, .nav-tabs-custom li > a'
+      );
+      if (!tabTrigger) return;
+
+      const targetSelector = tabTrigger.getAttribute('data-bs-target') || 
+                             tabTrigger.getAttribute('data-target') || 
+                             tabTrigger.getAttribute('href');
+
+      if (!targetSelector || !targetSelector.startsWith('#')) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (window.switchProntoTab) {
+        window.switchProntoTab(tabTrigger);
+      } else {
+        const targetPane = document.querySelector(targetSelector);
+        if (!targetPane) return;
+
+        const navList = tabTrigger.closest('.nav-tabs, .nav-pills, .nav, .nav-tabs-custom') || tabTrigger.parentElement.parentElement;
+        if (navList) {
+          navList.querySelectorAll('.nav-link, button, a, li, .nav-item').forEach(el => {
+            el.classList.remove('active');
+            if (el.tagName === 'BUTTON' || el.tagName === 'A') el.setAttribute('aria-selected', 'false');
+          });
+        }
+
+        tabTrigger.classList.add('active');
+        tabTrigger.setAttribute('aria-selected', 'true');
+        const parentLi = tabTrigger.closest('li, .nav-item');
+        if (parentLi) parentLi.classList.add('active');
+
+        const tabContent = targetPane.closest('.tab-content') || targetPane.parentElement;
+        if (tabContent) {
+          tabContent.querySelectorAll('.tab-pane').forEach(p => {
+            p.classList.remove('active', 'show');
+            p.style.setProperty('display', 'none', 'important');
+          });
+        }
+
+        targetPane.classList.add('active', 'show');
+        targetPane.style.setProperty('display', 'block', 'important');
+        targetPane.style.setProperty('opacity', '1', 'important');
+        targetPane.style.setProperty('visibility', 'visible', 'important');
+        try { history.replaceState(null, null, targetSelector); } catch (err) {}
+      }
+    }, true);
   });
 
 })();

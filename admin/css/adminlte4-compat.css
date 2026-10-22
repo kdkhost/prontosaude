@@ -1100,4 +1100,120 @@ td .d-flex {
   gap: 0.5rem;
 }
 
+/* ==========================================================================
+   ESTILOS ROBUSTOS PARA ABAS (TABS) - ADMINLTE 4 & BOOTSTRAP 5
+   ========================================================================== */
+.card-outline-tabs,
+.card-tabs {
+  border-top: 0 !important;
+}
+
+.card-outline-tabs > .card-header,
+.card-tabs > .card-header {
+  border-bottom: 0 !important;
+  padding: 0 0.5rem !important;
+  background-color: transparent !important;
+}
+
+.card-outline-tabs .nav-tabs,
+.card-tabs .nav-tabs,
+.nav-tabs-custom .nav-tabs,
+.nav-tabs {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  padding-left: 0 !important;
+  margin-bottom: 0 !important;
+  list-style: none !important;
+  border-bottom: 2px solid var(--bs-border-color, #dee2e6) !important;
+  gap: 0.25rem !important;
+}
+
+.nav-tabs .nav-item,
+.card-outline-tabs .nav-tabs .nav-item {
+  margin-bottom: -2px !important;
+}
+
+.nav-tabs .nav-link,
+.card-outline-tabs .nav-tabs .nav-link,
+.nav-tabs > li > a,
+.nav-tabs-custom .nav-tabs > li > a {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0.75rem 1.25rem !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-bottom: 3px solid transparent !important;
+  border-top-left-radius: 0.5rem !important;
+  border-top-right-radius: 0.5rem !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out !important;
+  user-select: none !important;
+}
+
+.nav-tabs .nav-link:hover,
+.card-outline-tabs .nav-tabs .nav-link:hover,
+.nav-tabs > li > a:hover,
+.nav-tabs-custom .nav-tabs > li > a:hover {
+  color: var(--ps-primary, #0a6b74) !important;
+  background-color: rgba(10, 107, 116, 0.05) !important;
+  border-bottom-color: var(--ps-primary-light, #10b981) !important;
+}
+
+.nav-tabs .nav-link.active,
+.card-outline-tabs .nav-tabs .nav-link.active,
+.nav-tabs > li.active > a,
+.nav-tabs > .nav-item.active > .nav-link,
+.nav-tabs-custom .nav-tabs > li.active > a {
+  color: var(--ps-primary, #0a6b74) !important;
+  background-color: var(--bs-body-bg, #ffffff) !important;
+  border-color: var(--bs-border-color, #dee2e6) var(--bs-border-color, #dee2e6) transparent var(--bs-border-color, #dee2e6) !important;
+  border-bottom: 3px solid var(--ps-primary, #0a6b74) !important;
+  font-weight: 700 !important;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Painéis de Conteúdo das Abas (Tab Panes) - Garantia Absoluta de Visibilidade e Ocultação */
+.tab-pane,
+.tab-content > .tab-pane,
+.card-body > .tab-content > .tab-pane,
+.nav-tabs-custom > .tab-content > .tab-pane {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.tab-pane.active,
+.tab-pane.show.active,
+.tab-content > .tab-pane.active,
+.tab-content > .tab-pane.show.active,
+.card-body > .tab-content > .tab-pane.active,
+.card-body > .tab-content > .tab-pane.show.active,
+.nav-tabs-custom > .tab-content > .tab-pane.active {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  height: auto !important;
+  overflow: visible !important;
+  animation: psTabFadeIn 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+@keyframes psTabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 

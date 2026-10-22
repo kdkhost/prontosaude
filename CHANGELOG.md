@@ -4,6 +4,17 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.13.1] - 2026-10-22
+
+### Corrigido & Aprimorado
+- **Correção Definitiva e Universal do Sistema de Abas (Tabs) em Todo o Painel Administrativo**:
+  - **Eliminação de Conflito Assíncrono com Bootstrap 5**: Substituídas as tentativas assíncronas do Bootstrap `Tab.show()` (que entravam em corrida de transição `.fade` deixando os painéis com `opacity: 0` ou `display: none`) por um motor síncrono, imediato e universal (`window.switchProntoTab`).
+  - **Interceptador Prioritário de Fase de Captura (`useCapture: true`)**: Garante que o clique em qualquer aba (`button` ou `a`, com `data-bs-toggle="pill"`, `data-bs-toggle="tab"`, `data-toggle="tab"` ou classes `.nav-tabs .nav-link`) seja processado antes de qualquer outro listener concorrente, cancelando comportamentos indesejados.
+  - **Regras CSS com Força Máxima (`admin/css/adminlte4-compat.css`)**: Implementadas regras com `!important` para `.tab-pane.active` (`display: block !important; opacity: 1 !important; visibility: visible !important; height: auto !important`) e `.tab-pane:not(.active)` (`display: none !important; opacity: 0 !important; visibility: hidden !important; height: 0 !important`), assegurando visibilidade instantânea sem depender de animações instáveis.
+  - **Sincronização Bidirecional**: Sincronização automática da aba ativa a partir do hash da URL (`#tab_1` a `#tab_10`) e do estado inicial gerado pelo PHP (`$active_tab`) tanto no carregamento inicial (`DOMContentLoaded` e `window.load`) quanto nas navegações SPA (`reinitAllComponents`).
+  - **Camada de Redundância Global (`admin/js/pronto-global.js`)**: Adicionado listener global de fail-safe em `pronto-global.js` para garantir funcionamento imediato mesmo sob condições adversas de rede ou carregamento assíncrono.
+  - **Recálculo Automático de Tabelas e Editores**: Ao trocar de aba, colunas responsivas do DataTables e dimensões de componentes internos são automaticamente recalculadas.
+
 ## [2.13.0] - 2026-10-22
 
 ### Reformulado & Corrigido
