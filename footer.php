@@ -22,9 +22,9 @@ if (strlen($whats_clean) <= 11) {
                         <h5 class="text-white fw-bold mb-0"><i class="fas fa-hospital-user me-2" style="color: var(--ps-accent);"></i> Pronto Saúde</h5>
                     <?php endif; ?>
                 </div>
-                <p class="small text-secondary mb-3 leading-relaxed">
-                    <?= !empty($footer_about) ? nl2br(htmlspecialchars($footer_about)) : 'Centro médico e odontológico completo, focado em medicina preventiva, exames de alta precisão e acolhimento familiar humanizado.'; ?>
-                </p>
+                <div class="small text-secondary mb-3 leading-relaxed">
+                    <?= !empty($footer_about) ? $footer_about : 'Centro médico e odontológico completo, focado em medicina preventiva, exames de alta precisão e acolhimento familiar humanizado.'; ?>
+                </div>
                 <div class="d-flex gap-2">
                     <?php if(!empty($social_data)): ?>
                         <?php foreach ($social_data as $s_row): ?>
