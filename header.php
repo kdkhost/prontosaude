@@ -373,677 +373,346 @@ $email   = $row2['dep_email'] ?? '';
 
         <!-- Favicon -->
         <link href="<?= BASE_URL; ?>assets/uploads/<?= $favicon; ?>" rel="shortcut icon" type="image/png">
-        
-        <!-- Google Fonts: Plus Jakarta Sans (Tipografia Moderna Hospitalar) -->
+
+        <!-- Google Fonts: Plus Jakarta Sans & Outfit (Tipografia Médica de Alta Conversão) -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
         
-        <!-- Stylesheets -->
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/bootstrap.min.css">
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/toastr.min.css">
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/slicknav.css">
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/superfish.css">
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/animate.css">
+        <!-- Bootstrap 5.3.3, FontAwesome 6, Flaticon UIcons & Bootstrap Icons (Universal) -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
+        <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css">
 
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/jquery.bxslider.css">
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/hover.css">
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/magnific-popup.css">
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/style.css?v=<?= time(); ?>">
-        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/responsive.css?v=<?= time(); ?>">
+        <!-- Swiper 11 Slider (Carrosséis Touch e Drag) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+        <!-- Toastr & SweetAlert2 (Notificações Globais) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+        <!-- Estilos Oficiais Pronto Saúde / Foco 7 -->
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/pronto-modern-frontend.css?v=<?= time(); ?>">
-        <script src="<?= BASE_URL; ?>assets/js/modernizr.min.js"></script>
-
-
-
-        <style>
-
-            <?php $color = '#' . $color; ?>
-            .sf-menu li:hover a,
-            .department-v2 .department-tab .nav-tabs > li > a,
-            .doctor-v1 .item .text h3 a,
-            .pricing-v1 .pricing-item:hover .price .hexa .amount,
-            .pricing-v1 .pricing-item:hover .price .hexa .time,
-            .pricing-v1 .pricing-item:hover .button a,
-            .news-v1 .date .day:before,
-            .blog h4,
-            .widget ul li a:hover,
-            .doctor-detail .doctor-detail-tab .nav-tabs>li>a,
-            .heading-normal h2,
-            .doctor-v2 .text h3 a {
-                color: <?= $color; ?>!important;
-            }
-
-            .top-bar,
-            .sf-menu li li:hover,
-            .slider p.button a,
-            .service-v1 .text p.button a:hover,
-            .department-v2 .department-tab .nav-tabs > li.active > a,
-            .department-v2 .department-tab .nav-tabs > li.active > a:hover,
-            .department-v2 .department-tab .nav-tabs > li.active > a:focus,
-            .department-v2 .department-tab .nav-tabs > li a:hover,
-            .department-v2 .department-tab .nav-tabs > li a:focus,
-            .department-v2 .department-tab .department-content p.button a,
-            .doctor-v1 .item:hover .text,
-            .doctor-v1 .social-icons ul li a,
-            .pricing-v1 .pricing-item:hover,
-            .pricing-v1 .pricing-item .price .hexa,
-            .pricing-v1 .pricing-item .button a,
-            .testimonial-v1 .overlay,
-            .news-v1 .date .day,
-            .footer-social,
-            .footer-social .item ul li,
-            .footer-col h3:after,
-            .scrollup i,
-            .news-v1 .owl-controls .owl-prev:hover,
-            .news-v1 .owl-controls .owl-next:hover,
-            .doctor-v1 .owl-controls .owl-prev:hover,
-            .doctor-v1 .owl-controls .owl-next:hover,
-            .doctor-detail .doctor-single .social ul li a,
-            .doctor-detail .contact .icon,
-            .doctor-v2 .owl-controls .owl-prev:hover,
-            .doctor-v2 .owl-controls .owl-next:hover,
-            .doctor-v2 .social-icons ul li a {
-                background: <?= $color; ?>!important;
-            }
-
-            .department-v2 .department-tab .nav-tabs > li.active > a,
-            .department-v2 .department-tab .nav-tabs > li.active > a:hover,
-            .department-v2 .department-tab .nav-tabs > li.active > a:focus,
-            .department-v2 .department-tab .nav-tabs > li a:hover,
-            .department-v2 .department-tab .nav-tabs > li a:focus,
-            .footer-social .item ul li a {
-                border-color: <?= $color; ?>!important;
-            }
-
-            .pricing-v1 .pricing-item .price .hexa:before,
-            .widget h4,
-            .heading-normal h2 {
-                border-bottom-color: <?= $color; ?>!important;
-            }
-            .pricing-v1 .pricing-item .price .hexa:after {
-                border-top-color: <?= $color; ?>!important;
-            }
-
-            .slicknav_nav a {
-                background: #85b5b9;
-            }
-
-            .slicknav_nav .slicknav_row:hover {
-                background: #0a6b74;
-                color: #fff;
-            }
-
-            .slicknav_nav a:hover {
-                color: #fff;
-                background: #0a6b74;
-                border-radius: 0;
-                -webkit-border-radius: 0;
-                -moz-border-radius: 0;
-            }
-
-            .slicknav_nav .slicknav_row:hover a {
-                /* background: #1AABDD; */
-            }
-
-            .slicknav_btn {
-                width: 46px;
-                text-indent: -999px;
-                background: #85b5b9;
-                padding: 10px 10px 10px 7px !important;
-            }
-
-            .panel-default>.panel-heading {
-                color: #0a6b74;
-                background-color: #f1f6f7;
-                border-color: #0a6b74;
-            }
-
-
-            /* Demo only */
-
-            .table-wrap {
-                background: #fff;
-            }
-
-            .table tbody tr:nth-child(odd) {
-                background: #f1f6f7;
-            }
-
-            @media (min-width: 768px) {
-                .table thead tr th,
-                .table tbody tr td {
-                    /**padding: 15px 20px;**/
-                }
-            }
-            .table>thead>tr>th {
-                vertical-align: bottom;
-                border-bottom: 2px solid #076774;
-            }
-            .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
-                padding: 8px;
-                line-height: 1.42857143;
-                vertical-align: top;
-                border-top: 1px solid #076774;
-            }
-            table.dataTable th,
-            table.dataTable td {
-                white-space: nowrap;
-            }
-            .acordo {
-                margin-bottom: 1px;
-                margin-top:1px;
-            }
-            /** FIM DA TABELA RESPONSIVA **/
-        </style>
-
-        <style>
-            .dropbtn {
-                background-color:#85b5ba;
-                border-radius:3px;
-                color: white;
-                padding: 6px;
-                font-size: 13px;
-                border: none;
-            }
-
-            .dropdown {
-                position: relative;
-                display: inline-block;
-            }
-
-            .dropdown-content {
-                display: none;
-                position: absolute;
-                background-color: #85b5ba;
-                min-width: 160px;
-                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                z-index: 1;
-            }
-
-            .dropdown-content a {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-            }
-
-            .dropdown-content a:hover {
-                background-color: #0a6b74;
-            }
-
-            .dropdown:hover .dropdown-content {
-                display: block;
-            }
-
-            .dropdown:hover .dropbtn {
-                background-color: #87cca4;
-            }
-        </style>
-
-        <script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=5993ef01e2587a001253a261&product=inline-share-buttons"></script>
-       
-       
-       
-        <style>
-	    ::-webkit-scrollbar-track {
-            background-color: #85b5ba29;
-        }
-        ::-webkit-scrollbar {
-            width: 6px;
-            background: #85b5ba29;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #0a6b7440;
-        }
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-         
-        ::-webkit-scrollbar-track {
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-            border-radius: 10px;
-        }
-         
-        /* Cards de Serviços, Planos e Produtos Personalizáveis */
-        .service-card-box {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            background: #ffffff;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-        .service-card-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 28px rgba(10, 107, 116, 0.16);
-        }
-        .service-card-price-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(10, 107, 116, 0.92);
-            color: #ffffff;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            letter-spacing: 0.3px;
-            backdrop-filter: blur(4px);
-            z-index: 2;
-        }
-        .service-card-price-badge small {
-            font-size: 10px;
-            text-transform: uppercase;
-            display: inline-block;
-            opacity: 0.9;
-            font-weight: 600;
-            margin-right: 2px;
-        }
-        .service-card-benefits {
-            list-style: none !important;
-            padding-left: 0 !important;
-            margin: 12px 0 16px 0 !important;
-        }
-        .service-card-benefits li {
-            font-size: 12px !important;
-            color: #475569 !important;
-            margin-bottom: 6px !important;
-            line-height: 1.4 !important;
-            display: flex !important;
-            align-items: center !important;
-        }
-        .service-card-benefits li i {
-            color: #10b981 !important;
-            margin-right: 6px !important;
-            font-size: 13px !important;
-            flex-shrink: 0 !important;
-        }
-        .pricing-popular {
-            border: 2px solid #0a6b74 !important;
-            transform: scale(1.02);
-            box-shadow: 0 14px 30px rgba(10, 107, 116, 0.18) !important;
-            z-index: 2;
-        }
-        .pricing-badge-flag {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #ffc107;
-            color: #1e293b;
-            font-weight: 700;
-            font-size: 11px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            z-index: 3;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .plan-img-container {
-            margin: 12px auto;
-            max-width: 220px;
-            height: 95px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-	</style>
     </head>
-    <body>
+    <body class="ps-foco-body" id="inicio">
 
         <?php
-        // Getting Facebook comment code from the database
-        $statement = $pdo->prepare("SELECT * FROM tbl_comment WHERE id=1");
-        $statement->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($result as $row) {
-            echo $row['code_body'];
-        }
+        // Facebook comment code from database
+        try {
+            $statement = $pdo->prepare("SELECT * FROM tbl_comment WHERE id=1");
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($result as $row) {
+                echo $row['code_body'] ?? '';
+            }
+        } catch (Exception $e) {}
         ?>
 
-        <?php if($preloader == 1){?>
+        <?php if($preloader == 1): ?>
         <div id="preloader">
             <div id="status"></div>
         </div>
-        <?php }?>
+        <?php endif; ?>
 
-        <div class="page-wrapper">
-
-            <?php
-            // Carregamento de mídias sociais
+        <?php
+        // Carregamento de mídias sociais
+        $social_data = [];
+        try {
             $statement = $pdo->prepare("SELECT * FROM tbl_social WHERE social_url != ''");
             $statement->execute();
             $social_data = $statement->fetchAll(PDO::FETCH_ASSOC);
-            ?>
+        } catch (Exception $e) {}
 
-            <!-- Backdrop do Menu Deslizante -->
-            <div class="ps-drawer-backdrop" id="psDrawerBackdrop"></div>
+        // Limpeza do número de WhatsApp
+        $whats_raw = !empty($contact_phone) ? $contact_phone : '21985831464';
+        $whats_clean = preg_replace('/\D/', '', $whats_raw);
+        if (strlen($whats_clean) <= 11) {
+            $whats_clean = '55' . $whats_clean;
+        }
 
-            <?php
-            // Carregamento otimizado de menus
+        // Carregamento otimizado de menus
+        $all_menus = [];
+        try {
             $statement = $pdo->prepare("SELECT * FROM tbl_menu ORDER BY menu_order ASC");
             $statement->execute();
             $all_menus = $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {}
 
-            $parent_menus = [];
-            $children_menus = [];
-            foreach ($all_menus as $m) {
-                // Oculta itens de menu cujas páginas estejam desativadas
-                if (function_exists('pronto_is_menu_active') && !pronto_is_menu_active($m, $pdo)) {
-                    continue;
-                }
-                if ($m['menu_parent'] == 0) {
-                    $parent_menus[] = $m;
-                } else {
-                    $children_menus[$m['menu_parent']][] = $m;
-                }
+        $parent_menus = [];
+        $children_menus = [];
+        foreach ($all_menus as $m) {
+            if (function_exists('pronto_is_menu_active') && !pronto_is_menu_active($m, $pdo)) {
+                continue;
             }
-
-            // Remove menus pais que eram agregadores (#) caso todos os seus filhos estejam desativados
-            $parent_menus = array_filter($parent_menus, function($p) use ($children_menus) {
-                $url = trim($p['menu_url'] ?? '');
-                $type = $p['menu_type'] ?? '';
-                if ($type === 'Other' && ($url === '#' || empty($url))) {
-                    return !empty($children_menus[$p['menu_id']]);
-                }
-                return true;
-            });
-
-            // Funções padronizadas para resolução de URLs e estado ativo de menus
-            if (!function_exists('pronto_resolve_menu_url')) {
-                function pronto_resolve_menu_url($item) {
-                    $type = $item['menu_type'] ?? '';
-                    $slug = trim($item['category_or_page_slug'] ?? '');
-                    $raw_url = trim($item['menu_url'] ?? '');
-
-                    if ($type === 'Category') {
-                        return BASE_URL . 'category/' . $slug;
-                    }
-                    if ($type === 'Page') {
-                        return BASE_URL . 'page/' . $slug;
-                    }
-                    if ($type === 'Other') {
-                        if ($raw_url === '#' || empty($raw_url)) {
-                            return '#';
-                        }
-                        if (preg_match('/^https?:\/\//i', $raw_url)) {
-                            return $raw_url;
-                        }
-                        if (strpos($raw_url, '../') === 0) {
-                            return BASE_URL . substr($raw_url, 3);
-                        }
-                        if (strpos($raw_url, '/') === 0) {
-                            return BASE_URL . ltrim($raw_url, '/');
-                        }
-                        return BASE_URL . $raw_url;
-                    }
-                    return BASE_URL;
-                }
+            if ($m['menu_parent'] == 0) {
+                $parent_menus[] = $m;
+            } else {
+                $children_menus[$m['menu_parent']][] = $m;
             }
+        }
 
-            if (!function_exists('pronto_is_menu_item_active')) {
-                function pronto_is_menu_item_active($item, $current_uri, $script_name) {
-                    $type = $item['menu_type'] ?? '';
-                    $slug = trim($item['category_or_page_slug'] ?? '');
-                    $raw_url = trim($item['menu_url'] ?? '');
+        $parent_menus = array_filter($parent_menus, function($p) use ($children_menus) {
+            $url = trim($p['menu_url'] ?? '');
+            $type = $p['menu_type'] ?? '';
+            if ($type === 'Other' && ($url === '#' || empty($url))) {
+                return !empty($children_menus[$p['menu_id']]);
+            }
+            return true;
+        });
 
-                    $is_home = ($current_uri === '/' || $current_uri === '' || $script_name === 'index.php');
-                    if ($is_home) {
-                        if ($slug === 'home' || $raw_url === '../' || $raw_url === './' || $raw_url === BASE_URL) {
+        if (!function_exists('pronto_resolve_menu_url')) {
+            function pronto_resolve_menu_url($item) {
+                $type = $item['menu_type'] ?? '';
+                $slug = trim($item['category_or_page_slug'] ?? '');
+                $raw_url = trim($item['menu_url'] ?? '');
+
+                if ($type === 'Category') {
+                    return BASE_URL . 'category/' . $slug;
+                }
+                if ($type === 'Page') {
+                    return BASE_URL . 'page/' . $slug;
+                }
+                if ($type === 'Other') {
+                    if ($raw_url === '#' || empty($raw_url)) {
+                        return '#';
+                    }
+                    if (preg_match('/^https?:\/\//i', $raw_url)) {
+                        return $raw_url;
+                    }
+                    if (strpos($raw_url, '../') === 0) {
+                        return BASE_URL . substr($raw_url, 3);
+                    }
+                    if (strpos($raw_url, '/') === 0) {
+                        return BASE_URL . ltrim($raw_url, '/');
+                    }
+                    return BASE_URL . $raw_url;
+                }
+                return BASE_URL;
+            }
+        }
+
+        if (!function_exists('pronto_is_menu_item_active')) {
+            function pronto_is_menu_item_active($item, $current_uri, $script_name) {
+                $type = $item['menu_type'] ?? '';
+                $slug = trim($item['category_or_page_slug'] ?? '');
+                $raw_url = trim($item['menu_url'] ?? '');
+
+                $is_home = ($current_uri === '/' || $current_uri === '' || $script_name === 'index.php');
+                if ($is_home) {
+                    if ($slug === 'home' || $raw_url === '../' || $raw_url === './' || $raw_url === BASE_URL) {
+                        return true;
+                    }
+                }
+
+                if (!empty($slug)) {
+                    if (strpos($current_uri, '/' . $slug) !== false || $script_name === ($slug . '.php')) {
+                        return true;
+                    }
+                }
+
+                if ($type === 'Other' && !empty($raw_url) && $raw_url !== '#') {
+                    $clean_file = basename(parse_url($raw_url, PHP_URL_PATH));
+                    if (!empty($clean_file) && $clean_file !== '..' && $clean_file !== '.') {
+                        if ($script_name === $clean_file || strpos($current_uri, '/' . $clean_file) !== false) {
                             return true;
                         }
                     }
-
-                    if (!empty($slug)) {
-                        if (strpos($current_uri, '/' . $slug) !== false || $script_name === ($slug . '.php')) {
-                            return true;
-                        }
-                    }
-
-                    if ($type === 'Other' && !empty($raw_url) && $raw_url !== '#') {
-                        $clean_file = basename(parse_url($raw_url, PHP_URL_PATH));
-                        if (!empty($clean_file) && $clean_file !== '..' && $clean_file !== '.') {
-                            if ($script_name === $clean_file || strpos($current_uri, '/' . $clean_file) !== false) {
-                                return true;
-                            }
-                        }
-                    }
-
-                    return false;
                 }
+
+                return false;
             }
+        }
 
-            $current_req_uri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
-            $current_script_file = basename($_SERVER['SCRIPT_NAME'] ?? '');
-            ?>
+        $current_req_uri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+        $current_script_file = basename($_SERVER['SCRIPT_NAME'] ?? '');
+        ?>
 
-            <!-- Drawer Deslizante da Esquerda para a Direita -->
-            <aside class="ps-offcanvas-drawer" id="psOffcanvasDrawer" role="dialog" aria-modal="true" aria-label="Menu Principal">
-                <div class="ps-drawer-header">
-                    <div class="ps-drawer-brand">
-                        <?php if(!empty($logo)): ?>
-                            <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" class="ps-drawer-logo">
-                        <?php else: ?>
-                            <span class="ps-drawer-title"><i class="fa fa-hospital-o me-2"></i> Pronto Saúde</span>
-                        <?php endif; ?>
-                    </div>
-                    <button class="ps-drawer-close-btn" id="btnCloseMobileDrawer" type="button" aria-label="Fechar Menu">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-
-                <div class="ps-drawer-quick-cta">
-                    <a href="https://wa.me/+5521985831464?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta" target="_blank" rel="noopener noreferrer" class="ps-drawer-cta-btn">
-                        <i class="fa fa-whatsapp"></i> Agendamento via WhatsApp
-                    </a>
-                </div>
-
-                <nav class="ps-drawer-body">
-                    <ul class="ps-drawer-menu">
-                        <?php foreach ($parent_menus as $p_item): 
-                            $has_subs = !empty($children_menus[$p_item['menu_id']]);
-                            $p_url = pronto_resolve_menu_url($p_item);
-                            $p_active = pronto_is_menu_item_active($p_item, $current_req_uri, $current_script_file);
-                            if (!$p_active && $has_subs) {
-                                foreach ($children_menus[$p_item['menu_id']] as $sub_chk) {
-                                    if (pronto_is_menu_item_active($sub_chk, $current_req_uri, $current_script_file)) {
-                                        $p_active = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        ?>
-                        <li class="ps-drawer-item <?= $has_subs ? 'has-sub' : ''; ?> <?= $p_active ? 'active' : ''; ?> <?= ($has_subs && $p_active) ? 'open' : ''; ?>">
-                            <div class="ps-drawer-link-row">
-                                <a href="<?= $p_url; ?>" class="ps-drawer-link <?= $has_subs ? 'has-children' : ''; ?> <?= $p_active ? 'active' : ''; ?>">
-                                    <?= htmlspecialchars($p_item['menu_name']); ?>
-                                </a>
-                                <?php if($has_subs): ?>
-                                <button class="ps-drawer-toggle-sub" type="button" aria-label="Expandir submenu <?= htmlspecialchars($p_item['menu_name']); ?>">
-                                    <i class="fa fa-chevron-down"></i>
-                                </button>
-                                <?php endif; ?>
-                            </div>
-
-                            <?php if($has_subs): ?>
-                            <ul class="ps-drawer-submenu">
-                                <?php foreach ($children_menus[$p_item['menu_id']] as $sub_item): 
-                                    $s_url = pronto_resolve_menu_url($sub_item);
-                                    $s_active = pronto_is_menu_item_active($sub_item, $current_req_uri, $current_script_file);
-                                ?>
-                                <li class="<?= $s_active ? 'active' : ''; ?>">
-                                    <a href="<?= $s_url; ?>" class="ps-drawer-sublink <?= $s_active ? 'active' : ''; ?>">
-                                        <i class="fa fa-angle-right ps-drawer-subicon"></i>
-                                        <span><?= htmlspecialchars($sub_item['menu_name']); ?></span>
-                                    </a>
-                                </li>
-                                <?php endforeach; ?>
-                            </ul>
-                            <?php endif; ?>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </nav>
-
-                <div class="ps-drawer-footer">
-                    <div class="ps-drawer-contact-list">
+        <!-- 1. CABEÇALHO FIXO GLOBAL (TOPBAR + NAVBAR) NO PADRÃO FOCO 7 -->
+        <header class="foco-header-fixed" id="focoHeader">
+            <!-- TOPBAR DE CONTATO E HORÁRIOS -->
+            <div class="foco-topbar d-none d-md-block">
+                <div class="container d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-4">
+                        <span><i class="fas fa-clock text-danger me-1"></i> Seg a Sex: 07h às 19h | Sáb: 07h às 13h</span>
                         <?php if(!empty($contact_phone)): ?>
-                        <div class="ps-drawer-contact-item">
-                            <i class="fa fa-phone"></i>
-                            <a href="tel:+55<?= preg_replace('/[^0-9]/', '', $contact_phone); ?>"><?= htmlspecialchars($contact_phone); ?></a>
-                        </div>
+                            <span><i class="fas fa-phone-alt text-danger me-1"></i> <?= htmlspecialchars($contact_phone); ?></span>
                         <?php endif; ?>
-                        <?php if(!empty($contact_email)): ?>
-                        <div class="ps-drawer-contact-item">
-                            <i class="fa fa-envelope-o"></i>
-                            <a href="mailto:<?= htmlspecialchars($contact_email); ?>"><?= htmlspecialchars($contact_email); ?></a>
-                        </div>
+                        <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de falar com o atendimento Pronto Saúde'); ?>" target="_blank" rel="noopener">
+                            <i class="fab fa-whatsapp text-success me-1"></i> WhatsApp Oficial
+                        </a>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <?php if(!empty($social_data)): ?>
+                            <?php foreach ($social_data as $s_row): ?>
+                                <?php if(!empty($s_row['social_url'])): ?>
+                                    <a href="<?= $s_row['social_url']; ?>" target="_blank" rel="noopener noreferrer" title="Rede Social" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                        <i class="<?= $s_row['social_icon']; ?>"></i>
+                                    </a>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
                         <?php endif; ?>
-                    </div>
-                    <div class="ps-drawer-socials">
-                        <?php
-                        if (isset($social_data)) {
-                            foreach ($social_data as $s_row) {
-                                if (!empty($s_row['social_url'])) {
-                                    echo '<a href="' . $s_row['social_url'] . '" target="_blank" rel="noopener noreferrer"><i class="' . $s_row['social_icon'] . '"></i></a>';
-                                }
-                            }
-                        }
-                        ?>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Topbar Ultra Clean Estilo Foco7 -->
-            <div class="ps-foco-topbar hidden-xs hidden-sm">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <div class="ps-topbar-info">
-                                <span class="ps-topbar-info-item">
-                                    <i class="fa fa-clock-o text-success"></i> 
-                                    <span>Seg a Sex: 07h às 19h | Sáb: 07h às 13h</span>
-                                </span>
-                                <?php if(!empty($contact_phone)): ?>
-                                <span class="ps-topbar-info-item">
-                                    <i class="fa fa-phone" style="color: #0a6b74;"></i> 
-                                    <a href="tel:+55<?= preg_replace('/[^0-9]/', '', $contact_phone); ?>"><?= htmlspecialchars($contact_phone); ?></a>
-                                </span>
-                                <?php endif; ?>
-                                <?php if(!empty($contact_email)): ?>
-                                <span class="ps-topbar-info-item">
-                                    <i class="fa fa-envelope-o" style="color: #0a6b74;"></i> 
-                                    <a href="mailto:<?= htmlspecialchars($contact_email); ?>"><?= htmlspecialchars($contact_email); ?></a>
-                                </span>
-                                <?php endif; ?>
-                                <span class="ps-topbar-info-item">
-                                    <i class="fa fa-whatsapp text-success"></i> 
-                                    <a href="https://wa.me/+5521985831464?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta" target="_blank" rel="noopener">WhatsApp Oficial</a>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-4 text-right">
-                            <div class="ps-topbar-right">
-                                <div class="ps-topbar-socials">
-                                    <?php
-                                    if (isset($social_data)) {
-                                        foreach ($social_data as $s_row) {
-                                            if (!empty($s_row['social_url'])) {
-                                                echo '<a href="' . $s_row['social_url'] . '" target="_blank" rel="noopener noreferrer" class="ps-topbar-social-btn"><i class="' . $s_row['social_icon'] . '"></i></a>';
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                </div>
-                                <a href="<?= BASE_URL; ?>admin/login.php" class="ps-topbar-patient-btn">
-                                    <i class="fa fa-user-circle-o"></i> Área do Cliente / Painel
-                                </a>
-                            </div>
-                        </div>
+                        <a href="<?= BASE_URL; ?>admin/login.php" class="btn-cliente-topo">
+                            <i class="fas fa-user-lock me-1"></i> Área do Paciente / Painel
+                        </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Navbar Sticky Estilo Foco7 -->
-            <header class="ps-foco-navbar">
+            <!-- NAVBAR NAVEGAÇÃO FOCO 7 -->
+            <nav class="navbar navbar-expand-lg foco-navbar" id="mainNavbar">
                 <div class="container">
-                    <div class="ps-navbar-container">
-                        <!-- Logo -->
-                        <div class="ps-brand-logo">
-                            <a href="<?= BASE_URL; ?>">
-                                <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde">
-                            </a>
-                        </div>
+                    <a class="navbar-brand d-flex align-items-center gap-2" href="<?= BASE_URL; ?>">
+                        <?php if(!empty($logo)): ?>
+                            <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" height="42" class="logo-foco7">
+                        <?php else: ?>
+                            <span class="fw-bold fs-4 text-dark"><i class="fas fa-hospital-user text-danger me-2"></i> Pronto Saúde</span>
+                        <?php endif; ?>
+                    </a>
 
-                        <!-- Menu Centralizado Foco7 com Dropdown Padronizado ao Extremo -->
-                        <nav class="hidden-xs hidden-sm">
-                            <ul class="ps-nav-links">
-                                <?php 
-                                foreach ($parent_menus as $row): 
-                                    $has_sub = !empty($children_menus[$row['menu_id']]);
-                                    $m_url = pronto_resolve_menu_url($row);
-                                    $is_active = pronto_is_menu_item_active($row, $current_req_uri, $current_script_file);
-                                    if (!$is_active && $has_sub) {
-                                        foreach ($children_menus[$row['menu_id']] as $sub_chk) {
-                                            if (pronto_is_menu_item_active($sub_chk, $current_req_uri, $current_script_file)) {
-                                                $is_active = true;
-                                                break;
-                                            }
+                    <!-- BOTÃO HAMBÚRGUER ESTILO ANDROID (Abre Drawer da Esquerda para a Direita) -->
+                    <button class="navbar-toggler d-lg-none btn-android-burger" type="button" id="btnOpenMenuDrawer" data-bs-toggle="offcanvas" data-bs-target="#menuDrawerAndroid" aria-controls="menuDrawerAndroid" aria-label="Abrir Menu de Navegação">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- MENU HORIZONTAL DESKTOP (>= 992px) -->
+                    <div class="collapse navbar-collapse d-none d-lg-flex" id="navDesktopFoco">
+                        <ul class="navbar-nav mx-auto mb-2 mb-lg-0 align-items-lg-center">
+                            <?php foreach ($parent_menus as $p_item): 
+                                $has_subs = !empty($children_menus[$p_item['menu_id']]);
+                                $p_url = pronto_resolve_menu_url($p_item);
+                                $p_active = pronto_is_menu_item_active($p_item, $current_req_uri, $current_script_file);
+                                if (!$p_active && $has_subs) {
+                                    foreach ($children_menus[$p_item['menu_id']] as $sub_chk) {
+                                        if (pronto_is_menu_item_active($sub_chk, $current_req_uri, $current_script_file)) {
+                                            $p_active = true;
+                                            break;
                                         }
                                     }
-                                ?>
-                                <li class="<?= $has_sub ? 'has-dropdown' : ''; ?> <?= $is_active ? 'active' : ''; ?>">
-                                    <a href="<?= $m_url; ?>" class="<?= $is_active ? 'active' : ''; ?>">
-                                        <span><?= htmlspecialchars($row['menu_name']); ?></span>
-                                        <?php if ($has_sub): ?>
-                                            <i class="fa fa-angle-down ps-nav-chevron" aria-hidden="true"></i>
-                                        <?php endif; ?>
-                                    </a>
-
-                                    <?php if ($has_sub): ?>
-                                    <ul class="ps-dropdown-menu" role="menu">
-                                        <?php foreach ($children_menus[$row['menu_id']] as $sub_row): 
-                                            $sub_url = pronto_resolve_menu_url($sub_row);
-                                            $sub_active = pronto_is_menu_item_active($sub_row, $current_req_uri, $current_script_file);
-                                        ?>
-                                        <li class="ps-dropdown-item-wrap <?= $sub_active ? 'active' : ''; ?>" role="none">
-                                            <a href="<?= $sub_url; ?>" class="ps-dropdown-link <?= $sub_active ? 'active' : ''; ?>" role="menuitem">
-                                                <span class="ps-dd-left">
-                                                    <span class="ps-dd-bullet" aria-hidden="true"></span>
-                                                    <span class="ps-dd-label"><?= htmlspecialchars($sub_row['menu_name']); ?></span>
-                                                </span>
-                                                <i class="fa fa-angle-right ps-dd-arrow" aria-hidden="true"></i>
-                                            </a>
-                                        </li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                    <?php endif; ?>
-                                </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </nav>
-
-                        <!-- Ações Rápidas Foco7 -->
-                        <div class="ps-navbar-actions hidden-xs hidden-sm">
-                            <a href="<?= BASE_URL; ?>servicos.php" class="btn-foco-outline">
-                                <i class="fa fa-stethoscope"></i> Especialidades
+                                }
+                            ?>
+                                <?php if($has_subs): ?>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle <?= $p_active ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <?= htmlspecialchars($p_item['menu_name']); ?>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <?php foreach ($children_menus[$p_item['menu_id']] as $sub_item): 
+                                                $s_url = pronto_resolve_menu_url($sub_item);
+                                                $s_active = pronto_is_menu_item_active($sub_item, $current_req_uri, $current_script_file);
+                                            ?>
+                                                <li>
+                                                    <a class="dropdown-item <?= $s_active ? 'active' : ''; ?>" href="<?= $s_url; ?>">
+                                                        <i class="fas fa-angle-right text-muted me-2"></i><?= htmlspecialchars($sub_item['menu_name']); ?>
+                                                    </a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </li>
+                                <?php else: ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link <?= $p_active ? 'active' : ''; ?>" href="<?= $p_url; ?>">
+                                            <?= htmlspecialchars($p_item['menu_name']); ?>
+                                        </a>
+                                    </li>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </ul>
+                        <div class="d-flex flex-column flex-lg-row gap-2 align-items-stretch align-items-lg-center mt-3 mt-lg-0">
+                            <a href="<?= BASE_URL; ?>servicos.php" class="btn btn-sm btn-outline-danger d-none d-xl-inline-flex align-items-center gap-1 btn-foco-outline">
+                                <i class="fas fa-stethoscope"></i> Especialidades
                             </a>
-                            <a href="https://wa.me/+5521985831464?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta" target="_blank" rel="noopener" class="btn-foco-primary">
-                                <i class="fa fa-calendar-check-o"></i> Agendar Consulta
+                            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de agendar uma consulta na Pronto Saúde'); ?>" target="_blank" rel="noopener" class="btn-foco-primary">
+                                <i class="fas fa-calendar-check"></i> Agendar Consulta
                             </a>
-                        </div>
-
-                        <!-- Botão Hambúrguer Mobile -->
-                        <div class="visible-xs visible-sm">
-                            <button class="ps-mobile-toggle-btn" id="btnOpenMobileDrawer" type="button" aria-label="Abrir Menu">
-                                <span class="ps-hamburger-bar"></span>
-                                <span class="ps-hamburger-bar"></span>
-                                <span class="ps-hamburger-bar"></span>
-                            </button>
                         </div>
                     </div>
                 </div>
-            </header>
-            <!-- Header End -->
+            </nav>
+        </header>
+
+        <!-- MENU GAVETA DESLIZANTE NATIVO ANDROID (DESLIZA DA ESQUERDA PARA A DIREITA) -->
+        <div class="offcanvas offcanvas-start foco-android-drawer" tabindex="-1" id="menuDrawerAndroid" aria-labelledby="menuDrawerLabel">
+            <div class="offcanvas-header android-drawer-header">
+                <div class="d-flex align-items-center gap-2">
+                    <?php if(!empty($logo)): ?>
+                        <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" height="34" class="drawer-logo">
+                    <?php else: ?>
+                        <span class="fw-bold text-dark"><i class="fas fa-hospital-user text-danger me-2"></i> Pronto Saúde</span>
+                    <?php endif; ?>
+                </div>
+                <button type="button" class="btn-android-close" data-bs-dismiss="offcanvas" aria-label="Fechar menu">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+
+            <!-- Cartão de Status do Atendimento -->
+            <div class="android-drawer-card-status">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="android-pulse-dot"></span>
+                        <span class="small fw-bold text-dark">Central de Atendimento Ativa</span>
+                    </div>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1" style="font-size: 0.72rem;">Online</span>
+                </div>
+                <p class="small text-muted mb-0 mt-1" style="font-size: 0.75rem;">Consultas, Exames Laboratoriais & Odontologia</p>
+            </div>
+
+            <!-- Lista de Navegação Estilo Android -->
+            <div class="offcanvas-body android-drawer-body p-0">
+                <nav class="android-nav-list">
+                    <?php foreach ($parent_menus as $p_item): 
+                        $has_subs = !empty($children_menus[$p_item['menu_id']]);
+                        $p_url = pronto_resolve_menu_url($p_item);
+                        $p_active = pronto_is_menu_item_active($p_item, $current_req_uri, $current_script_file);
+                    ?>
+                        <?php if($has_subs): ?>
+                            <div class="android-nav-group">
+                                <a class="android-nav-item d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#drawerSub<?= $p_item['menu_id']; ?>" role="button" aria-expanded="false">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="android-item-icon"><i class="fas fa-folder"></i></div>
+                                        <span class="android-item-text"><?= htmlspecialchars($p_item['menu_name']); ?></span>
+                                    </div>
+                                    <i class="fas fa-chevron-down android-item-arrow"></i>
+                                </a>
+                                <div class="collapse" id="drawerSub<?= $p_item['menu_id']; ?>">
+                                    <div class="ps-3 py-1 bg-light">
+                                        <?php foreach ($children_menus[$p_item['menu_id']] as $sub_item): 
+                                            $s_url = pronto_resolve_menu_url($sub_item);
+                                        ?>
+                                            <a href="<?= $s_url; ?>" class="android-nav-item py-2">
+                                                <div class="android-item-icon"><i class="fas fa-angle-right"></i></div>
+                                                <span class="android-item-text small"><?= htmlspecialchars($sub_item['menu_name']); ?></span>
+                                            </a>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <a href="<?= $p_url; ?>" class="android-nav-item <?= $p_active ? 'active' : ''; ?>">
+                                <div class="android-item-icon"><i class="fas fa-chevron-right"></i></div>
+                                <span class="android-item-text"><?= htmlspecialchars($p_item['menu_name']); ?></span>
+                                <i class="fas fa-chevron-right android-item-arrow"></i>
+                            </a>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </nav>
+
+                <div class="p-3 border-top mt-3">
+                    <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de agendar uma consulta médica na Pronto Saúde.'); ?>" target="_blank" rel="noopener noreferrer" class="btn-foco-primary w-100 justify-content-center mb-3">
+                        <i class="fab fa-whatsapp me-2"></i> Agendamento via WhatsApp
+                    </a>
+                    <?php if(!empty($contact_phone)): ?>
+                        <div class="small text-secondary mb-1">
+                            <i class="fas fa-phone-alt text-danger me-2"></i> <?= htmlspecialchars($contact_phone); ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if(!empty($contact_email)): ?>
+                        <div class="small text-secondary">
+                            <i class="fas fa-envelope text-danger me-2"></i> <?= htmlspecialchars($contact_email); ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
