@@ -48,7 +48,10 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - **Headers de Alta Segurança & Anti-Vazamento:** Políticas estritas de HSTS, X-Content-Type-Options (nosniff), X-Frame-Options (anti-clickjacking), Referrer-Policy e ocultação total da assinatura do PHP.
   - **Controle de Acesso por IP & Quarentena Dinâmica:** Gestão integrada de Lista Branca (Whitelist), Lista Negra (Blacklist) e desbloqueio imediato de IPs bloqueados via painel administrativo.
   - **Auditoria e Logs em Tempo Real:** Registro detalhado de todos os incidentes com identificação de IP, endpoint atacado, severidade da ameaça e payload interceptado.
-- **Design de Última Geração e Modo Escuro/Claro:** Construído sobre o **AdminLTE 4** e **Bootstrap 5.3**, com alternador dinâmico de tema (Claro / Escuro / Automático) na barra superior, tipografia nativa **Source Sans 3** e espaçamentos padronizados sem estilos legados.
+- **Design de Última Geração e Coerência Absoluta Dark / Light Mode:**
+  - Construído sobre o **AdminLTE 4** e **Bootstrap 5.3**, com alternador dinâmico de tema (Claro / Escuro / Automático) na barra superior, tipografia nativa **Source Sans 3** e espaçamentos padronizados sem divergências de cores.
+  - **Suíte de Alto Contraste para Modo Escuro:** Correção de tabelas, cartões, abas, modais, formulários, inputs, paginações DataTables, e integração total com componentes externos como **Select2**, **Datepicker**, **Summernote**, **SweetAlert2** e **Toastr**.
+  - **Reconstrução das Páginas Internas do Site:** Modernização das páginas de especialidades (`department.php`), corpo clínico (`doctor.php`), notícias (`news.php`), termos institucionais e todos os layouts do gerenciador de páginas (`page.php`), mantendo 100% das funções e tabelas do banco de dados intactas.
 - **Cabeçalho Fixo e Sidebar com Menus Treeview Agrupados & Modo Acordeão:**
   - Barra de navegação superior fixa (`sticky-top`) com efeito de desfoque de fundo (`backdrop-filter`).
   - Menu lateral 100% categorizado em grupos lógicos compactos (Administração, Notícias, Corpo Clínico, Serviços, Planos, Mídias, Elementos do Portal, Banners, Engajamento e Minha Conta).

@@ -16,7 +16,7 @@
 			$total_popular_news_sidebar = $row['total_popular_news_sidebar'];
 		}
 		?>
-		<h4>Categorias</h4>
+		<h4><i class="fa fa-folder-open-o" style="margin-right: 6px;"></i> Categorias</h4>
 		<ul>
 			<?php
 			$statement = $pdo->prepare("SELECT * FROM tbl_category ORDER BY category_name ASC");
@@ -31,7 +31,7 @@
 		</ul>
 	</div>
 	<div class="widget">
-		<h4>Postagens Recentes</h4>
+		<h4><i class="fa fa-clock-o" style="margin-right: 6px;"></i> Postagens Recentes</h4>
 		<ul>
 			<?php
 			$i=0;
@@ -49,7 +49,7 @@
 		</ul>
 	</div>
 	<div class="widget">
-		<h4>Postagens Populares</h4>
+		<h4><i class="fa fa-fire text-danger" style="margin-right: 6px;"></i> Postagens Populares</h4>
 		<ul>
 			<?php
 			$i=0;

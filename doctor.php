@@ -20,20 +20,21 @@ else
 	}
 }
 
-// Getting the detailed data of a service from slug
+// Getting the detailed data of a doctor from slug
 $statement = $pdo->prepare("SELECT * FROM tbl_doctor WHERE slug=?");
 $statement->execute(array($_REQUEST['slug']));
 $result = $statement->fetchAll(PDO::FETCH_ASSOC);				
 foreach ($result as $row) {
-   extract($row);
-            echo '<meta name="description" content="'.$row['meta_description'].'">';
-			echo '<meta name="keywords" content="'.$row['meta_keyword'].'">';
-			echo '<title>'.$row['meta_title'].'</title>';
+    extract($row);
+    echo '<meta name="description" content="'.htmlspecialchars($row['meta_description'] ?? '').'">';
+    echo '<meta name="keywords" content="'.htmlspecialchars($row['meta_keyword'] ?? '').'">';
+    echo '<title>'.htmlspecialchars($row['meta_title'] ?? $row['name']).'</title>';
 }
 
 $statement = $pdo->prepare("SELECT * FROM tbl_designation WHERE designation_id=?");
 $statement->execute(array($designation_id));
 $result = $statement->fetchAll(PDO::FETCH_ASSOC);				
+$designation_name = '';
 foreach ($result as $row)
 {
 	$designation_name = $row['designation_name'];
@@ -43,9 +44,6 @@ $stmt = $pdo->prepare("SELECT * FROM tbl_designation WHERE designation_id");
 $stmt->execute(); 
 $data = $stmt->fetchAll();
 
-?>
-
-<?php
 $doc_banner_src = (!empty($banner) && file_exists('assets/uploads/' . $banner)) ? BASE_URL . 'assets/uploads/' . $banner : BASE_URL . 'assets/uploads/department-1.png';
 $doc_photo_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ? BASE_URL . 'assets/uploads/' . $photo : BASE_URL . 'assets/images/sem-foto.gif';
 $zap_num = !empty($phone) ? preg_replace('/[^0-9]/', '', $phone) : (!empty($contact_phone) ? preg_replace('/[^0-9]/', '', $contact_phone) : '5521985831464');
@@ -62,7 +60,12 @@ $zap_doc_msg = urlencode("*Olá! Gostaria de agendar uma consulta com Dr(a).* " 
 		<div class="row">
 			<div class="col-md-12">
 				<div class="banner-text">
-					<h1>Doutor(a): <?php echo htmlspecialchars($name); ?></h1>
+					<h1>Dr(a). <?php echo htmlspecialchars($name); ?></h1>
+					<?php if(!empty($designation_name)): ?>
+						<p style="color: rgba(255,255,255,0.9); font-size: 1.15rem; margin-top: 8px; font-weight: 500;">
+							<i class="fa fa-user-md" style="margin-right: 6px;"></i> <?php echo htmlspecialchars($designation_name); ?>
+						</p>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
@@ -70,273 +73,284 @@ $zap_doc_msg = urlencode("*Olá! Gostaria de agendar uma consulta com Dr(a).* " 
 </div>
 <!-- Banner End -->
 
-<!-- Doctor Start -->
-<section class="doctor-detail">
+<!-- Doctor Detail Start -->
+<section class="doctor-detail" style="padding: 60px 0; background: #f8fafc;">
 	<div class="container">
 		<div class="row">
+			
+			<!-- Card Lateral do Médico -->
 			<div class="col-md-4">
-				<div class="doctor-single">
-					<div class="thumb">
-						<img src="<?= $doc_photo_src; ?>" alt="<?php echo htmlspecialchars($name); ?>">
+				<div style="background: #ffffff; border-radius: 16px; padding: 28px 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; text-align: center; margin-bottom: 30px;">
+					<div style="width: 170px; height: 170px; margin: 0 auto 20px auto; border-radius: 50%; overflow: hidden; border: 4px solid #e6f3f4; box-shadow: 0 8px 20px rgba(10,107,116,0.15);">
+						<img src="<?= $doc_photo_src; ?>" alt="<?php echo htmlspecialchars($name); ?>" style="width: 100%; height: 100%; object-fit: cover;">
 					</div>
-					<div class="text">
-						<h2><?php echo htmlspecialchars($name); ?></h2>
-						<h3><?php echo htmlspecialchars($designation_name); ?></h3>
-						<p>
+					
+					<h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 6px;">
+						<?php echo htmlspecialchars($name); ?>
+					</h2>
+					
+					<div style="margin-bottom: 12px;">
+						<span style="display: inline-block; background: #e6f3f4; color: #0a6b74; font-weight: 700; font-size: 13px; padding: 5px 14px; border-radius: 20px;">
+							<?php echo htmlspecialchars($designation_name); ?>
+						</span>
+					</div>
+
+					<?php if(!empty($degree)): ?>
+						<p style="color: #64748b; font-size: 13.5px; margin-bottom: 16px; line-height: 1.5;">
+							<i class="fa fa-graduation-cap" style="color: #0a6b74; margin-right: 4px;"></i>
 							<?php echo htmlspecialchars($degree); ?>
 						</p>
+					<?php endif; ?>
+
+					<?php if(!empty($registro)): ?>
+						<p style="color: #0a6b74; font-weight: 700; font-size: 13px; background: #f1f5f9; padding: 6px 12px; border-radius: 8px; margin-bottom: 18px;">
+							<i class="fa fa-id-card-o" style="margin-right: 5px;"></i> Registro: <?php echo htmlspecialchars($registro); ?>
+						</p>
+					<?php endif; ?>
+
+					<!-- Redes Sociais -->
+					<div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 22px;">
+						<?php if(!empty($facebook)): ?>
+							<a href="<?php echo htmlspecialchars($facebook); ?>" target="_blank" rel="noopener" style="width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9; color: #3b5998; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"><i class="fa fa-facebook"></i></a>
+						<?php endif; ?>
+
+						<?php if(!empty($instagram)): ?>
+							<a href="<?php echo htmlspecialchars($instagram); ?>" target="_blank" rel="noopener" style="width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9; color: #e1306c; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"><i class="fa fa-instagram"></i></a>
+						<?php endif; ?>
+
+						<?php if(!empty($linkedin)): ?>
+							<a href="<?php echo htmlspecialchars($linkedin); ?>" target="_blank" rel="noopener" style="width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9; color: #0077b5; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"><i class="fa fa-linkedin"></i></a>
+						<?php endif; ?>
+
+						<?php if(!empty($youtube)): ?>
+							<a href="<?php echo htmlspecialchars($youtube); ?>" target="_blank" rel="noopener" style="width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9; color: #ff0000; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"><i class="fa fa-youtube"></i></a>
+						<?php endif; ?>
+
+						<?php if(!empty($twitter)): ?>
+							<a href="<?php echo htmlspecialchars($twitter); ?>" target="_blank" rel="noopener" style="width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9; color: #1da1f2; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"><i class="fa fa-twitter"></i></a>
+						<?php endif; ?>
 					</div>
-					<div class="social">
-						<ul>
-							<?php if($facebook!=''): ?>
-								<li><a href="<?php echo $facebook; ?>" target="_blank"><i class="fa fa-facebook"></i></a></li>
-							<?php endif; ?>
 
-							<?php if($twitter!=''): ?>
-								<li><a href="<?php echo $twitter; ?>" target="_blank"><i class="fa fa-twitter"></i></a></li>
-							<?php endif; ?>
-
-							<?php if($linkedin!=''): ?>
-								<li><a href="<?php echo $linkedin; ?>" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-							<?php endif; ?>
-
-							<?php if($youtube!=''): ?>
-								<li><a href="<?php echo $youtube; ?>" target="_blank"><i class="fa fa-youtube"></i></a></li>
-							<?php endif; ?>
-
-							<?php if($google_plus!=''): ?>
-								<li><a href="<?php echo $google_plus; ?>" target="_blank"><i class="fa fa-google-plus"></i></a></li>
-							<?php endif; ?>
-
-							<?php if($instagram!=''): ?>
-								<li><a href="<?php echo $instagram; ?>" target="_blank"><i class="fa fa-instagram"></i></a></li>
-							<?php endif; ?>
-
-							<?php if($flickr!=''): ?>
-								<li><a href="<?php echo $flickr; ?>" target="_blank"><i class="fa fa-flickr"></i></a></li>
-							<?php endif; ?>
-						</ul>
-					</div>
-					<div style="margin-top: 20px; padding-top: 18px; border-top: 1px solid #f1f5f9;">
-						<a href="https://wa.me/<?= $zap_num; ?>?text=<?= $zap_doc_msg; ?>" target="_blank" rel="noopener" class="btn btn-success btn-block" style="background: #10b981; border: none; border-radius: 8px; font-weight: 700; padding: 12px 18px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(16,185,129,0.35);">
-							<i class="fa fa-whatsapp" style="font-size: 18px;"></i> Agendar Consulta
+					<div style="padding-top: 18px; border-top: 1px solid #f1f5f9;">
+						<a href="https://wa.me/<?= $zap_num; ?>?text=<?= $zap_doc_msg; ?>" target="_blank" rel="noopener" class="btn btn-success btn-block" style="background: #10b981; border: none; border-radius: 10px; font-weight: 700; padding: 13px 18px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(16,185,129,0.35); font-size: 15px; color: #ffffff; text-decoration: none;">
+							<i class="fa fa-whatsapp" style="font-size: 19px;"></i> Agendar Consulta
 						</a>
 					</div>
 				</div>
 			</div>
+
+			<!-- Coluna Principal com Abas Modernas -->
 			<div class="col-md-8">
-				
-				<!-- Doctor Detail Tab Start -->
-				<div class="doctor-detail-tab">
-					<ul class="nav nav-tabs">
-						<li class=""><a href="#tab1" data-toggle="tab" aria-expanded="false">Sobre</a></li>
-						<?php if($address!='' || $phone!='' || $email!='' || $website!=''){?>
-						<li class=""><a href="#tab2" data-toggle="tab" aria-expanded="false">Contato</a></li>
-						<?php }?>
-						<li class="active"><a href="#tab3" data-toggle="tab" aria-expanded="true">Especialidade</a></li>
+				<div style="background: #ffffff; border-radius: 16px; padding: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; margin-bottom: 30px;">
+					
+					<!-- Navegação de Abas Estilizada -->
+					<ul class="nav nav-tabs" style="border-bottom: 2px solid #e2e8f0; margin-bottom: 24px; display: flex; gap: 8px;">
+						<li class="active">
+							<a href="#tab1" data-toggle="tab" style="border: none; border-radius: 8px 8px 0 0; font-weight: 700; padding: 12px 20px; color: #0a6b74; font-size: 14.5px;">
+								<i class="fa fa-user-circle-o" style="margin-right: 6px;"></i> Sobre o Especialista
+							</a>
+						</li>
+						<?php if(!empty($address) || !empty($phone) || !empty($email) || !empty($website)): ?>
+						<li>
+							<a href="#tab2" data-toggle="tab" style="border: none; border-radius: 8px 8px 0 0; font-weight: 700; padding: 12px 20px; color: #64748b; font-size: 14.5px;">
+								<i class="fa fa-map-marker" style="margin-right: 6px;"></i> Contato & Local
+							</a>
+						</li>
+						<?php endif; ?>
+						<li>
+							<a href="#tab3" data-toggle="tab" style="border: none; border-radius: 8px 8px 0 0; font-weight: 700; padding: 12px 20px; color: #64748b; font-size: 14.5px;">
+								<i class="fa fa-calendar-check-o" style="margin-right: 6px;"></i> Atendimento & Horários
+							</a>
+						</li>
 					</ul>
 					
-					<!-- Tab Content Start -->
+					<!-- Conteúdo das Abas -->
 					<div class="tab-content">
-						<div class="tab-pane fade" id="tab1">
-							<div class="row">										
-								<div class="col-md-12">
-									<div class="content">
-										<?php echo $detail; ?>										
-									</div>
-								</div>
+						
+						<!-- Aba 1: Sobre -->
+						<div class="tab-pane fade active in" id="tab1">
+							<h3 style="font-size: 19px; font-weight: 800; color: #0a6b74; margin-top: 0; margin-bottom: 16px;">
+								Apresentação Profissional
+							</h3>
+							<div class="content" style="color: #334155; font-size: 15px; line-height: 1.8;">
+								<?php if(!empty($detail)): ?>
+									<?php echo $detail; ?>
+								<?php else: ?>
+									<p style="color: #64748b; font-style: italic;">
+										Informações detalhadas sobre a atuação clínica e especializações do(a) Dr(a). <?php echo htmlspecialchars($name); ?>. Para agendar sua consulta, entre em contato através de nossos canais de atendimento.
+									</p>
+								<?php endif; ?>
 							</div>
 						</div>
 						
+						<!-- Aba 2: Contato -->
 						<div class="tab-pane fade" id="tab2">
+							<h3 style="font-size: 19px; font-weight: 800; color: #0a6b74; margin-top: 0; margin-bottom: 20px;">
+								Canais de Atendimento
+							</h3>
 							<div class="row">
-								<div class="col-md-12">
-									<div class="content">									
-										<div class="row">
-										<?php if($address!=''): ?>
-											<div class="col-md-6">
-												<div class="contact">
-													<div class="icon"><i class="fa fa-map-o"></i></div>
-													<div class="text">
-														<h4>Endereço</h4>
-														<p>
-														    <a href="https://www.google.com/maps/place/<?=$address;?>" 
-														    class="maps" style="text-decoration:none;" target="new">
-														        <?= $address; ?>
-														    </a>
-														</p>
-													</div>
-												</div>
+								<?php if(!empty($address)): ?>
+									<div class="col-md-6" style="margin-bottom: 16px;">
+										<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: flex; align-items: flex-start; gap: 14px;">
+											<div style="width: 42px; height: 42px; border-radius: 10px; background: #e6f3f4; color: #0a6b74; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+												<i class="fa fa-map-marker"></i>
 											</div>
-										<?php endif; ?>
-										<?php if($phone!=''): ?>
-											<div class="col-md-6">
-												<div class="contact">
-													<div class="icon"><i class="fa fa-phone"></i></div>
-													<div class="text">
-														<h4>Telefone</h4>
-														<p>
-															<a href="tel:+55<?= $phone; ?>" class="" style="text-decoration:none;">
-														        <?= $phone; ?>
-														    </a>
-														</p>
-													</div>
-												</div>
+											<div>
+												<h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Endereço</h4>
+												<p style="margin: 0; font-size: 13.5px;">
+													<a href="https://www.google.com/maps/place/<?= urlencode($address); ?>" target="_blank" rel="noopener" style="color: #0a6b74; text-decoration: none;">
+														<?= htmlspecialchars($address); ?>
+													</a>
+												</p>
 											</div>
-										<?php endif; ?>
-										<?php if($email!=''): ?>
-											<div class="col-md-6">
-												<div class="contact">
-													<div class="icon"><i class="fa fa-envelope"></i></div>
-													<div class="text">
-														<h4>Email</h4>
-														<p>
-															<a href="mailto:<?= $email; ?>" class="" style="text-decoration:none;">
-														        <?= $email; ?>
-														    </a>
-														</p>
-													</div>
-												</div>
-											</div>
-										<?php endif; ?>
-										<?php if($website!=''): ?>
-											<div class="col-md-6">
-												<div class="contact">
-													<div class="icon"><i class="fa fa-globe"></i></div>
-													<div class="text">
-														<h4>Website</h4>
-														<p>
-														    <a href="<?= $website; ?>" class="" style="text-decoration:none;">
-														        <?= $website; ?>
-														    </a>
-														</p>
-													</div>
-												</div>
-											</div>
-										<?php endif; ?>
 										</div>
 									</div>
-								</div>
-							</div>									
+								<?php endif; ?>
+
+								<?php if(!empty($phone)): ?>
+									<div class="col-md-6" style="margin-bottom: 16px;">
+										<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: flex; align-items: flex-start; gap: 14px;">
+											<div style="width: 42px; height: 42px; border-radius: 10px; background: #e6f3f4; color: #0a6b74; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+												<i class="fa fa-phone"></i>
+											</div>
+											<div>
+												<h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Telefone</h4>
+												<p style="margin: 0; font-size: 13.5px;">
+													<a href="tel:+55<?= preg_replace('/[^0-9]/', '', $phone); ?>" style="color: #0a6b74; text-decoration: none; font-weight: 600;">
+														<?= htmlspecialchars($phone); ?>
+													</a>
+												</p>
+											</div>
+										</div>
+									</div>
+								<?php endif; ?>
+
+								<?php if(!empty($email)): ?>
+									<div class="col-md-6" style="margin-bottom: 16px;">
+										<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: flex; align-items: flex-start; gap: 14px;">
+											<div style="width: 42px; height: 42px; border-radius: 10px; background: #e6f3f4; color: #0a6b74; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+												<i class="fa fa-envelope"></i>
+											</div>
+											<div>
+												<h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">E-mail</h4>
+												<p style="margin: 0; font-size: 13.5px;">
+													<a href="mailto:<?= htmlspecialchars($email); ?>" style="color: #0a6b74; text-decoration: none;">
+														<?= htmlspecialchars($email); ?>
+													</a>
+												</p>
+											</div>
+										</div>
+									</div>
+								<?php endif; ?>
+
+								<?php if(!empty($website)): ?>
+									<div class="col-md-6" style="margin-bottom: 16px;">
+										<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: flex; align-items: flex-start; gap: 14px;">
+											<div style="width: 42px; height: 42px; border-radius: 10px; background: #e6f3f4; color: #0a6b74; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+												<i class="fa fa-globe"></i>
+											</div>
+											<div>
+												<h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Website</h4>
+												<p style="margin: 0; font-size: 13.5px;">
+													<a href="<?= htmlspecialchars($website); ?>" target="_blank" rel="noopener" style="color: #0a6b74; text-decoration: none;">
+														<?= htmlspecialchars($website); ?>
+													</a>
+												</p>
+											</div>
+										</div>
+									</div>
+								<?php endif; ?>
+							</div>
 						</div>
 						
-                        <div class="tab-pane fade active in" id="tab3">
-                            <div class="row">										
-                                <div class="col-md-12">
-                                    <div class="content">
-                                        <div class = "panel panel-default">
-                                           <div class = "panel-heading" style="font-size:18px;">
-                                              <b><?= $registro ;?></b>
-                                           </div>
-                                           
-                                           <div class = "panel-body">
-                                              <div class="panel-group" id="accordion">
-                                            	<div class="panel panel-default">
-                                                    <?php
-                                                            
-                                                            $funs = $pdo->prepare("SELECT * FROM tbl_department_openning_hour");
-                                                            $funs->execute();
-                                                            $viewss = $funs->fetchAll(PDO::FETCH_ASSOC);
-                                                            
-                                                                foreach($viewss as $sem){
-                                                                    
-                                                                }
-                                                            
-                                                            
-                                                            $i=0;
-                                                            $medico = $pdo->prepare("SELECT * FROM tbl_doctor 
-                                                            AS t1 JOIN tbl_especialidade 
-                                                            AS t2 JOIN tbl_department_openning_hour 
-                                                            AS t3 JOIN tbl_designation 
-                                                            AS t4 
-                                                            WHERE t4.designation_id=t2.funcao AND t2.semana=t3.oh_id AND t1.id=t2.medico AND t1.slug=?");
-                                                            $medico->execute(array($_REQUEST['slug']));
-                                                            $view = $medico->fetchAll(PDO::FETCH_ASSOC);
-                                                            foreach($view as $dias){
-                                                                $func = $dias["funcao"];
-                                                                $i++;
-                                                                
-                                                                
-                                                                //var_dump($dias);
-                                                                
-                                                    ?>
-                                                    
-                                            		<div class="panel-heading acordo">
-                                            			<h4 class="panel-title">
-                                                            <a class="accordion-toggle text-captalize" data-toggle="collapse" 
-                                                            data-parent="#accordion" href="#id<?=$i; ?>">
-                                                              <i class="fa fa-hand-o-right"></i>
-                                                                <?= $dias['designation_name'];?>
-                                                            </a>
-                                            			</h4>
-                                            		</div>
-                                            		<div id="id<?= $i; ?>" class="panel-collapse collapse">
-                                            			<div class="panel-body">
-                                                            <table class="table table-striped">
-                                                                <thead>
-                                                                    <tr class="text-uppercase">
-                                                                        <th>Dias de Atendimento</th>
-                                                                        <th>Horário de Atendimento</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td><?= $dias['oh_day']; ?></td>
-                                                                        <td>
-                                                                            <?php if($dias['inicio'] == "" && $dias['fim'] == ""){ ?>
-                                                                            <b>Sob Demanda</b>
-                                                                            <?php }else{ ?>
-                                                                            <b>
-                                                                                <?= date("H:i", strtotime($dias['inicio'])) . "</b> até às <b>" . date("H:i", strtotime($dias['fim'])); ?>
-                                                                            </b>
-                                                                            <?php } ?>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                            			</div>
-                                            		</div>
-                                                    <?php }  ?>
-                                                </div>
-                                            </div>
-                                           </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-					</div>
-					<!-- Tab Content End -->
-				</div>
-				<!-- Doctor Detail Tab End -->
+						<!-- Aba 3: Atendimento e Horários -->
+						<div class="tab-pane fade" id="tab3">
+							<h3 style="font-size: 19px; font-weight: 800; color: #0a6b74; margin-top: 0; margin-bottom: 18px;">
+								Horários e Especialidades Atendidas
+							</h3>
 
+							<?php
+							$i=0;
+							$medico = $pdo->prepare("SELECT * FROM tbl_doctor 
+							AS t1 JOIN tbl_especialidade 
+							AS t2 JOIN tbl_department_openning_hour 
+							AS t3 JOIN tbl_designation 
+							AS t4 
+							WHERE t4.designation_id=t2.funcao AND t2.semana=t3.oh_id AND t1.id=t2.medico AND t1.slug=?");
+							$medico->execute(array($_REQUEST['slug']));
+							$view = $medico->fetchAll(PDO::FETCH_ASSOC);
+
+							if(empty($view)):
+							?>
+								<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; text-align: center; color: #64748b;">
+									<i class="fa fa-calendar-o" style="font-size: 28px; margin-bottom: 10px; display: block; color: #0a6b74;"></i>
+									Atendimento regular conforme agendamento prévio. Entre em contato com a nossa recepção via WhatsApp para verificar as datas disponíveis.
+								</div>
+							<?php else: ?>
+								<div style="border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+									<table class="table" style="margin-bottom: 0;">
+										<thead>
+											<tr style="background: #0a6b74; color: #ffffff;">
+												<th style="padding: 14px 18px; font-weight: 700; border: none;">Especialidade</th>
+												<th style="padding: 14px 18px; font-weight: 700; border: none;">Dia da Semana</th>
+												<th style="padding: 14px 18px; font-weight: 700; border: none; text-align: right;">Horário</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php foreach($view as $dias): $i++; ?>
+											<tr style="border-bottom: 1px solid #f1f5f9;">
+												<td style="padding: 14px 18px; vertical-align: middle; font-weight: 600; color: #0f172a;">
+													<i class="fa fa-stethoscope text-success" style="margin-right: 6px;"></i>
+													<?= htmlspecialchars($dias['designation_name']); ?>
+												</td>
+												<td style="padding: 14px 18px; vertical-align: middle; color: #475569;">
+													<?= htmlspecialchars($dias['oh_day']); ?>
+												</td>
+												<td style="padding: 14px 18px; vertical-align: middle; text-align: right;">
+													<?php if(empty($dias['inicio']) && empty($dias['fim'])): ?>
+														<span style="background: #fef3c7; color: #92400e; font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 20px;">
+															Sob Demanda
+														</span>
+													<?php else: ?>
+														<span style="background: #dcfce7; color: #166534; font-weight: 700; font-size: 13px; padding: 4px 12px; border-radius: 20px;">
+															<?= date("H:i", strtotime($dias['inicio'])) . " às " . date("H:i", strtotime($dias['fim'])); ?>
+														</span>
+													<?php endif; ?>
+												</td>
+											</tr>
+											<?php endforeach; ?>
+										</tbody>
+									</table>
+								</div>
+							<?php endif; ?>
+
+						</div>
+
+					</div>
+				</div>
 			</div>
+
 		</div>
 	</div>
 </section>
-<!-- Doctor End -->
+<!-- Doctor Detail End -->
 
-
-<!-- Doctors Start -->
-<section class="doctor-v2" style="padding-top:0;">
+<!-- Seção Outros Médicos Qualificados -->
+<section class="doctor-v2" style="padding: 60px 0; background: #ffffff;">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="heading-normal">
-					<h2>Nossos Médicos Qualificados</h2>
+				<div class="heading-normal" style="text-align: center; margin-bottom: 40px;">
+					<h2 style="font-size: 28px; font-weight: 800; color: #0a6b74; margin-bottom: 8px;">Conheça Nossa Equipe Médica</h2>
+					<p style="color: #64748b; font-size: 16px;">Profissionais especializados e dedicados ao cuidado da sua saúde integral</p>
 				</div>
 			</div>
 		</div>
-		<div class="gap-small"></div>
 		<div class="row">
 			<div class="col-md-12">
-				
-				<!-- Doctor Carousel Start -->
 				<div class="doctor-carousel">
 					<?php
 					$statement = $pdo->prepare("SELECT 
-												
 												t1.id,
 												t1.name,
 												t1.slug,
@@ -349,60 +363,33 @@ $zap_doc_msg = urlencode("*Olá! Gostaria de agendar uma consulta com Dr(a).* " 
 												t1.google_plus,
 												t1.instagram,
 												t1.flickr,
-
 												t2.designation_id,
 												t2.designation_name
-
 					                           FROM tbl_doctor t1
 					                           JOIN tbl_designation t2
 					                           ON t1.designation_id = t2.designation_id
 					                           WHERE t1.status = ?
-					                           ");
+					                           ORDER BY t1.id DESC");
 					$statement->execute(array('Active'));
 					$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 					foreach ($result as $row) {
+						$other_photo = (!empty($row['photo']) && file_exists('assets/uploads/' . $row['photo'])) ? BASE_URL . 'assets/uploads/' . $row['photo'] : BASE_URL . 'assets/images/sem-foto.gif';
 						?>
-						<div class="item wow fadeInUp">
-							<div class="thumb">
-								<div class="photo" style="background-image:url(<?php echo BASE_URL; ?>assets/uploads/<?php echo $row['photo']; ?>);"></div>
-							</div>
-							<div class="text">
-								<h3><a href="<?php echo BASE_URL; ?>doctor/<?php echo $row['slug']; ?>"><?php echo $row['name']; ?></a></h3>
-								<p><?php echo $row['designation_name']; ?></p>
-								<div class="social-icons">
-									<ul>
-										<?php if($row['facebook']!=''): ?>
-											<li><a href="<?php echo $row['facebook']; ?>" target="_blank"><i class="fa fa-facebook"></i></a></li>
-										<?php endif; ?>
-
-										<?php if($row['twitter']!=''): ?>
-											<li><a href="<?php echo $row['twitter']; ?>" target="_blank"><i class="fa fa-twitter"></i></a></li>
-										<?php endif; ?>
-
-										<?php if($row['linkedin']!=''): ?>
-											<li><a href="<?php echo $row['linkedin']; ?>" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-										<?php endif; ?>
-
-										<?php if($row['youtube']!=''): ?>
-											<li><a href="<?php echo $row['youtube']; ?>" target="_blank"><i class="fa fa-youtube"></i></a></li>
-										<?php endif; ?>
-
-										<?php if($row['google_plus']!=''): ?>
-											<li><a href="<?php echo $row['google_plus']; ?>" target="_blank"><i class="fa fa-google-plus"></i></a></li>
-										<?php endif; ?>
-
-										<?php if($row['instagram']!=''): ?>
-											<li><a href="<?php echo $row['instagram']; ?>" target="_blank"><i class="fa fa-instagram"></i></a></li>
-										<?php endif; ?>
-
-										<?php if($row['flickr']!=''): ?>
-											<li>
-											    <a href="<?php echo $row['flickr']; ?>" target="_blank">
-											        <i class="fa fa-flickr"></i>
-											    </a>
-											</li>
-										<?php endif; ?>
-									</ul>
+						<div class="item wow fadeInUp" style="padding: 10px;">
+							<div style="background: #ffffff; border-radius: 14px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 8px 24px rgba(0,0,0,0.05); text-align: center; padding-bottom: 20px; transition: all 0.3s ease;">
+								<div style="height: 220px; background-image:url(<?= $other_photo; ?>); background-size: cover; background-position: center; position: relative;"></div>
+								<div style="padding: 18px 14px 10px 14px;">
+									<h3 style="font-size: 17px; font-weight: 800; margin: 0 0 6px 0;">
+										<a href="<?php echo BASE_URL; ?>doctor/<?php echo $row['slug']; ?>" style="color: #0f172a; text-decoration: none;">
+											<?php echo htmlspecialchars($row['name']); ?>
+										</a>
+									</h3>
+									<p style="color: #0a6b74; font-weight: 600; font-size: 13px; margin-bottom: 12px;">
+										<?php echo htmlspecialchars($row['designation_name']); ?>
+									</p>
+									<a href="<?php echo BASE_URL; ?>doctor/<?php echo $row['slug']; ?>" class="btn btn-sm btn-outline-primary" style="border-radius: 20px; font-weight: 700; font-size: 12.5px; padding: 6px 16px;">
+										Ver Perfil
+									</a>
 								</div>
 							</div>
 						</div>
@@ -410,12 +397,9 @@ $zap_doc_msg = urlencode("*Olá! Gostaria de agendar uma consulta com Dr(a).* " 
 					}
 					?>
 				</div>
-				<!-- Doctor Carousel End -->
-
 			</div>
 		</div>
 	</div>
 </section>
-<!-- Doctors End -->
 
 <?php require_once('footer.php'); ?>

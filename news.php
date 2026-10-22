@@ -79,33 +79,61 @@ $news_banner_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ?
 							
 
 							<!-- Post Item Start -->
-							<div class="post-item">
-								<div class="image-holder">
-									<img class="img-responsive" src="<?php echo BASE_URL; ?>assets/uploads/<?php echo $photo ?>" alt="<?php echo $news_title; ?>">
-								</div>
+							<div class="post-item" style="background: #ffffff; border-radius: 16px; padding: 28px 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; margin-bottom: 30px;">
+								<?php if(!empty($photo)): ?>
+									<div class="image-holder" style="border-radius: 12px; overflow: hidden; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(0,0,0,0.08);">
+										<img class="img-responsive" src="<?php echo BASE_URL; ?>assets/uploads/<?php echo $photo ?>" alt="<?php echo htmlspecialchars($news_title); ?>" style="width: 100%; max-height: 480px; object-fit: cover;">
+									</div>
+								<?php endif; ?>
+								
 								<div class="text">
-									<h3><?php echo $news_title; ?></h3>
-									<ul class="status">
-										<li><i class="fa fa-tag"></i>Categoria: <a href="<?php echo BASE_URL; ?>category/<?php echo $category_slug; ?>"><?php echo $category_name; ?></a></li>
-										<li><i class="fa fa-calendar"></i>Data: <?php echo $news_date; ?></li>
+									<h2 style="font-size: 26px; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 14px; line-height: 1.35;">
+										<?php echo htmlspecialchars($news_title); ?>
+									</h2>
+									
+									<ul class="status" style="margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 10px; padding: 0; list-style: none;">
+										<?php if(!empty($category_name)): ?>
+											<li>
+												<a href="<?php echo BASE_URL; ?>category/<?php echo $category_slug; ?>" style="background: #e6f3f4; color: #0a6b74; font-weight: 700; font-size: 13px; padding: 5px 14px; border-radius: 20px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+													<i class="fa fa-tag"></i> <?php echo htmlspecialchars($category_name); ?>
+												</a>
+											</li>
+										<?php endif; ?>
+										<?php if(!empty($news_date)): ?>
+											<li style="background: #f1f5f9; color: #64748b; font-weight: 600; font-size: 13px; padding: 5px 14px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
+												<i class="fa fa-calendar-o"></i> <?php echo htmlspecialchars($news_date); ?>
+											</li>
+										<?php endif; ?>
 									</ul>
-									<p>
+
+									<div class="article-content" style="color: #334155; font-size: 16px; line-height: 1.85; margin-bottom: 30px;">
 										<?php echo $news_content; ?>
-									</p>
-									<h3>Compartilhe isso</h3>
-									<div class="sharethis-inline-share-buttons"></div>
+									</div>
+									
+									<div style="padding-top: 20px; border-top: 1px solid #f1f5f9; margin-bottom: 24px;">
+										<h4 style="font-size: 16px; font-weight: 700; color: #0a6b74; margin-bottom: 12px;">
+											<i class="fa fa-share-alt" style="margin-right: 6px;"></i> Compartilhe este artigo:
+										</h4>
+										<div class="sharethis-inline-share-buttons"></div>
+									</div>
+
+									<div style="margin-top: 16px;">
+										<a href="javascript:history.back()" class="btn btn-default" style="border-radius: 8px; font-weight: 600; padding: 10px 20px;">
+											<i class="fa fa-arrow-left" style="margin-right: 6px;"></i> Voltar
+										</a>
+									</div>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-md-12">
-									<h3>Comentários</h3>
-									<?php
-									// Getting the full url of the current page
-									$final_url = BASE_URL . 'news/' . $_REQUEST['slug'];
-									?>
-									<!-- Facebook Comment Main Code (got from facebook website) -->
-									<div class="fb-comments" data-href="<?php echo $final_url; ?>" data-numposts="5"></div>
-								</div>
+
+							<!-- Comentários -->
+							<div style="background: #ffffff; border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; margin-bottom: 30px;">
+								<h3 style="font-size: 19px; font-weight: 800; color: #0a6b74; margin-top: 0; margin-bottom: 16px;">
+									<i class="fa fa-comments-o" style="margin-right: 6px;"></i> Comentários e Opiniões
+								</h3>
+								<?php
+								$final_url = BASE_URL . 'news/' . $_REQUEST['slug'];
+								?>
+								<div class="fb-comments" data-href="<?php echo $final_url; ?>" data-numposts="5" data-width="100%"></div>
 							</div>
 							<!-- Post Item End -->
 

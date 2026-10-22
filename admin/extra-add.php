@@ -206,15 +206,16 @@ if(isset($_POST['form1'])) {
     .card-heading {
         font-size: 18px;
         font-weight: bold;
-        background: #fff;
+        background: var(--bs-card-bg, #ffffff);
+        color: var(--bs-heading-color, #1e293b);
         padding: 10px 15px;
     }
 
     .card-text {
         padding: 10px 15px;
-        background: #fff;
+        background: var(--bs-card-bg, #ffffff);
         font-size: 14px;
-        color: #636262;
+        color: var(--bs-body-color, #64748b);
     }
 
     .card-button {

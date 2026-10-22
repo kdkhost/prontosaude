@@ -4,6 +4,24 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.15.0] - 2026-10-22
+
+### Reformulado & Aprimorado
+- **Coerência e Consistência Global do Tema Dark / Light**:
+  - **Suíte Completa para Dark Mode (`admin/css/adminlte4-compat.css`)**:
+    - Equalização cromática de alto contraste para `[data-bs-theme="dark"]` com `--bs-body-bg: #0b1320`, cards `.card`, `.box` e `.card-outline` (`#131f33`), bordas (`#24354f`), tabelas thead/tbody (`#19273f`), inputs `.form-control` e `.form-select` (`#152238`), abas `.nav-tabs` e `.nav-link.active` com verde esmeralda (`#10b981`), modais, dropdowns e paginação DataTables.
+    - Suporte nativo completo ao Dark Mode para plugins de terceiros: **Select2** (container, dropdown e search field), **Datepicker** (células, dias e meses), **Summernote** (toolbar, editable area e statusbar), **SweetAlert2** e **Toastr**.
+    - Eliminação de todos os fundos fixos (`background: #fff` / `white`) no painel administrativo (`admin/convenio.php`, `admin/extra-add.php`), substituindo por variáveis dinâmicas de tema `var(--bs-card-bg)`.
+- **Reconstrução Completa das Páginas Internas do Site Público**:
+  - `department.php`: Reconstruída com layout hospitalar de padrão internacional, badges de localização, telefone, whatsapp e e-mail, horários de atendimento com badges de status, FAQ dinâmico em acordeão e botão direto de agendamento.
+  - `doctor.php`: Perfil médico ultra moderno com card do especialista, badge de especialidade com ícone, grau acadêmico/registro, botões de redes sociais e abas modernas (Apresentação Profissional, Contato & Localização, Horários e Especialidades Atendidas) e carrossel da equipe médica.
+  - `page.php`: Reconstrução dos layouts de Conteúdo Completo (`Full Width`), Formulário de Contato (`Contact Us`), FAQ estruturado por categorias, Galeria de Fotos (com legendas e zoom suave) e Galeria de Vídeos (com player responsivo e títulos dos vídeos).
+  - `news.php`: Artigo de notícia com card elevado, moldura de imagem, badges de categoria e data, tipografia aprimorada, compartilhamento social e seção de comentários moderna.
+  - `privacidade.php` & `rsocial.php`: Envolvidas em card elevado com sombra suave e tipografia legível.
+  - `sidebar.php`: Widgets modernizados com ícones temáticos, input de pesquisa arredondado e links com hover elegante.
+
+---
+
 ## [2.14.0] - 2026-10-22
 
 ### Reformulado & Modernizado

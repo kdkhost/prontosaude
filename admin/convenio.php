@@ -47,28 +47,26 @@ foreach ($result as $conv) {
 								<th>SUB-TÍTULO</th>
 								<th>DESCRIÇÃO</th>
 							</tr>
-							<tbody style="background:#fff;">
+    					</thead>
+						<tbody>
+							<tr>
 							    <td><?= $id; ?></td>
 							    <td><?= $nome; ?></td>
 							    <td><?= $titulo; ?></td>
 							    <td><?= $subtitulo; ?></td>
 							    <td><?= $descricao; ?></td>
-							</tbody>
-							<tfooter>
-							    <tr style="background:#fff;">
-							        <td>
-							            <h3>
-							                BANNER
-							            </h3>
-							        </td>
-                                  <td class="text-center" colspan="12">
-                                      <center>
-                                          <img style="max-height: 50px;" src="<?= BASE_URL ?>assets/uploads/<?= $banner; ?>" alt="Foto Banner" class="" />
-                                      </center>
-                                  </td>
-                                </tr>
-							</tfooter>
-    					</thead>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+							    <td>
+							        <strong class="text-uppercase">BANNER</strong>
+							    </td>
+                                <td class="text-center" colspan="4">
+                                    <img style="max-height: 50px;" src="<?= BASE_URL ?>assets/uploads/<?= $banner; ?>" alt="Foto Banner" class="img-fluid rounded border" />
+                                </td>
+                            </tr>
+						</tfoot>
                     </table>
                 </div>
             </div>

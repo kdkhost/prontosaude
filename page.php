@@ -49,11 +49,13 @@ $page_banner_src = (!empty($banner) && file_exists('assets/uploads/' . $banner))
 
 
 <?php if($page_layout == 'Full Width Page Layout'): ?>
-<section class="about-v2">
+<section class="about-v2" style="padding: 60px 0; background: #f8fafc;">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<?php echo $page_content; ?>
+				<div style="background: #ffffff; border-radius: 16px; padding: 36px 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; font-size: 15.5px; line-height: 1.85; color: #334155;">
+					<?php echo $page_content; ?>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -242,51 +244,93 @@ $visitor_email = $_POST['visitor_email'];
 				?>	
 
 
-				<form action="<?php echo BASE_URL; ?>page/<?php echo $_REQUEST['slug']; ?>" class="form-horizontal cform-1" method="post">
-					<!-- Campo Honeypot Invisível Anti-Spam -->
-					<input type="text" name="website_hp" style="display:none !important; position:absolute; left:-9999px;" tabindex="-1" autocomplete="off">
+				<div style="background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; margin-bottom: 30px;">
+					<h3 style="font-size: 22px; font-weight: 800; color: #0a6b74; margin-top: 0; margin-bottom: 20px;">
+						Envie-nos uma Mensagem
+					</h3>
+					<form action="<?php echo BASE_URL; ?>page/<?php echo $_REQUEST['slug']; ?>" class="form-horizontal cform-1" method="post">
+						<!-- Campo Honeypot Invisível Anti-Spam -->
+						<input type="text" name="website_hp" style="display:none !important; position:absolute; left:-9999px;" tabindex="-1" autocomplete="off">
 
-					<div class="form-group">
-                        <div class="col-sm-12">
-                            <input type="text" class="form-control" placeholder="Nome" name="visitor_name" required>
-                        </div>
-                    </div>
-					<div class="form-group">
-                        <div class="col-sm-12">
-                            <input type="email" class="form-control" placeholder="Email" name="visitor_email" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <input type="text" class="form-control" placeholder="Telefone" name="visitor_phone" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <textarea name="visitor_comment" class="form-control" cols="30" rows="8" placeholder="Mensagem" required></textarea>
-                        </div>
-                    </div>
-
-					<?php if(!empty($recaptcha_status) && !empty($recaptcha_site_key)): ?>
-					<div class="form-group">
-						<div class="col-sm-12">
-							<div class="g-recaptcha mb-2" data-sitekey="<?php echo htmlspecialchars($recaptcha_site_key); ?>"></div>
-							<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+						<div class="form-group" style="margin-bottom: 16px;">
+							<div class="col-sm-12">
+								<label style="font-weight: 600; font-size: 13.5px; color: #334155; margin-bottom: 6px; display: block;">Seu Nome Completo *</label>
+								<input type="text" class="form-control" placeholder="Digite seu nome" name="visitor_name" required style="border-radius: 8px; padding: 12px 14px;">
+							</div>
 						</div>
-					</div>
-					<?php endif; ?>
+						<div class="form-group" style="margin-bottom: 16px;">
+							<div class="col-sm-12">
+								<label style="font-weight: 600; font-size: 13.5px; color: #334155; margin-bottom: 6px; display: block;">Seu E-mail *</label>
+								<input type="email" class="form-control" placeholder="exemplo@email.com" name="visitor_email" required style="border-radius: 8px; padding: 12px 14px;">
+							</div>
+						</div>
+						<div class="form-group" style="margin-bottom: 16px;">
+							<div class="col-sm-12">
+								<label style="font-weight: 600; font-size: 13.5px; color: #334155; margin-bottom: 6px; display: block;">Telefone / WhatsApp *</label>
+								<input type="text" class="form-control" placeholder="(00) 00000-0000" name="visitor_phone" required style="border-radius: 8px; padding: 12px 14px;">
+							</div>
+						</div>
+						<div class="form-group" style="margin-bottom: 18px;">
+							<div class="col-sm-12">
+								<label style="font-weight: 600; font-size: 13.5px; color: #334155; margin-bottom: 6px; display: block;">Mensagem ou Dúvida *</label>
+								<textarea name="visitor_comment" class="form-control" cols="30" rows="6" placeholder="Como podemos ajudar você hoje?" required style="border-radius: 8px; padding: 12px 14px;"></textarea>
+							</div>
+						</div>
 
-                    <div class="form-group">
-	                    <div class="col-sm-12">
-	                        <input type="submit" value="Enviar Mensagem" class="btn btn-success" name="form_contact">
-	                    </div>
-	                </div>
-				</form>
+						<?php if(!empty($recaptcha_status) && !empty($recaptcha_site_key)): ?>
+						<div class="form-group" style="margin-bottom: 18px;">
+							<div class="col-sm-12">
+								<div class="g-recaptcha mb-2" data-sitekey="<?php echo htmlspecialchars($recaptcha_site_key); ?>"></div>
+								<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+							</div>
+						</div>
+						<?php endif; ?>
+
+						<div class="form-group" style="margin-bottom: 0;">
+							<div class="col-sm-12">
+								<button type="submit" class="btn btn-success" name="form_contact" style="background: #10b981; border: none; border-radius: 8px; font-weight: 700; padding: 12px 28px; box-shadow: 0 4px 14px rgba(16,185,129,0.35); font-size: 15px;">
+									<i class="fa fa-paper-plane" style="margin-right: 6px;"></i> Enviar Mensagem
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 			<div class="col-md-5">
-				<div class="google-map">
-					<?php echo $contact_map_iframe; ?>
-				</div>	
+				<div style="background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; margin-bottom: 30px;">
+					<h3 style="font-size: 20px; font-weight: 800; color: #0a6b74; margin-top: 0; margin-bottom: 16px;">
+						Nossa Localização
+					</h3>
+					<div class="google-map" style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px;">
+						<?php echo $contact_map_iframe; ?>
+					</div>
+					<?php if(!empty($contact_phone) || !empty($contact_email) || !empty($contact_address)): ?>
+						<div style="background: #f8fafc; border-radius: 10px; padding: 16px; border: 1px solid #f1f5f9;">
+							<?php if(!empty($contact_address)): ?>
+								<div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px;">
+									<i class="fa fa-map-marker text-success" style="font-size: 16px; margin-top: 3px;"></i>
+									<span style="font-size: 13.5px; color: #334155;"><?= htmlspecialchars($contact_address); ?></span>
+								</div>
+							<?php endif; ?>
+							<?php if(!empty($contact_phone)): ?>
+								<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+									<i class="fa fa-phone text-success" style="font-size: 16px;"></i>
+									<a href="tel:+55<?= preg_replace('/[^0-9]/', '', $contact_phone); ?>" style="font-size: 13.5px; color: #0a6b74; font-weight: 600; text-decoration: none;">
+										<?= htmlspecialchars($contact_phone); ?>
+									</a>
+								</div>
+							<?php endif; ?>
+							<?php if(!empty($contact_email)): ?>
+								<div style="display: flex; align-items: center; gap: 10px;">
+									<i class="fa fa-envelope text-success" style="font-size: 14px;"></i>
+									<a href="mailto:<?= htmlspecialchars($contact_email); ?>" style="font-size: 13.5px; color: #0a6b74; text-decoration: none;">
+										<?= htmlspecialchars($contact_email); ?>
+									</a>
+								</div>
+							<?php endif; ?>
+						</div>
+					<?php endif; ?>
+				</div>
 			</div>
 			
 		</div>
@@ -294,10 +338,8 @@ $visitor_email = $_POST['visitor_email'];
 </section>
 <?php endif; ?>
 
-
-
 <?php if($page_layout == 'FAQ Page Layout'): ?>
-<section class="faq">
+<section class="faq" style="padding: 60px 0; background: #f8fafc;">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">			
@@ -317,25 +359,29 @@ $visitor_email = $_POST['visitor_email'];
 						continue;
 					}
 				?>
-				<h1><?php echo htmlspecialchars($row['faq_category_name'] ?? ''); ?></h1>
+				<div style="margin-bottom: 36px;">
+					<h3 style="font-size: 22px; font-weight: 800; color: #0a6b74; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+						<i class="fa fa-question-circle"></i> <?php echo htmlspecialchars($row['faq_category_name'] ?? ''); ?>
+					</h3>
 					<div class="panel-group" id="accordion<?php echo $i; ?>" role="tablist" aria-multiselectable="true">
 						<?php
 						foreach ($result1 as $row1) {
 							$j++;
 							?>
-							<div class="panel panel-default">
-								<div class="panel-heading" role="tab" id="heading1">
-									<h4 class="panel-title">
+							<div class="panel panel-default" style="border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
+								<div class="panel-heading" role="tab" id="heading<?= $j; ?>" style="background: #fff; padding: 16px 20px;">
+									<h4 class="panel-title" style="margin: 0; font-size: 16px;">
 										<a class="collapsed" role="button" 
 										data-toggle="collapse" data-parent="#accordion<?php echo $i; ?>" 
-										href="#collapse<?php echo $j; ?>" aria-expanded="false" aria-controls="collapse<?php echo $j; ?>">
-											<?php echo $row1['faq_title']; ?>
+										href="#collapse<?php echo $j; ?>" aria-expanded="false" aria-controls="collapse<?php echo $j; ?>"
+										style="color: #0f172a; font-weight: 700; text-decoration: none; display: flex; justify-content: space-between; align-items: center;">
+											<span><?php echo $row1['faq_title']; ?></span>
+											<i class="fa fa-chevron-down" style="font-size: 13px; opacity: 0.5;"></i>
 										</a>
 									</h4>
-									
 								</div>
-								<div id="collapse<?php echo $j; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading1">
-									<div class="panel-body">
+								<div id="collapse<?php echo $j; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<?= $j; ?>">
+									<div class="panel-body" style="padding: 20px; color: #475569; font-size: 15px; line-height: 1.7; background: #f8fafc; border-top: 1px solid #e2e8f0;">
 										<?php echo $row1['faq_content']; ?>
 									</div>
 								</div>
@@ -344,7 +390,8 @@ $visitor_email = $_POST['visitor_email'];
 						}
 						?>
 					</div>
-					<?php
+				</div>
+				<?php
 				}
 				?>				
 			</div>			
@@ -400,16 +447,21 @@ $visitor_email = $_POST['visitor_email'];
     					$temp_slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $temp_string);
 						?>
 						<div class="col-md-4 mix <?php echo $temp_slug; ?> all" data-my-order="<?php echo $i; ?>">
-							<div class="inner">
-								<div class="photo" style="background-image:url(<?php echo BASE_URL; ?>assets/uploads/<?php echo $row['photo_name']; ?>);"></div>
+							<div class="inner" style="margin-bottom: 24px; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 4px 14px rgba(0,0,0,0.06); border: 1px solid #e2e8f0;">
+								<div class="photo" style="background-image:url(<?php echo BASE_URL; ?>assets/uploads/<?php echo $row['photo_name']; ?>); height: 230px; background-size: cover; background-position: center;"></div>
 								<div class="overlay"></div>
 								<div class="icons">
 									<div class="icons-inner">
-										<a class="gallery-photo" href="<?php echo BASE_URL; ?>assets/uploads/<?php echo $row['photo_name']; ?>">
+										<a class="gallery-photo" href="<?php echo BASE_URL; ?>assets/uploads/<?php echo $row['photo_name']; ?>" title="<?php echo htmlspecialchars($row['photo_caption'] ?? ''); ?>">
 										    <i class="fa fa-search-plus"></i>
 										</a>
 									</div>
 								</div>
+								<?php if(!empty($row['photo_caption'])): ?>
+									<div style="padding: 12px 16px; background: #ffffff; border-top: 1px solid #f1f5f9;">
+										<p style="margin: 0; font-size: 13.5px; font-weight: 600; color: #334155;"><?php echo htmlspecialchars($row['photo_caption']); ?></p>
+									</div>
+								<?php endif; ?>
 							</div>
 						</div>
 						<?php
@@ -473,11 +525,14 @@ $visitor_email = $_POST['visitor_email'];
     					$temp_slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $temp_string);
 						?>
 						<div class="col-md-4 mix <?php echo $temp_slug; ?> all" data-my-order="<?php echo $i; ?>">
-							<div class="inner viframe">
-								<video width="380" height="auto" class="parado" controls preload="auto">
+							<div class="inner viframe" style="margin-bottom: 24px; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 4px 14px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; padding: 12px;">
+								<video style="width: 100%; height: auto; border-radius: 10px;" class="parado" controls preload="auto">
                                   <source src="<?=$row['video_iframe']?>" type="video/mp4">
                                     Seu navegador não suporta tags de vídeo.
                                 </video>
+								<?php if(!empty($row['video_title'])): ?>
+									<h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 12px 4px 4px 4px;"><?= htmlspecialchars($row['video_title']); ?></h4>
+								<?php endif; ?>
 							</div>
 						</div>
 						<?php

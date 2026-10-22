@@ -1888,3 +1888,437 @@ body.ps-drawer-open .ps-offcanvas-drawer {
     box-shadow: 0 4px 14px rgba(10, 107, 116, 0.4) !important;
 }
 
+/* ==========================================================================
+   21. GALERIA MODERNA (FOTOS E VÍDEOS)
+   ========================================================================== */
+.gallery {
+    padding: 60px 0 !important;
+    background: #f8fafc;
+}
+
+.gallery-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto 36px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.gallery-menu li.filter {
+    padding: 8px 22px;
+    background: #ffffff;
+    color: var(--ps-body-text);
+    border: 1px solid var(--ps-border);
+    border-radius: var(--ps-radius-pill);
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: var(--ps-transition);
+    box-shadow: var(--ps-shadow-xs);
+}
+
+.gallery-menu li.filter:hover,
+.gallery-menu li.filter.active {
+    background: var(--ps-primary);
+    color: #ffffff;
+    border-color: var(--ps-primary);
+    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.25);
+    transform: translateY(-2px);
+}
+
+.gallery .mix {
+    margin-bottom: 30px;
+}
+
+.gallery .inner {
+    background: #ffffff;
+    border-radius: var(--ps-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--ps-shadow-sm);
+    border: 1px solid var(--ps-border);
+    position: relative;
+    transition: var(--ps-transition);
+}
+
+.gallery .inner:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--ps-shadow-lg);
+    border-color: var(--ps-primary);
+}
+
+.gallery .inner .photo {
+    height: 240px;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+
+.gallery .inner:hover .photo {
+    transform: scale(1.05);
+}
+
+.gallery .inner.viframe {
+    padding: 10px;
+    background: #ffffff;
+}
+
+.gallery .inner.viframe video {
+    width: 100% !important;
+    border-radius: var(--ps-radius-md);
+    outline: none;
+}
+
+/* ==========================================================================
+   22. BLOG & ARTIGOS MODERNOS
+   ========================================================================== */
+.blog {
+    padding: 60px 0 !important;
+    background: #f8fafc;
+}
+
+.blog .post-item {
+    background: #ffffff;
+    border-radius: var(--ps-radius-lg);
+    padding: 24px;
+    box-shadow: var(--ps-shadow-sm);
+    border: 1px solid var(--ps-border);
+    margin-bottom: 30px;
+    transition: var(--ps-transition);
+}
+
+.blog .post-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ps-shadow-md);
+    border-color: rgba(10, 107, 116, 0.25);
+}
+
+.blog .post-item .image-holder {
+    border-radius: var(--ps-radius-md);
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--ps-shadow-xs);
+}
+
+.blog .post-item .image-holder img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.blog .post-item:hover .image-holder img {
+    transform: scale(1.03);
+}
+
+.blog .post-item .text h3 {
+    font-size: 1.45rem;
+    font-weight: 800;
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.blog .post-item .text h3 a {
+    color: var(--ps-dark);
+    text-decoration: none;
+    transition: var(--ps-transition);
+}
+
+.blog .post-item .text h3 a:hover {
+    color: var(--ps-primary);
+}
+
+.blog .post-item ul.status {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.blog .post-item ul.status li {
+    font-size: 0.85rem;
+    color: var(--ps-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--ps-primary-subtle);
+    padding: 4px 12px;
+    border-radius: var(--ps-radius-pill);
+    font-weight: 600;
+}
+
+.blog .post-item ul.status li i {
+    color: var(--ps-primary);
+}
+
+.blog .post-item ul.status li a {
+    color: var(--ps-primary);
+    text-decoration: none;
+}
+
+.blog .post-item .text p {
+    color: var(--ps-body-text);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 18px;
+}
+
+.blog .post-item p.button a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ps-primary);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 9px 20px;
+    border-radius: var(--ps-radius-pill);
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(10, 107, 116, 0.25);
+    transition: var(--ps-transition);
+}
+
+.blog .post-item p.button a:hover {
+    background: var(--ps-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(10, 107, 116, 0.35);
+}
+
+/* Paginação Moderna */
+.pagination {
+    display: flex !important;
+    justify-content: center;
+    gap: 6px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.pagination a, .pagination span {
+    padding: 8px 16px;
+    border-radius: var(--ps-radius-md);
+    background: #ffffff;
+    border: 1px solid var(--ps-border);
+    color: var(--ps-body-text);
+    font-weight: 700;
+    text-decoration: none;
+    transition: var(--ps-transition);
+}
+
+.pagination a:hover {
+    background: var(--ps-primary-subtle);
+    color: var(--ps-primary);
+    border-color: var(--ps-primary);
+}
+
+.pagination .current {
+    background: var(--ps-primary) !important;
+    color: #ffffff !important;
+    border-color: var(--ps-primary) !important;
+    box-shadow: 0 4px 12px rgba(10, 107, 116, 0.3);
+}
+
+.pagination .disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ==========================================================================
+   23. SIDEBAR MODERNA DO FRONTEND
+   ========================================================================== */
+.sidebar .widget {
+    background: #ffffff;
+    border-radius: var(--ps-radius-lg);
+    padding: 24px;
+    border: 1px solid var(--ps-border);
+    box-shadow: var(--ps-shadow-sm);
+    margin-bottom: 26px;
+}
+
+.sidebar .widget h4 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--ps-primary);
+    padding-bottom: 12px;
+    margin-top: 0;
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--ps-primary-subtle);
+}
+
+.sidebar .widget-search form {
+    position: relative;
+    display: flex;
+}
+
+.sidebar .widget-search input {
+    width: 100%;
+    padding: 12px 45px 12px 16px;
+    border-radius: var(--ps-radius-pill);
+    border: 1px solid var(--ps-border);
+    font-size: 0.92rem;
+    outline: none;
+    transition: var(--ps-transition);
+}
+
+.sidebar .widget-search input:focus {
+    border-color: var(--ps-primary);
+    box-shadow: 0 0 0 3px rgba(10, 107, 116, 0.15);
+}
+
+.sidebar .widget-search button {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--ps-primary);
+    border: none;
+    color: #ffffff;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--ps-transition);
+}
+
+.sidebar .widget-search button:hover {
+    background: var(--ps-primary-dark);
+}
+
+.sidebar .widget ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar .widget ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--ps-border-subtle);
+}
+
+.sidebar .widget ul li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.sidebar .widget ul li a {
+    color: var(--ps-body-text);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.92rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: var(--ps-transition);
+}
+
+.sidebar .widget ul li a::before {
+    content: "\f105";
+    font-family: FontAwesome;
+    color: var(--ps-primary);
+    margin-right: 8px;
+    font-weight: 700;
+}
+
+.sidebar .widget ul li a:hover {
+    color: var(--ps-primary);
+    padding-left: 4px;
+}
+
+/* ==========================================================================
+   24. GRID DE MÉDICOS (DOCTOR PAGE LAYOUT)
+   ========================================================================== */
+.doctor-v3 {
+    padding: 60px 0 !important;
+    background: #f8fafc;
+}
+
+.doctor-v3 .doctor-inner .item {
+    margin-bottom: 30px;
+}
+
+.doctor-v3 .doctor-inner .inner {
+    background: #ffffff;
+    border-radius: var(--ps-radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--ps-border);
+    box-shadow: var(--ps-shadow-sm);
+    text-align: center;
+    padding-bottom: 22px;
+    transition: var(--ps-transition);
+}
+
+.doctor-v3 .doctor-inner .inner:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--ps-shadow-lg);
+    border-color: var(--ps-primary);
+}
+
+.doctor-v3 .doctor-inner .thumb {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+}
+
+.doctor-v3 .doctor-inner .thumb .photo {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+
+.doctor-v3 .doctor-inner .inner:hover .thumb .photo {
+    transform: scale(1.06);
+}
+
+.doctor-v3 .doctor-inner .text {
+    padding: 20px 16px 0 16px;
+}
+
+.doctor-v3 .doctor-inner .text h3 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 0 0 6px 0;
+}
+
+.doctor-v3 .doctor-inner .text h3 a {
+    color: var(--ps-dark);
+    text-decoration: none;
+    transition: var(--ps-transition);
+}
+
+.doctor-v3 .doctor-inner .text h3 a:hover {
+    color: var(--ps-primary);
+}
+
+.doctor-v3 .doctor-inner .text h4 {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ps-primary);
+    margin: 0 0 16px 0;
+}
+
+.doctor-v3 .doctor-inner p.button a {
+    display: inline-block;
+    padding: 7px 18px;
+    border-radius: var(--ps-radius-pill);
+    border: 1.5px solid var(--ps-primary);
+    color: var(--ps-primary);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: var(--ps-transition);
+}
+
+.doctor-v3 .doctor-inner p.button a:hover {
+    background: var(--ps-primary);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(10, 107, 116, 0.25);
+}
+
+
