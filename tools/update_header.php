@@ -22,6 +22,7 @@ $second_part = '
         <!-- Bootstrap 5.3.3, FontAwesome 6, Flaticon UIcons & Bootstrap Icons (Universal) -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/v4-shims.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
         <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css">
@@ -186,9 +187,15 @@ $second_part = '
                     <div class="d-flex align-items-center gap-3">
                         <?php if(!empty($social_data)): ?>
                             <?php foreach ($social_data as $s_row): ?>
-                                <?php if(!empty($s_row[\'social_url\'])): ?>
+                                <?php if(!empty($s_row[\'social_url\'])): 
+                                    $s_ico = $s_row[\'social_icon\'] ?? \'\';
+                                    if (strpos($s_ico, \'fa-\') !== false && strpos($s_ico, \'fab \') === false && strpos($s_ico, \'fas \') === false) {
+                                        $s_ico = \'fab \' . preg_replace(\'/^fa\s+fa-/\', \'fa-\', $s_ico);
+                                        if ($s_ico === \'fab fa-facebook\') $s_ico = \'fab fa-facebook-f\';
+                                    }
+                                ?>
                                     <a href="<?= $s_row[\'social_url\']; ?>" target="_blank" rel="noopener noreferrer" title="Rede Social" data-bs-toggle="tooltip" data-bs-placement="bottom">
-                                        <i class="<?= $s_row[\'social_icon\']; ?>"></i>
+                                        <i class="<?= $s_ico; ?>"></i>
                                     </a>
                                 <?php endif; ?>
                             <?php endforeach; ?>

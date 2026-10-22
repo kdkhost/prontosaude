@@ -257,7 +257,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
 
 /* Botão de Destaque da Plataforma de Rastreamento */
 .btn-foco-rastreamento {
-    background: linear-gradient(135deg, var(--cor-primaria, #0a6b74) 0%, #b80000 100%);
+    background: linear-gradient(135deg, var(--cor-primaria, #0a6b74) 0%, #075259 100%);
     color: #ffffff !important;
     font-weight: 700;
     font-size: 0.84rem;
@@ -601,7 +601,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
    3. BOTÕES E COMPONENTES DE AÇÃO (CTAS)
    ============================================================================== */
 .btn-foco-primary {
-    background: linear-gradient(135deg, var(--foco-red) 0%, #b80000 100%);
+    background: linear-gradient(135deg, var(--foco-red) 0%, #075259 100%);
     color: #ffffff;
     font-weight: 700;
     letter-spacing: 0.3px;
@@ -1050,7 +1050,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
     top: -14px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, var(--foco-red) 0%, #b80000 100%);
+    background: linear-gradient(135deg, var(--foco-red) 0%, #075259 100%);
     color: #ffffff;
     font-size: 0.74rem;
     font-weight: 800;
@@ -2081,7 +2081,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
 }
 
 .card-estetica:hover .icon-estetica-box {
-    background: linear-gradient(135deg, var(--foco-red) 0%, #b80000 100%);
+    background: linear-gradient(135deg, var(--foco-red) 0%, #075259 100%);
     color: #ffffff;
     transform: scale(1.08) rotate(4deg);
     box-shadow: 0 6px 18px var(--foco-red-glow);
@@ -2107,7 +2107,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
 }
 
 .btn-agendar-estetica {
-    background: linear-gradient(135deg, var(--foco-red) 0%, #b80000 100%);
+    background: linear-gradient(135deg, var(--foco-red) 0%, #075259 100%);
     color: #ffffff;
     font-weight: 700;
     padding: 12px 20px;
@@ -2123,7 +2123,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
 }
 
 .btn-agendar-estetica:hover {
-    background: linear-gradient(135deg, #b80000 0%, #900000 100%);
+    background: linear-gradient(135deg, #075259 0%, #900000 100%);
     color: #ffffff;
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(10, 107, 116, 0.42);
@@ -2398,7 +2398,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
     font-size: 0.84rem;
     font-weight: 700;
     color: #ffffff !important;
-    background: linear-gradient(135deg, var(--foco-red, #0a6b74) 0%, #b80000 100%);
+    background: linear-gradient(135deg, var(--foco-red, #0a6b74) 0%, #075259 100%);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 10px;
     transition: all 0.2s ease;
@@ -2465,7 +2465,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
 }
 
 .foco-whatsapp-float:hover {
-    background: #b80000 !important;
+    background: #075259 !important;
     color: #ffffff !important;
     transform: scale(1.1) translateY(-3px);
     box-shadow: 0 10px 25px rgba(10, 107, 116, 0.6);
@@ -3122,6 +3122,85 @@ img, svg, video, canvas, audio, iframe, embed, object {
 
 
 
+
+/* ==============================================================================
+   REGRAS TAILORED DE DESIGN PRONTO SAÚDE (TEAL & VERDE ESMERALDA)
+   ============================================================================== */
+:root {
+    --foco-red: #0a6b74 !important;
+    --foco-red-hover: #075259 !important;
+    --foco-red-light: #0d838e !important;
+    --foco-red-subtle: rgba(10, 107, 116, 0.08) !important;
+    --foco-red-glow: rgba(10, 107, 116, 0.25) !important;
+    --bs-primary: #0a6b74 !important;
+}
+
+/* Logo no Navbar Branco: converte imagem com texto branco para a cor Teal Hospitalar */
+.logo-foco7 {
+    filter: brightness(0) saturate(100%) invert(27%) sepia(85%) saturate(542%) hue-rotate(143deg) brightness(91%) contrast(93%);
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Botões com gradiente Hospitalar Teal */
+.btn-foco-primary {
+    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 18px rgba(10, 107, 116, 0.28) !important;
+}
+.btn-foco-primary:hover {
+    background: linear-gradient(135deg, #0d838e 0%, #0a6b74 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 25px rgba(10, 107, 116, 0.42) !important;
+    transform: translateY(-2px);
+}
+
+.btn-outline-danger {
+    color: #0a6b74 !important;
+    border-color: #0a6b74 !important;
+}
+.btn-outline-danger:hover {
+    background-color: #0a6b74 !important;
+    border-color: #0a6b74 !important;
+    color: #ffffff !important;
+}
+
+.text-danger {
+    color: #0a6b74 !important;
+}
+.bg-danger {
+    background-color: #0a6b74 !important;
+}
+
+.badge.bg-danger,
+.badge-estetica-topo,
+.tag-plano-destaque {
+    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
+    color: #ffffff !important;
+}
+
+.btn-agendar-estetica {
+    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--foco-transition);
+}
+.btn-agendar-estetica:hover {
+    background: linear-gradient(135deg, #0d838e 0%, #0a6b74 100%) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(10, 107, 116, 0.35);
+}
 
 /* ==============================================================================
    SEÇÃO CORPO CLÍNICO & MÉDICOS ESPECIALISTAS (PRONTO SAÚDE)

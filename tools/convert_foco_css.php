@@ -15,6 +15,7 @@ $map = [
     '#D90000' => '#0a6b74',
     '#b30000' => '#075259',
     '#B30000' => '#075259',
+    '#b80000' => '#075259',
     '#ff2a2a' => '#0d838e',
     '#FF2A2A' => '#0d838e',
     '#ff3b3b' => '#0d838e',
@@ -27,7 +28,6 @@ $map = [
     'Foco 7' => 'Pronto Saúde',
     'FOCO 7' => 'PRONTO SAÚDE',
     'foco 7' => 'pronto saúde',
-    'foco-red' => 'foco-red', // mantém compatibilidade de nomes das variáveis
 ];
 
 $css = str_replace(array_keys($map), array_values($map), $css);
@@ -41,6 +41,85 @@ $css = str_replace(
 
 // Adiciona regras específicas da Pronto Saúde (Corpo Clínico, etc.)
 $extra = "\n\n" . '/* ==============================================================================
+   REGRAS TAILORED DE DESIGN PRONTO SAÚDE (TEAL & VERDE ESMERALDA)
+   ============================================================================== */
+:root {
+    --foco-red: #0a6b74 !important;
+    --foco-red-hover: #075259 !important;
+    --foco-red-light: #0d838e !important;
+    --foco-red-subtle: rgba(10, 107, 116, 0.08) !important;
+    --foco-red-glow: rgba(10, 107, 116, 0.25) !important;
+    --bs-primary: #0a6b74 !important;
+}
+
+/* Logo no Navbar Branco: converte imagem com texto branco para a cor Teal Hospitalar */
+.logo-foco7 {
+    filter: brightness(0) saturate(100%) invert(27%) sepia(85%) saturate(542%) hue-rotate(143deg) brightness(91%) contrast(93%);
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Botões com gradiente Hospitalar Teal */
+.btn-foco-primary {
+    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 18px rgba(10, 107, 116, 0.28) !important;
+}
+.btn-foco-primary:hover {
+    background: linear-gradient(135deg, #0d838e 0%, #0a6b74 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 25px rgba(10, 107, 116, 0.42) !important;
+    transform: translateY(-2px);
+}
+
+.btn-outline-danger {
+    color: #0a6b74 !important;
+    border-color: #0a6b74 !important;
+}
+.btn-outline-danger:hover {
+    background-color: #0a6b74 !important;
+    border-color: #0a6b74 !important;
+    color: #ffffff !important;
+}
+
+.text-danger {
+    color: #0a6b74 !important;
+}
+.bg-danger {
+    background-color: #0a6b74 !important;
+}
+
+.badge.bg-danger,
+.badge-estetica-topo,
+.tag-plano-destaque {
+    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
+    color: #ffffff !important;
+}
+
+.btn-agendar-estetica {
+    background: linear-gradient(135deg, #0a6b74 0%, #075259 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--foco-transition);
+}
+.btn-agendar-estetica:hover {
+    background: linear-gradient(135deg, #0d838e 0%, #0a6b74 100%) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(10, 107, 116, 0.35);
+}
+
+/* ==============================================================================
    SEÇÃO CORPO CLÍNICO & MÉDICOS ESPECIALISTAS (PRONTO SAÚDE)
    ============================================================================== */
 .section-medicos {
@@ -141,4 +220,4 @@ $extra = "\n\n" . '/* ==========================================================
 ';
 
 file_put_contents($dest, $css . $extra);
-echo "Sucesso: pronto-modern-frontend.css gerado com " . strlen($css . $extra) . " bytes.\n";
+echo "Sucesso: pronto-modern-frontend.css atualizado com " . strlen($css . $extra) . " bytes.\n";
