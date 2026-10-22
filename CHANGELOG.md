@@ -4,6 +4,16 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.16.0] - 2026-10-22
+
+### Padronizado & Aprimorado
+- **Universalização do Editor Summernote BS5 em Todos os Formulários do Painel**:
+  - **Summernote por Padrão em Todos os Textareas:** Todos os campos `<textarea>` do painel administrativo agora são automaticamente convertidos no editor rico Summernote oficial (Bootstrap 5 v0.8.20), dispensando classes ou seletores manuais específicos.
+  - **Exceções Técnicas Automatizadas:** Campos de código de incorporação (`iframe`), listas de IP (`.font-monospace`), chaves e campos com classes/atributos de escape (`.no-summernote`, `.no-editor`, `data-no-summernote`) continuam mantendo a formatação bruta sem rich text.
+  - **Localização em Português do Brasil:** Integração do pacote oficial `summernote-pt-BR.min.js` para menus, botões e dicas do editor totalmente traduzidos.
+  - **Sincronização Bidirecional Pré-Envio:** Atualização instantânea do valor HTML gerado para o textarea original antes de qualquer submissão (tanto em formulários tradicionais quanto requisições AJAX/SPA).
+  - **Design System & Dark Mode:** Adaptação completa de bordas arredondadas, foco com anel translúcido e paleta de alto contraste para o tema escuro.
+
 ## [2.15.1] - 2026-10-22
 
 ### Reformulado & Otimizado

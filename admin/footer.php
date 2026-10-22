@@ -48,7 +48,8 @@
 		window.jQuery.fn.tooltip = function () { return this; };
 	}
 	</script>
-	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/lang/summernote-pt-BR.min.js"></script>
 
 	<!-- Utilitário Global Pronto Saúde (SweetAlert2, Toastr, DarkMode, Confirmações) -->
 	<script src="js/pronto-global.js?v=<?= time(); ?>"></script>
@@ -133,25 +134,62 @@
 			});
 		}
 
-		// Inicialização Global do Summernote
+		// Inicialização Universal do Summernote como padrão para todos os textarea
 		if ($.fn.summernote) {
-			const editorSelector = '.summernote, [id="1"], [id="2"], [id="3"], textarea.editor, textarea#editor1, textarea[name="content"], textarea[name="news_content"], textarea[name="page_content"], textarea[name="description"], textarea[name="detail"], textarea[name="detalhes"], textarea[name="requisitos"], textarea[name="beneficios"], textarea[name="faq_content"], textarea[name="comment"]';
-			$(editorSelector).each(function () {
-				if (!$(this).next().hasClass('note-editor')) {
-					$(this).summernote({
+			function initSummernote(scope) {
+				const $context = scope ? $(scope) : $(document);
+				$context.find('textarea').each(function () {
+					const $ta = $(this);
+					// Pula se já inicializado ou se marcado explicitamente como sem editor
+					if ($ta.next().hasClass('note-editor') || 
+						$ta.hasClass('no-summernote') || 
+						$ta.hasClass('no-editor') || 
+						$ta.attr('data-no-summernote') !== undefined || 
+						$ta.attr('data-no-editor') !== undefined) {
+						return;
+					}
+
+					// Pula campos técnicos que não devem ter HTML rico (código iframe, listas brutas de IP, chaves/segurança)
+					const name = ($ta.attr('name') || '').toLowerCase();
+					const id = ($ta.attr('id') || '').toLowerCase();
+					if (name.includes('iframe') || name.includes('ip_') || id.includes('iframe') || $ta.hasClass('font-monospace')) {
+						return;
+					}
+
+					// Configuração dinâmica de altura baseada em rows ou padrão
+					const rows = parseInt($ta.attr('rows') || '5', 10);
+					const calculatedHeight = Math.min(450, Math.max(180, rows * 36));
+
+					$ta.summernote({
 						tabsize: 2,
-						height: 200,
+						height: calculatedHeight,
+						lang: 'pt-BR',
+						placeholder: $ta.attr('placeholder') || 'Escreva o conteúdo aqui...',
+						dialogsInBody: true,
 						toolbar: [
 							['style', ['style']],
 							['font', ['bold', 'italic', 'underline', 'clear']],
+							['fontname', ['fontname']],
 							['color', ['color']],
 							['para', ['ul', 'ol', 'paragraph']],
 							['table', ['table']],
-							['insert', ['link', 'picture', 'video']],
-							['view', ['fullscreen', 'codeview']]
+							['insert', ['link', 'picture', 'video', 'hr']],
+							['view', ['fullscreen', 'codeview', 'help']]
 						]
 					});
-				}
+				});
+			}
+
+			initSummernote();
+
+			// Garante que o valor do Summernote seja sempre sincronizado com o textarea original antes do envio
+			$(document).on('submit', 'form', function () {
+				$(this).find('textarea').each(function () {
+					const $ta = $(this);
+					if ($ta.next().hasClass('note-editor') && $ta.summernote) {
+						$ta.val($ta.summernote('code'));
+					}
+				});
 			});
 		}
 		// Controle do Botão Voltar ao Topo no Painel Admin

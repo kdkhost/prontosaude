@@ -1466,30 +1466,97 @@ td .d-flex {
   border-color: #10b981 !important;
 }
 
+/* Summernote Editor Moderno (AdminLTE 4 + Bootstrap 5) */
+.note-editor.note-frame {
+  border-radius: 0.5rem !important;
+  border: 1px solid var(--bs-border-color, #e2e8f0) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+.note-editor.note-frame:focus-within {
+  border-color: #0a6b74 !important;
+  box-shadow: 0 0 0 0.25rem rgba(10, 107, 116, 0.15) !important;
+}
+.note-toolbar {
+  background-color: var(--bs-tertiary-bg, #f8fafc) !important;
+  border-bottom: 1px solid var(--bs-border-color, #e2e8f0) !important;
+  padding: 6px 8px !important;
+}
+.note-btn {
+  border-radius: 0.375rem !important;
+  font-size: 0.8125rem !important;
+  padding: 4px 8px !important;
+  border-color: transparent !important;
+}
+.note-btn:hover {
+  background-color: rgba(10, 107, 116, 0.08) !important;
+  color: #0a6b74 !important;
+}
+.note-editable {
+  min-height: 160px;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  padding: 14px 16px !important;
+}
+.note-statusbar {
+  background-color: var(--bs-tertiary-bg, #f8fafc) !important;
+  border-top: 1px solid var(--bs-border-color, #e2e8f0) !important;
+}
+
 /* Summernote Editor no Dark Mode */
 [data-bs-theme="dark"] .note-editor.note-frame {
   border-color: #2e4363 !important;
+  background-color: #0e1828 !important;
 }
-
+[data-bs-theme="dark"] .note-editor.note-frame:focus-within {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.2) !important;
+}
 [data-bs-theme="dark"] .note-toolbar {
   background-color: #152238 !important;
-  border-bottom-color: var(--bs-border-color) !important;
+  border-bottom-color: #2e4363 !important;
 }
-
 [data-bs-theme="dark"] .note-btn {
   background-color: #1e2f4a !important;
   border-color: #2e4363 !important;
   color: #f1f5f9 !important;
 }
-
+[data-bs-theme="dark"] .note-btn:hover {
+  background-color: #2e4363 !important;
+  color: #10b981 !important;
+}
 [data-bs-theme="dark"] .note-editable {
   background-color: #0e1828 !important;
   color: #f8fafc !important;
 }
-
 [data-bs-theme="dark"] .note-statusbar {
   background-color: #152238 !important;
-  border-top-color: var(--bs-border-color) !important;
+  border-top-color: #2e4363 !important;
+}
+[data-bs-theme="dark"] .note-dropdown-menu {
+  background-color: #152238 !important;
+  border-color: #2e4363 !important;
+  color: #f8fafc !important;
+}
+[data-bs-theme="dark"] .note-dropdown-menu a {
+  color: #f8fafc !important;
+}
+[data-bs-theme="dark"] .note-dropdown-menu a:hover {
+  background-color: #1e2f4a !important;
+  color: #10b981 !important;
+}
+[data-bs-theme="dark"] .note-modal-content {
+  background-color: #152238 !important;
+  border-color: #2e4363 !important;
+  color: #f8fafc !important;
+}
+[data-bs-theme="dark"] .note-modal-header {
+  border-bottom-color: #2e4363 !important;
+}
+[data-bs-theme="dark"] .note-modal-footer {
+  border-top-color: #2e4363 !important;
 }
 
 /* Callouts no Dark Mode */

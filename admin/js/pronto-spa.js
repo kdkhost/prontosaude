@@ -128,32 +128,50 @@
       });
     }
 
-    // C. Summernote Global
+    // C. Summernote Universal como padrão em todos os textareas
     if (window.jQuery && jQuery.fn.summernote) {
       try {
         if (!window.jQuery.fn.tooltip) {
           window.jQuery.fn.tooltip = function () { return this; };
         }
-        const editorSelector = '.summernote, [id="1"], [id="2"], [id="3"], textarea.editor, textarea#editor1, textarea[name="content"], textarea[name="news_content"], textarea[name="page_content"], textarea[name="description"], textarea[name="detail"], textarea[name="detalhes"], textarea[name="requisitos"], textarea[name="beneficios"], textarea[name="faq_content"], textarea[name="comment"]';
-        const editors = container.querySelectorAll(editorSelector);
-        editors.forEach(ed => {
+        const textareas = container.querySelectorAll('textarea');
+        textareas.forEach(ed => {
           try {
-            if (!jQuery(ed).next().hasClass('note-editor')) {
-              jQuery(ed).summernote({
-                tabsize: 2,
-                height: 220,
-                lang: 'pt-BR',
-                toolbar: [
-                  ['style', ['style']],
-                  ['font', ['bold', 'italic', 'underline', 'clear']],
-                  ['color', ['color']],
-                  ['para', ['ul', 'ol', 'paragraph']],
-                  ['table', ['table']],
-                  ['insert', ['link', 'picture', 'video']],
-                  ['view', ['fullscreen', 'codeview']]
-                ]
-              });
+            const $ed = jQuery(ed);
+            if ($ed.next().hasClass('note-editor') ||
+                $ed.hasClass('no-summernote') ||
+                $ed.hasClass('no-editor') ||
+                $ed.attr('data-no-summernote') !== undefined ||
+                $ed.attr('data-no-editor') !== undefined) {
+              return;
             }
+
+            const name = ($ed.attr('name') || '').toLowerCase();
+            const id = ($ed.attr('id') || '').toLowerCase();
+            if (name.includes('iframe') || name.includes('ip_') || id.includes('iframe') || $ed.hasClass('font-monospace')) {
+              return;
+            }
+
+            const rows = parseInt($ed.attr('rows') || '5', 10);
+            const calculatedHeight = Math.min(450, Math.max(180, rows * 36));
+
+            $ed.summernote({
+              tabsize: 2,
+              height: calculatedHeight,
+              lang: 'pt-BR',
+              placeholder: $ed.attr('placeholder') || 'Escreva o conteúdo aqui...',
+              dialogsInBody: true,
+              toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video', 'hr']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+              ]
+            });
           } catch (e) {}
         });
       } catch (e) {}
@@ -478,10 +496,10 @@
 
       // Sincroniza qualquer editor Summernote com o textarea antes de empacotar o FormData
       if (window.jQuery && jQuery.fn.summernote) {
-        jQuery(form).find('.note-editor').each(function () {
-          const $textarea = jQuery(this).prev('textarea');
-          if ($textarea.length) {
-            $textarea.val($textarea.summernote('code'));
+        jQuery(form).find('textarea').each(function () {
+          const $ta = jQuery(this);
+          if ($ta.next().hasClass('note-editor') && $ta.summernote) {
+            $ta.val($ta.summernote('code'));
           }
         });
       }

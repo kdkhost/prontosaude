@@ -94,7 +94,7 @@ $logo = $row['logo'] ?? '';
 	<link rel="stylesheet" href="css/select2.min.css">
 	<link rel="stylesheet" href="css/datepicker3.css">
 	<link rel="stylesheet" href="css/on-off-switch.css">
-	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.css" rel="stylesheet">
 	
 	<!-- DataTables & DataTables Responsive (AdminLTE 3/4 Style) -->
 	<link rel="stylesheet" href="css/dataTables.bootstrap.css">
