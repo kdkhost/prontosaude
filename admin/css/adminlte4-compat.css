@@ -52,13 +52,23 @@ body {
 
 /* Brand e Sidebar Moderna com Scroll Nativo e Treeview Accordion */
 .app-sidebar {
-  position: fixed !important;
+  /* Padrão oficial AdminLTE 4: sticky mantém a coluna reservada no grid do .app-wrapper */
+  position: sticky !important;
   top: 0;
-  bottom: 0;
-  left: 0;
   height: 100vh !important;
+  max-height: 100vh;
   overflow: hidden !important;
   z-index: 1038;
+}
+
+/* Abaixo de lg a sidebar é off-canvas (margin-left negativo controlado pelo AdminLTE) */
+@media (max-width: 991.98px) {
+  .app-sidebar {
+    position: fixed !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+  }
 }
 
 .app-sidebar .sidebar-brand {
