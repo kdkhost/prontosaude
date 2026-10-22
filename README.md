@@ -56,6 +56,13 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - Botão circular expansível com ícone verde de sinal de mais (`+`) e sinal de menos (`-`) em vermelho ao expandir a linha filha com todos os dados e detalhes estruturados.
 - **Padronização Visual Completa e Alinhamento de Botões:**
   - Tipografia unificada estritamente em 14px (`Source Sans 3`), alinhamento automático de botões de ação nas tabelas (Editar, Deletar, Visualizar) lado a lado sem quebra feia, cabeçalhos de página proporcionais e grid de formulários perfeitamente alinhado.
+- **Gestão e Customização Total de Cards (Serviços, Planos e Produtos):**
+  - **100% Configurável pelo Painel Admin:** Fim de imagens, links e textos fixos no código-fonte. Tudo é editável em tempo real nos módulos de Serviços (`admin/service.php`), Planos (`admin/pricing-plan.php`) e Odontologia (`admin/dental.php`).
+  - **Upload Dinâmico com Preview:** Upload por arrastar e soltar (Drag & Drop) de fotos e ilustrações sem dependência de caminhos estáticos.
+  - **Preços e Valores Flexíveis:** Definição livre de valores monetários (`R$ 49,90`), prazos (`/mês`, `/ano`) ou modalidades especiais (`Sob Consulta`).
+  - **Benefícios Inclusos:** Edição simplificada de tópicos/benefícios (um por linha no painel) com renderização automática de ícones de checkmark nos cards do portal.
+  - **Botões e Links Customizáveis:** Personalização do texto da ação (ex: *Contratar Agora*, *Agendar Consulta*, *Saiba Mais*) e URL de destino flexível (WhatsApp direto, link de checkout ou página de detalhes).
+  - **Destaque e Selos (Badges):** Opção de marcar planos recomendados com efeito de elevação e selos dinâmicos (*Mais Popular*, *Recomendado*).
 - **Correção Abrangente de Acentuação e Encoding:**
   - Banco de dados e arquivos 100% saneados em UTF-8 (`utf8mb4`), eliminando caracteres corrompidos (`?`) e garantindo ortografia correta da língua portuguesa.
 - **KPIs Modernos e Interativos:**

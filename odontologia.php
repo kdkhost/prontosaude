@@ -21,32 +21,47 @@
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 			foreach ($result as $row) {
+				$foto = $row['foto'];
+				$foto_src = (!empty($foto) && file_exists('assets/uploads/'.$foto)) ? BASE_URL.'assets/uploads/'.$foto : BASE_URL.'assets/images/sem-foto.gif';
+				$link_dest = !empty($row['link']) ? $row['link'] : '#';
+				$is_external_link = (strpos($link_dest, 'http') === 0);
+				$btn_label = !empty($row['button_text']) ? $row['button_text'] : 'Agendar Avaliação';
+				$benefits_items = !empty($row['beneficios']) ? explode("\n", str_replace("\r", "", $row['beneficios'])) : [];
 				?>
 				<div class="col-sm-6 col-md-4 col-lg-4">
-					<div class="item border border-info">
-						<?php if($row['foto'] == ""){?>
-						<div class="photo" 
-						    style="background-image:url(../assets/uploads/dental/sem-foto.gif);">
+					<div class="item border border-info service-card-box">
+						<div class="photo" style="background-image:url(<?= $foto_src; ?>); position: relative;">
+							<?php if(!empty($row['valor'])): ?>
+								<div class="service-card-price-badge">
+									<small>A partir de</small> R$ <?= htmlspecialchars($row['valor']); ?>
+								</div>
+							<?php endif; ?>
 						</div>
-						<?php }else{?>
-						<div class="photo" 
-						    style="background-image:url(../assets/uploads/<?= $row['foto']; ?>);">
-						</div>
-						<?php }?>
 						<div class="text">
 							<div class="inner">
 								<h3>
-								    <a href="#" data-toggle="modal" data-target="#staticBackdrop-<?= $row['id_den']; ?>">
-								        <?php echo $row['servico']; ?>
-								    </a>
+									<?php if($is_external_link): ?>
+										<a href="<?= htmlspecialchars($link_dest); ?>" target="_blank" rel="noopener"><?= htmlspecialchars($row['servico']); ?></a>
+									<?php else: ?>
+										<a href="#" data-toggle="modal" data-target="#staticBackdrop-<?= $row['id_den']; ?>"><?= htmlspecialchars($row['servico']); ?></a>
+									<?php endif; ?>
 								</h3>
 								<p>
-								    <?= substr(strip_tags($row['descricao']), 0, 200) . ' ...'; ?>
+									<?= substr(strip_tags($row['descricao']), 0, 160) . '...'; ?>
 								</p>
+								<?php if(!empty($benefits_items)): ?>
+									<ul class="service-card-benefits">
+										<?php foreach(array_slice($benefits_items, 0, 3) as $b_item): if(!empty(trim($b_item))): ?>
+											<li><i class="fa fa-check text-success" style="margin-right: 5px;"></i> <?= htmlspecialchars(trim($b_item)); ?></li>
+										<?php endif; endforeach; ?>
+									</ul>
+								<?php endif; ?>
 								<p class="button">
-									<a href="#" data-toggle="modal" data-target="#staticBackdrop-<?= $row['id_den']; ?>">
-									    Saiba Mais
-									</a>
+									<?php if($is_external_link): ?>
+										<a href="<?= htmlspecialchars($link_dest); ?>" target="_blank" rel="noopener"><?= htmlspecialchars($btn_label); ?></a>
+									<?php else: ?>
+										<a href="#" data-toggle="modal" data-target="#staticBackdrop-<?= $row['id_den']; ?>"><?= htmlspecialchars($btn_label); ?></a>
+									<?php endif; ?>
 								</p>
 							</div>
 						</div>

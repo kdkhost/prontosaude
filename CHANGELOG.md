@@ -4,6 +4,38 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.0] - 2026-10-21
+
+### Adicionado & Aprimorado
+- **Customização Total de Cards de Serviços, Planos e Produtos pelo Painel Admin**:
+  - **Eliminação de Dados Hardcoded**: Fim de imagens fixas (`top-saude.png`, `odonto.png`, `empresarial.png`), valores estáticos ou botões com links fixos no frontend. Agora todo o conteúdo é gerido diretamente pelo banco de dados e editável pelo painel.
+  - **Migração do Banco de Dados Idempotente (`admin/inc/migrate_cards.php`)**:
+    - `tbl_pricing_plan`: Adicionadas colunas `pricing_plan_photo` (VARCHAR 255), `pricing_plan_period` (VARCHAR 50), `pricing_plan_badge` (VARCHAR 100) e `pricing_plan_popular` (TINYINT 1).
+    - `tbl_service`: Adicionadas colunas `price` (VARCHAR 100), `benefits` (TEXT), `button_text` (VARCHAR 100) e `button_url` (VARCHAR 255).
+    - `tbl_dental`: Adicionadas colunas `beneficios` (TEXT) e `button_text` (VARCHAR 100).
+    - Migração automática das imagens padrão para `assets/uploads/` e vinculação dos registros existentes.
+  - **Módulo de Planos de Saúde (`admin/pricing-plan*.php`)**:
+    - Upload moderno de foto do plano com Drag & Drop e visualização instantânea.
+    - Campos dinâmicos de Valor, Período de Cobrança (`/mês`, `/ano`) e Badge de Destaque (*Ex: Mais Popular, Recomendado*).
+    - Checkbox de Plano Destaque (`pricing_plan_popular`) que aplica contorno e elevação tridimensional no frontend.
+    - Área de texto para listagem de benefícios inclusos (1 por linha) sincronizada de forma atômica com a tabela filha `tbl_pricing_item`.
+    - Configuração personalizada de texto do botão de ação e URL de redirecionamento (checkout, WhatsApp ou páginas internas).
+    - Listagem administrativa com exibição de miniaturas das fotos, badges, valores formatados e resumo de benefícios no DataTables.
+  - **Módulo de Serviços Médicos (`admin/service*.php`)**:
+    - Adicionados campos para Preço/Valor (`A partir de R$ ...`), Tópicos de Benefícios Inclusos, Texto do Botão e Link do Botão.
+    - Visualização no DataTables com badges informativas.
+  - **Módulo de Odontologia & Produtos (`admin/dental*.php`)**:
+    - Suporte a benefícios inclusos, texto do botão configurável e link de atendimento/WhatsApp dinâmico.
+  - **Estilização Refinada no Frontend (`header.php`, `index.php`, `servicos.php`, `fidelidade.php`, `odontologia.php`)**:
+    - Selo flutuante de preço sobre a foto (`.service-card-price-badge`) com efeito de desfoque translúcido (`backdrop-filter`).
+    - Lista visual de benefícios com marcadores verdes (`.service-card-benefits`).
+    - Realce visual moderno para planos populares (`.pricing-popular` e `.pricing-badge-flag`).
+    - Compatibilidade responsiva e detecção inteligente de URLs externas com abertura segura em nova aba (`target="_blank" rel="noopener"`).
+  - **Estabilidade no CLI e Servidor**:
+    - Ajuste preventivo em `admin/inc/security_guard.php` para execuções via CLI sem emissão de warnings de `REQUEST_METHOD`.
+
+---
+
 ## [2.9.0] - 2026-10-21
 
 ### Adicionado & Aprimorado

@@ -533,9 +533,89 @@ $email   = $row2['dep_email'] ?? '';
             border-radius: 10px;
         }
          
-        ::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+        /* Cards de Serviços, Planos e Produtos Personalizáveis */
+        .service-card-box {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .service-card-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(10, 107, 116, 0.16);
+        }
+        .service-card-price-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(10, 107, 116, 0.92);
+            color: #ffffff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.3px;
+            backdrop-filter: blur(4px);
+            z-index: 2;
+        }
+        .service-card-price-badge small {
+            font-size: 10px;
+            text-transform: uppercase;
+            display: inline-block;
+            opacity: 0.9;
+            font-weight: 600;
+            margin-right: 2px;
+        }
+        .service-card-benefits {
+            list-style: none !important;
+            padding-left: 0 !important;
+            margin: 12px 0 16px 0 !important;
+        }
+        .service-card-benefits li {
+            font-size: 12px !important;
+            color: #475569 !important;
+            margin-bottom: 6px !important;
+            line-height: 1.4 !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        .service-card-benefits li i {
+            color: #10b981 !important;
+            margin-right: 6px !important;
+            font-size: 13px !important;
+            flex-shrink: 0 !important;
+        }
+        .pricing-popular {
+            border: 2px solid #0a6b74 !important;
+            transform: scale(1.02);
+            box-shadow: 0 14px 30px rgba(10, 107, 116, 0.18) !important;
+            z-index: 2;
+        }
+        .pricing-badge-flag {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #ffc107;
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 3;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .plan-img-container {
+            margin: 12px auto;
+            max-width: 220px;
+            height: 95px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 	</style>
     </head>

@@ -74,21 +74,38 @@
 		</div>
 		<div class="row">
 			<?php
-			$statement = $pdo->prepare("SELECT * FROM tbl_service ORDER BY rand() LIMIT 3");
+			$statement = $pdo->prepare("SELECT * FROM tbl_service ORDER BY id ASC LIMIT 3");
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 			foreach ($result as $row) {
+				$link_btn = !empty($row['button_url']) ? $row['button_url'] : BASE_URL . 'service/' . $row['slug'];
+				$btn_target = (!empty($row['button_url']) && strpos($row['button_url'], 'http') === 0) ? 'target="_blank" rel="noopener"' : '';
+				$btn_label = !empty($row['button_text']) ? $row['button_text'] : 'Agendar Consulta';
+				$photo_src = (!empty($row['photo']) && file_exists('assets/uploads/' . $row['photo'])) ? BASE_URL . 'assets/uploads/' . $row['photo'] : BASE_URL . 'assets/images/sem-foto.gif';
+				$benefits_items = !empty($row['benefits']) ? explode("\n", str_replace("\r", "", $row['benefits'])) : [];
 				?>
 				<div class="col-sm-6 col-md-4 col-lg-4">
-					<div class="item border border-info">
-						<div class="photo" style="background-image:url(<?php echo BASE_URL; ?>assets/uploads/<?php echo $row['photo']; ?>);">
+					<div class="item border border-info service-card-box">
+						<div class="photo" style="background-image:url(<?php echo $photo_src; ?>); position: relative;">
+							<?php if(!empty($row['price'])): ?>
+								<div class="service-card-price-badge">
+									<small>A partir de</small> R$ <?php echo htmlspecialchars($row['price']); ?>
+								</div>
+							<?php endif; ?>
 						</div>
 						<div class="text">
 							<div class="inner">
-								<h3><a href="../servicos.php"><?php echo $row['name']; ?></a></h3>
-								<p><?php echo substr($row['short_description'],0,145); ?></p>
+								<h3><a href="<?php echo htmlspecialchars($link_btn); ?>" <?php echo $btn_target; ?>><?php echo htmlspecialchars($row['name']); ?></a></h3>
+								<p><?php echo substr(strip_tags($row['short_description']), 0, 140) . '...'; ?></p>
+								<?php if(!empty($benefits_items)): ?>
+									<ul class="service-card-benefits">
+										<?php foreach(array_slice($benefits_items, 0, 3) as $b_item): if(!empty(trim($b_item))): ?>
+											<li><i class="fa fa-check text-success" style="margin-right: 5px;"></i> <?php echo htmlspecialchars(trim($b_item)); ?></li>
+										<?php endif; endforeach; ?>
+									</ul>
+								<?php endif; ?>
 								<p class="button">
-									<a href="../servicos.php">Saiba Mais</a>
+									<a href="<?php echo htmlspecialchars($link_btn); ?>" <?php echo $btn_target; ?>><?php echo htmlspecialchars($btn_label); ?></a>
 								</p>
 							</div>
 						</div>
@@ -313,58 +330,80 @@
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 			foreach ($result as $row) {
+				$plan_photo = $row['pricing_plan_photo'] ?? '';
+				$photo_src = '';
+				if(!empty($plan_photo) && file_exists('assets/uploads/' . $plan_photo)) {
+					$photo_src = BASE_URL . 'assets/uploads/' . $plan_photo;
+				} elseif(!empty($plan_photo) && file_exists('assets/images/planos/' . $plan_photo)) {
+					$photo_src = BASE_URL . 'assets/images/planos/' . $plan_photo;
+				}
+
+				$plan_btn_text = !empty($row['pricing_plan_button_text']) ? $row['pricing_plan_button_text'] : 'Contratar Agora';
+				$plan_btn_url = !empty($row['pricing_plan_button_url']) ? $row['pricing_plan_button_url'] : BASE_URL . 'fidelidade.php';
+				$btn_target = (strpos($plan_btn_url, 'http') === 0) ? 'target="_blank" rel="noopener"' : '';
+				$is_popular = !empty($row['pricing_plan_popular']);
+				$badge = $row['pricing_plan_badge'] ?? '';
+				$price_val = trim($row['pricing_plan_price'] ?? '');
+				$period_val = trim($row['pricing_plan_period'] ?? '/mês');
 				?>
 				<div class="col-md-4">
-				    <style>
-				        .pricing-item:hover{
-				            background:#0a6b74;
-				            color:white;
-				        }
-				    </style>
-					<div class="pricing-item">
-						<div class="title" style="font-size:18px;">
-						    <?php echo $row['pricing_plan_name']; ?>
+					<div class="pricing-item <?php echo $is_popular ? 'pricing-popular' : ''; ?>" style="position: relative; transition: all 0.3s ease;">
+						<?php if(!empty($badge)): ?>
+							<div class="pricing-badge-flag" style="position: absolute; top: 12px; right: 12px; background: #ffc107; color: #1e293b; font-weight: bold; font-size: 11px; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); z-index: 2;">
+								<i class="fa fa-star" style="margin-right: 3px;"></i> <?php echo htmlspecialchars($badge); ?>
+							</div>
+						<?php endif; ?>
+
+						<div class="title" style="font-size:19px; font-weight: bold;">
+							<?php echo htmlspecialchars($row['pricing_plan_name']); ?>
 						</div>
+
 						<div class="price">
-						      <div class="" width="200px">
-								<?php if($row['pricing_plan_name'] == "Top saúde"){ ?>
-								    <img class="img img-responsive" src="../assets/images/planos/top-saude.png" alt="<?=$row['pricing_plan_name'];?>" />
-								<?php }elseif($row['pricing_plan_name'] == "Top saúde Med Odonto"){ ?>
-								    <img class="img img-responsive" src="../assets/images/planos/odonto.png" alt="<?=$row['pricing_plan_name'];?>" />
-								<?php }elseif($row['pricing_plan_name'] == "Plano Empresa"){?>
-								    <img class="img img-responsive" src="../assets/images/planos/empresarial.png" alt="<?=$row['pricing_plan_name'];?>" />
-								<?php }?>
+							<?php if(!empty($photo_src)): ?>
+								<div class="plan-img-container" style="margin: 12px auto; max-width: 220px; height: 95px; display: flex; align-items: center; justify-content: center;">
+									<img class="img img-responsive center-block" src="<?php echo $photo_src; ?>" alt="<?php echo htmlspecialchars($row['pricing_plan_name']); ?>" style="max-height: 90px; max-width: 100%; object-fit: contain; margin: 0 auto;" />
+								</div>
+							<?php endif; ?>
+
+							<div class="plan-pricing-amount" style="margin: 12px 0;">
+								<?php if(strtolower($price_val) === 'consultar' || stripos($price_val, 'sob') !== false): ?>
+									<span class="text-uppercase h4 d-block fw-bold" style="color: #0a6b74;">Sob Consulta</span>
+								<?php else: ?>
+									<div style="color: #0a6b74; line-height: 1.2;">
+										<small style="font-size: 12px; color: #64748b; font-weight: 500; display: block; text-transform: uppercase;">A partir de</small>
+										<span style="font-size: 16px; font-weight: bold;">R$</span> 
+										<span style="font-size: 26px; font-weight: 800;"><?php echo htmlspecialchars($price_val); ?></span>
+										<?php if(!empty($period_val)): ?>
+											<span style="font-size: 13px; color: #64748b; font-weight: normal;"><?php echo htmlspecialchars($period_val); ?></span>
+										<?php endif; ?>
+									</div>
+								<?php endif; ?>
 							</div>
 						</div>
-						        <?php
-    						        if($row['pricing_plan_price'] != "consultar"){
-    						            echo "<span class='text-uppercase h4'>À Partir de R$ " . $row['pricing_plan_price'] . "</span>";
-    						        }else{
-    						            echo "<span class='text-uppercase h4'>À " . $row['pricing_plan_price'] . "</span><br>";
-    						        }
-    						    ?>
-    						    <p style='padding-bottom:25px;'></p>
+
 						<div class="offer">
 							<ul>
 								<?php
-								$statement1 = $pdo->prepare("SELECT * FROM tbl_pricing_item WHERE pricing_plan_id=? LIMIT 3");
+								$statement1 = $pdo->prepare("SELECT * FROM tbl_pricing_item WHERE pricing_plan_id=? ORDER BY pricing_item_id ASC");
 								$statement1->execute(array($row['pricing_plan_id']));
 								$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);							
 								foreach ($result1 as $row1) {
 									?>
 									<li>
-									    <?php echo $row1['pricing_item_name']; ?>
+										<i class="fa fa-check text-success" style="margin-right: 6px;"></i>
+										<?php echo htmlspecialchars($row1['pricing_item_name']); ?>
 									</li>
 									<?php
 								}
 								?>
 							</ul>
 						</div>
-						<?php if($row['pricing_plan_button_text']!=''): ?>
-						<div class="button">
-							<a href="../fidelidade.php"><?php echo $row['pricing_plan_button_text']; ?></a>
+
+						<div class="button" style="margin-top: 15px;">
+							<a href="<?php echo htmlspecialchars($plan_btn_url); ?>" <?php echo $btn_target; ?> style="display: block; border-radius: 6px; font-weight: 600; padding: 10px 15px;">
+								<?php echo htmlspecialchars($plan_btn_text); ?>
+							</a>
 						</div>
-						<?php endif; ?>
 					</div>
 				</div>
 				<?php

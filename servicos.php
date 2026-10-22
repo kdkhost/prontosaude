@@ -48,17 +48,34 @@ foreach ($result as $row) {
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 			foreach ($result as $row) {
+				$link_btn = !empty($row['button_url']) ? $row['button_url'] : BASE_URL . 'service/' . $row['slug'];
+				$btn_target = (!empty($row['button_url']) && strpos($row['button_url'], 'http') === 0) ? 'target="_blank" rel="noopener"' : '';
+				$btn_label = !empty($row['button_text']) ? $row['button_text'] : 'Agendar Consulta';
+				$photo_src = (!empty($row['photo']) && file_exists('assets/uploads/' . $row['photo'])) ? BASE_URL . 'assets/uploads/' . $row['photo'] : BASE_URL . 'assets/images/sem-foto.gif';
+				$benefits_items = !empty($row['benefits']) ? explode("\n", str_replace("\r", "", $row['benefits'])) : [];
 				?>
 				<div class="col-sm-6 col-md-4 col-lg-4">
-					<div class="item border border-info">
-						<div class="photo" style="background-image:url(<?php echo BASE_URL; ?>assets/uploads/<?php echo $row['photo']; ?>);">
+					<div class="item border border-info service-card-box">
+						<div class="photo" style="background-image:url(<?php echo $photo_src; ?>); position: relative;">
+							<?php if(!empty($row['price'])): ?>
+								<div class="service-card-price-badge">
+									<small>A partir de</small> R$ <?php echo htmlspecialchars($row['price']); ?>
+								</div>
+							<?php endif; ?>
 						</div>
 						<div class="text">
 							<div class="inner">
-								<h3><a href="<?php echo BASE_URL; ?>service/<?php echo $row['slug']; ?>"><?php echo $row['name']; ?></a></h3>
-								<p><?= substr($row['short_description'],0,150); ?></p>
+								<h3><a href="<?php echo htmlspecialchars($link_btn); ?>" <?php echo $btn_target; ?>><?php echo htmlspecialchars($row['name']); ?></a></h3>
+								<p><?= substr(strip_tags($row['short_description']), 0, 150) . '...'; ?></p>
+								<?php if(!empty($benefits_items)): ?>
+									<ul class="service-card-benefits">
+										<?php foreach(array_slice($benefits_items, 0, 3) as $b_item): if(!empty(trim($b_item))): ?>
+											<li><i class="fa fa-check text-success" style="margin-right: 5px;"></i> <?php echo htmlspecialchars(trim($b_item)); ?></li>
+										<?php endif; endforeach; ?>
+									</ul>
+								<?php endif; ?>
 								<p class="button">
-									<a href="<?php echo BASE_URL; ?>service/<?php echo $row['slug']; ?>">Saiba Mais</a>
+									<a href="<?php echo htmlspecialchars($link_btn); ?>" <?php echo $btn_target; ?>><?php echo htmlspecialchars($btn_label); ?></a>
 								</p>
 							</div>
 						</div>

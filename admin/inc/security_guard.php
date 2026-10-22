@@ -362,7 +362,7 @@ if (!defined('PRONTO_SECURITY_LOADED')) {
         }
 
         // F. Detecção de Honeypot Anti-Robô
-        if (!empty($settings['honeypot_protection']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!empty($settings['honeypot_protection']) && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             if (!empty($_POST['security_token_hp']) || !empty($_POST['security_guard_hp'])) {
                 $incId = pronto_security_log_incident($pdo, $ip, 'BOT_HONEYPOT_TRIPPED', 'ALTA', 'Preenchimento de campo invisível honeypot');
                 pronto_security_render_blocked_screen('Submissão automatizada de formulário detectada por armadilha honeypot.', 'BOT_HONEYPOT_TRIPPED', $incId, $ip);

@@ -1,144 +1,120 @@
 <?php require_once('header.php'); ?>
 
 <?php
-if(isset($_POST['form1'])) {
-	$valid = 1;
-
-	if(empty($_POST['servico'])) {
-		$valid = 0;
-		$error_message .= 'Serviço não pode ser vazio<br>';
-	}
-
-	if(empty($_POST['desc_total'])) {
-		$valid = 0;
-		$error_message .= 'A Descrição Longa não pode ser vazia<br>';
-	}
-	
-	if(empty($_POST['link'])) {
-		$valid = 0;
-		$error_message .= 'O Link não pode ser vazio<br>';
-	}
-
-	if(empty($_POST['descricao'])) {
-		$valid = 0;
-		$error_message .= 'A Descrição curta não pode ser vazia<br>';
-	}
-	
-    $path = $_FILES['photo']['name'];
-    $path_tmp = $_FILES['photo']['tmp_name'];
-
-    if($path!='') {
-        $ext = pathinfo( $path, PATHINFO_EXTENSION );
-        $file_name = basename( $path, '.' . $ext );
-        if( $ext!='jpg' && $ext!='png' && $ext!='jpeg' && $ext!='gif' ) {
-            $valid = 0;
-            $error_message .= 'Você deve fazer o upload de um arquivo jpg, jpeg, gif ou png para a foto em destaque<br>';
-        }
-    }
-
-    $path1 = $_FILES['banner']['name'];
-    $path_tmp1 = $_FILES['banner']['tmp_name'];
-
-    if($path1!='') {
-        $ext1 = pathinfo( $path1, PATHINFO_EXTENSION );
-        $file_name1 = basename( $path1, '.' . $ext1 );
-        if( $ext1!='jpg' && $ext1!='png' && $ext1!='jpeg' && $ext1!='gif' ) {
-            $valid = 0;
-            $error_message .= 'Você deve fazer o upload do arquivo jpg, jpeg, gif ou png para Banner<br>';
-        }
-    }
-
-		if($path == '' && $path1 == '') {
-			$statement = $pdo->prepare("UPDATE tbl_dental SET servico=?, link=?, descricao=?, desc_total=? WHERE id_den=?");
-    		$statement->execute(array($_POST['servico'],$_POST['link'],$_POST['descricao'],$_POST['desc_total'],$_REQUEST['id_den']));
-		}
-		if($path != '' && $path1 == '') {
-			unlink('../assets/uploads/'.$_POST['current_photo']);
-
-			$final_name = 'dental-'.$_REQUEST['id_den'].'.'.$ext;
-        	move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
-
-        	$statement = $pdo->prepare("UPDATE tbl_dental SET servico=?, link=?, descricao=?, desc_total=?, foto=? WHERE id_den=?");
-    		$statement->execute(array($_POST['servico'],$_POST['link'],$_POST['descricao'],$_POST['desc_total'],$final_name,$_REQUEST['id_den']));
-		}
-		if($path == '' && $path1 != '') {
-			unlink('../assets/uploads/'.$_POST['current_banner']);
-
-			$final_name1 = 'dental-banner-'.$_REQUEST['id_den'].'.'.$ext1;
-        	move_uploaded_file( $path_tmp1, '../assets/uploads/'.$final_name1 );
-
-        	$statement = $pdo->prepare("UPDATE tbl_dental SET servico=?, link=?, descricao=?, desc_total=? WHERE id_den=?");
-    		$statement->execute(array($_POST['servico'],$_POST['link'],$_POST['descricao'],$_POST['desc_total'],$_REQUEST['id_den']));
-		}
-		if($path != '' && $path1 != '') {
-
-			unlink('../assets/uploads/'.$_POST['current_photo']);
-			unlink('../assets/uploads/'.$_POST['current_banner']);
-
-			$final_name = 'dental-'.$_REQUEST['id_den'].'.'.$ext;
-        	move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
-
-			$final_name1 = 'dental-banner-'.$_REQUEST['id_den'].'.'.$ext1;
-        	move_uploaded_file( $path_tmp1, '../assets/uploads/'.$final_name1 );
-
-        	$statement = $pdo->prepare("UPDATE tbl_dental SET servico=?, link=?, descricao=?, desc_total=?, foto=? WHERE id_den=?");
-    		$statement->execute(array($_POST['servico'],$_POST['link'],$_POST['descricao'],$_POST['desc_total'],$final_name,$_REQUEST['id_den']));
-		}
-
-		$success_message = 'Serviço Adicionado com Sucesso!!';
-	}
-
-?>
-
-<?php
 if(!isset($_REQUEST['id_den'])) {
 	header('location: logout.php');
 	exit;
 } else {
-	// Check the id is valid or not
+	// Checar se o ID é válido
 	$statement = $pdo->prepare("SELECT * FROM tbl_dental WHERE id_den=?");
 	$statement->execute(array($_REQUEST['id_den']));
 	$total = $statement->rowCount();
-	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
-	if( $total == 0 ) {
+	$current_dental = $statement->fetch(PDO::FETCH_ASSOC);
+	if($total == 0) {
 		header('location: logout.php');
 		exit;
+	}
+}
+
+if(isset($_POST['form1'])) {
+	$valid = 1;
+
+	$servico = trim($_POST['servico'] ?? '');
+	$valor = trim($_POST['valor'] ?? '');
+	$link = trim($_POST['link'] ?? '');
+	$button_text = trim($_POST['button_text'] ?? 'Agendar Avaliação');
+	$descricao = trim($_POST['descricao'] ?? '');
+	$beneficios = trim($_POST['beneficios'] ?? '');
+	$desc_total = trim($_POST['desc_total'] ?? '');
+
+	if(empty($servico)) {
+		$valid = 0;
+		$error_message .= 'O nome do serviço odontológico é obrigatório.<br>';
+	}
+
+	if(empty($desc_total)) {
+		$valid = 0;
+		$error_message .= 'A descrição detalhada é obrigatória.<br>';
+	}
+
+	if(empty($descricao)) {
+		$valid = 0;
+		$error_message .= 'A descrição curta do card é obrigatória.<br>';
+	}
+	
+    $path = $_FILES['photo']['name'] ?? '';
+    $path_tmp = $_FILES['photo']['tmp_name'] ?? '';
+	$final_name = $current_dental['foto'];
+
+    if($path != '') {
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        $allowed_exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+        if(!in_array($ext, $allowed_exts)) {
+            $valid = 0;
+            $error_message .= 'Você deve enviar um arquivo válido (JPG, PNG, WEBP ou GIF) para a foto.<br>';
+        } else {
+			$final_name = 'dental-'.$_REQUEST['id_den'].'-'.time().'.'.$ext;
+			if(move_uploaded_file($path_tmp, '../assets/uploads/'.$final_name)) {
+				if(!empty($current_dental['foto']) && file_exists('../assets/uploads/'.$current_dental['foto'])) {
+					@unlink('../assets/uploads/'.$current_dental['foto']);
+				}
+			} else {
+				$valid = 0;
+				$error_message .= 'Falha ao salvar a nova foto.<br>';
+			}
+		}
+    }
+
+	if($valid == 1) {
+		$statement = $pdo->prepare("UPDATE tbl_dental SET 
+			servico = ?,
+			valor = ?,
+			link = ?,
+			button_text = ?,
+			desc_total = ?,
+			descricao = ?,
+			beneficios = ?,
+			foto = ?
+			WHERE id_den = ?");
+
+		$statement->execute([
+			$servico,
+			$valor,
+			$link,
+			$button_text,
+			$desc_total,
+			$descricao,
+			$beneficios,
+			$final_name,
+			$_REQUEST['id_den']
+		]);
+
+		$success_message = 'Serviço odontológico e card atualizados com sucesso!';
+
+		// Recarrega dados atualizados
+		$statement = $pdo->prepare("SELECT * FROM tbl_dental WHERE id_den=?");
+		$statement->execute(array($_REQUEST['id_den']));
+		$current_dental = $statement->fetch(PDO::FETCH_ASSOC);
 	}
 }
 ?>
 
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Editar Serviço Dentário</h1>
+		<h1>Editar Serviço Odontológico: <?= htmlspecialchars($current_dental['servico']); ?></h1>
 	</div>
 	<div class="content-header-right">
-		<a href="dental.php" class="btn btn-primary btn-sm">Visualizar Todos</a>
+		<a href="dental.php" class="btn btn-primary btn-sm"><i class="bi bi-list-ul me-1"></i> Visualizar Todos</a>
 	</div>
 </section>
 
-<?php
-$statement = $pdo->prepare("SELECT * FROM tbl_dental WHERE id_den=?");
-$statement->execute(array($_REQUEST['id_den']));
-$result = $statement->fetchAll(PDO::FETCH_ASSOC);
-foreach ($result as $row) {
-	$name               = $row['servico'];
-	$link               = $row['link'];
-	$description        = $row['descricao'];
-	$desc_total         = $row['desc_total'];
-	$photo              = $row['foto'];
-}
-?>
-
 <section class="content">
-
 	<div class="row">
 		<div class="col-md-12">
 
 			<?php if($error_message): ?>
 			<div class="callout callout-danger">
-				<p>
-				<?= $error_message; ?>
-				</p>
+				<p><?= $error_message; ?></p>
 			</div>
 			<?php endif; ?>
 
@@ -149,62 +125,99 @@ foreach ($result as $row) {
 			<?php endif; ?>
 
 			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-				<input type="hidden" name="current_photo" value="<?= $photo; ?>">
 				<div class="box box-info">
 					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Serviço <span>*</span></label>
-							<div class="col-sm-6">
-								<input type="text" autocomplete="off" class="form-control" name="servico" value="<?= $name; ?>">
+
+						<!-- Nome do Serviço -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Procedimento <span>*</span></label>
+							<div class="col-sm-8">
+								<input type="text" autocomplete="off" class="form-control" name="servico" value="<?= htmlspecialchars($current_dental['servico']); ?>" required>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Link <span>*</span></label>
-							<div class="col-sm-6">
-								<input type="text" autocomplete="off" class="form-control" name="link" value="<?= $link; ?>">
+
+						<!-- Preço / Valor -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Valor no Card</label>
+							<div class="col-sm-4">
+								<div class="input-group">
+									<span class="input-group-text">R$</span>
+									<input type="text" class="form-control mascara-moeda" name="valor" placeholder="Ex: 150,00 ou Sob Avaliação" value="<?= htmlspecialchars($current_dental['valor'] ?? ''); ?>">
+								</div>
+								<small class="text-muted">Valor em destaque exibido no card do procedimento odontológico.</small>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Descrição Longa <span>*</span></label>
+
+						<!-- Descrição Curta (Card) -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Descrição Curta (Card) <span>*</span></label>
+							<div class="col-sm-8">
+								<textarea class="form-control" name="descricao" rows="3" required><?= htmlspecialchars($current_dental['descricao']); ?></textarea>
+							</div>
+						</div>
+
+						<!-- Benefícios Inclusos -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Benefícios Inclusos (1 por linha)</label>
+							<div class="col-sm-8">
+								<textarea class="form-control" name="beneficios" rows="4" placeholder="Digite cada benefício em uma linha separada..."><?= htmlspecialchars($current_dental['beneficios'] ?? ''); ?></textarea>
+							</div>
+						</div>
+
+						<!-- Botão de Ação e Link -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Texto do Botão</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="button_text" value="<?= htmlspecialchars($current_dental['button_text'] ?? 'Agendar Avaliação'); ?>">
+							</div>
+						</div>
+
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Link de Destino</label>
+							<div class="col-sm-8">
+								<input type="text" autocomplete="off" class="form-control" name="link" value="<?= htmlspecialchars($current_dental['link']); ?>">
+								<small class="text-muted">Link do WhatsApp para agendamento direto com o consultório odontológico.</small>
+							</div>
+						</div>
+
+						<!-- Descrição Completa -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Descrição Completa <span>*</span></label>
 							<div class="col-sm-9">
-								<textarea id="1" class="form-control" name="desc_total" id="1"><?= $desc_total; ?></textarea>
+								<textarea class="form-control summernote" name="desc_total"><?= htmlspecialchars($current_dental['desc_total']); ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Descrição Curta <span>*</span></label>
-							<div class="col-sm-9">
-								<textarea id="2" class="form-control" name="descricao" style="height:140px;"><?= $description; ?></textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Foto Atual</label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<?php if($photo != ""){?>
-								    <img src="<?= BASE_URL; ?>assets/uploads/<?= $photo; ?>" alt="Foto Odonto" style="width:400px;">
-								<?php }else{?>
-								    <img src="<?= BASE_URL; ?>assets/uploads/dental/sem-foto.gif" alt="Foto Odonto" style="width:400px;">
-								<?php } ?>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Foto </label>
-							<div class="col-sm-6" style="padding-top:5px">
-								<input type="file" name="photo">(Somente jpg, jpeg, gif and png are allowed)
+
+						<!-- Foto Atual e Troca -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Foto Atual do Card</label>
+							<div class="col-sm-6">
+								<div class="p-2 border rounded bg-body-tertiary d-inline-block mb-2 shadow-sm">
+									<?php 
+										$foto = $current_dental['foto'];
+										$foto_src = (!empty($foto) && file_exists('../assets/uploads/'.$foto)) ? BASE_URL.'assets/uploads/'.$foto : BASE_URL.'assets/images/sem-foto.gif';
+									?>
+									<img src="<?= $foto_src; ?>" alt="Foto Odonto" style="max-height: 140px; max-width: 300px; object-fit: cover; border-radius: 6px;">
+								</div>
+								<input type="file" name="photo" class="form-control" accept="image/*">
+								<small class="text-muted">Envie um novo arquivo caso deseje alterar a foto existente.</small>
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
+						<!-- Botão Atualizar -->
+						<div class="form-group mt-4">
+							<label class="col-sm-2 control-label"></label>
 							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Atualizar</button>
+								<button type="submit" class="btn btn-success px-4" name="form1"><i class="bi bi-check-circle me-1"></i> Atualizar Informações</button>
+								<a href="dental.php" class="btn btn-outline-secondary ms-2">Voltar</a>
 							</div>
 						</div>
+
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
-
 </section>
 
 <?php require_once('footer.php'); ?>

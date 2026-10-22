@@ -4,180 +4,266 @@
 if(isset($_POST['form1'])) {
 	$valid = 1;
 
-	if(empty($_POST['name'])) {
+	$name = trim($_POST['name'] ?? '');
+	$price = trim($_POST['price'] ?? '');
+	$description = trim($_POST['description'] ?? '');
+	$short_description = trim($_POST['short_description'] ?? '');
+	$benefits = trim($_POST['benefits'] ?? '');
+	$button_text = trim($_POST['button_text'] ?? 'Agendar Consulta');
+	$button_url = trim($_POST['button_url'] ?? '');
+
+	if(empty($name)) {
 		$valid = 0;
-		$error_message .= 'Name can not be empty<br>';
+		$error_message .= 'O nome do serviço é obrigatório.<br>';
 	}
 
-	if(empty($_POST['description'])) {
+	if(empty($description)) {
 		$valid = 0;
-		$error_message .= 'Description can not be empty<br>';
+		$error_message .= 'A descrição detalhada é obrigatória.<br>';
 	}
 
-	if(empty($_POST['short_description'])) {
+	if(empty($short_description)) {
 		$valid = 0;
-		$error_message .= 'Short Description can not be empty<br>';
+		$error_message .= 'A descrição curta do card é obrigatória.<br>';
 	}
 
-	$path = $_FILES['photo']['name'];
-    $path_tmp = $_FILES['photo']['tmp_name'];
+	$path = $_FILES['photo']['name'] ?? '';
+    $path_tmp = $_FILES['photo']['tmp_name'] ?? '';
 
-    if($path!='') {
-        $ext = pathinfo( $path, PATHINFO_EXTENSION );
-        $file_name = basename( $path, '.' . $ext );
-        if( $ext!='jpg' && $ext!='png' && $ext!='jpeg' && $ext!='gif' ) {
+    if($path != '') {
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        $allowed_exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+        if(!in_array($ext, $allowed_exts)) {
             $valid = 0;
-            $error_message .= 'You must have to upload jpg, jpeg, gif or png file for featured photo<br>';
+            $error_message .= 'Envie um arquivo válido de imagem (JPG, PNG, WEBP ou GIF) para a foto de destaque.<br>';
         }
     } else {
     	$valid = 0;
-        $error_message .= 'You must have to select a photo for featured photo<br>';
+        $error_message .= 'A foto de destaque do serviço é obrigatória.<br>';
     }
 
-    $path1 = $_FILES['banner']['name'];
-    $path_tmp1 = $_FILES['banner']['tmp_name'];
+    $path1 = $_FILES['banner']['name'] ?? '';
+    $path_tmp1 = $_FILES['banner']['tmp_name'] ?? '';
 
-    if($path1!='') {
-        $ext1 = pathinfo( $path1, PATHINFO_EXTENSION );
-        $file_name1 = basename( $path1, '.' . $ext1 );
-        if( $ext1!='jpg' && $ext1!='png' && $ext1!='jpeg' && $ext1!='gif' ) {
+    if($path1 != '') {
+        $ext1 = strtolower(pathinfo($path1, PATHINFO_EXTENSION));
+        $allowed_exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+        if(!in_array($ext1, $allowed_exts)) {
             $valid = 0;
-            $error_message .= 'You must have to upload jpg, jpeg, gif or png file for banner<br>';
+            $error_message .= 'Envie um arquivo válido de imagem (JPG, PNG, WEBP ou GIF) para o banner.<br>';
         }
     } else {
     	$valid = 0;
-        $error_message .= 'You must have to select a photo for banner<br>';
+        $error_message .= 'O banner superior do serviço é obrigatório.<br>';
     }
 
 	if($valid == 1) {
-
-		// getting auto increment id
+		// Obter próximo ID
 		$statement = $pdo->prepare("SHOW TABLE STATUS LIKE 'tbl_service'");
 		$statement->execute();
-		$result = $statement->fetchAll();
-		foreach($result as $row) {
-			$ai_id=$row[10];
-		}
+		$result = $statement->fetch(PDO::FETCH_ASSOC);
+		$ai_id = $result['Auto_increment'] ?? time();
 
-		if($_POST['slug'] == '') {
-    		// generate slug
-    		$temp_string = strtolower($_POST['name']);
+		$slug_input = trim($_POST['slug'] ?? '');
+		if($slug_input == '') {
+    		$temp_string = strtolower($name);
     		$slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $temp_string);
     	} else {
-    		$temp_string = strtolower($_POST['slug']);
+    		$temp_string = strtolower($slug_input);
     		$slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $temp_string);
     	}
 
-    	// if slug already exists, then rename it
+    	// Checar se o slug já existe
 		$statement = $pdo->prepare("SELECT * FROM tbl_service WHERE slug=?");
 		$statement->execute(array($slug));
 		$total = $statement->rowCount();
 		if($total) {
-			$slug = $slug.'-1';
+			$slug = $slug.'-'.time();
 		}
 
-		$final_name = 'service-'.$ai_id.'.'.$ext;
-        move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
+		$final_name = 'service-'.$ai_id.'-'.time().'.'.$ext;
+        move_uploaded_file($path_tmp, '../assets/uploads/'.$final_name);
 
-        $final_name1 = 'service-banner-'.$ai_id.'.'.$ext1;
-        move_uploaded_file( $path_tmp1, '../assets/uploads/'.$final_name1 );
+        $final_name1 = 'service-banner-'.$ai_id.'-'.time().'.'.$ext1;
+        move_uploaded_file($path_tmp1, '../assets/uploads/'.$final_name1);
 
-		$statement = $pdo->prepare("INSERT INTO tbl_service (name,slug,description,short_description,photo,banner) VALUES (?,?,?,?,?,?)");
-		$statement->execute(array($_POST['name'],$slug,$_POST['description'],$_POST['short_description'],$final_name,$final_name1));
+		$statement = $pdo->prepare("INSERT INTO tbl_service (
+			name,
+			price,
+			slug,
+			description,
+			short_description,
+			benefits,
+			button_text,
+			button_url,
+			photo,
+			banner
+		) VALUES (?,?,?,?,?,?,?,?,?,?)");
+
+		$statement->execute([
+			$name,
+			$price,
+			$slug,
+			$description,
+			$short_description,
+			$benefits,
+			$button_text,
+			$button_url,
+			$final_name,
+			$final_name1
+		]);
 			
-		$success_message = 'Service is added successfully!';
+		$success_message = 'Serviço e card configurados e publicados com sucesso!';
 
 		unset($_POST['name']);
+		unset($_POST['price']);
 		unset($_POST['slug']);
 		unset($_POST['description']);
 		unset($_POST['short_description']);
+		unset($_POST['benefits']);
+		unset($_POST['button_text']);
+		unset($_POST['button_url']);
 	}
 }
 ?>
 
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Add Service</h1>
+		<h1>Adicionar Serviço Médico</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="service.php" class="btn btn-primary btn-sm">View All</a>
+		<a href="service.php" class="btn btn-primary btn-sm"><i class="bi bi-list-ul me-1"></i> Visualizar Todos</a>
 	</div>
 </section>
 
-
 <section class="content">
-
 	<div class="row">
 		<div class="col-md-12">
 
 			<?php if($error_message): ?>
 			<div class="callout callout-danger">
-				<p>
-					<?php echo $error_message; ?>
-				</p>
+				<p><?= $error_message; ?></p>
 			</div>
 			<?php endif; ?>
 
 			<?php if($success_message): ?>
 			<div class="callout callout-success">
-				<p><?php echo $success_message; ?></p>
+				<p><?= $success_message; ?></p>
 			</div>
 			<?php endif; ?>
 
 			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
 				<div class="box box-info">
 					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Name <span>*</span></label>
-							<div class="col-sm-6">
-								<input type="text" autocomplete="off" class="form-control" name="name" value="<?php if(isset($_POST['name'])){echo $_POST['name'];} ?>">
+
+						<!-- Nome do Serviço -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Nome do Serviço <span>*</span></label>
+							<div class="col-sm-8">
+								<input type="text" autocomplete="off" class="form-control" name="name" placeholder="Ex: Consulta Cardiológica, Ultrassonografia, Exame de Sangue" value="<?= htmlspecialchars($_POST['name'] ?? ''); ?>" required>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Slug </label>
-							<div class="col-sm-6">
-								<input type="text" autocomplete="off" class="form-control ps-slug-locked" name="slug" placeholder="Gerado automaticamente..." value="<?php if(isset($_POST['slug'])){echo $_POST['slug'];} ?>" readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
+
+						<!-- Valor / Preço do Serviço -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Preço / Valor no Card</label>
+							<div class="col-sm-4">
+								<div class="input-group">
+									<span class="input-group-text">R$</span>
+									<input type="text" class="form-control mascara-moeda" name="price" placeholder="Ex: 120,00 ou Sob Consulta" value="<?= htmlspecialchars($_POST['price'] ?? ''); ?>">
+								</div>
+								<small class="text-muted">Exibido em destaque no card do serviço na página inicial e catálogo.</small>
+							</div>
+						</div>
+
+						<!-- Slug Automático -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Slug </label>
+							<div class="col-sm-8">
+								<input type="text" autocomplete="off" class="form-control ps-slug-locked" name="slug" value="<?= htmlspecialchars($_POST['slug'] ?? ''); ?>" readonly style="background-color: var(--bs-tertiary-bg, #f1f5f9); cursor: not-allowed; border-style: dashed;">
 								<div class="form-text small text-body-secondary mt-1 ps-slug-helper d-flex align-items-center gap-1">
 									<i class="bi bi-lock-fill text-primary"></i> <span class="fw-semibold">Slug automático:</span> gerado sozinho pelo sistema (edição manual desativada)
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Description <span>*</span></label>
+
+						<!-- Descrição Curta (Exibida no Card) -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Descrição Curta (Card) <span>*</span></label>
+							<div class="col-sm-8">
+								<textarea class="form-control" name="short_description" rows="3" placeholder="Resumo atrativo exibido no card do serviço..." required><?= htmlspecialchars($_POST['short_description'] ?? ''); ?></textarea>
+							</div>
+						</div>
+
+						<!-- Benefícios Inclusos -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Benefícios Inclusos (1 por linha)</label>
+							<div class="col-sm-8">
+								<textarea class="form-control" name="benefits" rows="4" placeholder="Exemplo:
+Consulta com especialista qualificado
+Retorno garantido em até 15 dias
+Prontuário e laudo 100% digital
+Atendimento com hora marcada"><?= htmlspecialchars($_POST['benefits'] ?? ''); ?></textarea>
+								<small class="text-muted">Itens com ícone de confirmação exibidos no card ou página de detalhes.</small>
+							</div>
+						</div>
+
+						<!-- Botão de Ação e Link -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Texto do Botão do Card</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="button_text" placeholder="Ex: Agendar Consulta, Saiba Mais, Ver Detalhes" value="<?= htmlspecialchars($_POST['button_text'] ?? 'Agendar Consulta'); ?>">
+							</div>
+						</div>
+
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">URL / Destino do Botão</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="button_url" placeholder="Ex: https://wa.me/5598988887777?text=Quero%20agendar%20este%20serviço (Deixe vazio para usar a página do serviço)" value="<?= htmlspecialchars($_POST['button_url'] ?? ''); ?>">
+								<small class="text-muted">Se preenchido, o botão levará direto para o WhatsApp ou página de contratação.</small>
+							</div>
+						</div>
+
+						<!-- Descrição Completa -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Descrição Completa <span>*</span></label>
 							<div class="col-sm-9">
-								<textarea id="1" class="form-control" name="description" id="editor1"><?php if(isset($_POST['description'])){echo $_POST['description'];} ?></textarea>
+								<textarea class="form-control summernote" name="description"><?= htmlspecialchars($_POST['description'] ?? ''); ?></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Short Description <span>*</span></label>
-							<div class="col-sm-9">
-								<textarea id="2" class="form-control" name="short_description" style="height:140px;"><?php if(isset($_POST['short_description'])){echo $_POST['short_description'];} ?></textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Featured Photo <span>*</span></label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<input type="file" name="photo">(Only jpg, jpeg, gif and png are allowed)
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Banner Photo <span>*</span></label>
-							<div class="col-sm-9" style="padding-top:5px">
-								<input type="file" name="banner">(Only jpg, jpeg, gif and png are allowed)
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label"></label>
+
+						<!-- Foto de Destaque -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Foto do Card <span>*</span></label>
 							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
+								<input type="file" name="photo" class="form-control" accept="image/*" required>
+								<small class="text-muted">Imagem que estampa o card do serviço (formato recomendado: 600x400px).</small>
 							</div>
 						</div>
+
+						<!-- Banner do Serviço -->
+						<div class="form-group mb-3">
+							<label class="col-sm-2 control-label fw-bold">Banner da Página <span>*</span></label>
+							<div class="col-sm-6">
+								<input type="file" name="banner" class="form-control" accept="image/*" required>
+								<small class="text-muted">Imagem panorâmica do topo da página do serviço (ex: 1920x400px).</small>
+							</div>
+						</div>		
+
+						<!-- Botão de Salvar -->
+						<div class="form-group mt-4">
+							<label class="col-sm-2 control-label"></label>
+							<div class="col-sm-6">
+								<button type="submit" class="btn btn-success px-4" name="form1"><i class="bi bi-check-circle me-1"></i> Cadastrar Serviço</button>
+								<a href="service.php" class="btn btn-outline-secondary ms-2">Cancelar</a>
+							</div>
+						</div>
+
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
-
 </section>
 
 <?php require_once('footer.php'); ?>
