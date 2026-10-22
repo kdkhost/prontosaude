@@ -6,3 +6,5 @@ error_log
 php.ini
 .DS_Store
 Thumbs.db
+*.sqlite
+*.db

@@ -30,16 +30,32 @@ if (!defined('ADMIN_URL')) {
 
 // Conexão PDO com suporte total a UTF-8 mb4 e timezone sincronizado
 try {
+    $mysql_init_cmd = defined('Pdo\Mysql::ATTR_INIT_COMMAND') ? \Pdo\Mysql::ATTR_INIT_COMMAND : (defined('PDO::MYSQL_ATTR_INIT_COMMAND') ? PDO::MYSQL_ATTR_INIT_COMMAND : 1002);
     $pdo = new PDO("mysql:host={$dbhost};dbname={$dbname};charset=utf8mb4", $dbuser, $dbpass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
-        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci, time_zone = '-03:00'"
+        $mysql_init_cmd => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci, time_zone = '-03:00'"
     ]);
 } catch (PDOException $exception) {
-    error_log("Erro de Conexão PDO: " . $exception->getMessage());
-    echo "Erro ao conectar com o banco de dados. Por favor, tente novamente mais tarde.";
-    exit();
+    // Fallback inteligente para ambiente de desenvolvimento local caso o MySQL não esteja ativo
+    $sqlite_local = __DIR__ . '/../pronto_local.sqlite';
+    if (($dbhost === 'localhost' || $dbhost === '127.0.0.1') && file_exists($sqlite_local)) {
+        try {
+            $pdo = new PDO("sqlite:" . $sqlite_local, null, null, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ]);
+        } catch (PDOException $sqle) {
+            error_log("Erro de Conexão PDO SQLite: " . $sqle->getMessage());
+            echo "Erro ao conectar com o banco de dados. Por favor, tente novamente mais tarde.";
+            exit();
+        }
+    } else {
+        error_log("Erro de Conexão PDO: " . $exception->getMessage());
+        echo "Erro ao conectar com o banco de dados. Por favor, tente novamente mais tarde.";
+        exit();
+    }
 }
 
 // Inicialização do Escudo de Segurança de Padrão Militar e WAF
