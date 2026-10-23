@@ -4,6 +4,15 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.21.0] - 2026-10-23
+
+### Corrigido & Aprimorado
+- **Correção da Navegação de Submenus no Menu Móvel Deslizante (Offcanvas Mobile/Tablet)**:
+  - **Eliminação de Fechamento Acidental do Menu ao Abrir Submenus:** Os acionadores de submenu pai agora utilizam botões nativos (`<button type="button">` com `data-bs-toggle="collapse"` e `data-bs-target`), impedindo qualquer tentativa de navegação de âncora ou recarregamento de página.
+  - **Isolamento de Eventos no ScrollSpy:** O manipulador global de âncoras suaves foi blindado para ignorar os elementos de colapso do drawer (`:not([data-bs-toggle]):not([data-bs-target])`), mantendo o menu deslizante aberto e estável enquanto o paciente navega pelos submenus.
+  - **Fechamento Automático Apenas em Links Finais:** O drawer agora permanece aberto para exploração dos submenus e só se fecha suavemente quando o usuário clica em uma página destino real.
+  - **Micro-animação de Seta com Rotação 180°:** Transição fluida do chevron (`.android-item-arrow`) para indicar claramente o estado aberto ou fechado do submenu.
+
 ## [2.20.0] - 2026-10-23
 
 ### Padronizado & Aprimorado

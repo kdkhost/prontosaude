@@ -225,10 +225,10 @@ $(function () {
         });
     }
 
-    // ScrollSpy Inteligente & Navegação Suave
-    $('a.nav-link[href^="#"], a.android-nav-item[href^="#"]').on('click', function (e) {
+    // ScrollSpy Inteligente & Navegação Suave (apenas âncoras reais na página, ignorando toggles de submenu)
+    $('a.nav-link[href^="#"]:not([data-bs-toggle]), a.android-nav-item[href^="#"]:not([data-bs-toggle]):not([data-bs-target])').on('click', function (e) {
         var targetHash = $(this).attr('href');
-        if (!targetHash || targetHash === '#' || targetHash === '#!') return;
+        if (!targetHash || targetHash === '#' || targetHash === '#!' || targetHash.indexOf('#drawerSub') === 0) return;
 
         var $target = $(targetHash);
         if ($target.length) {
@@ -244,6 +244,28 @@ $(function () {
             if (drawerEl) {
                 var bsOffcanvas = bootstrap.Offcanvas.getInstance(drawerEl);
                 if (bsOffcanvas) bsOffcanvas.hide();
+            }
+        }
+    });
+
+    // Controle de Submenus no Menu Móvel Deslizante
+    // 1. Evita fechamento acidental ao clicar nos botões de abrir/fechar submenu
+    $(document).on('click', '#menuDrawerAndroid .android-nav-group [data-bs-toggle="collapse"]', function (e) {
+        e.stopPropagation();
+    });
+
+    // 2. Fecha o menu deslizante quando o usuário clica em um link de página real (que navega de fato)
+    $(document).on('click', '#menuDrawerAndroid a.android-nav-item:not([data-bs-toggle="collapse"])', function () {
+        var href = $(this).attr('href');
+        if (href && href !== '#' && href !== '#!' && href.indexOf('#drawerSub') === -1) {
+            var drawerEl = document.getElementById('menuDrawerAndroid');
+            if (drawerEl) {
+                var bsOffcanvas = bootstrap.Offcanvas.getInstance(drawerEl);
+                if (bsOffcanvas) {
+                    setTimeout(function() {
+                        bsOffcanvas.hide();
+                    }, 120);
+                }
             }
         }
     });

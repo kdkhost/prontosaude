@@ -323,13 +323,13 @@ $second_part = '
                     ?>
                         <?php if($has_subs): ?>
                             <div class="android-nav-group">
-                                <a class="android-nav-item d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#drawerSub<?= $p_item[\'menu_id\']; ?>" role="button" aria-expanded="false">
+                                <button type="button" class="android-nav-item android-nav-toggle d-flex justify-content-between align-items-center w-100 border-0 bg-transparent text-start" data-bs-toggle="collapse" data-bs-target="#drawerSub<?= $p_item[\'menu_id\']; ?>" aria-expanded="false" aria-controls="drawerSub<?= $p_item[\'menu_id\']; ?>">
                                     <div class="d-flex align-items-center gap-2">
                                         <div class="android-item-icon"><i class="fas fa-folder"></i></div>
                                         <span class="android-item-text"><?= htmlspecialchars($p_item[\'menu_name\']); ?></span>
                                     </div>
                                     <i class="fas fa-chevron-down android-item-arrow"></i>
-                                </a>
+                                </button>
                                 <div class="collapse" id="drawerSub<?= $p_item[\'menu_id\']; ?>">
                                     <div class="ps-3 py-1 bg-light">
                                         <?php foreach ($children_menus[$p_item[\'menu_id\']] as $sub_item): 
