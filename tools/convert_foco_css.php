@@ -1126,12 +1126,13 @@ body.ps-foco-body {
     transform: translateY(-2px);
 }
 
-/* Cards Planos Fidelidade Multipage */
+/* Cards Planos Fidelidade Padronizados com Serviços/Especialidades */
 .ps-plan-card {
     background: #ffffff;
     border: 1.5px solid var(--ps-border);
     border-radius: 16px;
-    padding: 26px;
+    padding: 0;
+    overflow: hidden;
     transition: var(--ps-transition);
     position: relative;
     display: flex;
@@ -1145,37 +1146,52 @@ body.ps-foco-body {
     border-color: var(--ps-primary);
 }
 .ps-plan-card.ps-plan-popular {
-    border: 2.5px solid var(--ps-primary);
-    box-shadow: 0 10px 30px rgba(10, 107, 116, 0.18);
+    border: 2px solid var(--ps-primary);
+    box-shadow: 0 10px 30px rgba(10, 107, 116, 0.16);
+}
+.ps-plan-thumb {
+    width: 100%;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    background: #f1f5f9;
+}
+.ps-plan-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ps-plan-card:hover .ps-plan-thumb img {
+    transform: scale(1.05);
 }
 .ps-plan-badge-tag {
     position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 12px;
+    right: 12px;
+    z-index: 2;
     background: linear-gradient(135deg, var(--ps-primary) 0%, var(--ps-primary-dark) 100%);
     color: #ffffff;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 800;
-    padding: 4px 14px;
+    padding: 5px 14px;
     border-radius: 20px;
     text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.03em;
+}
+.ps-plan-body {
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 .ps-plan-name {
     font-size: 1.25rem;
     font-weight: 800;
     color: var(--ps-title);
-    text-align: center;
     margin-bottom: 12px;
-}
-.ps-plan-img {
-    text-align: center;
-    margin: 10px 0;
-}
-.ps-plan-img img {
-    max-height: 90px;
-    max-width: 100%;
-    object-fit: contain;
 }
 .ps-plan-price-wrap {
     background: var(--ps-light-bg);
@@ -1189,7 +1205,8 @@ body.ps-foco-body {
     font-size: 0.72rem;
     text-transform: uppercase;
     color: var(--ps-muted);
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: 0.05em;
 }
 .ps-plan-amount {
     color: var(--ps-primary);
@@ -1478,6 +1495,95 @@ body.ps-foco-body {
 
 .ps-gallery-item.ps-hidden {
     display: none !important;
+}
+
+/* ==============================================================================
+   GALERIA DE VÍDEOS PRONTO SAÚDE (RESPONSIVO, ASPECT-RATIO 16:9, UM VÍDEO POR VEZ)
+   ============================================================================== */
+.ps-video-card {
+    background: #ffffff;
+    border: 1px solid var(--ps-border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(10, 107, 116, 0.05);
+    transition: var(--ps-transition);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.ps-video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 36px rgba(10, 107, 116, 0.14);
+    border-color: rgba(10, 107, 116, 0.25);
+}
+
+.ps-video-player-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #071822;
+    overflow: hidden;
+}
+
+.ps-video-player-wrap video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: #071822;
+}
+
+.ps-video-badge-cat {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    background: rgba(7, 24, 34, 0.85);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ps-video-body {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background: #ffffff;
+}
+
+.ps-video-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ps-title);
+    margin-bottom: 6px;
+    line-height: 1.35;
+}
+
+.ps-video-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.ps-video-status {
+    font-size: 0.78rem;
+    color: var(--ps-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 ';
 

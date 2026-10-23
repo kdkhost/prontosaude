@@ -508,7 +508,7 @@ foreach ($gallery_photos as $p) {
 						<div class="ps-gallery-card">
 							<a href="<?= $photo_path; ?>" 
 							   class="ps-gallery-img-link" 
-							   data-fancybox="pronto-galeria" 
+							   data-fancybox="pronto-galeria-cat-<?= $cat_id; ?>" 
 							   data-caption="<?= htmlspecialchars($caption, ENT_QUOTES, \'UTF-8\'); ?>"
 							   title="Clique para ampliar em tela cheia">
 								
@@ -604,70 +604,217 @@ document.addEventListener(\'DOMContentLoaded\', function () {
 <?php endif; ?>
 
 <!-- ==============================================================================
-     5. VIDEO GALLERY PAGE LAYOUT
+     5. VIDEO GALLERY PAGE LAYOUT (MODERNO, RESPONSIVO, 1 VÍDEO POR VEZ)
      ============================================================================== -->
 <?php if($page_layout == \'Video Gallery Page Layout\'): ?>
-<section class="gallery" style="padding: 60px 0; background: #f8fafc;">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<ul class="gallery-menu">
-					<li class="filter" data-filter="all" data-role="button">Todos</li>
-					<?php
-					$statement = $pdo->prepare("SELECT * FROM tbl_category_video WHERE status=?");
-					$statement->execute(array(\'Active\'));
-					$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
-					foreach ($result as $row) {
-						$temp_string = strtolower($row[\'v_category_name\']);
-    					$temp_slug = preg_replace(\'/[^A-Za-z0-9-]+/\', \'-\', $temp_string);
-    					?>
-    					<li class="filter" data-filter=".<?php echo $temp_slug; ?>" data-role="button">
-    					    <?php echo $row[\'v_category_name\']; ?>
-    					</li>
-						<?php } ?>
-				</ul>
+<?php
+// Carrega vídeos ativos com suas categorias
+$videos_stmt = $pdo->prepare("
+    SELECT t1.video_id, t1.video_title, t1.video_iframe, t1.v_category_id,
+           t2.v_category_name
+    FROM tbl_video t1
+    JOIN tbl_category_video t2 ON t1.v_category_id = t2.v_category_id
+    WHERE (t1.status = \'Active\' OR t1.status IS NULL) AND t2.status = \'Active\'
+    ORDER BY t1.video_id DESC
+");
+$videos_stmt->execute();
+$gallery_videos = $videos_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-				<div id="mix-container" class="row g-3">
+// Carrega categorias de vídeo ativas
+$vcat_stmt = $pdo->prepare("SELECT * FROM tbl_category_video WHERE status=\'Active\' ORDER BY v_category_id ASC");
+$vcat_stmt->execute();
+$video_categories = $vcat_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Contagem de vídeos por categoria
+$total_videos = count($gallery_videos);
+$vcategory_counts = [];
+foreach ($gallery_videos as $v) {
+    $cid = $v[\'v_category_id\'];
+    $vcategory_counts[$cid] = ($vcategory_counts[$cid] ?? 0) + 1;
+}
+?>
+<section class="ps-gallery-section">
+	<div class="container">
+		<!-- Header descritivo da Galeria de Vídeos -->
+		<div class="ps-gallery-header">
+			<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fw-bold text-uppercase mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+				<i class="fas fa-play-circle me-1"></i> Vídeos &amp; Depoimentos
+			</span>
+			<h2 class="ps-gallery-title"><?= !empty($page_name) ? htmlspecialchars($page_name) : \'Galeria de Vídeos\'; ?></h2>
+			<p class="ps-gallery-subtitle">
+				Acompanhe histórias reais de superação, depoimentos de nossos pacientes e explicações médicas sobre cuidados e saúde preventiva.
+			</p>
+			<?php if(!empty(trim(strip_tags($page_content)))): ?>
+				<div class="mt-3 text-start bg-white p-3 rounded-3 border border-slate-200 small text-secondary">
+					<?= $page_content; ?>
+				</div>
+			<?php endif; ?>
+		</div>
+
+		<!-- Barra de Filtros Pílula Responsiva -->
+		<?php if(!empty($video_categories)): ?>
+		<div class="ps-gallery-filter-wrap">
+			<button type="button" class="ps-gallery-filter-btn active" data-vfilter="all">
+				<i class="fas fa-film"></i>
+				<span>Todos os Vídeos</span>
+				<span class="ps-gallery-count"><?= $total_videos; ?></span>
+			</button>
+			<?php foreach ($video_categories as $vcat): ?>
+				<?php
+				$cat_id = $vcat[\'v_category_id\'];
+				$cat_count = $vcategory_counts[$cat_id] ?? 0;
+				$cat_name = $vcat[\'v_category_name\'];
+				$cat_lower = mb_strtolower($cat_name, \'UTF-8\');
+				$icon = \'fas fa-video\';
+				if (strpos($cat_lower, \'depoim\') !== false) {
+					$icon = \'fas fa-comment-dots\';
+				} elseif (strpos($cat_lower, \'proced\') !== false) {
+					$icon = \'fas fa-heartbeat\';
+				} elseif (strpos($cat_lower, \'instruc\') !== false || strpos($cat_lower, \'dica\') !== false) {
+					$icon = \'fas fa-lightbulb\';
+				}
+				?>
+				<button type="button" class="ps-gallery-filter-btn" data-vfilter="vcat-<?= $cat_id; ?>">
+					<i class="<?= $icon; ?>"></i>
+					<span><?= htmlspecialchars($cat_name); ?></span>
+					<span class="ps-gallery-count"><?= $cat_count; ?></span>
+				</button>
+			<?php endforeach; ?>
+		</div>
+		<?php endif; ?>
+
+		<!-- Grid de Vídeos -->
+		<div class="row g-4" id="psVideoGrid">
+			<?php if(!empty($gallery_videos)): ?>
+				<?php foreach ($gallery_videos as $vrow): ?>
 					<?php
-					$i=0;
-					$statement = $pdo->prepare("SELECT
-					                           	t1.video_id,
-												t1.video_title,
-												t1.video_iframe,
-												t1.v_category_id,
-												t2.v_category_id,
-												t2.v_category_name,
-												t2.status
-					                            FROM tbl_video t1
-					                            JOIN tbl_category_video t2
-					                            ON t1.v_category_id = t2.v_category_id 
-					                            ");
-					$statement->execute();
-					$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
-					foreach ($result as $row) {
-						$i++;
-						$temp_string = strtolower($row[\'v_category_name\']);
-    					$temp_slug = preg_replace(\'/[^A-Za-z0-9-]+/\', \'-\', $temp_string);
-						?>
-						<div class="col-md-4 mix <?php echo $temp_slug; ?> all" data-my-order="<?php echo $i; ?>">
-							<div class="inner viframe" style="margin-bottom: 24px; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 4px 14px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; padding: 12px;">
-								<video style="width: 100%; height: auto; border-radius: 10px;" class="parado" controls preload="auto">
-                                  <source src="<?=$row[\'video_iframe\']?>" type="video/mp4">
-                                    Seu navegador não suporta tags de vídeo.
-                                </video>
-								<?php if(!empty($row[\'video_title\'])): ?>
-									<h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 12px 4px 4px 4px;"><?= htmlspecialchars($row[\'video_title\']); ?></h4>
+					$video_raw = $vrow[\'video_iframe\'];
+					$is_mp4 = (stripos($video_raw, \'.mp4\') !== false || stripos($video_raw, \'assets/uploads\') !== false);
+					$video_src = \'\';
+					if ($is_mp4) {
+						$clean_name = basename(str_replace(\'\\\\\', \'/\', $video_raw));
+						$video_src = BASE_URL . \'assets/uploads/videos/\' . $clean_name;
+					}
+					$v_title = !empty($vrow[\'video_title\']) ? $vrow[\'video_title\'] : $vrow[\'v_category_name\'] . \' • Pronto Saúde\';
+					$cat_id = $vrow[\'v_category_id\'];
+					?>
+					<div class="col-12 col-sm-6 col-lg-4 ps-video-item vcat-<?= $cat_id; ?>" data-vcategory="vcat-<?= $cat_id; ?>">
+						<div class="ps-video-card">
+							<div class="ps-video-player-wrap">
+								<span class="ps-video-badge-cat">
+									<i class="fas fa-tag"></i>
+									<?= htmlspecialchars($vrow[\'v_category_name\']); ?>
+								</span>
+
+								<?php if($is_mp4 && !empty($video_src)): ?>
+									<video controls preload="none" playsinline>
+										<source src="<?= $video_src; ?>" type="video/mp4">
+										Seu navegador não suporta reprodução de vídeo HTML5.
+									</video>
+								<?php else: ?>
+									<div class="w-100 h-100 d-flex align-items-center justify-content-center">
+										<?= $video_raw; ?>
+									</div>
 								<?php endif; ?>
 							</div>
+
+							<div class="ps-video-body">
+								<h5 class="ps-video-title" title="<?= htmlspecialchars($v_title, ENT_QUOTES, \'UTF-8\'); ?>">
+									<?= htmlspecialchars($v_title); ?>
+								</h5>
+								<div class="ps-video-footer">
+									<span class="ps-video-status">
+										<i class="fas fa-circle-play text-success"></i> Pronto Saúde
+									</span>
+									<span class="small text-muted">
+										<i class="fas fa-volume-up me-1"></i> Áudio Ativo
+									</span>
+								</div>
+							</div>
 						</div>
-						<?php
-					}
-					?>
+					</div>
+				<?php endforeach; ?>
+			<?php else: ?>
+				<div class="col-12 text-center py-5">
+					<div class="p-4 bg-white rounded-4 border border-slate-200 shadow-sm d-inline-block">
+						<i class="fas fa-film text-muted fa-3x mb-3"></i>
+						<h5 class="fw-bold text-dark">Nenhum vídeo disponível</h5>
+						<p class="text-muted small mb-0">Em breve disponibilizaremos novos vídeos e depoimentos.</p>
+					</div>
 				</div>
+			<?php endif; ?>
+		</div>
+
+		<!-- Estado Vazio para Filtros sem Vídeos -->
+		<div id="psVideoEmpty" class="text-center py-5" style="display: none;">
+			<div class="p-4 bg-white rounded-4 border border-slate-200 shadow-sm d-inline-block" style="max-width: 420px;">
+				<i class="fas fa-video-slash text-muted fa-2x mb-2" style="color: var(--ps-accent) !important;"></i>
+				<h6 class="fw-bold text-dark mb-1">Nenhum vídeo nesta categoria</h6>
+				<p class="text-muted small mb-0">Selecione outra categoria ou clique em "Todos os Vídeos".</p>
 			</div>
 		</div>
 	</div>
 </section>
+
+<!-- Script de Controle de Vídeo Único e Filtros Dinâmicos -->
+<script>
+document.addEventListener(\'DOMContentLoaded\', function () {
+    // 1. REGRA CRÍTICA: Executa apenas 1 vídeo por vez para não sobrecarregar banda nem travar o navegador
+    document.addEventListener(\'play\', function (e) {
+        if (e.target && e.target.tagName && e.target.tagName.toLowerCase() === \'video\') {
+            const allVideos = document.querySelectorAll(\'video\');
+            allVideos.forEach(function (v) {
+                if (v !== e.target && !v.paused) {
+                    v.pause();
+                }
+            });
+        }
+    }, true);
+
+    // 2. Filtros Dinâmicos de Vídeo
+    const vfilterButtons = document.querySelectorAll(\'.ps-gallery-filter-btn[data-vfilter]\');
+    const videoItems = document.querySelectorAll(\'.ps-video-item\');
+    const emptyNotice = document.getElementById(\'psVideoEmpty\');
+
+    vfilterButtons.forEach(function (btn) {
+        btn.addEventListener(\'click\', function (e) {
+            e.preventDefault();
+            const targetFilter = this.getAttribute(\'data-vfilter\');
+
+            // Pausa qualquer vídeo que esteja tocando ao alternar categorias
+            const allVideos = document.querySelectorAll(\'video\');
+            allVideos.forEach(function (v) {
+                if (!v.paused) v.pause();
+            });
+
+            vfilterButtons.forEach(function (b) { b.classList.remove(\'active\'); });
+            this.classList.add(\'active\');
+
+            let visibleCount = 0;
+
+            videoItems.forEach(function (item) {
+                const categoryClass = item.getAttribute(\'data-vcategory\');
+                if (targetFilter === \'all\' || categoryClass === targetFilter) {
+                    item.classList.remove(\'ps-hidden\');
+                    item.style.opacity = \'0\';
+                    item.style.transform = \'scale(0.97)\';
+                    setTimeout(function () {
+                        item.style.opacity = \'1\';
+                        item.style.transform = \'scale(1)\';
+                    }, 30);
+                    visibleCount++;
+                } else {
+                    item.classList.add(\'ps-hidden\');
+                }
+            });
+
+            if (emptyNotice) {
+                emptyNotice.style.display = visibleCount === 0 ? \'block\' : \'none\';
+            }
+        });
+    });
+});
+</script>
 <?php endif; ?>
 
 <!-- ==============================================================================

@@ -63,54 +63,66 @@ foreach ($result as $row) {
 					$photo_src = BASE_URL . 'assets/images/planos/' . $plan_photo;
 				}
 
+				// Fallback de imagem consistente por plano
+				if(empty($photo_src)) {
+					if (stripos($row['pricing_plan_name'], 'empresa') !== false) {
+						$photo_src = BASE_URL . 'assets/images/planos/empresarial.png';
+					} elseif (stripos($row['pricing_plan_name'], 'odonto') !== false) {
+						$photo_src = BASE_URL . 'assets/images/planos/odonto.png';
+					} else {
+						$photo_src = BASE_URL . 'assets/images/planos/top-saude.png';
+					}
+				}
+
 				$plan_btn_text = !empty($row['pricing_plan_button_text']) ? $row['pricing_plan_button_text'] : 'Quero Este Plano';
 				$plan_btn_url = !empty($row['pricing_plan_button_url']) ? $row['pricing_plan_button_url'] : '#';
 				$btn_target = (strpos($plan_btn_url, 'http') === 0) ? 'target="_blank" rel="noopener"' : '';
 				$is_popular = !empty($row['pricing_plan_popular']);
 				$badge = $row['pricing_plan_badge'] ?? '';
 				$price_val = trim($row['pricing_plan_price'] ?? '');
+				$clean_price = preg_replace('/^R\$\s*/i', '', $price_val);
 				$period_val = trim($row['pricing_plan_period'] ?? '/mês');
 				?>
 				<div class="col-lg-4 col-md-6 mb-4">
 					<div class="ps-plan-card <?php echo $is_popular ? 'ps-plan-popular' : ''; ?>">
-						<?php if($is_popular || !empty($badge)): ?>
-							<span class="ps-plan-badge-tag"><?php echo htmlspecialchars(!empty($badge) ? $badge : 'Mais Popular'); ?></span>
-						<?php endif; ?>
-						<h3 class="ps-plan-name"><?php echo htmlspecialchars($row['pricing_plan_name']); ?></h3>
-						<?php if(!empty($photo_src)): ?>
-							<div class="ps-plan-img">
-								<img src="<?php echo $photo_src; ?>" alt="<?php echo htmlspecialchars($row['pricing_plan_name']); ?>" loading="lazy" decoding="async">
-							</div>
-						<?php endif; ?>
-						<div class="ps-plan-price-wrap">
-							<?php if(strtolower($price_val) === 'consultar' || stripos($price_val, 'sob') !== false): ?>
-								<span class="ps-plan-price-val">Sob Consulta</span>
-							<?php else: ?>
-								<span class="ps-plan-from">A partir de</span>
-								<div class="ps-plan-amount">
-									<span class="ps-plan-currency">R$</span>
-									<span class="ps-plan-number"><?php echo htmlspecialchars($price_val); ?></span>
-									<?php if(!empty($period_val)): ?>
-										<span class="ps-plan-period"><?php echo htmlspecialchars($period_val); ?></span>
-									<?php endif; ?>
-								</div>
+						<div class="ps-plan-thumb">
+							<img src="<?php echo $photo_src; ?>" alt="<?php echo htmlspecialchars($row['pricing_plan_name']); ?>" loading="lazy" decoding="async">
+							<?php if($is_popular || !empty($badge)): ?>
+								<span class="ps-plan-badge-tag"><i class="fas fa-fire me-1"></i><?php echo htmlspecialchars(!empty($badge) ? $badge : 'Mais Escolhido'); ?></span>
 							<?php endif; ?>
 						</div>
-						<ul class="ps-plan-features">
-							<?php
-							$statement1 = $pdo->prepare("SELECT * FROM tbl_pricing_item WHERE pricing_plan_id=? ORDER BY pricing_item_id ASC");
-							$statement1->execute(array($row['pricing_plan_id']));
-							$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
-							foreach ($result1 as $row1) {
-								?>
-								<li><i class="fa fa-check-circle"></i> <?php echo htmlspecialchars($row1['pricing_item_name']); ?></li>
+						<div class="ps-plan-body">
+							<h3 class="ps-plan-name"><?php echo htmlspecialchars($row['pricing_plan_name']); ?></h3>
+							<div class="ps-plan-price-wrap">
+								<?php if(strtolower($clean_price) === 'consultar' || stripos($price_val, 'sob') !== false): ?>
+									<span class="ps-plan-price-val fw-bold" style="font-size: 1.15rem; color: var(--ps-primary);">Sob Consulta</span>
+								<?php else: ?>
+									<span class="ps-plan-from">A partir de</span>
+									<div class="ps-plan-amount">
+										<span class="ps-plan-currency">R$</span>
+										<span class="ps-plan-number"><?php echo htmlspecialchars($clean_price); ?></span>
+										<?php if(!empty($period_val)): ?>
+											<span class="ps-plan-period"><?php echo htmlspecialchars($period_val); ?></span>
+										<?php endif; ?>
+									</div>
+								<?php endif; ?>
+							</div>
+							<ul class="ps-plan-features">
 								<?php
-							}
-							?>
-						</ul>
-						<a href="<?php echo htmlspecialchars($plan_btn_url); ?>" <?php echo $btn_target; ?> class="ps-plan-btn">
-							<?php echo htmlspecialchars($plan_btn_text); ?> <i class="fa fa-arrow-right"></i>
-						</a>
+								$statement1 = $pdo->prepare("SELECT * FROM tbl_pricing_item WHERE pricing_plan_id=? ORDER BY pricing_item_id ASC");
+								$statement1->execute(array($row['pricing_plan_id']));
+								$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
+								foreach ($result1 as $row1) {
+									?>
+									<li><i class="fa fa-check-circle"></i> <?php echo htmlspecialchars($row1['pricing_item_name']); ?></li>
+									<?php
+								}
+								?>
+							</ul>
+							<a href="<?php echo htmlspecialchars($plan_btn_url); ?>" <?php echo $btn_target; ?> class="ps-plan-btn">
+								<?php echo htmlspecialchars($plan_btn_text); ?> <i class="fa fa-arrow-right"></i>
+							</a>
+						</div>
 					</div>
 				</div>
 				<?php

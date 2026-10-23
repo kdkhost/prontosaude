@@ -397,8 +397,11 @@ if (function_exists(\'pronto_is_page_active\')) {
 
                     <div class="bloco-preco">
                         <div>
-                            <span class="preco-valor">R$ <?= htmlspecialchars($plano[\'pricing_plan_price\']); ?></span>
-                            <span class="preco-periodo"><?= htmlspecialchars($plano[\'pricing_plan_period\'] ?? \'/mês\'); ?></span>
+                            <?php $clean_plan_price = preg_replace(\'/^R\\$\\s*/i\', \'\', trim($plano[\'pricing_plan_price\'])); ?>
+                            <span class="preco-valor"><?= (strtolower($clean_plan_price) === \'consultar\' || stripos($clean_plan_price, \'sob\') !== false) ? \'Sob Consulta\' : \'R$ \' . htmlspecialchars($clean_plan_price); ?></span>
+                            <?php if(strtolower($clean_plan_price) !== \'consultar\' && stripos($clean_plan_price, \'sob\') === false): ?>
+                                <span class="preco-periodo"><?= htmlspecialchars($plano[\'pricing_plan_period\'] ?? \'/mês\'); ?></span>
+                            <?php endif; ?>
                         </div>
                         <span class="badge-adesao">
                             <i class="fas fa-check-circle me-1"></i> SEM CARÊNCIA
