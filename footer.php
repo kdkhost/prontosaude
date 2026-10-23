@@ -249,7 +249,7 @@ $(function () {
     });
 
     // Submissão do Formulário de Contato via AJAX com SweetAlert2
-    $('#formContatoSite').on('submit', function (e) {
+    $('#formContatoSite, .cform-1, #formContatoPage').on('submit', function (e) {
         e.preventDefault();
         var $form = $(this);
         var $btn = $form.find('button[type="submit"]');

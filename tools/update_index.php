@@ -1,11 +1,21 @@
 <?php
 // tools/update_index.php
-// Gera index.php com arquitetura robusta, funcional, compacta (sem vazios excessivos)
-// e 100% alinhada à Identidade Visual da Pronto Saúde (Teal #0a6b74, Dark Teal #07474d, Verde #10b981)
+// Gera index.php com arquitetura robusta, compacta (sem vazios excessivos),
+// 100% alinhada à Identidade Visual da Pronto Saúde (Teal #0a6b74, Dark Teal #07474d, Verde #10b981),
+// respeitando rigorosamente o banco de dados gravado e a estrutura MULTIPAGE (sem formulário de contato na home).
 
 $index_file = __DIR__ . '/../index.php';
 
 $index_code = '<?php require_once(\'header.php\'); ?>
+<?php
+// Sincroniza seções da Home com o status de cada página individual conforme o banco de dados
+if (function_exists(\'pronto_is_page_active\')) {
+    if (!pronto_is_page_active(\'doctor\')) $home_status_doctor = 0;
+    if (!pronto_is_page_active(\'servicos\')) $home_status_service = 0;
+    if (!pronto_is_page_active(\'fidelidade\')) $home_status_pricing = 0;
+    if (!pronto_is_page_active(\'news\')) $home_status_news = 0;
+}
+?>
 
 <!-- ==============================================================================
      1. HERO SECTION ROBUSTA & DINÂMICA (CROSS-FADE CAROUSEL + AGENDAMENTO RÁPIDO)
@@ -75,7 +85,7 @@ $index_code = '<?php require_once(\'header.php\'); ?>
                                     <a href="<?= htmlspecialchars($btn_url); ?>" target="_blank" rel="noopener noreferrer" class="btn-foco-primary">
                                         <i class="fas fa-calendar-check"></i> <?= htmlspecialchars($btn_text); ?>
                                     </a>
-                                    <a href="#servicos" class="btn-foco-outline">
+                                    <a href="<?= BASE_URL; ?>servicos.php" class="btn-foco-outline">
                                         <i class="fas fa-stethoscope"></i> Ver Especialidades
                                     </a>
                                 </div>
@@ -95,35 +105,35 @@ $index_code = '<?php require_once(\'header.php\'); ?>
                                     
                                     <div class="row g-2 mb-3">
                                         <div class="col-6">
-                                            <a href="#servicos" class="btn-tipo-veiculo">
+                                            <a href="<?= BASE_URL; ?>servicos.php" class="btn-tipo-veiculo">
                                                 <i class="fas fa-user-md fs-4 d-block mb-1"></i>
                                                 <span class="fw-bold d-block small">Consultas</span>
                                                 <span class="text-muted" style="font-size: 0.72rem;">Diversas Áreas</span>
                                             </a>
                                         </div>
                                         <div class="col-6">
-                                            <a href="#servicos" class="btn-tipo-veiculo">
+                                            <a href="<?= BASE_URL; ?>servicos.php" class="btn-tipo-veiculo">
                                                 <i class="fas fa-flask fs-4 d-block mb-1"></i>
                                                 <span class="fw-bold d-block small">Exames</span>
                                                 <span class="text-muted" style="font-size: 0.72rem;">Laudos Precisos</span>
                                             </a>
                                         </div>
                                         <div class="col-6">
-                                            <a href="#servicos" class="btn-tipo-veiculo">
+                                            <a href="<?= BASE_URL; ?>odontologia.php" class="btn-tipo-veiculo">
                                                 <i class="fas fa-tooth fs-4 d-block mb-1"></i>
                                                 <span class="fw-bold d-block small">Odontologia</span>
                                                 <span class="text-muted" style="font-size: 0.72rem;">Tratamento Dental</span>
                                             </a>
                                         </div>
                                         <div class="col-6">
-                                            <a href="#planos" class="btn-tipo-veiculo">
+                                            <a href="<?= BASE_URL; ?>fidelidade.php" class="btn-tipo-veiculo">
                                                 <i class="fas fa-id-card fs-4 d-block mb-1"></i>
                                                 <span class="fw-bold d-block small">Fidelidade</span>
                                                 <span class="text-muted" style="font-size: 0.72rem;">Até 50% Desconto</span>
                                             </a>
                                         </div>
                                     </div>
-                                    <a href="#planos" class="btn-foco-primary w-100 justify-content-center py-2" style="font-size: 0.88rem;">
+                                    <a href="<?= BASE_URL; ?>fidelidade.php" class="btn-foco-primary w-100 justify-content-center py-2" style="font-size: 0.88rem;">
                                         <i class="fas fa-shield-alt"></i> CONHEÇA O CARTÃO FIDELIDADE
                                     </a>
                                 </div>
@@ -282,9 +292,14 @@ $index_code = '<?php require_once(\'header.php\'); ?>
                             <span>Agendamento ágil pelo WhatsApp em menos de 1 minuto</span>
                         </li>
                     </ul>
-                    <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar uma visita ou atendimento na Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="btn-foco-primary w-100 justify-content-center py-2" style="font-size: 0.88rem;">
-                        <i class="fab fa-whatsapp me-1"></i> Falar com um Atendente
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a href="<?= BASE_URL; ?>page/sobre" class="btn btn-outline-secondary w-50 py-2 small fw-bold">
+                            <i class="fas fa-info-circle me-1"></i> Conheça Nossa História
+                        </a>
+                        <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar uma visita ou atendimento na Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="btn-foco-primary w-50 justify-content-center py-2" style="font-size: 0.88rem;">
+                            <i class="fab fa-whatsapp me-1"></i> Falar com Atendente
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -292,14 +307,15 @@ $index_code = '<?php require_once(\'header.php\'); ?>
 </section>
 
 <!-- ==============================================================================
-     4. PLANOS E CARTÃO FIDELIDADE (COMPACTO & SEM ESPAÇOS OCIOSOS)
+     4. PLANOS E CARTÃO FIDELIDADE (RESPEITA BANCO DE DADOS: $home_status_pricing)
      ============================================================================== -->
+<?php if(!empty($home_status_pricing) && $home_status_pricing == 1): ?>
 <section id="planos" class="section-planos">
     <div class="container" style="max-width: 1240px;">
         <div class="text-center max-w-700 mx-auto section-header-compact">
             <span class="fw-bold text-uppercase small letter-spacing-1" style="color: var(--ps-primary);">Economia &amp; Benefícios</span>
-            <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);">Cartão Fidelidade &amp; Planos</h2>
-            <p class="text-muted small mb-0">Sem carência, sem consulta ao SPC/Serasa e com descontos de até 50% para toda a sua família.</p>
+            <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);"><?= !empty($home_title_pricing) ? htmlspecialchars($home_title_pricing) : \'Cartão Fidelidade &amp; Planos\'; ?></h2>
+            <p class="text-muted small mb-0"><?= !empty($home_subtitle_pricing) ? htmlspecialchars($home_subtitle_pricing) : \'Sem carência, sem consulta ao SPC/Serasa e com descontos de até 50% para toda a sua família.\'; ?></p>
         </div>
 
         <?php
@@ -316,7 +332,7 @@ $index_code = '<?php require_once(\'header.php\'); ?>
                     \'pricing_plan_name\' => \'Top Saúde Individual\',
                     \'pricing_plan_badge\' => \'Mais Escolhido\',
                     \'pricing_plan_popular\' => 1,
-                    \'pricing_plan_price\' => \'R$ 69,90\',
+                    \'pricing_plan_price\' => \'69,90\',
                     \'pricing_plan_period\' => \'/mês\',
                     \'pricing_plan_button_text\' => \'ADERIR AO PLANO\',
                     \'pricing_plan_button_url\' => \'https://wa.me/\' . $whats_clean . \'?text=\' . urlencode(\'Olá! Gostaria de saber mais sobre o plano Top Saúde.\')
@@ -326,25 +342,15 @@ $index_code = '<?php require_once(\'header.php\'); ?>
                     \'pricing_plan_name\' => \'Top Saúde Med Odonto\',
                     \'pricing_plan_badge\' => \'\',
                     \'pricing_plan_popular\' => 0,
-                    \'pricing_plan_price\' => \'R$ 105,00\',
+                    \'pricing_plan_price\' => \'105,00\',
                     \'pricing_plan_period\' => \'/mês\',
                     \'pricing_plan_button_text\' => \'ADERIR AO PLANO\',
                     \'pricing_plan_button_url\' => \'https://wa.me/\' . $whats_clean . \'?text=\' . urlencode(\'Olá! Gostaria de saber mais sobre o plano Med Odonto.\')
-                ],
-                [
-                    \'pricing_plan_id\' => 3,
-                    \'pricing_plan_name\' => \'Plano Empresa\',
-                    \'pricing_plan_badge\' => \'\',
-                    \'pricing_plan_popular\' => 0,
-                    \'pricing_plan_price\' => \'Sob Consulta\',
-                    \'pricing_plan_period\' => \'/mês\',
-                    \'pricing_plan_button_text\' => \'CONSULTAR VALORES\',
-                    \'pricing_plan_button_url\' => \'https://wa.me/\' . $whats_clean . \'?text=\' . urlencode(\'Olá! Gostaria de saber sobre o Plano Empresa.\')
                 ]
             ];
         }
 
-        $col_class = count($planos) <= 3 ? \'col-lg-4 col-md-6\' : \'col-xl-3 col-lg-6 col-md-6\';
+        $col_class = count($planos) <= 2 ? \'col-lg-5 col-md-6\' : (count($planos) == 3 ? \'col-lg-4 col-md-6\' : \'col-xl-3 col-lg-6 col-md-6\');
         ?>
 
         <div class="row g-3 justify-content-center align-items-stretch">
@@ -391,7 +397,7 @@ $index_code = '<?php require_once(\'header.php\'); ?>
 
                     <div class="bloco-preco">
                         <div>
-                            <span class="preco-valor"><?= htmlspecialchars($plano[\'pricing_plan_price\']); ?></span>
+                            <span class="preco-valor">R$ <?= htmlspecialchars($plano[\'pricing_plan_price\']); ?></span>
                             <span class="preco-periodo"><?= htmlspecialchars($plano[\'pricing_plan_period\'] ?? \'/mês\'); ?></span>
                         </div>
                         <span class="badge-adesao">
@@ -408,27 +414,35 @@ $index_code = '<?php require_once(\'header.php\'); ?>
                         <?php endforeach; ?>
                     </ul>
 
-                    <a href="<?= htmlspecialchars($p_url); ?>" target="_blank" rel="noopener noreferrer" class="btn <?= $is_destaque ? \'btn-foco-primary\' : \'btn-outline-danger\'; ?> w-100 py-2 mt-auto fw-bold text-nowrap justify-content-center" style="font-size: 0.86rem;">
+                    <a href="<?= htmlspecialchars($p_url); ?>" target="_blank" rel="noopener noreferrer" class="btn <?= $is_destaque ? \'btn-foco-primary\' : \'btn-outline-secondary\'; ?> w-100 py-2 mt-auto fw-bold text-nowrap justify-content-center" style="font-size: 0.86rem;">
                         <i class="fas fa-shield-alt me-1"></i> <?= htmlspecialchars($plano[\'pricing_plan_button_text\'] ?: \'ADERIR AO PLANO\'); ?>
                     </a>
                 </div>
             </div>
             <?php endforeach; ?>
         </div>
+
+        <div class="text-center mt-4">
+            <a href="<?= BASE_URL; ?>fidelidade.php" class="btn btn-outline-secondary fw-bold px-4 py-2 rounded-pill small">
+                <i class="fas fa-id-card me-2"></i> Ver Todos os Detalhes do Cartão Fidelidade
+            </a>
+        </div>
     </div>
 </section>
+<?php endif; ?>
 
 <!-- ==============================================================================
-     5. ESPECIALIDADES MÉDICAS & EXAMES (ROBUSTO & ACESSÍVEL)
+     5. ESPECIALIDADES MÉDICAS & EXAMES (RESPEITA BANCO DE DADOS: $home_status_service)
      ============================================================================== -->
+<?php if(!empty($home_status_service) && $home_status_service == 1): ?>
 <section id="servicos" class="section-estetica">
     <div class="container" style="max-width: 1240px;">
         <div class="text-center max-w-700 mx-auto section-header-compact">
             <span class="badge-estetica-topo text-uppercase small fw-bold px-3 py-1 rounded-pill">
                 <i class="fas fa-stethoscope me-1" style="color: var(--ps-primary);"></i> Cuidado Especializado
             </span>
-            <h2 class="h3 fw-bold mt-2" style="color: var(--ps-title);">Especialidades Médicas &amp; Exames</h2>
-            <p class="text-muted small mb-0">Atendimento ambulatorial com hora marcada, corpo clínico experiente e laudos confiáveis.</p>
+            <h2 class="h3 fw-bold mt-2" style="color: var(--ps-title);"><?= !empty($home_title_service) ? htmlspecialchars($home_title_service) : \'Especialidades Médicas &amp; Exames\'; ?></h2>
+            <p class="text-muted small mb-0"><?= !empty($home_subtitle_service) ? htmlspecialchars($home_subtitle_service) : \'Atendimento ambulatorial com hora marcada, corpo clínico experiente e laudos confiáveis.\'; ?></p>
         </div>
 
         <?php
@@ -446,6 +460,7 @@ $index_code = '<?php require_once(\'header.php\'); ?>
                         ? BASE_URL . \'assets/uploads/\' . $servico[\'photo\']
                         : \'\';
                     $s_desc = !empty($servico[\'short_description\']) ? strip_tags($servico[\'short_description\']) : \'Atendimento com suporte integral e diagnóstico precoce seguro.\';
+                    $s_link = !empty($servico[\'slug\']) ? BASE_URL . \'service/\' . $servico[\'slug\'] : BASE_URL . \'servicos.php\';
                 ?>
                 <div class="col-xl-4 col-md-6">
                     <div class="card-estetica">
@@ -460,15 +475,22 @@ $index_code = '<?php require_once(\'header.php\'); ?>
                                 </div>
                             <?php endif; ?>
 
-                            <h5 class="fw-bold mb-1" style="color: var(--ps-title);"><?= htmlspecialchars($servico[\'name\']); ?></h5>
+                            <h5 class="fw-bold mb-1" style="color: var(--ps-title);">
+                                <a href="<?= $s_link; ?>" class="text-decoration-none" style="color: inherit;">
+                                    <?= htmlspecialchars($servico[\'name\']); ?>
+                                </a>
+                            </h5>
                             <div class="text-muted small mb-3">
                                 <?= htmlspecialchars(mb_strimwidth($s_desc, 0, 130, \'...\')); ?>
                             </div>
                         </div>
 
-                        <div class="pt-2 border-top border-light-subtle mt-auto">
-                            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar atendimento na especialidade: \' . $servico[\'name\']); ?>" target="_blank" rel="noopener noreferrer" class="btn-agendar-estetica">
-                                <i class="fas fa-calendar-check me-2"></i> Agendar Especialidade
+                        <div class="pt-2 border-top border-light-subtle mt-auto d-flex gap-2">
+                            <a href="<?= $s_link; ?>" class="btn btn-sm btn-outline-secondary w-50 py-2 small fw-semibold">
+                                <i class="fas fa-info-circle me-1"></i> Saiba Mais
+                            </a>
+                            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar atendimento na especialidade: \' . $servico[\'name\']); ?>" target="_blank" rel="noopener noreferrer" class="btn-agendar-estetica w-50 text-center">
+                                <i class="fas fa-calendar-check me-1"></i> Agendar
                             </a>
                         </div>
                     </div>
@@ -482,28 +504,30 @@ $index_code = '<?php require_once(\'header.php\'); ?>
         </div>
 
         <div class="text-center mt-4">
-            <a href="<?= BASE_URL; ?>servicos.php" class="btn btn-outline-danger fw-bold px-4 py-2 rounded-pill small">
+            <a href="<?= BASE_URL; ?>servicos.php" class="btn btn-outline-secondary fw-bold px-4 py-2 rounded-pill small">
                 <i class="fas fa-th-large me-2"></i> Ver Todas as Especialidades &amp; Exames
             </a>
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <!-- ==============================================================================
-     6. CORPO CLÍNICO / MÉDICOS (ENQUADRAMENTO EQUILIBRADO)
+     6. CORPO CLÍNICO / MÉDICOS (RESPEITA BANCO DE DADOS: $home_status_doctor)
      ============================================================================== -->
+<?php if(!empty($home_status_doctor) && $home_status_doctor == 1): ?>
 <section id="medicos" class="section-medicos">
     <div class="container" style="max-width: 1240px;">
         <div class="text-center max-w-700 mx-auto section-header-compact">
             <span class="fw-bold text-uppercase small letter-spacing-1" style="color: var(--ps-primary);">Profissionais Dedicados</span>
-            <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);">Nosso Corpo Clínico</h2>
-            <p class="text-muted small mb-0">Médicos capacitados prontos para acolher você e sua família com respeito e cuidado.</p>
+            <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);"><?= !empty($home_title_doctor) ? htmlspecialchars($home_title_doctor) : \'Nosso Corpo Clínico\'; ?></h2>
+            <p class="text-muted small mb-0"><?= !empty($home_subtitle_doctor) ? htmlspecialchars($home_subtitle_doctor) : \'Médicos capacitados prontos para acolher você e sua família com respeito e cuidado.\'; ?></p>
         </div>
 
         <?php
         $medicos = [];
         try {
-            $st_doc = $pdo->query("SELECT d.*, dg.designation_name FROM tbl_doctor d LEFT JOIN tbl_designation dg ON d.designation_id = dg.designation_id ORDER BY d.id ASC LIMIT 4");
+            $st_doc = $pdo->query("SELECT d.*, dg.designation_name FROM tbl_doctor d LEFT JOIN tbl_designation dg ON d.designation_id = dg.designation_id WHERE d.status = \'Active\' ORDER BY d.id ASC LIMIT 4");
             $medicos = $st_doc->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {}
         ?>
@@ -513,15 +537,20 @@ $index_code = '<?php require_once(\'header.php\'); ?>
                 $doc_photo = (!empty($doc[\'photo\']) && file_exists(__DIR__ . \'/assets/uploads/\' . $doc[\'photo\']))
                     ? BASE_URL . \'assets/uploads/\' . $doc[\'photo\']
                     : BASE_URL . \'assets/uploads/department-1.png\';
+                $doc_link = !empty($doc[\'slug\']) ? BASE_URL . \'doctor/\' . $doc[\'slug\'] : \'#\';
             ?>
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card-medico">
                     <img src="<?= $doc_photo; ?>" alt="<?= htmlspecialchars($doc[\'name\']); ?>" class="card-medico-thumb">
                     <div class="card-medico-body">
-                        <h6 class="card-medico-name"><?= htmlspecialchars($doc[\'name\']); ?></h6>
+                        <h6 class="card-medico-name">
+                            <a href="<?= $doc_link; ?>" class="text-decoration-none" style="color: inherit;">
+                                <?= htmlspecialchars($doc[\'name\']); ?>
+                            </a>
+                        </h6>
                         <span class="card-medico-spec"><?= htmlspecialchars($doc[\'designation_name\'] ?? \'Médico Especialista\'); ?></span>
                         <div class="card-medico-footer">
-                            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar uma consulta com \' . $doc[\'name\']); ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-danger w-100 fw-bold">
+                            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar uma consulta com \' . $doc[\'name\']); ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-foco-primary w-100 fw-bold">
                                 <i class="fas fa-calendar-check me-1"></i> Agendar Consulta
                             </a>
                         </div>
@@ -532,10 +561,12 @@ $index_code = '<?php require_once(\'header.php\'); ?>
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <!-- ==============================================================================
-     7. DEPOIMENTOS DE PACIENTES
+     7. DEPOIMENTOS DE PACIENTES (RESPEITA BANCO DE DADOS: $home_status_testimonial)
      ============================================================================== -->
+<?php if(!empty($home_status_testimonial) && $home_status_testimonial == 1): ?>
 <?php
 $depoimentos = [];
 try {
@@ -548,8 +579,8 @@ try {
     <div class="container position-relative">
         <div class="text-center max-w-700 mx-auto section-header-compact">
             <span class="fw-bold text-uppercase small" style="color: var(--ps-primary);">A Voz dos Pacientes</span>
-            <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);">Quem Cuida da Saúde Conosco, Recomenda</h2>
-            <p class="text-muted small mb-0">Depoimentos reais de quem confia na dedicação e no acolhimento da Pronto Saúde.</p>
+            <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);"><?= !empty($home_title_testimonial) ? htmlspecialchars($home_title_testimonial) : \'Quem Cuida da Saúde Conosco, Recomenda\'; ?></h2>
+            <p class="text-muted small mb-0"><?= !empty($home_subtitle_testimonial) ? htmlspecialchars($home_subtitle_testimonial) : \'Depoimentos reais de quem confia na dedicação e no acolhimento da Pronto Saúde.\'; ?></p>
         </div>
 
         <div class="row g-3 justify-content-center">
@@ -582,10 +613,83 @@ try {
     </div>
 </section>
 <?php endif; ?>
+<?php endif; ?>
 
 <!-- ==============================================================================
-     8. CONVÊNIOS E PARCEIROS
+     8. NOTÍCIAS & DICAS DE SAÚDE (RESPEITA BANCO DE DADOS: $home_status_news)
      ============================================================================== -->
+<?php if(!empty($home_status_news) && $home_status_news == 1): ?>
+<?php
+$noticias = [];
+$total_noticias = !empty($total_recent_news_home_page) ? (int)$total_recent_news_home_page : 3;
+try {
+    $st_news = $pdo->prepare("SELECT n.*, c.category_name, c.category_slug FROM tbl_news n LEFT JOIN tbl_category c ON n.category_id = c.category_id ORDER BY n.news_id DESC LIMIT ?");
+    $st_news->bindValue(1, $total_noticias, PDO::PARAM_INT);
+    $st_news->execute();
+    $noticias = $st_news->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {}
+?>
+<?php if(!empty($noticias)): ?>
+<section id="noticias" class="section-sobre py-5 bg-light">
+    <div class="container" style="max-width: 1240px;">
+        <div class="text-center max-w-700 mx-auto section-header-compact">
+            <span class="fw-bold text-uppercase small letter-spacing-1" style="color: var(--ps-primary);">Informação &amp; Prevenção</span>
+            <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);"><?= !empty($home_title_news) ? htmlspecialchars($home_title_news) : \'Notícias &amp; Dicas de Saúde\'; ?></h2>
+            <p class="text-muted small mb-0"><?= !empty($home_subtitle_news) ? htmlspecialchars($home_subtitle_news) : \'Artigos e orientações médicas preparados por nossa equipe para o seu bem-estar.\'; ?></p>
+        </div>
+
+        <div class="row g-3 justify-content-center">
+            <?php foreach ($noticias as $item): 
+                $n_photo = (!empty($item[\'photo\']) && file_exists(__DIR__ . \'/assets/uploads/\' . $item[\'photo\']))
+                    ? BASE_URL . \'assets/uploads/\' . $item[\'photo\']
+                    : BASE_URL . \'assets/uploads/department-1.png\';
+                $n_link = BASE_URL . \'news/\' . $item[\'news_slug\'];
+            ?>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border rounded-4 overflow-hidden shadow-sm bg-white d-flex flex-column">
+                    <div style="height: 180px; overflow: hidden; position: relative;">
+                        <img src="<?= $n_photo; ?>" alt="<?= htmlspecialchars($item[\'news_title\']); ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
+                        <?php if(!empty($item[\'category_name\'])): ?>
+                            <span class="badge position-absolute top-0 start-0 m-3 px-3 py-1 rounded-pill" style="background: var(--ps-primary); font-size: 0.72rem;">
+                                <?= htmlspecialchars($item[\'category_name\']); ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+                    <div class="p-3 d-flex flex-column flex-grow-1">
+                        <span class="text-muted small mb-1" style="font-size: 0.75rem;">
+                            <i class="far fa-calendar-alt me-1"></i> <?= htmlspecialchars($item[\'news_date\']); ?>
+                        </span>
+                        <h6 class="fw-bold mb-2" style="color: var(--ps-title); line-height: 1.4;">
+                            <a href="<?= $n_link; ?>" class="text-decoration-none" style="color: inherit;">
+                                <?= htmlspecialchars(mb_strimwidth($item[\'news_title\'], 0, 75, \'...\')); ?>
+                            </a>
+                        </h6>
+                        <p class="text-muted small flex-grow-1 mb-3" style="font-size: 0.82rem; line-height: 1.6;">
+                            <?= htmlspecialchars(mb_strimwidth(strip_tags($item[\'news_content\']), 0, 110, \'...\')); ?>
+                        </p>
+                        <a href="<?= $n_link; ?>" class="btn btn-sm btn-outline-secondary w-100 fw-bold mt-auto py-2">
+                            Ler Artigo Completo <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="<?= BASE_URL; ?>page/news" class="btn btn-outline-secondary fw-bold px-4 py-2 rounded-pill small">
+                <i class="fas fa-newspaper me-2"></i> Ver Todas as Notícias &amp; Artigos
+            </a>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+<?php endif; ?>
+
+<!-- ==============================================================================
+     9. CONVÊNIOS E PARCEIROS (RESPEITA BANCO DE DADOS: $home_status_partner)
+     ============================================================================== -->
+<?php if(!empty($home_status_partner) && $home_status_partner == 1): ?>
 <?php
 $parceiros = [];
 try {
@@ -594,10 +698,10 @@ try {
 } catch (Exception $e) {}
 ?>
 <?php if(!empty($parceiros)): ?>
-<section id="parceiros" class="section-parceiros border-top border-bottom">
+<section id="parceiros" class="section-parceiros border-top border-bottom py-4 bg-white">
     <div class="container text-center">
-        <span class="fw-bold text-uppercase small d-block mb-1" style="color: var(--ps-primary);">Convênios &amp; Parcerias</span>
-        <h5 class="fw-bold mb-3" style="color: var(--ps-title);">Facilidades &amp; Sistema Livre Escolha</h5>
+        <span class="fw-bold text-uppercase small d-block mb-1" style="color: var(--ps-primary);">Rede Credenciada</span>
+        <h5 class="fw-bold mb-3" style="color: var(--ps-title);"><?= !empty($home_title_partner) ? htmlspecialchars($home_title_partner) : \'Convênios Aceitos &amp; Parceiros Institucionais\'; ?></h5>
         <div class="row align-items-center justify-content-center g-3">
             <?php foreach ($parceiros as $parc): 
                 $p_logo = (!empty($parc[\'photo\']) && file_exists(__DIR__ . \'/assets/uploads/\' . $parc[\'photo\']))
@@ -614,9 +718,10 @@ try {
     </div>
 </section>
 <?php endif; ?>
+<?php endif; ?>
 
 <!-- ==============================================================================
-     9. PERGUNTAS FREQUENTES (FAQ CLÍNICO)
+     10. PERGUNTAS FREQUENTES (FAQ CLÍNICO)
      ============================================================================== -->
 <?php
 $faqs = [];
@@ -630,6 +735,7 @@ try {
         <div class="text-center max-w-700 mx-auto section-header-compact">
             <span class="fw-bold text-uppercase small" style="color: var(--ps-primary);">Tire Suas Dúvidas</span>
             <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);">Perguntas Frequentes</h2>
+            <p class="text-muted small mb-0">Confira respostas para as principais dúvidas sobre consultas, exames e agendamentos.</p>
         </div>
         <div class="max-w-800 mx-auto">
             <div class="accordion accordion-foco" id="faqAccordion">
@@ -668,69 +774,26 @@ try {
 </section>
 
 <!-- ==============================================================================
-     10. FALE CONOSCO & CONTATO DIRETO
+     11. BANNER INSTITUCIONAL DE AGENDAMENTO (SEM FORMULÁRIO NA HOME - MULTIPAGE)
      ============================================================================== -->
-<section id="contato" class="section-contato">
+<section class="section-cta-atendimento py-4" style="background: linear-gradient(135deg, var(--ps-primary-dark) 0%, var(--ps-primary) 100%); color: #fff;">
     <div class="container">
-        <div class="row g-4 align-items-center">
-            <div class="col-lg-5">
-                <span class="fw-bold text-uppercase small" style="color: var(--ps-primary);">Atendimento Direto</span>
-                <h2 class="h3 fw-bold mt-1 mb-3" style="color: var(--ps-title);">Agende Sua Consulta ou Tire Dúvidas</h2>
-                <p class="text-muted small mb-4">Nossa equipe de recepção está pronta para atender com agilidade e cordialidade.</p>
-                <div class="d-flex flex-column gap-2">
-                    <?php if(!empty($contact_phone)): ?>
-                    <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-sm border">
-                        <div class="card-contato-icon text-white" style="background: var(--ps-primary);"><i class="fas fa-phone-alt"></i></div>
-                        <div>
-                            <span class="text-muted" style="font-size: 0.75rem;">Telefone da Recepção</span>
-                            <h6 class="fw-bold mb-0 text-dark small"><?= htmlspecialchars($contact_phone); ?></h6>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-sm border">
-                        <div class="card-contato-icon text-white" style="background: var(--ps-secondary);"><i class="fab fa-whatsapp"></i></div>
-                        <div>
-                            <span class="text-muted" style="font-size: 0.75rem;">WhatsApp Oficial</span>
-                            <h6 class="fw-bold mb-0 text-dark small">Agendamento em 1 Minuto</h6>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-sm border">
-                        <div class="card-contato-icon text-white" style="background: var(--ps-primary-dark);"><i class="fas fa-map-marker-alt"></i></div>
-                        <div>
-                            <span class="text-muted" style="font-size: 0.75rem;">Nossa Unidade</span>
-                            <h6 class="fw-bold mb-0 text-dark small"><?= htmlspecialchars($contact_address ?: \'Gardênia Azul, Jacarepaguá, Rio de Janeiro\'); ?></h6>
-                        </div>
-                    </div>
-                </div>
+        <div class="row align-items-center justify-content-between g-3">
+            <div class="col-lg-8 text-center text-lg-start">
+                <span class="badge rounded-pill px-3 py-1 text-white fw-bold mb-2" style="background: rgba(255,255,255,0.18); font-size: 0.76rem;">
+                    <i class="fas fa-headset me-1"></i> CANAL DIRETO COM A RECEPÇÃO
+                </span>
+                <h3 class="fw-bold mb-1 text-white">Precisa de atendimento ou deseja tirar dúvidas?</h3>
+                <p class="mb-0 text-white-50 small">Nossa equipe está disponível de segunda a sábado para cuidar de você e sua família.</p>
             </div>
-            <div class="col-lg-7">
-                <div class="card-contato-form">
-                    <h5 class="fw-bold mb-3" style="color: var(--ps-title);">Envie Sua Mensagem</h5>
-                    <form action="<?= BASE_URL; ?>send_email.php" method="POST" id="formContatoSite">
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <label class="form-label small text-muted fw-semibold mb-1">Seu Nome *</label>
-                                <input type="text" name="visitor_name" class="form-control" required placeholder="Nome completo">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small text-muted fw-semibold mb-1">Telefone / WhatsApp *</label>
-                                <input type="text" name="visitor_phone" class="form-control" required placeholder="(21) 99999-9999">
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label small text-muted fw-semibold mb-1">Seu E-mail *</label>
-                                <input type="email" name="visitor_email" class="form-control" required placeholder="seu@email.com">
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label small text-muted fw-semibold mb-1">Como podemos ajudar? *</label>
-                                <textarea name="visitor_comment" class="form-control" rows="3" required placeholder="Informe a consulta, exame ou especialidade desejada..."></textarea>
-                            </div>
-                            <div class="col-12 mt-3">
-                                <button type="submit" class="btn-foco-primary w-100 justify-content-center py-2">
-                                    <i class="fas fa-paper-plane me-1"></i> ENVIAR MENSAGEM
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+            <div class="col-lg-4 text-center text-lg-end">
+                <div class="d-flex flex-wrap justify-content-center justify-content-lg-end gap-2">
+                    <a href="<?= BASE_URL; ?>page/contato" class="btn btn-light fw-bold px-3 py-2 rounded-pill small" style="color: var(--ps-primary);">
+                        <i class="fas fa-envelope me-1"></i> Página de Contato
+                    </a>
+                    <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode(\'Olá! Gostaria de agendar um atendimento na Pronto Saúde.\'); ?>" target="_blank" rel="noopener noreferrer" class="btn btn-success fw-bold px-3 py-2 rounded-pill small" style="background: #10b981; border: none;">
+                        <i class="fab fa-whatsapp me-1"></i> Chamar no WhatsApp
+                    </a>
                 </div>
             </div>
         </div>
@@ -746,4 +809,4 @@ if (substr($index_code, 0, 3) === "\xEF\xBB\xBF") {
 }
 
 file_put_contents($index_file, $index_code);
-echo "Sucesso: index.php atualizado com arquitetura densa e identidade Pronto Saúde (" . strlen($index_code) . " bytes).\n";
+echo "Sucesso: index.php atualizado com estrutura multipage, sem formulario na home e respeitando o banco de dados (" . strlen($index_code) . " bytes).\n";

@@ -4,6 +4,28 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.20.0] - 2026-10-23
+
+### Padronizado & Aprimorado
+- **Arquitetura Multipage & Respeito Rigoroso ao Banco de Dados**:
+  - **Remoção do Formulário de Contato da Home (`index.php`):** O formulário de contato foi removido da primeira página, preservando a arquitetura multipage tradicional onde o contato é realizado exclusivamente em sua página dedicada (`/page/contato` ou `page.php?slug=contato`), com submissão assíncrona via AJAX e diálogos interativos do **SweetAlert2**.
+  - **Respeito Estrito às Configurações do Painel Admin:** Cada seção da Home agora é estritamente condicionada aos switches gravados no banco de dados em `tbl_settings` e `tbl_page`:
+    - `home_status_pricing` (Planos & Preços)
+    - `home_status_service` (Nossos Serviços)
+    - `home_status_doctor` (Corpo Clínico - respeitado como inativo conforme gravação no banco)
+    - `home_status_testimonial` (Depoimentos de Pacientes)
+    - `home_status_news` (Notícias e Informações com limite configurável)
+    - `home_status_partner` (Parceiros Institucionais - respeitado conforme banco)
+    - Títulos (`$home_title_*`) e subtítulos (`$home_subtitle_*`) renderizados dinamicamente a partir dos campos do banco de dados.
+  - **Links Multipage Reais no Hero e Faixa de Agendamento:** Direcionamento direto para as páginas multipage correspondentes (`servicos.php`, `fidelidade.php`, `odontologia.php`, `page/sobre` e `page/contato`).
+  - **Padronização das Demais Páginas Multipage:** 
+    - `page.php`: layout de contato com formulário integrado via AJAX e SweetAlert2, cards de canais diretos e mapa responsivo; layouts de FAQ com acordeões modernos, galeria, blog e corpo clínico harmonizados.
+    - `servicos.php` & `service.php`: cards modernos com benefícios, preços e ação direta.
+    - `fidelidade.php`: planos de fidelidade com detalhes, preços e adesão.
+    - `odontologia.php`: procedimentos com fotos, valores e modais detalhados em Teal Pronto Saúde.
+    - `convenio.php` & `trabalhe-conosco.php`: visual padronizado, sem classes vermelhas ou elementos destoantes.
+  - **Identidade Visual Oficial Pronto Saúde:** Paleta baseada em Teal (`#0a6b74`), Dark Teal (`#07474d`), Verde Esmeralda (`#10b981`) e fundo suave (`#f8fafc`).
+
 ## [2.19.0] - 2026-10-22
 
 ### Adicionado & Aprimorado

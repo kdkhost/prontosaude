@@ -956,8 +956,274 @@ body.ps-foco-body {
     opacity: 1;
     visibility: visible;
 }
-.btn-voltar-topo:hover {
-    background: var(--ps-primary);
-    transform: translateY(-3px);
+/* ==============================================================================
+   8. ESTILOS DAS PÁGINAS INTERNAS (ARQUITETURA MULTIPAGE PRONTO SAÚDE)
+   ============================================================================== */
+.page-banner {
+    position: relative;
+    padding: 65px 0;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-color: var(--ps-dark);
+}
+.page-banner .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(7, 24, 34, 0.92) 0%, rgba(10, 107, 116, 0.85) 100%) !important;
+}
+.page-banner .banner-text {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+.page-banner .banner-text h1 {
     color: #ffffff;
+    font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+.page-banner .banner-text p {
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+/* Cards das páginas internas de Serviços e Especialidades */
+.ps-service-card-modern,
+.service-card-box {
+    background: #ffffff;
+    border: 1px solid var(--ps-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: var(--ps-transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--ps-shadow-sm);
+}
+.ps-service-card-modern:hover,
+.service-card-box:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--ps-shadow-hover);
+    border-color: var(--ps-primary);
+}
+.ps-service-thumb,
+.service-card-box .photo {
+    width: 100%;
+    height: 200px;
+    background-size: cover !important;
+    background-position: center center !important;
+    position: relative;
+}
+.ps-service-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.ps-service-price-tag,
+.service-card-price-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, var(--ps-primary) 0%, var(--ps-primary-dark) 100%);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.ps-service-body,
+.service-card-box .text {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.ps-service-title,
+.service-card-box .text h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ps-title);
+    margin-bottom: 8px;
+}
+.ps-service-title a,
+.service-card-box .text h3 a {
+    color: var(--ps-title);
+    text-decoration: none;
+    transition: var(--ps-transition);
+}
+.ps-service-title a:hover,
+.service-card-box .text h3 a:hover {
+    color: var(--ps-primary);
+}
+.ps-service-desc {
+    color: var(--ps-muted);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-bottom: 14px;
+}
+.ps-service-benefits,
+.service-card-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+}
+.ps-service-benefits li,
+.service-card-benefits li {
+    font-size: 0.82rem;
+    color: var(--ps-text);
+    padding: 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.ps-service-benefits li i,
+.service-card-benefits li i {
+    color: var(--ps-secondary);
+}
+.ps-service-action-btn {
+    margin-top: auto;
+    background: var(--ps-light-bg);
+    color: var(--ps-primary);
+    border: 1px solid var(--ps-border);
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: var(--ps-transition);
+}
+.ps-service-action-btn:hover {
+    background: var(--ps-primary);
+    color: #ffffff;
+    border-color: var(--ps-primary);
+    transform: translateY(-2px);
+}
+
+/* Cards Planos Fidelidade Multipage */
+.ps-plan-card {
+    background: #ffffff;
+    border: 1.5px solid var(--ps-border);
+    border-radius: 16px;
+    padding: 26px;
+    transition: var(--ps-transition);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-shadow: var(--ps-shadow-sm);
+}
+.ps-plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--ps-shadow-hover);
+    border-color: var(--ps-primary);
+}
+.ps-plan-card.ps-plan-popular {
+    border: 2.5px solid var(--ps-primary);
+    box-shadow: 0 10px 30px rgba(10, 107, 116, 0.18);
+}
+.ps-plan-badge-tag {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--ps-primary) 0%, var(--ps-primary-dark) 100%);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+.ps-plan-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--ps-title);
+    text-align: center;
+    margin-bottom: 12px;
+}
+.ps-plan-img {
+    text-align: center;
+    margin: 10px 0;
+}
+.ps-plan-img img {
+    max-height: 90px;
+    max-width: 100%;
+    object-fit: contain;
+}
+.ps-plan-price-wrap {
+    background: var(--ps-light-bg);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    margin-bottom: 18px;
+}
+.ps-plan-from {
+    display: block;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    color: var(--ps-muted);
+    font-weight: 600;
+}
+.ps-plan-amount {
+    color: var(--ps-primary);
+}
+.ps-plan-currency {
+    font-size: 1rem;
+    font-weight: 700;
+}
+.ps-plan-number {
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+.ps-plan-period {
+    font-size: 0.82rem;
+    color: var(--ps-muted);
+}
+.ps-plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    flex-grow: 1;
+}
+.ps-plan-features li {
+    font-size: 0.86rem;
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ps-text);
+}
+.ps-plan-features li i {
+    color: var(--ps-secondary);
+}
+.ps-plan-btn {
+    background: linear-gradient(135deg, var(--ps-primary) 0%, var(--ps-primary-dark) 100%);
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.25);
+    transition: var(--ps-transition);
+}
+.ps-plan-btn:hover {
+    background: linear-gradient(135deg, var(--ps-primary-light) 0%, var(--ps-primary) 100%);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(10, 107, 116, 0.35);
 }
