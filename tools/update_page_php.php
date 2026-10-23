@@ -413,77 +413,194 @@ $page_banner_src = (!empty($banner) && file_exists(__DIR__ . \'/assets/uploads/\
 <?php endif; ?>
 
 <!-- ==============================================================================
-     4. PHOTO GALLERY PAGE LAYOUT
+     4. PHOTO GALLERY PAGE LAYOUT (GALERIA DE FOTOS MODERNA & RESPONSIVA)
      ============================================================================== -->
 <?php if($page_layout == \'Photo Gallery Page Layout\'): ?>
-<section class="gallery" style="padding: 60px 0; background: #f8fafc;">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<ul class="gallery-menu">
-					<li class="filter" data-filter="all" data-role="button">Todos</li>
-					<?php
-					$statement = $pdo->prepare("SELECT * FROM tbl_category_photo WHERE status=?");
-					$statement->execute(array(\'Active\'));
-					$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
-					foreach ($result as $row) {
-						$temp_string = strtolower($row[\'p_category_name\']);
-    					$temp_slug = preg_replace(\'/[^A-Za-z0-9-]+/\', \'-\', $temp_string);
-    					?>
-    					<li class="filter" data-filter=".<?php echo $temp_slug; ?>" data-role="button"><?php echo $row[\'p_category_name\']; ?></li>
-						<?php
-					}
-					?>
-				</ul>
+<?php
+// Carrega todas as fotos ativas com suas categorias
+$photos_stmt = $pdo->prepare("
+    SELECT t1.photo_id, t1.photo_caption, t1.photo_name, t1.p_category_id,
+           t2.p_category_name
+    FROM tbl_photo t1
+    JOIN tbl_category_photo t2 ON t1.p_category_id = t2.p_category_id
+    WHERE (t1.status = \'Active\' OR t1.status IS NULL) AND t2.status = \'Active\'
+    ORDER BY t1.photo_id DESC
+");
+$photos_stmt->execute();
+$gallery_photos = $photos_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-				<div id="mix-container" class="row g-3">
+// Carrega categorias ativas
+$cat_stmt = $pdo->prepare("SELECT * FROM tbl_category_photo WHERE status=\'Active\' ORDER BY p_category_id ASC");
+$cat_stmt->execute();
+$gallery_categories = $cat_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Contabiliza fotos por categoria
+$total_photos = count($gallery_photos);
+$category_counts = [];
+foreach ($gallery_photos as $p) {
+    $cid = $p[\'p_category_id\'];
+    $category_counts[$cid] = ($category_counts[$cid] ?? 0) + 1;
+}
+?>
+<section class="ps-gallery-section">
+	<div class="container">
+		<!-- Header descritivo da Galeria -->
+		<div class="ps-gallery-header">
+			<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fw-bold text-uppercase mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+				<i class="fas fa-hospital me-1"></i> Infraestrutura Médica
+			</span>
+			<h2 class="ps-gallery-title"><?= !empty($page_name) ? htmlspecialchars($page_name) : \'Galeria de Fotos\'; ?></h2>
+			<p class="ps-gallery-subtitle">
+				Conheça nossas instalações, consultórios climatizados, recepção acolhedora e equipamentos de ponta preparados para o seu conforto e segurança.
+			</p>
+			<?php if(!empty(trim(strip_tags($page_content)))): ?>
+				<div class="mt-3 text-start bg-white p-3 rounded-3 border border-slate-200 small text-secondary">
+					<?= $page_content; ?>
+				</div>
+			<?php endif; ?>
+		</div>
+
+		<!-- Barra de Filtros Pílula Responsiva -->
+		<?php if(!empty($gallery_categories)): ?>
+		<div class="ps-gallery-filter-wrap">
+			<button type="button" class="ps-gallery-filter-btn active" data-filter="all">
+				<i class="fas fa-th-large"></i>
+				<span>Todos os Ambientes</span>
+				<span class="ps-gallery-count"><?= $total_photos; ?></span>
+			</button>
+			<?php foreach ($gallery_categories as $cat): ?>
+				<?php
+				$cat_id = $cat[\'p_category_id\'];
+				$cat_count = $category_counts[$cat_id] ?? 0;
+				$cat_name = $cat[\'p_category_name\'];
+				$cat_lower = mb_strtolower($cat_name, \'UTF-8\');
+				$icon = \'fas fa-door-open\';
+				if (strpos($cat_lower, \'recep\') !== false) {
+					$icon = \'fas fa-concierge-bell\';
+				} elseif (strpos($cat_lower, \'consult\') !== false) {
+					$icon = \'fas fa-stethoscope\';
+				} elseif (strpos($cat_lower, \'triag\') !== false) {
+					$icon = \'fas fa-user-md\';
+				} elseif (strpos($cat_lower, \'exam\') !== false || strpos($cat_lower, \'laborat\') !== false) {
+					$icon = \'fas fa-microscope\';
+				}
+				?>
+				<button type="button" class="ps-gallery-filter-btn" data-filter="cat-<?= $cat_id; ?>">
+					<i class="<?= $icon; ?>"></i>
+					<span><?= htmlspecialchars($cat_name); ?></span>
+					<span class="ps-gallery-count"><?= $cat_count; ?></span>
+				</button>
+			<?php endforeach; ?>
+		</div>
+		<?php endif; ?>
+
+		<!-- Grid de Fotos com Fancybox 5 -->
+		<div class="row g-4" id="psGalleryGrid">
+			<?php if(!empty($gallery_photos)): ?>
+				<?php foreach ($gallery_photos as $row): ?>
 					<?php
-					$i=0;
-					$statement = $pdo->prepare("SELECT
-					                           	t1.photo_id,
-												t1.photo_caption,
-												t1.photo_name,
-												t1.p_category_id,
-												t2.p_category_id,
-												t2.p_category_name,
-												t2.status
-					                            FROM tbl_photo t1
-					                            JOIN tbl_category_photo t2
-					                            ON t1.p_category_id = t2.p_category_id 
-					                            ");
-					$statement->execute();
-					$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
-					foreach ($result as $row) {
-						$i++;
-						$temp_string = strtolower($row[\'p_category_name\']);
-    					$temp_slug = preg_replace(\'/[^A-Za-z0-9-]+/\', \'-\', $temp_string);
-						?>
-						<div class="col-md-4 mix <?php echo $temp_slug; ?> all" data-my-order="<?php echo $i; ?>">
-							<div class="inner" style="margin-bottom: 24px; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 4px 14px rgba(0,0,0,0.06); border: 1px solid #e2e8f0;">
-								<div class="photo" style="background-image:url(<?php echo BASE_URL; ?>assets/uploads/<?php echo $row[\'photo_name\']; ?>); height: 230px; background-size: cover; background-position: center;"></div>
-								<div class="overlay"></div>
-								<div class="icons">
-									<div class="icons-inner">
-										<a class="gallery-photo" href="<?php echo BASE_URL; ?>assets/uploads/<?php echo $row[\'photo_name\']; ?>" title="<?php echo htmlspecialchars($row[\'photo_caption\'] ?? \'\'); ?>">
-										    <i class="fa fa-search-plus"></i>
-										</a>
+					$photo_filename = $row[\'photo_name\'];
+					$photo_path = BASE_URL . \'assets/uploads/\' . $photo_filename;
+					$caption = !empty($row[\'photo_caption\']) ? $row[\'photo_caption\'] : $row[\'p_category_name\'] . \' • Pronto Saúde\';
+					$cat_id = $row[\'p_category_id\'];
+					?>
+					<div class="col-12 col-sm-6 col-lg-4 ps-gallery-item cat-<?= $cat_id; ?>" data-category="cat-<?= $cat_id; ?>">
+						<div class="ps-gallery-card">
+							<a href="<?= $photo_path; ?>" 
+							   class="ps-gallery-img-link" 
+							   data-fancybox="pronto-galeria" 
+							   data-caption="<?= htmlspecialchars($caption, ENT_QUOTES, \'UTF-8\'); ?>"
+							   title="Clique para ampliar em tela cheia">
+								
+								<span class="ps-gallery-badge-cat">
+									<i class="fas fa-tag"></i>
+									<?= htmlspecialchars($row[\'p_category_name\']); ?>
+								</span>
+
+								<img src="<?= $photo_path; ?>" 
+								     alt="<?= htmlspecialchars($caption, ENT_QUOTES, \'UTF-8\'); ?>" 
+								     loading="lazy">
+
+								<div class="ps-gallery-overlay">
+									<div class="ps-gallery-zoom-icon">
+										<i class="fas fa-search-plus"></i>
 									</div>
 								</div>
-								<?php if(!empty($row[\'photo_caption\'])): ?>
-									<div style="padding: 12px 16px; background: #ffffff; border-top: 1px solid #f1f5f9;">
-										<p style="margin: 0; font-size: 13.5px; font-weight: 600; color: #334155;"><?php echo htmlspecialchars($row[\'photo_caption\']); ?></p>
-									</div>
-								<?php endif; ?>
+							</a>
+
+							<div class="ps-gallery-footer">
+								<h6 class="ps-gallery-caption" title="<?= htmlspecialchars($caption, ENT_QUOTES, \'UTF-8\'); ?>">
+									<?= htmlspecialchars($caption); ?>
+								</h6>
+								<span class="ps-gallery-sub">
+									<i class="fas fa-expand me-1"></i> Ampliar
+								</span>
 							</div>
 						</div>
-						<?php
-					}
-					?>
+					</div>
+				<?php endforeach; ?>
+			<?php else: ?>
+				<div class="col-12 text-center py-5">
+					<div class="p-4 bg-white rounded-4 border border-slate-200 shadow-sm d-inline-block">
+						<i class="fas fa-images text-muted fa-3x mb-3"></i>
+						<h5 class="fw-bold text-dark">Nenhuma foto encontrada</h5>
+						<p class="text-muted small mb-0">Em breve adicionaremos novas imagens da nossa infraestrutura.</p>
+					</div>
 				</div>
+			<?php endif; ?>
+		</div>
+
+		<!-- Estado Vazio para Filtros sem Fotos -->
+		<div id="psGalleryEmpty" class="text-center py-5" style="display: none;">
+			<div class="p-4 bg-white rounded-4 border border-slate-200 shadow-sm d-inline-block" style="max-width: 420px;">
+				<i class="fas fa-filter text-muted fa-2x mb-2" style="color: var(--ps-accent) !important;"></i>
+				<h6 class="fw-bold text-dark mb-1">Nenhuma imagem nesta categoria</h6>
+				<p class="text-muted small mb-0">Selecione outro ambiente ou clique em "Todos os Ambientes" para ver todas as fotos.</p>
 			</div>
 		</div>
 	</div>
 </section>
+
+<!-- Script de Filtragem Dinâmica Fluida sem mixitup antigo -->
+<script>
+document.addEventListener(\'DOMContentLoaded\', function () {
+    const filterButtons = document.querySelectorAll(\'.ps-gallery-filter-btn\');
+    const galleryItems = document.querySelectorAll(\'.ps-gallery-item\');
+    const emptyNotice = document.getElementById(\'psGalleryEmpty\');
+
+    filterButtons.forEach(function (btn) {
+        btn.addEventListener(\'click\', function (e) {
+            e.preventDefault();
+            const targetFilter = this.getAttribute(\'data-filter\');
+
+            filterButtons.forEach(function (b) { b.classList.remove(\'active\'); });
+            this.classList.add(\'active\');
+
+            let visibleCount = 0;
+
+            galleryItems.forEach(function (item) {
+                const categoryClass = item.getAttribute(\'data-category\');
+                if (targetFilter === \'all\' || categoryClass === targetFilter) {
+                    item.classList.remove(\'ps-hidden\');
+                    item.style.opacity = \'0\';
+                    item.style.transform = \'scale(0.97)\';
+                    setTimeout(function () {
+                        item.style.opacity = \'1\';
+                        item.style.transform = \'scale(1)\';
+                    }, 30);
+                    visibleCount++;
+                } else {
+                    item.classList.add(\'ps-hidden\');
+                }
+            });
+
+            if (emptyNotice) {
+                emptyNotice.style.display = visibleCount === 0 ? \'block\' : \'none\';
+            }
+        });
+    });
+});
+</script>
 <?php endif; ?>
 
 <!-- ==============================================================================

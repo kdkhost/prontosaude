@@ -390,6 +390,9 @@ $email   = $row2['dep_email'] ?? '';
         <!-- Swiper 11 Slider (Carrosséis Touch e Drag) -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
+        <!-- Fancybox 5 (Lightbox Imersivo para Fotos e Vídeos) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
+
         <!-- Toastr & SweetAlert2 (Notificações Globais) -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">

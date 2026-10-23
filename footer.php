@@ -162,9 +162,26 @@ if (strlen($whats_clean) <= 11) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 
 <script>
 $(function () {
+    // Inicialização global do Fancybox 5 para fotos e mídias
+    if (typeof Fancybox !== 'undefined') {
+        Fancybox.bind('[data-fancybox]', {
+            Toolbar: {
+                display: {
+                    left: ['infobar'],
+                    middle: [],
+                    right: ['zoomIn', 'zoomOut', 'slideshow', 'fullscreen', 'thumbs', 'close']
+                }
+            },
+            Thumbs: {
+                autoStart: false
+            }
+        });
+    }
+
     // Notificações Toastr Globais
     if (typeof toastr !== 'undefined') {
         toastr.options = {
@@ -271,7 +288,7 @@ $(function () {
     });
 
     // Submissão do Formulário de Contato via AJAX com SweetAlert2
-    $('#formContatoSite, .cform-1, #formContatoPage').on('submit', function (e) {
+    $('#formContatoSite').on('submit', function (e) {
         e.preventDefault();
         var $form = $(this);
         var $btn = $form.find('button[type="submit"]');

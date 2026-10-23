@@ -1245,6 +1245,240 @@ body.ps-foco-body {
     transform: translateY(-2px);
     box-shadow: 0 8px 22px rgba(10, 107, 116, 0.35);
 }
+
+/* ==============================================================================
+   GALERIA DE FOTOS & MÍDIAS PRONTO SAÚDE (DESIGN MODERNO & LIGHTBOX FANCYBOX 5)
+   ============================================================================== */
+.ps-gallery-section {
+    padding: 55px 0 85px 0;
+    background-color: #f8fafc;
+    position: relative;
+}
+
+.ps-gallery-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 35px auto;
+}
+
+.ps-gallery-title {
+    font-size: 2.15rem;
+    font-weight: 800;
+    color: var(--ps-title);
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+}
+
+.ps-gallery-subtitle {
+    font-size: 1.02rem;
+    color: var(--ps-muted);
+    line-height: 1.6;
+}
+
+.ps-gallery-filter-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .ps-gallery-filter-wrap {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .ps-gallery-filter-wrap::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.ps-gallery-filter-btn {
+    border-radius: 50px;
+    padding: 9px 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 1.5px solid #e2e8f0;
+    background: #ffffff;
+    color: var(--ps-text);
+    transition: var(--ps-transition);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(10, 107, 116, 0.04);
+    white-space: nowrap;
+    user-select: none;
+    text-decoration: none;
+}
+
+.ps-gallery-filter-btn:hover {
+    background: #f0fdf9;
+    border-color: var(--ps-accent);
+    color: var(--ps-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.12);
+}
+
+.ps-gallery-filter-btn.active {
+    background: linear-gradient(135deg, var(--ps-primary) 0%, var(--ps-primary-dark) 100%) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 6px 20px rgba(10, 107, 116, 0.28) !important;
+}
+
+.ps-gallery-filter-btn .ps-gallery-count {
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(10, 107, 116, 0.08);
+    color: var(--ps-primary);
+    transition: var(--ps-transition);
+}
+
+.ps-gallery-filter-btn.active .ps-gallery-count {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+}
+
+.ps-gallery-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 16px rgba(10, 107, 116, 0.05);
+    transition: var(--ps-transition);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.ps-gallery-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 36px rgba(10, 107, 116, 0.15);
+    border-color: rgba(10, 107, 116, 0.25);
+}
+
+.ps-gallery-img-link {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    height: 250px;
+    background: #e2e8f0;
+    text-decoration: none;
+}
+
+.ps-gallery-img-link img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ps-gallery-card:hover .ps-gallery-img-link img {
+    transform: scale(1.08);
+}
+
+.ps-gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(7, 24, 34, 0.08) 0%, rgba(7, 24, 34, 0.72) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.ps-gallery-card:hover .ps-gallery-overlay {
+    opacity: 1;
+}
+
+.ps-gallery-zoom-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: var(--ps-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    transform: scale(0.7);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ps-gallery-card:hover .ps-gallery-zoom-icon {
+    transform: scale(1);
+}
+
+.ps-gallery-badge-cat {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    color: var(--ps-primary-dark);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 5px 13px;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid rgba(255,255,255,0.7);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+}
+
+.ps-gallery-footer {
+    padding: 14px 18px;
+    background: #ffffff;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.ps-gallery-caption {
+    margin: 0;
+    font-size: 0.94rem;
+    font-weight: 700;
+    color: var(--ps-title);
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-gallery-sub {
+    font-size: 0.78rem;
+    color: var(--ps-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.ps-gallery-item {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.ps-gallery-item.ps-hidden {
+    display: none !important;
+}
 ';
 
 // Grava arquivo garantindo UTF-8 puro SEM BOM
