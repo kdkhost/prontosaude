@@ -19,7 +19,8 @@ O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0
 - **Resolução de Erros 404 e Auditoria de Rotas**:
   - **Eliminação do Erro 404 em `service.php`:** Corrigido o botão "Ver Todos os Serviços" para direcionar com precisão e consistência para a listagem oficial.
   - **Rotas Amigáveis no `.htaccess`:** Mapeamento universal para requisições limpas sem extensão `.php` (`/servicos`, `/fidelidade`, `/odontologia`, `/trabalhe-conosco`, `/convenio`, `/privacidade`, `/rsocial`, `/blog`, `/medicos`), eliminando qualquer possibilidade de erro 404 em links diretos.
-  - **Ativação da Página de Médicos em `tbl_page`:** Ativada a rota `/page/medicos` para que o menu "Especialidades -> Médicos" exiba o corpo clínico completo com fotos, especialidades e agendamento direto.
+  - **Refatoração Completa do Perfil do Médico (`doctor.php`):** O layout de perfil individual do médico foi totalmente modernizado com abas responsivas em **Bootstrap 5.3.3** (`data-bs-toggle="pill"`), botão funcional de voltar, ícones FontAwesome 6 e remoção de scripts quebrados de carrossel legado.
+  - **Manutenção de Status Seguro Desativado em `tbl_page`:** A página de médicos (`medicos` e `doctor`) permanece com status desativado (`Inactive`) no banco de dados, protegida contra acesso indevido até que o proprietário do sistema decida ativá-la no futuro através do painel administrativo.
 
 ## [2.21.0] - 2026-10-23
 
