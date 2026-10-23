@@ -85,11 +85,11 @@ foreach ($result as $row) {
 				?>
 				<div class="col-lg-4 col-md-6 mb-4">
 					<div class="ps-plan-card <?php echo $is_popular ? 'ps-plan-popular' : ''; ?>">
+						<?php if($is_popular || !empty($badge)): ?>
+							<span class="ps-plan-badge-tag"><i class="fas fa-fire me-1"></i><?php echo htmlspecialchars(!empty($badge) ? $badge : 'Mais Escolhido'); ?></span>
+						<?php endif; ?>
 						<div class="ps-plan-thumb">
 							<img src="<?php echo $photo_src; ?>" alt="<?php echo htmlspecialchars($row['pricing_plan_name']); ?>" loading="lazy" decoding="async">
-							<?php if($is_popular || !empty($badge)): ?>
-								<span class="ps-plan-badge-tag"><i class="fas fa-fire me-1"></i><?php echo htmlspecialchars(!empty($badge) ? $badge : 'Mais Escolhido'); ?></span>
-							<?php endif; ?>
 						</div>
 						<div class="ps-plan-body">
 							<h3 class="ps-plan-name"><?php echo htmlspecialchars($row['pricing_plan_name']); ?></h3>
