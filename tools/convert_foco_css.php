@@ -145,7 +145,66 @@ body.ps-foco-body {
     background-color: rgba(255, 255, 255, 0.16);
 }
 
-/* Dropdown Menu Desktop */
+/* Dropdown Menu Desktop - Abertura Automática no Hover em Telas Grandes (>= 992px) */
+@media (min-width: 992px) {
+    .foco-navbar .nav-item.dropdown {
+        position: relative;
+    }
+
+    /* Ponte invisível que mantém o foco ativo entre o nav-link e o dropdown-menu */
+    .foco-navbar .nav-item.dropdown::before {
+        content: \'\';
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        height: 16px;
+        background: transparent;
+        z-index: 1020;
+    }
+
+    .foco-navbar .nav-item.dropdown > .dropdown-menu {
+        display: block !important;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px) scale(0.98);
+        transform-origin: top center;
+        transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 0.22s;
+        pointer-events: none;
+        margin-top: 6px !important;
+    }
+
+    .foco-navbar .nav-item.dropdown:hover > .dropdown-menu,
+    .foco-navbar .nav-item.dropdown.show > .dropdown-menu,
+    .foco-navbar .nav-item.dropdown > .dropdown-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+    }
+
+    .foco-navbar .nav-item.dropdown:hover > .nav-link,
+    .foco-navbar .nav-item.dropdown.show > .nav-link {
+        color: #ffffff !important;
+        background-color: rgba(255, 255, 255, 0.16);
+    }
+
+    /* Rotação suave da setinha (chevron) do dropdown no hover */
+    .foco-navbar .nav-item.dropdown .dropdown-toggle::after {
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        display: inline-block;
+        vertical-align: 0.15em;
+        margin-left: 0.35em;
+    }
+
+    .foco-navbar .nav-item.dropdown:hover > .dropdown-toggle::after,
+    .foco-navbar .nav-item.dropdown.show > .dropdown-toggle::after {
+        transform: rotate(180deg);
+    }
+}
+
 .foco-navbar .dropdown-menu {
     background: #ffffff;
     border: 1px solid var(--ps-border);
@@ -153,7 +212,6 @@ body.ps-foco-body {
     box-shadow: 0 10px 30px rgba(7, 24, 34, 0.15);
     padding: 8px;
     min-width: 230px;
-    margin-top: 8px;
 }
 .foco-navbar .dropdown-item {
     color: var(--ps-title) !important;

@@ -265,6 +265,57 @@ $(function () {
         }
     });
 
+    // Abertura automática de submenu no hover em telas grandes (Desktop >= 992px)
+    function setupDesktopHoverDropdowns() {
+        if (!window.matchMedia('(min-width: 992px)').matches) {
+            $('.foco-navbar .nav-item.dropdown').off('mouseenter.psHover mouseleave.psHover');
+            return;
+        }
+
+        $('.foco-navbar .nav-item.dropdown').each(function () {
+            var $dropdown = $(this);
+            var $toggle = $dropdown.find('> .dropdown-toggle');
+            var $menu = $dropdown.find('> .dropdown-menu');
+            var hoverTimer;
+
+            $dropdown.off('mouseenter.psHover mouseleave.psHover')
+                .on('mouseenter.psHover', function () {
+                    clearTimeout(hoverTimer);
+                    $('.foco-navbar .nav-item.dropdown').not($dropdown).removeClass('show')
+                        .find('> .dropdown-toggle').attr('aria-expanded', 'false')
+                        .end().find('> .dropdown-menu').removeClass('show');
+
+                    $dropdown.addClass('show');
+                    $toggle.attr('aria-expanded', 'true');
+                    $menu.addClass('show');
+                })
+                .on('mouseleave.psHover', function () {
+                    hoverTimer = setTimeout(function () {
+                        $dropdown.removeClass('show');
+                        $toggle.attr('aria-expanded', 'false');
+                        $menu.removeClass('show');
+                    }, 140);
+                });
+
+            // No desktop, previne que clicar no link pai de âncora feche o menu já aberto pelo hover
+            $toggle.off('click.psHover').on('click.psHover', function (e) {
+                if (window.matchMedia('(min-width: 992px)').matches) {
+                    var href = $(this).attr('href');
+                    if (href === '#' || href === '' || !href) {
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+    }
+
+    setupDesktopHoverDropdowns();
+    var resizeDropdownTimer;
+    $(window).on('resize', function () {
+        clearTimeout(resizeDropdownTimer);
+        resizeDropdownTimer = setTimeout(setupDesktopHoverDropdowns, 100);
+    });
+
     // Controle de Submenus no Menu Móvel Deslizante
     // 1. Evita fechamento acidental ao clicar nos botões de abrir/fechar submenu
     $(document).on('click', '#menuDrawerAndroid .android-nav-group [data-bs-toggle="collapse"]', function (e) {
