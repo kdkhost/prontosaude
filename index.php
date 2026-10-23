@@ -457,36 +457,38 @@ if (function_exists('pronto_is_page_active')) {
                     $s_desc = !empty($servico['short_description']) ? strip_tags($servico['short_description']) : 'Atendimento com suporte integral e diagnóstico precoce seguro.';
                     $s_link = !empty($servico['slug']) ? BASE_URL . 'service/' . $servico['slug'] : BASE_URL . 'servicos.php';
                 ?>
-                <div class="col-xl-4 col-md-6">
+                <div class="col-xl-4 col-md-6 mb-3">
                     <div class="card-estetica">
-                        <div>
+                        <div class="card-estetica-thumb">
                             <?php if(!empty($s_photo)): ?>
-                                <div style="height: 160px; overflow: hidden; border-radius: 10px; margin-bottom: 12px;">
-                                    <img src="<?= $s_photo; ?>" alt="<?= htmlspecialchars($servico['name']); ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
+                                <img src="<?= $s_photo; ?>" alt="<?= htmlspecialchars($servico['name']); ?>" loading="lazy" decoding="async">
                             <?php else: ?>
-                                <div class="icon-estetica-box mb-3">
+                                <div class="w-100 h-100 d-flex align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, var(--ps-primary) 0%, var(--ps-primary-dark) 100%); font-size: 2.5rem;">
                                     <i class="fas fa-stethoscope"></i>
                                 </div>
                             <?php endif; ?>
-
-                            <h5 class="fw-bold mb-1" style="color: var(--ps-title);">
-                                <a href="<?= $s_link; ?>" class="text-decoration-none" style="color: inherit;">
-                                    <?= htmlspecialchars($servico['name']); ?>
-                                </a>
-                            </h5>
-                            <div class="text-muted small mb-3">
-                                <?= htmlspecialchars(mb_strimwidth($s_desc, 0, 130, '...')); ?>
-                            </div>
                         </div>
 
-                        <div class="pt-2 border-top border-light-subtle mt-auto d-flex gap-2">
-                            <a href="<?= $s_link; ?>" class="btn btn-sm btn-outline-secondary w-50 py-2 small fw-semibold">
-                                <i class="fas fa-info-circle me-1"></i> Saiba Mais
-                            </a>
-                            <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de agendar atendimento na especialidade: ' . $servico['name']); ?>" target="_blank" rel="noopener noreferrer" class="btn-agendar-estetica w-50 text-center">
-                                <i class="fas fa-calendar-check me-1"></i> Agendar
-                            </a>
+                        <div class="card-estetica-body">
+                            <div>
+                                <h5 class="fw-bold mb-2" style="color: var(--ps-title); font-size: 1.15rem;">
+                                    <a href="<?= $s_link; ?>" class="text-decoration-none" style="color: inherit;">
+                                        <?= htmlspecialchars($servico['name']); ?>
+                                    </a>
+                                </h5>
+                                <p class="text-muted small mb-3" style="line-height: 1.6;">
+                                    <?= htmlspecialchars(mb_strimwidth($s_desc, 0, 130, '...')); ?>
+                                </p>
+                            </div>
+
+                            <div class="pt-3 border-top border-light-subtle mt-auto d-flex gap-2">
+                                <a href="<?= $s_link; ?>" class="btn btn-sm btn-outline-secondary w-50 py-2 small fw-semibold d-inline-flex align-items-center justify-content-center">
+                                    <i class="fas fa-info-circle me-1"></i> Saiba Mais
+                                </a>
+                                <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de agendar atendimento na especialidade: ' . $servico['name']); ?>" target="_blank" rel="noopener noreferrer" class="btn-agendar-estetica w-50 text-center d-inline-flex align-items-center justify-content-center">
+                                    <i class="fas fa-calendar-check me-1"></i> Agendar
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
