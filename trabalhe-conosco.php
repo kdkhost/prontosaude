@@ -1,16 +1,14 @@
 <?php include_once 'header.php'; ?>
 
 <!-- Banner Start -->
-<div class="page-banner" style="background-image: url(<?= BASE_URL; ?>assets/uploads/department-1.png); background-size: cover; background-position: center;">
-	<div class="overlay" style="background: linear-gradient(135deg, rgba(7, 71, 77, 0.88) 0%, rgba(10, 107, 116, 0.75) 100%);"></div>
+<div class="page-banner" style="background-image: url(<?= BASE_URL; ?>assets/uploads/department-1.png);">
+	<div class="overlay"></div>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="banner-text">
 					<h1>Trabalhe Conosco</h1>
-					<p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; max-width: 600px; margin: 10px auto 0 auto;">
-						Faça parte de uma equipe comprometida com a excelência, o acolhimento e a saúde integrada.
-					</p>
+					<p>Faça parte de uma equipe comprometida com a excelência, o acolhimento e a saúde integrada.</p>
 				</div>
 			</div>
 		</div>

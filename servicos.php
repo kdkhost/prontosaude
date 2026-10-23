@@ -31,14 +31,16 @@ foreach ($result as $row) {
 ?>
 
 <!-- Banner da Página de Serviços -->
-<div class="page-banner" style="background-image: url(<?= BASE_URL; ?>assets/uploads/department-1.png); background-size: cover; background-position: center; padding: 70px 0; position: relative;">
-	<div class="overlay" style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(7, 24, 34, 0.92) 0%, rgba(10, 107, 116, 0.82) 100%);"></div>
-	<div class="container" style="position: relative; z-index: 2;">
+<div class="page-banner" style="background-image: url(<?= BASE_URL; ?>assets/uploads/department-1.png);">
+	<div class="overlay"></div>
+	<div class="container">
 		<div class="row">
-			<div class="col-md-12 text-center text-white">
-				<span class="ps-section-badge mb-2"><i class="fa fa-stethoscope"></i> Cuidado Integral</span>
-				<h1 style="font-size: 2.5rem; font-weight: 800; margin-top: 10px; margin-bottom: 10px;"><?php echo !empty($home_title_service) ? htmlspecialchars($home_title_service) : 'Nossas Especialidades & Serviços'; ?></h1>
-				<p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; max-width: 680px; margin: 0 auto;"><?php echo !empty($home_subtitle_service) ? htmlspecialchars($home_subtitle_service) : 'Atendimento humanizado, equipamentos de ponta e ampla gama de especialidades médicas para cuidar de você e sua família.'; ?></p>
+			<div class="col-md-12 text-center">
+				<div class="banner-text">
+					<span class="ps-section-badge mb-2"><i class="fa fa-stethoscope"></i> Cuidado Integral</span>
+					<h1 class="mt-2 mb-2"><?php echo !empty($home_title_service) ? htmlspecialchars($home_title_service) : 'Nossas Especialidades & Serviços'; ?></h1>
+					<p><?php echo !empty($home_subtitle_service) ? htmlspecialchars($home_subtitle_service) : 'Atendimento humanizado, equipamentos de ponta e ampla gama de especialidades médicas para cuidar de você e sua família.'; ?></p>
+				</div>
 			</div>
 		</div>
 	</div>

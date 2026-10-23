@@ -1045,36 +1045,88 @@ body.ps-foco-body {
 }
 /* ==============================================================================
    8. ESTILOS DAS PÁGINAS INTERNAS (ARQUITETURA MULTIPAGE PRONTO SAÚDE)
+   PADRONIZAÇÃO DEFINITIVA DE ALTURA, LARGURA E OVERLAY TRANSLÚCIDO DO BANNER
    ============================================================================== */
 .page-banner {
     position: relative;
-    padding: 65px 0;
+    width: 100%;
+    min-height: 290px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 0;
     background-size: cover !important;
     background-position: center center !important;
+    background-repeat: no-repeat !important;
     background-color: var(--ps-dark);
+    overflow: hidden;
+    box-sizing: border-box;
 }
 .page-banner .overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(7, 24, 34, 0.92) 0%, rgba(10, 107, 116, 0.85) 100%) !important;
+    /* Gradiente translúcido elegante: revela os detalhes da imagem de fundo com nitidez e riqueza de detalhes sem ofuscar a leitura */
+    background: linear-gradient(135deg, rgba(7, 24, 34, 0.55) 0%, rgba(10, 107, 116, 0.45) 100%) !important;
+    pointer-events: none;
+    z-index: 1;
+}
+.page-banner > .container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
 }
 .page-banner .banner-text {
     position: relative;
     z-index: 2;
     text-align: center;
+    margin: 0 auto;
 }
 .page-banner .banner-text h1 {
-    color: #ffffff;
-    font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+    color: #ffffff !important;
+    font-size: clamp(1.85rem, 3.2vw, 2.5rem);
     font-weight: 800;
+    margin-top: 6px;
     margin-bottom: 8px;
     letter-spacing: -0.5px;
+    text-shadow: 0 2px 10px rgba(7, 24, 34, 0.85), 0 1px 3px rgba(7, 24, 34, 0.65);
 }
 .page-banner .banner-text p {
-    color: rgba(255, 255, 255, 0.88);
+    color: rgba(255, 255, 255, 0.95) !important;
     font-size: 1.05rem;
-    max-width: 650px;
+    max-width: 680px;
     margin: 0 auto;
+    line-height: 1.5;
+    text-shadow: 0 1px 6px rgba(7, 24, 34, 0.8);
+}
+.page-banner .ps-section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 5px 14px;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 767.98px) {
+    .page-banner {
+        min-height: 220px;
+        padding: 35px 0;
+    }
+    .page-banner .banner-text h1 {
+        font-size: 1.6rem;
+    }
+    .page-banner .banner-text p {
+        font-size: 0.92rem;
+    }
 }
 
 /* Cards das páginas internas de Serviços e Especialidades */
