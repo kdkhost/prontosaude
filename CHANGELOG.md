@@ -4,6 +4,23 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.22.0] - 2026-10-23
+
+### Refatorado & Corrigido
+- **Refatoração Completa da Página do Blog (`/page/blog`, `category.php`, `search.php`, `news.php`)**:
+  - **Cards Modernos de Artigos:** Layout horizontal responsivo com miniaturas proporcionais de ponta a ponta (`.ps-blog-thumb-wrap`), badge estilizado de categoria hospitalar, indicador de tempo de leitura calculado dinamicamente, título com link interativo e botão de ação moderno (`.btn-blog-read`).
+  - **Paginação Moderna:** Novo componente numérico (`.ps-blog-pagination`) com cantos arredondados, estados ativos e desabilitados claros, e navegação intuitiva com ícones.
+  - **Banner Institucional do Blog:** Adicionado badge temático (`BLOG & ARTIGOS MÉDICOS`) e subtítulo acolhedor para maior engajamento dos pacientes.
+- **Modernização dos Campos e Widgets da Barra Lateral (`sidebar.php`)**:
+  - **Campo de Busca de Alta Conversão:** Input moderno estilizado com foco na paleta Teal Pronto Saúde (`#0a6b74`), cantos arredondados, botão de pesquisa integrado e placeholder acolhedor.
+  - **Categorias com Contadores Dinâmicos:** Widget com lista limpa e badges com a contagem real de artigos em cada categoria (`COUNT(news_id)`).
+  - **Artigos Recentes e Mais Lidos:** Cards elegantes com miniaturas dos posts, títulos de duas linhas com clamp e datas formatadas.
+  - **CTA de Conversão Hospitalar:** Card moderno integrado convidando os pacientes ao agendamento direto via WhatsApp.
+- **Resolução de Erros 404 e Auditoria de Rotas**:
+  - **Eliminação do Erro 404 em `service.php`:** Corrigido o botão "Ver Todos os Serviços" para direcionar com precisão e consistência para a listagem oficial.
+  - **Rotas Amigáveis no `.htaccess`:** Mapeamento universal para requisições limpas sem extensão `.php` (`/servicos`, `/fidelidade`, `/odontologia`, `/trabalhe-conosco`, `/convenio`, `/privacidade`, `/rsocial`, `/blog`, `/medicos`), eliminando qualquer possibilidade de erro 404 em links diretos.
+  - **Ativação da Página de Médicos em `tbl_page`:** Ativada a rota `/page/medicos` para que o menu "Especialidades -> Médicos" exiba o corpo clínico completo com fotos, especialidades e agendamento direto.
+
 ## [2.21.0] - 2026-10-23
 
 ### Corrigido & Aprimorado
