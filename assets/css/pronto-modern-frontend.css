@@ -422,31 +422,67 @@ body.ps-foco-body {
 /* ==============================================================================
    2. HERO CAROUSEL COMPACTO & ROBUSTO (ZERO VÃO EM BRANCO)
    ============================================================================== */
-.hero-section {
+.hero-section,
+#heroCarousel,
+#heroCarousel .carousel-inner,
+#heroCarousel .carousel-item {
     min-height: 580px;
+}
+@media (min-width: 768px) {
+    .hero-section,
+    #heroCarousel,
+    #heroCarousel .carousel-inner,
+    #heroCarousel .carousel-item {
+        min-height: 640px;
+    }
+}
+@media (min-width: 992px) {
+    .hero-section,
+    #heroCarousel,
+    #heroCarousel .carousel-inner,
+    #heroCarousel .carousel-item {
+        min-height: 700px;
+    }
+}
+@media (min-width: 1400px) {
+    .hero-section,
+    #heroCarousel,
+    #heroCarousel .carousel-inner,
+    #heroCarousel .carousel-item {
+        min-height: 760px;
+    }
+}
+
+.hero-section {
     background-color: var(--ps-dark);
     position: relative;
     overflow: hidden;
     width: 100%;
 }
-@media (min-width: 768px) {
-    .hero-section {
-        min-height: 640px;
-    }
+
+#heroCarousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
-@media (min-width: 992px) {
-    .hero-section {
-        min-height: 700px;
-    }
+
+#heroCarousel .carousel-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
-@media (min-width: 1400px) {
-    .hero-section {
-        min-height: 760px;
-    }
+
+#heroCarousel .carousel-item {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
+
 .hero-slide-bg {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     background-size: cover !important;
     background-position: center top !important;
     background-repeat: no-repeat !important;
@@ -464,6 +500,8 @@ body.ps-foco-body {
 .hero-slide-overlay {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     background: linear-gradient(90deg, rgba(7, 24, 34, 0.92) 0%, rgba(7, 24, 34, 0.82) 45%, rgba(7, 24, 34, 0.45) 80%, rgba(7, 24, 34, 0.22) 100%) !important;
 }
 @media (max-width: 991.98px) {
