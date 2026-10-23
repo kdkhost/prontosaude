@@ -290,31 +290,63 @@ body.ps-foco-body {
     outline: none;
 }
 
-/* Drawer Android Mobile */
+/* Drawer Android Mobile (Offcanvas Perfeito com Rodapé Estático) */
 .foco-android-drawer {
     background-color: #ffffff;
-    width: 320px;
+    width: 330px;
+    max-width: 86vw;
+    height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    box-shadow: 4px 0 25px rgba(7, 24, 34, 0.25) !important;
 }
 .android-drawer-header {
     background: #07474d;
-    padding: 16px;
+    padding: 14px 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100%;
+    flex-shrink: 0;
+}
+.android-drawer-header .logo-on-dark {
+    flex: 1;
+    min-width: 0;
 }
 .btn-android-close {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.18);
     border: none;
     color: #ffffff;
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: auto;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+.btn-android-close:hover {
+    background: rgba(255, 255, 255, 0.32);
+    transform: scale(1.08);
+}
+.android-drawer-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    height: calc(100vh - 65px) !important;
 }
 .android-drawer-card-status {
     background: var(--ps-light-bg);
     padding: 12px 16px;
     border-bottom: 1px solid var(--ps-border);
+    flex-shrink: 0;
 }
 .android-pulse-dot {
     width: 9px;
@@ -323,6 +355,24 @@ body.ps-foco-body {
     border-radius: 50%;
     display: inline-block;
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+}
+/* Área de Rolagem do Menu */
+.android-drawer-nav-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+}
+.android-drawer-nav-scroll::-webkit-scrollbar {
+    width: 5px;
+}
+.android-drawer-nav-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+.android-drawer-nav-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
 }
 .android-nav-list {
     padding: 10px 0;
@@ -363,6 +413,17 @@ body.ps-foco-body {
 .android-nav-item[aria-expanded="true"] .android-item-arrow {
     transform: rotate(180deg);
     color: var(--ps-primary);
+}
+
+/* Rodapé Estático com WhatsApp e Contatos */
+.android-drawer-footer {
+    flex-shrink: 0;
+    background: #ffffff;
+    border-top: 1px solid var(--ps-border);
+    padding: 14px 16px;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+    z-index: 5;
+    margin-top: auto;
 }
 
 /* ==============================================================================

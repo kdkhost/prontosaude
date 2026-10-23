@@ -658,8 +658,9 @@ $email   = $row2['dep_email'] ?? '';
             </nav>
         </header>
 
-        <!-- MENU GAVETA DESLIZANTE NATIVO ANDROID (Mobile) -->
+        <!-- MENU GAVETA DESLIZANTE NATIVO ANDROID (Mobile & Tablet) -->
         <div class="offcanvas offcanvas-start foco-android-drawer" tabindex="-1" id="menuDrawerAndroid" aria-labelledby="menuDrawerLabel">
+            <!-- 1. Header do Side Menu: Logo e Botão de Fechar alinhado à extrema direita -->
             <div class="offcanvas-header android-drawer-header">
                 <div class="d-flex align-items-center gap-2 logo-on-dark">
                     <?php if(!empty($logo)): ?>
@@ -668,74 +669,78 @@ $email   = $row2['dep_email'] ?? '';
                         <span class="fw-bold text-white"><i class="fas fa-hospital-user text-white-50 me-2"></i> Pronto Saúde</span>
                     <?php endif; ?>
                 </div>
-                <button type="button" class="btn-android-close" data-bs-dismiss="offcanvas" aria-label="Fechar menu">
+                <button type="button" class="btn-android-close ms-auto" data-bs-dismiss="offcanvas" aria-label="Fechar menu" title="Fechar Menu">
                     <i class="fas fa-arrow-left"></i>
                 </button>
             </div>
 
-            <!-- Cartão de Status do Atendimento -->
-            <div class="android-drawer-card-status">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="android-pulse-dot"></span>
-                        <span class="small fw-bold text-dark">Central de Atendimento Ativa</span>
+            <!-- 2. Corpo do Drawer com Flexbox e Rodapé Estático -->
+            <div class="offcanvas-body android-drawer-body p-0 d-flex flex-column h-100">
+                <!-- Cartão de Status do Atendimento (Fixo no Topo) -->
+                <div class="android-drawer-card-status flex-shrink-0">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="android-pulse-dot"></span>
+                            <span class="small fw-bold text-dark">Central de Atendimento Ativa</span>
+                        </div>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1" style="font-size: 0.72rem;">Online</span>
                     </div>
-                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1" style="font-size: 0.72rem;">Online</span>
+                    <p class="small text-muted mb-0 mt-1" style="font-size: 0.75rem;">Consultas, Exames Laboratoriais &amp; Odontologia</p>
                 </div>
-                <p class="small text-muted mb-0 mt-1" style="font-size: 0.75rem;">Consultas, Exames Laboratoriais & Odontologia</p>
-            </div>
 
-            <!-- Lista de Navegação Estilo Android -->
-            <div class="offcanvas-body android-drawer-body p-0">
-                <nav class="android-nav-list">
-                    <?php foreach ($parent_menus as $p_item): 
-                        $has_subs = !empty($children_menus[$p_item['menu_id']]);
-                        $p_url = pronto_resolve_menu_url($p_item);
-                        $p_active = pronto_is_menu_item_active($p_item, $current_req_uri, $current_script_file);
-                    ?>
-                        <?php if($has_subs): ?>
-                            <div class="android-nav-group">
-                                <button type="button" class="android-nav-item android-nav-toggle d-flex justify-content-between align-items-center w-100 border-0 bg-transparent text-start" data-bs-toggle="collapse" data-bs-target="#drawerSub<?= $p_item['menu_id']; ?>" aria-expanded="false" aria-controls="drawerSub<?= $p_item['menu_id']; ?>">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="android-item-icon"><i class="fas fa-folder"></i></div>
-                                        <span class="android-item-text"><?= htmlspecialchars($p_item['menu_name']); ?></span>
-                                    </div>
-                                    <i class="fas fa-chevron-down android-item-arrow"></i>
-                                </button>
-                                <div class="collapse" id="drawerSub<?= $p_item['menu_id']; ?>">
-                                    <div class="ps-3 py-1 bg-light">
-                                        <?php foreach ($children_menus[$p_item['menu_id']] as $sub_item): 
-                                            $s_url = pronto_resolve_menu_url($sub_item);
-                                        ?>
-                                            <a href="<?= $s_url; ?>" class="android-nav-item py-2">
-                                                <div class="android-item-icon"><i class="fas fa-angle-right"></i></div>
-                                                <span class="android-item-text small"><?= htmlspecialchars($sub_item['menu_name']); ?></span>
-                                            </a>
-                                        <?php endforeach; ?>
+                <!-- Lista de Navegação com Rolagem Independente (O menu rola internamente sem empurrar o rodapé) -->
+                <div class="android-drawer-nav-scroll flex-grow-1 overflow-y-auto">
+                    <nav class="android-nav-list">
+                        <?php foreach ($parent_menus as $p_item): 
+                            $has_subs = !empty($children_menus[$p_item['menu_id']]);
+                            $p_url = pronto_resolve_menu_url($p_item);
+                            $p_active = pronto_is_menu_item_active($p_item, $current_req_uri, $current_script_file);
+                        ?>
+                            <?php if($has_subs): ?>
+                                <div class="android-nav-group">
+                                    <button type="button" class="android-nav-item android-nav-toggle d-flex justify-content-between align-items-center w-100 border-0 bg-transparent text-start" data-bs-toggle="collapse" data-bs-target="#drawerSub<?= $p_item['menu_id']; ?>" aria-expanded="false" aria-controls="drawerSub<?= $p_item['menu_id']; ?>">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="android-item-icon"><i class="fas fa-folder"></i></div>
+                                            <span class="android-item-text"><?= htmlspecialchars($p_item['menu_name']); ?></span>
+                                        </div>
+                                        <i class="fas fa-chevron-down android-item-arrow"></i>
+                                    </button>
+                                    <div class="collapse" id="drawerSub<?= $p_item['menu_id']; ?>">
+                                        <div class="ps-3 py-1 bg-light">
+                                            <?php foreach ($children_menus[$p_item['menu_id']] as $sub_item): 
+                                                $s_url = pronto_resolve_menu_url($sub_item);
+                                            ?>
+                                                <a href="<?= $s_url; ?>" class="android-nav-item py-2">
+                                                    <div class="android-item-icon"><i class="fas fa-angle-right"></i></div>
+                                                    <span class="android-item-text small"><?= htmlspecialchars($sub_item['menu_name']); ?></span>
+                                                </a>
+                                            <?php endforeach; ?>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        <?php else: ?>
-                            <a href="<?= $p_url; ?>" class="android-nav-item <?= $p_active ? 'active' : ''; ?>">
-                                <div class="android-item-icon"><i class="fas fa-chevron-right"></i></div>
-                                <span class="android-item-text"><?= htmlspecialchars($p_item['menu_name']); ?></span>
-                                <i class="fas fa-chevron-right android-item-arrow"></i>
-                            </a>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </nav>
+                            <?php else: ?>
+                                <a href="<?= $p_url; ?>" class="android-nav-item <?= $p_active ? 'active' : ''; ?>">
+                                    <div class="android-item-icon"><i class="fas fa-chevron-right"></i></div>
+                                    <span class="android-item-text"><?= htmlspecialchars($p_item['menu_name']); ?></span>
+                                    <i class="fas fa-chevron-right android-item-arrow"></i>
+                                </a>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </nav>
+                </div>
 
-                <div class="p-3 border-top mt-3">
-                    <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de agendar uma consulta médica na Pronto Saúde.'); ?>" target="_blank" rel="noopener noreferrer" class="btn-foco-primary w-100 justify-content-center mb-3">
+                <!-- 3. Informações Estáticas Fixadas no Rodapé do Side Menu (NUNCA saem do campo de visão) -->
+                <div class="android-drawer-footer flex-shrink-0 border-top bg-white p-3 shadow-sm mt-auto">
+                    <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de agendar uma consulta médica na Pronto Saúde.'); ?>" target="_blank" rel="noopener noreferrer" class="btn-foco-primary w-100 justify-content-center mb-2">
                         <i class="fab fa-whatsapp me-2"></i> Agendamento via WhatsApp
                     </a>
                     <?php if(!empty($contact_phone)): ?>
-                        <div class="small text-secondary mb-1">
+                        <div class="small text-secondary mb-1 d-flex align-items-center">
                             <i class="fas fa-phone-alt me-2" style="color: var(--ps-primary);"></i> <?= htmlspecialchars($contact_phone); ?>
                         </div>
                     <?php endif; ?>
                     <?php if(!empty($contact_email)): ?>
-                        <div class="small text-secondary">
+                        <div class="small text-secondary d-flex align-items-center">
                             <i class="fas fa-envelope me-2" style="color: var(--ps-primary);"></i> <?= htmlspecialchars($contact_email); ?>
                         </div>
                     <?php endif; ?>
