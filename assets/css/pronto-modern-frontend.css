@@ -423,34 +423,39 @@ body.ps-foco-body {
    2. HERO CAROUSEL COMPACTO & ROBUSTO (ZERO VÃO EM BRANCO)
    ============================================================================== */
 .hero-section {
-    min-height: 600px;
+    min-height: 580px;
     background-color: var(--ps-dark);
     position: relative;
     overflow: hidden;
     width: 100%;
 }
+@media (min-width: 768px) {
+    .hero-section {
+        min-height: 640px;
+    }
+}
 @media (min-width: 992px) {
     .hero-section {
-        min-height: 680px;
+        min-height: 700px;
     }
 }
 @media (min-width: 1400px) {
     .hero-section {
-        min-height: 720px;
+        min-height: 760px;
     }
 }
 .hero-slide-bg {
     position: absolute;
     inset: 0;
     background-size: cover !important;
-    background-position: center 25% !important;
+    background-position: center top !important;
     background-repeat: no-repeat !important;
     transform: scale(1.02);
     transition: transform 7s ease;
 }
 @media (min-width: 992px) {
     .hero-slide-bg {
-        background-position: right 25% !important;
+        background-position: right top !important;
     }
 }
 .carousel-item.active .hero-slide-bg {
