@@ -676,41 +676,85 @@ foreach ($gallery_videos as $v) {
 		</div>
 		<?php endif; ?>
 
-		<!-- Grid de Vídeos -->
+		<!-- Grid de Vídeos com Capa na Frente e Esqueleto Animado -->
 		<div class="row g-4" id="psVideoGrid">
 			<?php if(!empty($gallery_videos)): ?>
-				<?php foreach ($gallery_videos as $vrow): ?>
+				<?php foreach ($gallery_videos as $idx => $vrow): ?>
 					<?php
 					$video_raw = $vrow['video_iframe'];
 					$is_mp4 = (stripos($video_raw, '.mp4') !== false || stripos($video_raw, 'assets/uploads') !== false);
 					$video_src = '';
+					$youtube_id = '';
+					$cover_img = BASE_URL . 'assets/uploads/department-1.png';
+
 					if ($is_mp4) {
 						$clean_name = basename(str_replace('\\', '/', $video_raw));
 						$video_src = BASE_URL . 'assets/uploads/videos/' . $clean_name;
+					} elseif (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i', $video_raw, $yt_match)) {
+						$youtube_id = $yt_match[1];
+						$cover_img = 'https://img.youtube.com/vi/' . $youtube_id . '/hqdefault.jpg';
 					}
+
 					$v_title = !empty($vrow['video_title']) ? $vrow['video_title'] : $vrow['v_category_name'] . ' • Pronto Saúde';
 					$cat_id = $vrow['v_category_id'];
+					$card_id = 'ps_video_' . ($vrow['video_id'] ?? $idx);
 					?>
 					<div class="col-12 col-sm-6 col-lg-4 ps-video-item vcat-<?= $cat_id; ?>" data-vcategory="vcat-<?= $cat_id; ?>">
-						<div class="ps-video-card">
+						<div class="ps-video-card" id="<?= $card_id; ?>">
+							<!-- 1. Esqueleto Animado Shimmer (exibido ao atualizar/carregar a página) -->
+							<div class="ps-video-skeleton" aria-hidden="true">
+								<div class="ps-skeleton-thumb ps-skeleton-shimmer"></div>
+								<div class="ps-skeleton-body">
+									<div class="ps-skeleton-pill ps-skeleton-shimmer"></div>
+									<div class="ps-skeleton-title ps-skeleton-shimmer"></div>
+									<div class="ps-skeleton-meta ps-skeleton-shimmer"></div>
+								</div>
+							</div>
+
+							<!-- 2. Área do Player e Capa na Frente do Box -->
 							<div class="ps-video-player-wrap">
 								<span class="ps-video-badge-cat">
 									<i class="fas fa-tag"></i>
 									<?= htmlspecialchars($vrow['v_category_name']); ?>
 								</span>
 
-								<?php if($is_mp4 && !empty($video_src)): ?>
-									<video controls preload="none" playsinline>
-										<source src="<?= $video_src; ?>" type="video/mp4">
-										Seu navegador não suporta reprodução de vídeo HTML5.
-									</video>
-								<?php else: ?>
-									<div class="w-100 h-100 d-flex align-items-center justify-content-center">
-										<?= $video_raw; ?>
+								<!-- Capa na frente do box com Botão de Play Pulsante -->
+								<div class="ps-video-cover-facade" 
+								     style="background-image: url('<?= $cover_img; ?>');"
+								     data-video-src="<?= htmlspecialchars($video_src); ?>"
+								     data-yt-id="<?= htmlspecialchars($youtube_id); ?>"
+								     data-is-mp4="<?= $is_mp4 ? '1' : '0'; ?>"
+								     title="Clique para reproduzir: <?= htmlspecialchars($v_title, ENT_QUOTES, 'UTF-8'); ?>">
+									<div class="ps-video-cover-overlay"></div>
+									
+									<div class="ps-video-play-btn">
+										<span class="ps-play-pulse-ring"></span>
+										<i class="fas fa-play"></i>
 									</div>
-								<?php endif; ?>
+
+									<span class="ps-video-tag-hd">
+										<i class="fas fa-play-circle me-1 text-success"></i> Assistir Vídeo
+									</span>
+								</div>
+
+								<!-- Contêiner do Vídeo HTML5 ou Iframe (Carregado instantaneamente ao clicar) -->
+								<div class="ps-video-embed-target w-100 h-100 d-flex align-items-center justify-content-center">
+									<?php if($is_mp4 && !empty($video_src)): ?>
+										<video controls preload="metadata" playsinline class="w-100 h-100" style="display:none;" poster="<?= $cover_img; ?>">
+											<source src="<?= $video_src; ?>" type="video/mp4">
+											Seu navegador não suporta reprodução de vídeo HTML5.
+										</video>
+									<?php elseif(!empty($youtube_id)): ?>
+										<div class="ps-yt-placeholder w-100 h-100"></div>
+									<?php else: ?>
+										<div class="ps-raw-video-wrap w-100 h-100">
+											<?= $video_raw; ?>
+										</div>
+									<?php endif; ?>
+								</div>
 							</div>
 
+							<!-- 3. Corpo do Card com Identificação e Status -->
 							<div class="ps-video-body">
 								<h5 class="ps-video-title" title="<?= htmlspecialchars($v_title, ENT_QUOTES, 'UTF-8'); ?>">
 									<?= htmlspecialchars($v_title); ?>
@@ -720,7 +764,7 @@ foreach ($gallery_videos as $v) {
 										<i class="fas fa-circle-play text-success"></i> Pronto Saúde
 									</span>
 									<span class="small text-muted">
-										<i class="fas fa-volume-up me-1"></i> Áudio Ativo
+										<i class="fas fa-volume-up me-1 text-primary"></i> Áudio Ativo
 									</span>
 								</div>
 							</div>
@@ -749,10 +793,95 @@ foreach ($gallery_videos as $v) {
 	</div>
 </section>
 
-<!-- Script de Controle de Vídeo Único e Filtros Dinâmicos -->
+<!-- Script de Controle de Vídeo Único, Capas Dinâmicas, Esqueleto e Filtros -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // 1. REGRA CRÍTICA: Executa apenas 1 vídeo por vez para não sobrecarregar banda nem travar o navegador
+    // 1. ANIMAÇÃO DE ESQUELETO AO ATUALIZAR / CARREGAR A PÁGINA
+    const videoCards = document.querySelectorAll('.ps-video-card');
+    setTimeout(function () {
+        videoCards.forEach(function (card, index) {
+            setTimeout(function () {
+                card.classList.add('ps-skeleton-loaded');
+            }, index * 90);
+        });
+    }, 380);
+
+    // 2. EXTRAÇÃO DE PRIMEIRO FRAME VIA CANVAS PARA CAPAS DE VÍDEOS MP4 LOCAIS
+    const facades = document.querySelectorAll('.ps-video-cover-facade');
+    facades.forEach(function (facade) {
+        const isMp4 = facade.getAttribute('data-is-mp4') === '1';
+        const vSrc = facade.getAttribute('data-video-src');
+        if (isMp4 && vSrc) {
+            try {
+                const tempVideo = document.createElement('video');
+                tempVideo.src = vSrc;
+                tempVideo.crossOrigin = 'anonymous';
+                tempVideo.muted = true;
+                tempVideo.preload = 'metadata';
+                tempVideo.currentTime = 0.6; // meio segundo para garantir quadro nítido do depoimento
+
+                tempVideo.addEventListener('seeked', function () {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = tempVideo.videoWidth || 640;
+                        canvas.height = tempVideo.videoHeight || 360;
+                        const ctx = canvas.getContext('2d');
+                        if (ctx && canvas.width > 0 && canvas.height > 0) {
+                            ctx.drawImage(tempVideo, 0, 0, canvas.width, canvas.height);
+                            const posterUrl = canvas.toDataURL('image/jpeg', 0.85);
+                            if (posterUrl && posterUrl.length > 100) {
+                                facade.style.backgroundImage = 'url(' + posterUrl + ')';
+                                const cardVideo = facade.closest('.ps-video-player-wrap').querySelector('video');
+                                if (cardVideo) cardVideo.poster = posterUrl;
+                            }
+                        }
+                    } catch (err) {
+                        // Mantém a capa estilizada com gradiente e logo caso CORS de terceiros restrinja o canvas
+                    }
+                }, { once: true });
+            } catch (e) {}
+        }
+    });
+
+    // 3. REPRODUÇÃO INSTANTÂNEA AO CLICAR NA CAPA DO BOX COM 1 VÍDEO POR VEZ
+    facades.forEach(function (facade) {
+        facade.addEventListener('click', function () {
+            const wrap = this.closest('.ps-video-player-wrap');
+            if (!wrap) return;
+
+            // Pausa qualquer outro vídeo HTML5 em execução
+            const allVideos = document.querySelectorAll('video');
+            allVideos.forEach(function (v) {
+                if (!v.paused) v.pause();
+            });
+
+            // Reseta outras capas do YouTube se houver
+            document.querySelectorAll('.ps-video-cover-facade.is-hidden').forEach(function (f) {
+                // Mantém escondida apenas a que está tocando agora
+            });
+
+            const isMp4 = this.getAttribute('data-is-mp4') === '1';
+            const ytId = this.getAttribute('data-yt-id');
+
+            // Esconde a capa da frente suavemente
+            this.classList.add('is-hidden');
+
+            if (isMp4) {
+                const videoEl = wrap.querySelector('video');
+                if (videoEl) {
+                    videoEl.style.display = 'block';
+                    videoEl.play().catch(function () {});
+                }
+            } else if (ytId) {
+                const target = wrap.querySelector('.ps-video-embed-target');
+                if (target) {
+                    target.innerHTML = '<iframe class="w-100 h-100" src="https://www.youtube.com/embed/' + encodeURIComponent(ytId) + '?autoplay=1&rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                }
+            }
+        });
+    });
+
+    // 4. REGRA CRÍTICA: Se algum vídeo iniciar reprodução via controles nativos, pausa os demais
     document.addEventListener('play', function (e) {
         if (e.target && e.target.tagName && e.target.tagName.toLowerCase() === 'video') {
             const allVideos = document.querySelectorAll('video');
@@ -764,7 +893,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }, true);
 
-    // 2. Filtros Dinâmicos de Vídeo
+    // 5. FILTROS DINÂMICOS DE VÍDEO COM ANIMAÇÃO
     const vfilterButtons = document.querySelectorAll('.ps-gallery-filter-btn[data-vfilter]');
     const videoItems = document.querySelectorAll('.ps-video-item');
     const emptyNotice = document.getElementById('psVideoEmpty');
@@ -774,7 +903,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             const targetFilter = this.getAttribute('data-vfilter');
 
-            // Pausa qualquer vídeo que esteja tocando ao alternar categorias
+            // Pausa qualquer vídeo ativo ao trocar de categoria
             const allVideos = document.querySelectorAll('video');
             allVideos.forEach(function (v) {
                 if (!v.paused) v.pause();
@@ -794,7 +923,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     setTimeout(function () {
                         item.style.opacity = '1';
                         item.style.transform = 'scale(1)';
-                    }, 30);
+                    }, 40);
                     visibleCount++;
                 } else {
                     item.classList.add('ps-hidden');

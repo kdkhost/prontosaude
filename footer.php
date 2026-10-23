@@ -165,6 +165,32 @@ if (strlen($whats_clean) <= 11) {
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 
 <script>
+// Controle Suave do Preloader Oficial
+(function() {
+    var preloader = document.getElementById('preloader');
+    if (preloader) {
+        var dismissPreloader = function() {
+            if (preloader.classList.contains('ps-preloader-hidden')) return;
+            preloader.classList.add('ps-preloader-hidden');
+            setTimeout(function() {
+                if (preloader && preloader.parentNode) {
+                    preloader.parentNode.removeChild(preloader);
+                }
+            }, 450);
+        };
+
+        if (document.readyState === 'complete') {
+            setTimeout(dismissPreloader, 350);
+        } else {
+            window.addEventListener('load', function() {
+                setTimeout(dismissPreloader, 350);
+            });
+        }
+        // Fallback de segurança: remove após 2.5s se algum asset externo atrasar
+        setTimeout(dismissPreloader, 2500);
+    }
+})();
+
 $(function () {
     // Inicialização global do Fancybox 5 para fotos e mídias
     if (typeof Fancybox !== 'undefined') {

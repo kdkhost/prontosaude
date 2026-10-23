@@ -415,8 +415,20 @@ $email   = $row2['dep_email'] ?? '';
         ?>
 
         <?php if($preloader == 1): ?>
-        <div id="preloader">
-            <div id="status"></div>
+        <!-- Preloader Oficial Pronto Saúde (Configurável no Painel Admin) -->
+        <div id="preloader" aria-hidden="true">
+            <div id="status">
+                <div class="ps-preloader-spinner-wrap">
+                    <div class="ps-preloader-ring"></div>
+                    <div class="ps-preloader-center">
+                        <i class="fas fa-heartbeat ps-preloader-icon"></i>
+                    </div>
+                </div>
+                <div class="ps-preloader-brand">
+                    <span class="ps-preloader-title">Pronto Saúde</span>
+                    <span class="ps-preloader-sub">Cuidando de você com excelência...</span>
+                </div>
+            </div>
         </div>
         <?php endif; ?>
 

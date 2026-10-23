@@ -1624,9 +1624,110 @@ body.ps-foco-body {
 }
 
 /* ==============================================================================
-   GALERIA DE VÍDEOS PRONTO SAÚDE (RESPONSIVO, ASPECT-RATIO 16:9, UM VÍDEO POR VEZ)
+   9. PRELOADER OFICIAL DA PRONTO SAÚDE (CONFIGURÁVEL NO PAINEL ADMIN)
+   ============================================================================== */
+#preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999999;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;
+}
+
+#preloader.ps-preloader-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    text-align: center;
+    padding: 20px;
+}
+
+.ps-preloader-spinner-wrap {
+    position: relative;
+    width: 86px;
+    height: 86px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-preloader-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3.5px solid rgba(10, 107, 116, 0.12);
+    border-top-color: var(--ps-primary);
+    border-right-color: var(--ps-secondary);
+    animation: ps-preloader-spin 0.9s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+}
+
+@keyframes ps-preloader-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.ps-preloader-center {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ps-primary) 0%, var(--ps-primary-dark) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(10, 107, 116, 0.28);
+}
+
+.ps-preloader-icon {
+    font-size: 1.45rem;
+    color: #ffffff;
+    animation: ps-preloader-pulse 1.3s ease-in-out infinite;
+}
+
+@keyframes ps-preloader-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.18); }
+}
+
+.ps-preloader-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.ps-preloader-title {
+    font-family: Outfit, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: var(--ps-title);
+}
+
+.ps-preloader-sub {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ps-muted);
+    letter-spacing: 0.02em;
+}
+
+/* ==============================================================================
+   10. GALERIA DE VÍDEOS: FACHADA COM CAPA, SKELETON SHIMMER E PLAY INSTANTÂNEO
    ============================================================================== */
 .ps-video-card {
+    position: relative;
     background: #ffffff;
     border: 1px solid var(--ps-border);
     border-radius: 18px;
@@ -1644,6 +1745,70 @@ body.ps-foco-body {
     border-color: rgba(10, 107, 116, 0.25);
 }
 
+/* Esqueleto Animado (Skeleton Loading com Shimmer) */
+.ps-video-skeleton {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: #ffffff;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s ease;
+}
+
+.ps-video-card.ps-skeleton-loaded .ps-video-skeleton {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.ps-skeleton-shimmer {
+    background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+    background-size: 200% 100%;
+    animation: ps-shimmer 1.4s infinite linear;
+}
+
+@keyframes ps-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.ps-skeleton-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+
+.ps-skeleton-body {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+}
+
+.ps-skeleton-pill {
+    height: 12px;
+    width: 35%;
+    border-radius: 6px;
+}
+
+.ps-skeleton-title {
+    height: 18px;
+    width: 80%;
+    border-radius: 6px;
+}
+
+.ps-skeleton-meta {
+    height: 14px;
+    width: 55%;
+    margin-top: auto;
+    border-radius: 6px;
+}
+
+/* Área do Player e Capa da Frente */
 .ps-video-player-wrap {
     position: relative;
     width: 100%;
@@ -1660,11 +1825,101 @@ body.ps-foco-body {
     background: #071822;
 }
 
+/* Capa na frente do box de vídeo (Video Facade) */
+.ps-video-cover-facade {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    overflow: hidden;
+}
+
+.ps-video-cover-facade.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.ps-video-cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(7, 24, 34, 0.25) 0%, rgba(7, 24, 34, 0.72) 100%);
+    transition: background 0.3s ease;
+}
+
+.ps-video-cover-facade:hover .ps-video-cover-overlay {
+    background: linear-gradient(180deg, rgba(7, 24, 34, 0.15) 0%, rgba(7, 24, 34, 0.82) 100%);
+}
+
+/* Botão de Play Pulsante */
+.ps-video-play-btn {
+    position: relative;
+    z-index: 5;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ps-secondary) 0%, #059669 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.45);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    padding-left: 3px;
+}
+
+.ps-play-pulse-ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid rgba(16, 185, 129, 0.65);
+    animation: ps-play-ring 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+    pointer-events: none;
+}
+
+@keyframes ps-play-ring {
+    0% { transform: scale(0.95); opacity: 0.95; }
+    50% { transform: scale(1.35); opacity: 0; }
+    100% { transform: scale(1.35); opacity: 0; }
+}
+
+.ps-video-cover-facade:hover .ps-video-play-btn {
+    transform: scale(1.12);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.65);
+}
+
+.ps-video-tag-hd {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 5;
+    background: rgba(7, 24, 34, 0.85);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: 0.03em;
+}
+
 .ps-video-badge-cat {
     position: absolute;
     top: 12px;
     left: 12px;
-    z-index: 2;
+    z-index: 5;
     background: rgba(7, 24, 34, 0.85);
     backdrop-filter: blur(8px);
     color: #ffffff;
