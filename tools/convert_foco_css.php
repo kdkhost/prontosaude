@@ -158,7 +158,7 @@ body.ps-foco-body {
         top: 100%;
         left: 0;
         right: 0;
-        height: 16px;
+        height: 18px;
         background: transparent;
         z-index: 1050;
     }
@@ -168,20 +168,20 @@ body.ps-foco-body {
         top: 100% !important;
         left: 0 !important;
         z-index: 1060 !important;
-        display: block !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        transform: translateY(8px) scale(0.98) !important;
-        transform-origin: top left !important;
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(8px);
+        transform-origin: top left;
         transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
                     transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-                    visibility 0.2s !important;
-        pointer-events: none !important;
+                    visibility 0.2s;
+        pointer-events: none;
         margin-top: 4px !important;
         background: #ffffff !important;
         border: 1px solid var(--ps-border) !important;
         border-radius: 12px !important;
-        box-shadow: 0 10px 30px rgba(7, 24, 34, 0.18) !important;
+        box-shadow: 0 12px 32px rgba(7, 24, 34, 0.18) !important;
         padding: 8px !important;
         min-width: 230px !important;
     }
@@ -189,9 +189,10 @@ body.ps-foco-body {
     .foco-navbar .nav-item.dropdown:hover > .dropdown-menu,
     .foco-navbar .nav-item.dropdown.show > .dropdown-menu,
     .foco-navbar .nav-item.dropdown > .dropdown-menu.show {
+        display: block !important;
         opacity: 1 !important;
         visibility: visible !important;
-        transform: translateY(0) scale(1) !important;
+        transform: translateY(0) !important;
         pointer-events: auto !important;
     }
 

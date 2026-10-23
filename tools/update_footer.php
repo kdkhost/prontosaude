@@ -284,8 +284,8 @@ $(function () {
             var $menu = $dropdown.find(\'> .dropdown-menu\');
             var hoverTimer;
 
-            $dropdown.off(\'mouseenter.psHover mouseleave.psHover\')
-                .on(\'mouseenter.psHover\', function () {
+            $dropdown.off(\'mouseenter.psHover mouseleave.psHover mouseover.psHover mouseout.psHover\')
+                .on(\'mouseenter.psHover mouseover.psHover\', function () {
                     clearTimeout(hoverTimer);
                     $(\'.foco-navbar .nav-item.dropdown\').not($dropdown).removeClass(\'show\')
                         .find(\'> .dropdown-toggle\').attr(\'aria-expanded\', \'false\')
@@ -295,12 +295,14 @@ $(function () {
                     $toggle.attr(\'aria-expanded\', \'true\');
                     $menu.addClass(\'show\');
                 })
-                .on(\'mouseleave.psHover\', function () {
+                .on(\'mouseleave.psHover mouseout.psHover\', function (e) {
+                    if (this.contains(e.relatedTarget)) return;
+
                     hoverTimer = setTimeout(function () {
                         $dropdown.removeClass(\'show\');
                         $toggle.attr(\'aria-expanded\', \'false\');
                         $menu.removeClass(\'show\');
-                    }, 140);
+                    }, 150);
                 });
 
             // No desktop, previne que clicar no link pai de âncora feche o menu já aberto pelo hover
