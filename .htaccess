@@ -16,6 +16,25 @@ RewriteRule  ^department/(.*)$/?$   department.php?slug=$1 [NC,L]
 RewriteRule  ^doctor/(.*)$/?$       doctor.php?slug=$1     [NC,L]
 RewriteRule  ^search                search.php             [NC,L]
 
+# Rotas Diretas Sem Extensão .php (Prevenção Total de Erros 404)
+RewriteRule  ^servicos/?$           servicos.php           [NC,L]
+RewriteRule  ^fidelidade/?$         fidelidade.php         [NC,L]
+RewriteRule  ^odontologia/?$        odontologia.php        [NC,L]
+RewriteRule  ^trabalhe-conosco/?$   trabalhe-conosco.php   [NC,L]
+RewriteRule  ^convenio/?$           convenio.php           [NC,L]
+RewriteRule  ^privacidade/?$        privacidade.php        [NC,L]
+RewriteRule  ^rsocial/?$            rsocial.php            [NC,L]
+RewriteRule  ^blog/?$               page.php?slug=blog     [NC,L]
+RewriteRule  ^medicos/?$            page.php?slug=medicos  [NC,L]
+RewriteRule  ^corpo-clinico/?$      page.php?slug=medicos  [NC,L]
+RewriteRule  ^sobre/?$              page.php?slug=sobre    [NC,L]
+RewriteRule  ^contato/?$            page.php?slug=contato  [NC,L]
+
+# Regra genérica para qualquer arquivo .php existente chamado sem extensão
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^([^/]+)/?$ $1.php [L]
+
 
 <IfModule mod_deflate.c>
 AddOutputFilterByType DEFLATE text/plain

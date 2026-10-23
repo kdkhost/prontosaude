@@ -81,8 +81,8 @@ $zap_msg = urlencode("*Olá! Gostaria de mais informações e agendamento para o
 										<?= $description; ?>
 									</div>
 									<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #f1f5f9; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
-										<a href="<?= BASE_URL; ?>servicos" class="btn btn-default" style="border-radius: 8px; font-weight: 600; padding: 10px 20px;">
-											<i class="fa fa-arrow-left" style="margin-right: 6px;"></i> Ver Todos os Serviços
+										<a href="<?= BASE_URL; ?>servicos.php" class="btn btn-outline-secondary fw-bold px-3 py-2 rounded-3 text-decoration-none d-inline-flex align-items-center">
+											<i class="fas fa-arrow-left me-2"></i> Ver Todos os Serviços
 										</a>
 										<a href="https://wa.me/<?= $zap_num; ?>?text=<?= $zap_msg; ?>" target="_blank" rel="noopener" class="btn btn-success" style="background: #10b981; border: none; border-radius: 8px; font-weight: 700; padding: 11px 24px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(16,185,129,0.35);">
 											<i class="fa fa-whatsapp" style="font-size: 18px;"></i> Agendar Este Serviço
