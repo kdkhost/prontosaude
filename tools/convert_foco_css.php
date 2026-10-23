@@ -430,23 +430,35 @@ body.ps-foco-body {
    2. HERO CAROUSEL COMPACTO & ROBUSTO (ZERO VÃO EM BRANCO)
    ============================================================================== */
 .hero-section {
-    min-height: 500px;
+    min-height: 600px;
     background-color: var(--ps-dark);
     position: relative;
     overflow: hidden;
+    width: 100%;
 }
 @media (min-width: 992px) {
     .hero-section {
-        min-height: 540px;
+        min-height: 680px;
+    }
+}
+@media (min-width: 1400px) {
+    .hero-section {
+        min-height: 720px;
     }
 }
 .hero-slide-bg {
     position: absolute;
     inset: 0;
     background-size: cover !important;
-    background-position: center center !important;
+    background-position: center 25% !important;
+    background-repeat: no-repeat !important;
     transform: scale(1.02);
     transition: transform 7s ease;
+}
+@media (min-width: 992px) {
+    .hero-slide-bg {
+        background-position: right 25% !important;
+    }
 }
 .carousel-item.active .hero-slide-bg {
     transform: scale(1);
@@ -454,12 +466,21 @@ body.ps-foco-body {
 .hero-slide-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(7, 24, 34, 0.94) 0%, rgba(7, 24, 34, 0.85) 50%, rgba(7, 24, 34, 0.55) 85%, rgba(7, 24, 34, 0.35) 100%) !important;
+    background: linear-gradient(90deg, rgba(7, 24, 34, 0.92) 0%, rgba(7, 24, 34, 0.82) 45%, rgba(7, 24, 34, 0.45) 80%, rgba(7, 24, 34, 0.22) 100%) !important;
+}
+@media (max-width: 991.98px) {
+    .hero-slide-overlay {
+        background: linear-gradient(180deg, rgba(7, 24, 34, 0.88) 0%, rgba(7, 24, 34, 0.92) 100%) !important;
+    }
 }
 .hero-slide-content {
     position: relative;
     z-index: 2;
-    padding: 42px 0;
+    padding: 70px 0;
+    width: 100%;
+    min-height: inherit;
+    display: flex;
+    align-items: center;
 }
 .hero-badge {
     display: inline-flex;
