@@ -690,7 +690,7 @@ $email   = $row2['dep_email'] ?? '';
 
                 <!-- Lista de Navegação com Rolagem Independente (O menu rola internamente sem empurrar o rodapé) -->
                 <div class="android-drawer-nav-scroll flex-grow-1 overflow-y-auto">
-                    <nav class="android-nav-list">
+                    <nav class="android-nav-list" id="drawerNavAccordion">
                         <?php foreach ($parent_menus as $p_item): 
                             $has_subs = !empty($children_menus[$p_item['menu_id']]);
                             $p_url = pronto_resolve_menu_url($p_item);
@@ -705,7 +705,7 @@ $email   = $row2['dep_email'] ?? '';
                                         </div>
                                         <i class="fas fa-chevron-down android-item-arrow"></i>
                                     </button>
-                                    <div class="collapse" id="drawerSub<?= $p_item['menu_id']; ?>">
+                                    <div class="collapse" id="drawerSub<?= $p_item['menu_id']; ?>" data-bs-parent="#drawerNavAccordion">
                                         <div class="ps-3 py-1 bg-light">
                                             <?php foreach ($children_menus[$p_item['menu_id']] as $sub_item): 
                                                 $s_url = pronto_resolve_menu_url($sub_item);

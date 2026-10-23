@@ -366,6 +366,14 @@ $(function () {
         }
     });
 
+    // Sanfona Exclusiva no Menu Lateral: ao abrir um menu, fecha os outros automaticamente
+    var $drawerAccordion = $('#drawerNavAccordion');
+    if ($drawerAccordion.length) {
+        $drawerAccordion.on('show.bs.collapse', '.collapse', function () {
+            $drawerAccordion.find('.collapse.show').not(this).collapse('hide');
+        });
+    }
+
     // Submissão do Formulário de Contato via AJAX com SweetAlert2
     $('#formContatoSite').on('submit', function (e) {
         e.preventDefault();
