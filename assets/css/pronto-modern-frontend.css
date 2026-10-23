@@ -141,11 +141,11 @@ body.ps-foco-body {
 /* Dropdown Menu Desktop - Abertura Automática no Hover em Telas Grandes (>= 992px) */
 @media (min-width: 992px) {
     .foco-navbar .nav-item.dropdown {
-        position: relative;
+        position: relative !important;
     }
 
     /* Ponte invisível que mantém o foco ativo entre o nav-link e o dropdown-menu */
-    .foco-navbar .nav-item.dropdown::before {
+    .foco-navbar .nav-item.dropdown::after {
         content: '';
         position: absolute;
         top: 100%;
@@ -153,35 +153,45 @@ body.ps-foco-body {
         right: 0;
         height: 16px;
         background: transparent;
-        z-index: 1020;
+        z-index: 1050;
     }
 
     .foco-navbar .nav-item.dropdown > .dropdown-menu {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        z-index: 1060 !important;
         display: block !important;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(10px) scale(0.98);
-        transform-origin: top center;
-        transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-                    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-                    visibility 0.22s;
-        pointer-events: none;
-        margin-top: 6px !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transform: translateY(8px) scale(0.98) !important;
+        transform-origin: top left !important;
+        transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 0.2s !important;
+        pointer-events: none !important;
+        margin-top: 4px !important;
+        background: #ffffff !important;
+        border: 1px solid var(--ps-border) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 30px rgba(7, 24, 34, 0.18) !important;
+        padding: 8px !important;
+        min-width: 230px !important;
     }
 
     .foco-navbar .nav-item.dropdown:hover > .dropdown-menu,
     .foco-navbar .nav-item.dropdown.show > .dropdown-menu,
     .foco-navbar .nav-item.dropdown > .dropdown-menu.show {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0) scale(1);
-        pointer-events: auto;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: translateY(0) scale(1) !important;
+        pointer-events: auto !important;
     }
 
     .foco-navbar .nav-item.dropdown:hover > .nav-link,
     .foco-navbar .nav-item.dropdown.show > .nav-link {
         color: #ffffff !important;
-        background-color: rgba(255, 255, 255, 0.16);
+        background-color: rgba(255, 255, 255, 0.16) !important;
     }
 
     /* Rotação suave da setinha (chevron) do dropdown no hover */

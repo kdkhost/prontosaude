@@ -251,7 +251,7 @@ $second_part = '
                             ?>
                                 <?php if($has_subs): ?>
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle <?= $p_active ? \'active\' : \'\'; ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a class="nav-link dropdown-toggle <?= $p_active ? \'active\' : \'\'; ?>" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                             <?= htmlspecialchars($p_item[\'menu_name\']); ?>
                                         </a>
                                         <ul class="dropdown-menu">
