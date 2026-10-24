@@ -113,6 +113,12 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - **Integração Facilitada e Paginação dos Comentários do Facebook (`admin/comment.php` e `news.php`):**
   - Painel facilitado para controle de comentários do Facebook: switch de ativação/desativação, campo para Facebook App ID, gerador inteligente de código SDK padrão em português (`pt_BR`) e controle de paginação de comentários (`data-numposts`) com botões rápidos (3, 5, 10, 15, 20).
   - Exibição dinâmica da caixa de comentários em cada post do blog (`news.php`), com a URL canônica do artigo e a quantidade limite de comentários por página configurada no admin.
+- **Central Moderna & Dinâmica de Redes Sociais (`admin/social-media.php`):**
+  - **Reformulação Integral do Layout:** Fim dos formulários inline verticais obsoletos. Interface convertida para grid responsivo de cards modernos com identidade visual colorida para cada marca (WhatsApp, Instagram, Facebook, YouTube, LinkedIn, X/Twitter, etc.).
+  - **Métricas em Tempo Real:** Cards superiores com contadores automáticos de Redes Cadastradas, Redes Ativas no Portal e Redes Ocultas.
+  - **Badges de Status Dinâmicos:** Indicadores visuais (`● Ativa` / `○ Oculta`) atualizados instantaneamente conforme o usuário digita ou limpa os links.
+  - **Ações Rápidas por Rede:** Botão integrado *"Testar Link"* (abre o destino em nova aba) e botão *"Limpar"* para remoção rápida.
+  - **Submissão 100% Assíncrona via AJAX:** Atualização instantânea com feedback via **Toastr**, animação de carregamento e fallback com **SweetAlert2** para limpeza geral de campos.
 - **Gestão e Customização Total de Cards (Serviços, Planos e Produtos):**
   - **100% Configurável pelo Painel Admin:** Fim de imagens, links e textos fixos no código-fonte. Tudo é editável em tempo real nos módulos de Serviços (`admin/service.php`), Planos (`admin/pricing-plan.php`) e Odontologia (`admin/dental.php`).
   - **Upload Dinâmico com Preview:** Upload por arrastar e soltar (Drag & Drop) de fotos e ilustrações sem dependência de caminhos estáticos.
