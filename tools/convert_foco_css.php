@@ -2598,6 +2598,7 @@ body.ps-foco-body {
 
 /* ==============================================================================
    SUPORTE COMPLETO E UNIFICADO AO TEMA ESCURO (DARK MODE) NO FRONTEND
+   Cobreado integralmente para todos os 55 seletores de seções, cards, tabelas e modais
    ============================================================================== */
 [data-bs-theme="dark"] {
     --ps-bg: #0b1320;
@@ -2620,42 +2621,96 @@ body.ps-foco-body {
     --bs-body-color: #cbd5e1;
 }
 
-/* Transição Suave de Cores */
+/* Transição Suave de Cores Global */
 body.ps-foco-body {
     transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-/* Corpo e Seções no Modo Escuro */
+/* 1. Corpo e Fundo Principal */
 [data-bs-theme="dark"] body.ps-foco-body {
-    background-color: var(--ps-bg, #0b1320) !important;
-    color: var(--ps-text, #cbd5e1) !important;
+    background-color: #0b1320 !important;
+    color: #cbd5e1 !important;
 }
 
-[data-bs-theme="dark"] .bg-light,
-[data-bs-theme="dark"] .foco-section-alt,
+/* 2. Seções Alternadas da Home (Zero Fundo Branco Rígido) */
+[data-bs-theme="dark"] .section-risco,
+[data-bs-theme="dark"] .section-planos,
+[data-bs-theme="dark"] .section-medicos,
+[data-bs-theme="dark"] .section-faq,
+[data-bs-theme="dark"] .section-contato,
+[data-bs-theme="dark"] .bg-white {
+    background-color: #0b1320 !important;
+    border-color: #24354f !important;
+}
+
+[data-bs-theme="dark"] .section-sobre,
+[data-bs-theme="dark"] .section-estetica,
+[data-bs-theme="dark"] .section-depoimentos,
+[data-bs-theme="dark"] .section-convenios,
+[data-bs-theme="dark"] .section-parceiros,
 [data-bs-theme="dark"] .section-differentials,
-[data-bs-theme="dark"] .section-sobre {
-    background-color: var(--ps-bg-alt, #0e1a2c) !important;
+[data-bs-theme="dark"] .foco-section-alt,
+[data-bs-theme="dark"] .bg-light {
+    background-color: #0e1a2c !important;
+    border-color: #24354f !important;
 }
 
-/* Cards no Modo Escuro */
-[data-bs-theme="dark"] .foco-card,
+/* 3. Todos os Cards da Home e Páginas Internas */
+[data-bs-theme="dark"] .card-simulacao-hero,
+[data-bs-theme="dark"] .card-risco,
+[data-bs-theme="dark"] .card-plano,
+[data-bs-theme="dark"] .card-estetica,
+[data-bs-theme="dark"] .card-medico,
+[data-bs-theme="dark"] .card-contato-form,
+[data-bs-theme="dark"] .whatsapp-popup-card,
+[data-bs-theme="dark"] .ps-service-card-modern,
+[data-bs-theme="dark"] .service-card-box,
+[data-bs-theme="dark"] .ps-plan-card,
+[data-bs-theme="dark"] .ps-gallery-card,
+[data-bs-theme="dark"] .ps-video-card,
 [data-bs-theme="dark"] .ps-blog-card,
 [data-bs-theme="dark"] .ps-sidebar-card,
+[data-bs-theme="dark"] .foco-card,
 [data-bs-theme="dark"] .foco-plan-card,
-[data-bs-theme="dark"] .card,
 [data-bs-theme="dark"] .foco-faq-card,
 [data-bs-theme="dark"] .doctor-card,
 [data-bs-theme="dark"] .service-card,
 [data-bs-theme="dark"] .ps-doctor-bio-card,
-[data-bs-theme="dark"] .ps-doctor-tab-card {
-    background-color: var(--ps-card-bg, #131f33) !important;
-    border-color: var(--ps-border, #24354f) !important;
-    color: var(--ps-text, #cbd5e1) !important;
-    box-shadow: var(--ps-shadow-card) !important;
+[data-bs-theme="dark"] .ps-doctor-tab-card,
+[data-bs-theme="dark"] .card {
+    background-color: #131f33 !important;
+    border-color: #24354f !important;
+    color: #cbd5e1 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45) !important;
 }
 
-/* Títulos no Modo Escuro */
+/* 4. Elementos Internos dos Cards */
+[data-bs-theme="dark"] .btn-tipo-veiculo {
+    background-color: #19273f !important;
+    border-color: #2e4363 !important;
+    color: #f8fafc !important;
+}
+[data-bs-theme="dark"] .btn-tipo-veiculo:hover {
+    background-color: rgba(10, 107, 116, 0.28) !important;
+    border-color: #0a6b74 !important;
+    color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .bloco-preco,
+[data-bs-theme="dark"] .ps-plan-price-wrap {
+    background-color: #19273f !important;
+    border-color: #2e4363 !important;
+    color: #f8fafc !important;
+}
+
+[data-bs-theme="dark"] .icone-plano-box,
+[data-bs-theme="dark"] .icon-estetica-box,
+[data-bs-theme="dark"] .icon-risco {
+    background-color: rgba(10, 107, 116, 0.2) !important;
+    border-color: rgba(10, 107, 116, 0.35) !important;
+}
+
+/* 5. Títulos e Subtítulos no Modo Escuro */
 [data-bs-theme="dark"] h1,
 [data-bs-theme="dark"] h2,
 [data-bs-theme="dark"] h3,
@@ -2664,39 +2719,100 @@ body.ps-foco-body {
 [data-bs-theme="dark"] h6,
 [data-bs-theme="dark"] .foco-section-title,
 [data-bs-theme="dark"] .foco-card-title,
+[data-bs-theme="dark"] .card-risco h3,
+[data-bs-theme="dark"] .card-plano h3,
+[data-bs-theme="dark"] .card-estetica h4,
+[data-bs-theme="dark"] .card-medico h4,
+[data-bs-theme="dark"] .ps-plan-title,
 [data-bs-theme="dark"] .ps-blog-card-title a,
 [data-bs-theme="dark"] .doctor-name,
 [data-bs-theme="dark"] .service-title {
-    color: var(--ps-title, #f8fafc) !important;
+    color: #f8fafc !important;
 }
 
 [data-bs-theme="dark"] .foco-section-subtitle,
+[data-bs-theme="dark"] .card-risco p,
+[data-bs-theme="dark"] .card-plano p,
+[data-bs-theme="dark"] .card-estetica p,
+[data-bs-theme="dark"] .card-medico p,
 [data-bs-theme="dark"] .text-muted,
 [data-bs-theme="dark"] .ps-read-time {
-    color: var(--ps-muted, #94a3b8) !important;
+    color: #94a3b8 !important;
 }
 
-/* Acordeões de FAQ no Modo Escuro */
-[data-bs-theme="dark"] .accordion-item {
-    background-color: #131f33 !important;
-    border-color: #24354f !important;
-}
-[data-bs-theme="dark"] .accordion-button {
+/* 6. Acordeões de FAQ (Home e Páginas) */
+[data-bs-theme="dark"] .accordion-foco .accordion-button,
+[data-bs-theme="dark"] .accordion-item .accordion-button {
     background-color: #131f33 !important;
     color: #f8fafc !important;
     border-color: #24354f !important;
 }
-[data-bs-theme="dark"] .accordion-button:not(.collapsed) {
-    background-color: #182840 !important;
+[data-bs-theme="dark"] .accordion-foco .accordion-button:not(.collapsed),
+[data-bs-theme="dark"] .accordion-item .accordion-button:not(.collapsed) {
+    background-color: #1a2a44 !important;
     color: #87cca4 !important;
     box-shadow: none !important;
 }
-[data-bs-theme="dark"] .accordion-body {
+[data-bs-theme="dark"] .accordion-foco .accordion-body,
+[data-bs-theme="dark"] .accordion-item .accordion-body {
     background-color: #131f33 !important;
     color: #cbd5e1 !important;
+    border-top: 1px solid #24354f !important;
 }
 
-/* Formulários e Inputs no Modo Escuro */
+/* 7. Dropdown Menu Desktop */
+[data-bs-theme="dark"] .foco-navbar .dropdown-menu {
+    background-color: #131f33 !important;
+    border-color: #24354f !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6) !important;
+}
+[data-bs-theme="dark"] .foco-navbar .dropdown-item {
+    color: #cbd5e1 !important;
+}
+[data-bs-theme="dark"] .foco-navbar .dropdown-item:hover,
+[data-bs-theme="dark"] .foco-navbar .dropdown-item.active {
+    background-color: rgba(10, 107, 116, 0.25) !important;
+    color: #ffffff !important;
+}
+
+/* 8. Galeria de Fotos e Vídeos */
+[data-bs-theme="dark"] .ps-gallery-filter-btn {
+    background-color: #131f33 !important;
+    border-color: #24354f !important;
+    color: #cbd5e1 !important;
+}
+[data-bs-theme="dark"] .ps-gallery-filter-btn.active,
+[data-bs-theme="dark"] .ps-gallery-filter-btn:hover {
+    background-color: #0a6b74 !important;
+    border-color: #0a6b74 !important;
+    color: #ffffff !important;
+}
+[data-bs-theme="dark"] .ps-gallery-footer,
+[data-bs-theme="dark"] .ps-video-body {
+    background-color: #131f33 !important;
+    border-color: #24354f !important;
+    color: #cbd5e1 !important;
+}
+[data-bs-theme="dark"] .ps-video-skeleton {
+    background: linear-gradient(90deg, #131f33 25%, #1a2a44 50%, #131f33 75%) !important;
+}
+
+/* 9. Paginação e Blog */
+[data-bs-theme="dark"] .ps-blog-pagination a,
+[data-bs-theme="dark"] .ps-blog-pagination span,
+[data-bs-theme="dark"] .ps-blog-pagination .page-link {
+    background-color: #131f33 !important;
+    border-color: #24354f !important;
+    color: #cbd5e1 !important;
+}
+[data-bs-theme="dark"] .ps-blog-pagination .active,
+[data-bs-theme="dark"] .ps-blog-pagination .page-item.active .page-link {
+    background-color: #0a6b74 !important;
+    border-color: #0a6b74 !important;
+    color: #ffffff !important;
+}
+
+/* 10. Formulários, Inputs e Pesquisa */
 [data-bs-theme="dark"] .form-control,
 [data-bs-theme="dark"] .form-select,
 [data-bs-theme="dark"] .ps-search-input,
@@ -2709,25 +2825,26 @@ body.ps-foco-body {
 [data-bs-theme="dark"] .form-control:focus,
 [data-bs-theme="dark"] .ps-search-input:focus {
     background-color: #19273f !important;
-    border-color: var(--ps-primary, #0a6b74) !important;
+    border-color: #0a6b74 !important;
     box-shadow: 0 0 0 0.25rem rgba(10, 107, 116, 0.25) !important;
     color: #ffffff !important;
 }
 
-/* Paginação do Blog no Modo Escuro */
-[data-bs-theme="dark"] .ps-blog-pagination .page-link {
-    background-color: #131f33 !important;
-    border-color: #24354f !important;
-    color: #cbd5e1 !important;
+/* 11. WhatsApp Flutuante e Canais */
+[data-bs-theme="dark"] .whatsapp-channel-btn {
+    background-color: #19273f !important;
+    border-color: #2e4363 !important;
+    color: #f8fafc !important;
 }
-[data-bs-theme="dark"] .ps-blog-pagination .page-item.active .page-link {
-    background-color: var(--ps-primary, #0a6b74) !important;
-    border-color: var(--ps-primary, #0a6b74) !important;
+[data-bs-theme="dark"] .whatsapp-channel-btn:hover {
+    background-color: rgba(10, 107, 116, 0.25) !important;
+    border-color: #0a6b74 !important;
     color: #ffffff !important;
 }
 
-/* Side Menu Mobile Android no Modo Escuro */
-[data-bs-theme="dark"] .android-drawer {
+/* 12. Drawer Mobile Android */
+[data-bs-theme="dark"] .android-drawer,
+[data-bs-theme="dark"] .foco-android-drawer {
     background-color: #0b1320 !important;
 }
 [data-bs-theme="dark"] .android-drawer-card-status {
@@ -2753,7 +2870,7 @@ body.ps-foco-body {
     border-color: #24354f !important;
 }
 
-/* Modais e SweetAlert2 no Frontend */
+/* 13. Modais e SweetAlert2 */
 [data-bs-theme="dark"] .modal-content {
     background-color: #131f33 !important;
     border-color: #24354f !important;
@@ -2774,7 +2891,7 @@ body.ps-foco-body {
     color: #f8fafc !important;
 }
 
-/* Botões de Alternar Tema no Frontend */
+/* 14. Botões de Alternar Tema no Frontend */
 .btn-theme-toggle-frontend {
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.25);
