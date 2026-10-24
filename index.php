@@ -149,7 +149,6 @@ if (function_exists('pronto_is_page_active')) {
                         </div>
                     </div>
                 </div>
-            </div>
             <?php endforeach; ?>
         </div>
 
