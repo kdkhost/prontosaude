@@ -543,8 +543,21 @@ body.ps-foco-body {
     color: rgba(255, 255, 255, 0.88);
     font-size: 1rem;
     max-width: 580px;
-    margin-bottom: 22px;
+    margin-bottom: 16px;
     line-height: 1.5;
+}
+.hero-content-extra {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 0.95rem;
+    max-width: 600px;
+    margin-bottom: 22px;
+    line-height: 1.55;
+    background: rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-left: 3.5px solid var(--ps-accent, #20c997);
+    padding: 10px 14px;
+    border-radius: 0 10px 10px 0;
 }
 
 /* Card Agendamento Rápido no Hero */

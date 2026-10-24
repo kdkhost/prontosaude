@@ -204,6 +204,30 @@ if(isset($_POST['form7'])) {
 	$home_status_news = isset($_POST['home_status_news']) ? 1 : 0;
 	$home_status_partner = isset($_POST['home_status_partner']) ? 1 : 0;
 
+	$hero_box_status        = isset($_POST['hero_box_status']) ? 1 : 0;
+	$hero_box_badge_left    = trim($_POST['hero_box_badge_left'] ?? 'ATENDIMENTO ÁGIL');
+	$hero_box_badge_right   = trim($_POST['hero_box_badge_right'] ?? 'Retorno Rápido');
+	$hero_box_title         = trim($_POST['hero_box_title'] ?? 'Agendamento em 1 Minuto');
+	$hero_box_desc          = trim($_POST['hero_box_desc'] ?? '');
+	$hero_box_item1_icon    = trim($_POST['hero_box_item1_icon'] ?? 'fas fa-user-md');
+	$hero_box_item1_title   = trim($_POST['hero_box_item1_title'] ?? 'Consultas');
+	$hero_box_item1_subtitle= trim($_POST['hero_box_item1_subtitle'] ?? 'Diversas Áreas');
+	$hero_box_item1_url     = trim($_POST['hero_box_item1_url'] ?? 'servicos.php');
+	$hero_box_item2_icon    = trim($_POST['hero_box_item2_icon'] ?? 'fas fa-flask');
+	$hero_box_item2_title   = trim($_POST['hero_box_item2_title'] ?? 'Exames');
+	$hero_box_item2_subtitle= trim($_POST['hero_box_item2_subtitle'] ?? 'Laudos Precisos');
+	$hero_box_item2_url     = trim($_POST['hero_box_item2_url'] ?? 'servicos.php');
+	$hero_box_item3_icon    = trim($_POST['hero_box_item3_icon'] ?? 'fas fa-tooth');
+	$hero_box_item3_title   = trim($_POST['hero_box_item3_title'] ?? 'Odontologia');
+	$hero_box_item3_subtitle= trim($_POST['hero_box_item3_subtitle'] ?? 'Tratamento Dental');
+	$hero_box_item3_url     = trim($_POST['hero_box_item3_url'] ?? 'odontologia.php');
+	$hero_box_item4_icon    = trim($_POST['hero_box_item4_icon'] ?? 'fas fa-id-card');
+	$hero_box_item4_title   = trim($_POST['hero_box_item4_title'] ?? 'Fidelidade');
+	$hero_box_item4_subtitle= trim($_POST['hero_box_item4_subtitle'] ?? 'Até 50% Desconto');
+	$hero_box_item4_url     = trim($_POST['hero_box_item4_url'] ?? 'fidelidade.php');
+	$hero_box_btn_text      = trim($_POST['hero_box_btn_text'] ?? 'CONHEÇA O CARTÃO FIDELIDADE');
+	$hero_box_btn_url       = trim($_POST['hero_box_btn_url'] ?? 'fidelidade.php');
+
 	$statement = $pdo->prepare("UPDATE tbl_settings SET 
 	                           home_title_service=?, 
 	                           home_subtitle_service=?,
@@ -225,7 +249,30 @@ if(isset($_POST['form7'])) {
 	                           home_status_news=?, 
 	                           home_title_partner=?,
 	                           home_subtitle_partner=?,
-	                           home_status_partner=?
+	                           home_status_partner=?,
+	                           hero_box_status=?,
+	                           hero_box_badge_left=?,
+	                           hero_box_badge_right=?,
+	                           hero_box_title=?,
+	                           hero_box_desc=?,
+	                           hero_box_item1_icon=?,
+	                           hero_box_item1_title=?,
+	                           hero_box_item1_subtitle=?,
+	                           hero_box_item1_url=?,
+	                           hero_box_item2_icon=?,
+	                           hero_box_item2_title=?,
+	                           hero_box_item2_subtitle=?,
+	                           hero_box_item2_url=?,
+	                           hero_box_item3_icon=?,
+	                           hero_box_item3_title=?,
+	                           hero_box_item3_subtitle=?,
+	                           hero_box_item3_url=?,
+	                           hero_box_item4_icon=?,
+	                           hero_box_item4_title=?,
+	                           hero_box_item4_subtitle=?,
+	                           hero_box_item4_url=?,
+	                           hero_box_btn_text=?,
+	                           hero_box_btn_url=?
 	                           WHERE id=1");
 	$statement->execute(array(
 		$_POST['home_title_service'] ?? '',
@@ -248,7 +295,30 @@ if(isset($_POST['form7'])) {
 		$home_status_news,
 		$_POST['home_title_partner'] ?? '',
 		$_POST['home_subtitle_partner'] ?? '',
-		$home_status_partner
+		$home_status_partner,
+		$hero_box_status,
+		$hero_box_badge_left,
+		$hero_box_badge_right,
+		$hero_box_title,
+		$hero_box_desc,
+		$hero_box_item1_icon,
+		$hero_box_item1_title,
+		$hero_box_item1_subtitle,
+		$hero_box_item1_url,
+		$hero_box_item2_icon,
+		$hero_box_item2_title,
+		$hero_box_item2_subtitle,
+		$hero_box_item2_url,
+		$hero_box_item3_icon,
+		$hero_box_item3_title,
+		$hero_box_item3_subtitle,
+		$hero_box_item3_url,
+		$hero_box_item4_icon,
+		$hero_box_item4_title,
+		$hero_box_item4_subtitle,
+		$hero_box_item4_url,
+		$hero_box_btn_text,
+		$hero_box_btn_url
 	));
 
 	$success_message = 'Os títulos, subtítulos e status das seções da Home foram atualizados com sucesso.';
@@ -340,6 +410,29 @@ $home_status_news                = $row['home_status_news'] ?? 0;
 $home_title_partner              = $row['home_title_partner'] ?? '';
 $home_subtitle_partner           = $row['home_subtitle_partner'] ?? '';
 $home_status_partner             = $row['home_status_partner'] ?? 0;
+$hero_box_status                = intval($row['hero_box_status'] ?? 1);
+$hero_box_badge_left            = $row['hero_box_badge_left'] ?? 'ATENDIMENTO ÁGIL';
+$hero_box_badge_right           = $row['hero_box_badge_right'] ?? 'Retorno Rápido';
+$hero_box_title                 = $row['hero_box_title'] ?? 'Agendamento em 1 Minuto';
+$hero_box_desc                  = $row['hero_box_desc'] ?? 'Escolha o serviço desejado e fale diretamente com a nossa recepção:';
+$hero_box_item1_icon            = $row['hero_box_item1_icon'] ?? 'fas fa-user-md';
+$hero_box_item1_title           = $row['hero_box_item1_title'] ?? 'Consultas';
+$hero_box_item1_subtitle        = $row['hero_box_item1_subtitle'] ?? 'Diversas Áreas';
+$hero_box_item1_url             = $row['hero_box_item1_url'] ?? 'servicos.php';
+$hero_box_item2_icon            = $row['hero_box_item2_icon'] ?? 'fas fa-flask';
+$hero_box_item2_title           = $row['hero_box_item2_title'] ?? 'Exames';
+$hero_box_item2_subtitle        = $row['hero_box_item2_subtitle'] ?? 'Laudos Precisos';
+$hero_box_item2_url             = $row['hero_box_item2_url'] ?? 'servicos.php';
+$hero_box_item3_icon            = $row['hero_box_item3_icon'] ?? 'fas fa-tooth';
+$hero_box_item3_title           = $row['hero_box_item3_title'] ?? 'Odontologia';
+$hero_box_item3_subtitle        = $row['hero_box_item3_subtitle'] ?? 'Tratamento Dental';
+$hero_box_item3_url             = $row['hero_box_item3_url'] ?? 'odontologia.php';
+$hero_box_item4_icon            = $row['hero_box_item4_icon'] ?? 'fas fa-id-card';
+$hero_box_item4_title           = $row['hero_box_item4_title'] ?? 'Fidelidade';
+$hero_box_item4_subtitle        = $row['hero_box_item4_subtitle'] ?? 'Até 50% Desconto';
+$hero_box_item4_url             = $row['hero_box_item4_url'] ?? 'fidelidade.php';
+$hero_box_btn_text              = $row['hero_box_btn_text'] ?? 'CONHEÇA O CARTÃO FIDELIDADE';
+$hero_box_btn_url               = $row['hero_box_btn_url'] ?? 'fidelidade.php';
 $color                           = $row['color'] ?? '0a6b74';
 $preloader                       = $row['preloader'] ?? 0;
 $frontend_dark_mode_status       = intval($row['frontend_dark_mode_status'] ?? 1);
@@ -933,6 +1026,156 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 							</div>
 
 							<div class="row g-4">
+
+								<!-- 0. Box Fixo na Hero (Card de Agendamento Rápido em 1 Minuto) -->
+								<div class="col-12">
+									<div class="card border border-primary shadow-sm">
+										<div class="card-header bg-primary-subtle d-flex flex-wrap align-items-center justify-content-between py-2 px-3">
+											<span class="fw-bold text-primary fs-6">
+												<i class="bi bi-layout-sidebar-inset me-1"></i> Box Fixo da Hero (Card de Agendamento Rápido em 1 Minuto)
+											</span>
+											<div class="d-flex align-items-center gap-2">
+												<span class="small fw-semibold text-muted">Exibir Card na Hero:</span>
+												<div class="form-check form-switch m-0">
+													<input class="form-check-input" type="checkbox" name="hero_box_status" value="1" id="swHeroBox" <?= ($hero_box_status == 1) ? 'checked' : ''; ?>>
+												</div>
+											</div>
+										</div>
+										<div class="card-body">
+											<div class="row g-3 mb-3">
+												<div class="col-md-3">
+													<label class="form-label small fw-semibold mb-1">Badge Superior Esquerdo</label>
+													<input type="text" name="hero_box_badge_left" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_badge_left); ?>" placeholder="Ex: ATENDIMENTO ÁGIL">
+												</div>
+												<div class="col-md-3">
+													<label class="form-label small fw-semibold mb-1">Badge Superior Direito</label>
+													<input type="text" name="hero_box_badge_right" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_badge_right); ?>" placeholder="Ex: Retorno Rápido">
+												</div>
+												<div class="col-md-6">
+													<label class="form-label small fw-semibold mb-1">Título do Box</label>
+													<input type="text" name="hero_box_title" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_title); ?>" placeholder="Ex: Agendamento em 1 Minuto">
+												</div>
+												<div class="col-12">
+													<label class="form-label small fw-semibold mb-1">Descrição / Instrução</label>
+													<input type="text" name="hero_box_desc" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_desc); ?>" placeholder="Ex: Escolha o serviço desejado e fale diretamente com a nossa recepção:">
+												</div>
+											</div>
+
+											<h6 class="fw-bold text-body-secondary border-bottom pb-2 mb-3 small text-uppercase">
+												<i class="bi bi-grid-fill text-primary me-1"></i> 4 Botões de Acesso Rápido do Card
+											</h6>
+
+											<div class="row g-3 mb-3">
+												<!-- Item 1 -->
+												<div class="col-md-6 col-lg-3">
+													<div class="p-2 border rounded bg-body-tertiary">
+														<span class="badge bg-secondary mb-2">Botão 1</span>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
+															<input type="text" name="hero_box_item1_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item1_icon); ?>" placeholder="fas fa-user-md">
+														</div>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Título</label>
+															<input type="text" name="hero_box_item1_title" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item1_title); ?>" placeholder="Consultas">
+														</div>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Subtítulo</label>
+															<input type="text" name="hero_box_item1_subtitle" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item1_subtitle); ?>" placeholder="Diversas Áreas">
+														</div>
+														<div class="mb-0">
+															<label class="form-label extra-small fw-semibold mb-0">Link / Destino</label>
+															<input type="text" name="hero_box_item1_url" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item1_url); ?>" placeholder="servicos.php">
+														</div>
+													</div>
+												</div>
+
+												<!-- Item 2 -->
+												<div class="col-md-6 col-lg-3">
+													<div class="p-2 border rounded bg-body-tertiary">
+														<span class="badge bg-secondary mb-2">Botão 2</span>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
+															<input type="text" name="hero_box_item2_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item2_icon); ?>" placeholder="fas fa-flask">
+														</div>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Título</label>
+															<input type="text" name="hero_box_item2_title" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item2_title); ?>" placeholder="Exames">
+														</div>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Subtítulo</label>
+															<input type="text" name="hero_box_item2_subtitle" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item2_subtitle); ?>" placeholder="Laudos Precisos">
+														</div>
+														<div class="mb-0">
+															<label class="form-label extra-small fw-semibold mb-0">Link / Destino</label>
+															<input type="text" name="hero_box_item2_url" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item2_url); ?>" placeholder="servicos.php">
+														</div>
+													</div>
+												</div>
+
+												<!-- Item 3 -->
+												<div class="col-md-6 col-lg-3">
+													<div class="p-2 border rounded bg-body-tertiary">
+														<span class="badge bg-secondary mb-2">Botão 3</span>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
+															<input type="text" name="hero_box_item3_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item3_icon); ?>" placeholder="fas fa-tooth">
+														</div>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Título</label>
+															<input type="text" name="hero_box_item3_title" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item3_title); ?>" placeholder="Odontologia">
+														</div>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Subtítulo</label>
+															<input type="text" name="hero_box_item3_subtitle" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item3_subtitle); ?>" placeholder="Tratamento Dental">
+														</div>
+														<div class="mb-0">
+															<label class="form-label extra-small fw-semibold mb-0">Link / Destino</label>
+															<input type="text" name="hero_box_item3_url" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item3_url); ?>" placeholder="odontologia.php">
+														</div>
+													</div>
+												</div>
+
+												<!-- Item 4 -->
+												<div class="col-md-6 col-lg-3">
+													<div class="p-2 border rounded bg-body-tertiary">
+														<span class="badge bg-secondary mb-2">Botão 4</span>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
+															<input type="text" name="hero_box_item4_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item4_icon); ?>" placeholder="fas fa-id-card">
+														</div>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Título</label>
+															<input type="text" name="hero_box_item4_title" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item4_title); ?>" placeholder="Fidelidade">
+														</div>
+														<div class="mb-1">
+															<label class="form-label extra-small fw-semibold mb-0">Subtítulo</label>
+															<input type="text" name="hero_box_item4_subtitle" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item4_subtitle); ?>" placeholder="Até 50% Desconto">
+														</div>
+														<div class="mb-0">
+															<label class="form-label extra-small fw-semibold mb-0">Link / Destino</label>
+															<input type="text" name="hero_box_item4_url" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item4_url); ?>" placeholder="fidelidade.php">
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<h6 class="fw-bold text-body-secondary border-bottom pb-2 mb-3 small text-uppercase">
+												<i class="bi bi-box-arrow-up-right text-primary me-1"></i> Botão Inferior de Ação Principal (CTA)
+											</h6>
+
+											<div class="row g-3">
+												<div class="col-md-6">
+													<label class="form-label small fw-semibold mb-1">Texto do Botão CTA</label>
+													<input type="text" name="hero_box_btn_text" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_btn_text); ?>" placeholder="Ex: CONHEÇA O CARTÃO FIDELIDADE">
+												</div>
+												<div class="col-md-6">
+													<label class="form-label small fw-semibold mb-1">Link / Destino do Botão CTA</label>
+													<input type="text" name="hero_box_btn_url" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_btn_url); ?>" placeholder="Ex: fidelidade.php">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 
 								<!-- 1. Serviços -->
 								<div class="col-md-6 col-xl-4">

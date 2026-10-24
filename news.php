@@ -120,16 +120,23 @@ $news_banner_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ?
 						</div>
 					</article>
 
-					<!-- Comentários -->
-					<div style="background: #ffffff; border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; margin-bottom: 30px;">
-						<h3 style="font-size: 19px; font-weight: 800; color: #0a6b74; margin-top: 0; margin-bottom: 16px;">
-							<i class="far fa-comments me-2"></i> Comentários e Opiniões
-						</h3>
-						<?php
-						$final_url = BASE_URL . 'news/' . $_REQUEST['slug'];
-						?>
-						<div class="fb-comments" data-href="<?php echo $final_url; ?>" data-numposts="5" data-width="100%"></div>
+					<!-- Comentários do Facebook (Dinâmico / Paginado pelo Painel Admin) -->
+					<?php if(!isset($fb_comment_status) || $fb_comment_status == 1): 
+						$final_url = BASE_URL . 'news/' . htmlspecialchars($_REQUEST['slug']);
+						$limit_posts = !empty($fb_comment_numposts) ? intval($fb_comment_numposts) : 5;
+					?>
+					<div class="ps-fb-comments-card" style="background: var(--ps-card-bg, #ffffff); border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid var(--ps-border, #e2e8f0); margin-bottom: 30px;">
+						<div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+							<h3 style="font-size: 19px; font-weight: 800; color: var(--ps-primary, #0a6b74); margin: 0;">
+								<i class="far fa-comments me-2"></i> Comentários e Opiniões
+							</h3>
+							<span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill small">
+								<i class="fab fa-facebook me-1"></i> Facebook
+							</span>
+						</div>
+						<div class="fb-comments" data-href="<?php echo $final_url; ?>" data-numposts="<?php echo $limit_posts; ?>" data-width="100%"></div>
 					</div>
+					<?php endif; ?>
 					<!-- Post Item End -->
 
 				</div>

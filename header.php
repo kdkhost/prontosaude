@@ -78,6 +78,31 @@ $home_status_news            = $row['home_status_news'] ?? 0;
 $home_title_partner          = $row['home_title_partner'] ?? '';
 $home_status_partner         = $row['home_status_partner'] ?? 0;
 
+// Box de Atendimento Rápido da Hero (Configurável no Painel Admin)
+$hero_box_status        = (int)($row['hero_box_status'] ?? 1);
+$hero_box_badge_left    = $row['hero_box_badge_left'] ?? 'ATENDIMENTO ÁGIL';
+$hero_box_badge_right   = $row['hero_box_badge_right'] ?? 'Retorno Rápido';
+$hero_box_title         = $row['hero_box_title'] ?? 'Agendamento em 1 Minuto';
+$hero_box_desc          = $row['hero_box_desc'] ?? 'Escolha o serviço desejado e fale diretamente com a nossa recepção:';
+$hero_box_item1_icon    = $row['hero_box_item1_icon'] ?? 'fas fa-user-md';
+$hero_box_item1_title   = $row['hero_box_item1_title'] ?? 'Consultas';
+$hero_box_item1_subtitle= $row['hero_box_item1_subtitle'] ?? 'Diversas Áreas';
+$hero_box_item1_url     = $row['hero_box_item1_url'] ?? 'servicos.php';
+$hero_box_item2_icon    = $row['hero_box_item2_icon'] ?? 'fas fa-flask';
+$hero_box_item2_title   = $row['hero_box_item2_title'] ?? 'Exames';
+$hero_box_item2_subtitle= $row['hero_box_item2_subtitle'] ?? 'Laudos Precisos';
+$hero_box_item2_url     = $row['hero_box_item2_url'] ?? 'servicos.php';
+$hero_box_item3_icon    = $row['hero_box_item3_icon'] ?? 'fas fa-tooth';
+$hero_box_item3_title   = $row['hero_box_item3_title'] ?? 'Odontologia';
+$hero_box_item3_subtitle= $row['hero_box_item3_subtitle'] ?? 'Tratamento Dental';
+$hero_box_item3_url     = $row['hero_box_item3_url'] ?? 'odontologia.php';
+$hero_box_item4_icon    = $row['hero_box_item4_icon'] ?? 'fas fa-id-card';
+$hero_box_item4_title   = $row['hero_box_item4_title'] ?? 'Fidelidade';
+$hero_box_item4_subtitle= $row['hero_box_item4_subtitle'] ?? 'Até 50% Desconto';
+$hero_box_item4_url     = $row['hero_box_item4_url'] ?? 'fidelidade.php';
+$hero_box_btn_text      = $row['hero_box_btn_text'] ?? 'CONHEÇA O CARTÃO FIDELIDADE';
+$hero_box_btn_url       = $row['hero_box_btn_url'] ?? 'fidelidade.php';
+
 // Controle do Tema Dark/Light no Portal Público
 $frontend_dark_mode_status = (int)($row['frontend_dark_mode_status'] ?? 1);
 
@@ -421,13 +446,23 @@ $email   = $row2['dep_email'] ?? '';
     <body class="ps-foco-body" id="inicio">
 
         <?php
-        // Facebook comment code from database
+        // Facebook comment SDK integration from database
         try {
-            $statement = $pdo->prepare("SELECT * FROM tbl_comment WHERE id=1");
-            $statement->execute();
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-                echo $row['code_body'] ?? '';
+            $st_comm = $pdo->prepare("SELECT * FROM tbl_comment WHERE id=1");
+            $st_comm->execute();
+            $comm_row = $st_comm->fetch(PDO::FETCH_ASSOC);
+            $fb_comment_status   = (int)($comm_row['fb_comment_status'] ?? 1);
+            $fb_comment_numposts = (int)($comm_row['fb_comment_numposts'] ?? 5);
+            $fb_app_id           = $comm_row['fb_app_id'] ?? '';
+            $fb_code_body        = trim($comm_row['code_body'] ?? '');
+
+            if ($fb_comment_status == 1) {
+                if (!empty($fb_code_body)) {
+                    echo $fb_code_body;
+                } else {
+                    $appIdParam = !empty($fb_app_id) ? '&appId=' . htmlspecialchars($fb_app_id) : '';
+                    echo '<div id="fb-root"></div><script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v19.0' . $appIdParam . '"></script>';
+                }
             }
         } catch (Exception $e) {}
         ?>

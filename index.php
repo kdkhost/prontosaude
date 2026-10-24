@@ -63,7 +63,7 @@ if (function_exists('pronto_is_page_active')) {
                     <div class="container position-relative">
                         <div class="row align-items-center">
                             <!-- Coluna Esquerda: Apresentação & Ação Principal -->
-                            <div class="col-lg-7 text-start py-3">
+                            <div class="<?= ($hero_box_status == 1) ? 'col-lg-7' : 'col-lg-10 col-xl-9'; ?> text-start py-3">
                                 <div class="hero-badge">
                                     <i class="fas fa-heartbeat me-2"></i> Pronto Saúde • Cuidado Integral
                                 </div>
@@ -73,6 +73,13 @@ if (function_exists('pronto_is_page_active')) {
                                 <div class="hero-desc">
                                     <?= nl2br(htmlspecialchars($slide['subheading'] ?? 'Consultas e exames completos com tecnologia avançada, corpo clínico qualificado e atendimento humanizado no Rio de Janeiro.')); ?>
                                 </div>
+                                <?php if(!empty($slide['content'])):
+                                    $clean_slide_content = trim($slide['content']);
+                                    if(!empty($clean_slide_content)): ?>
+                                    <div class="hero-content-extra mb-3">
+                                        <?= nl2br(htmlspecialchars($clean_slide_content)); ?>
+                                    </div>
+                                <?php endif; endif; ?>
                                 <div class="hero-btn-group d-flex flex-wrap gap-2">
                                     <a href="<?= htmlspecialchars($btn_url); ?>" target="_blank" rel="noopener noreferrer" class="btn-foco-primary">
                                         <i class="fas fa-calendar-check"></i> <?= htmlspecialchars($btn_text); ?>
@@ -83,52 +90,61 @@ if (function_exists('pronto_is_page_active')) {
                                 </div>
                             </div>
 
-                            <!-- Coluna Direita: Card de Agendamento Rápido em 1 Minuto -->
+                            <?php if($hero_box_status == 1): 
+                                $btn1_url = !empty($hero_box_item1_url) ? (strpos($hero_box_item1_url, 'http') === 0 ? $hero_box_item1_url : BASE_URL . ltrim($hero_box_item1_url, '/')) : BASE_URL . 'servicos.php';
+                                $btn2_url = !empty($hero_box_item2_url) ? (strpos($hero_box_item2_url, 'http') === 0 ? $hero_box_item2_url : BASE_URL . ltrim($hero_box_item2_url, '/')) : BASE_URL . 'servicos.php';
+                                $btn3_url = !empty($hero_box_item3_url) ? (strpos($hero_box_item3_url, 'http') === 0 ? $hero_box_item3_url : BASE_URL . ltrim($hero_box_item3_url, '/')) : BASE_URL . 'odontologia.php';
+                                $btn4_url = !empty($hero_box_item4_url) ? (strpos($hero_box_item4_url, 'http') === 0 ? $hero_box_item4_url : BASE_URL . ltrim($hero_box_item4_url, '/')) : BASE_URL . 'fidelidade.php';
+                                $cta_url  = !empty($hero_box_btn_url) ? (strpos($hero_box_btn_url, 'http') === 0 ? $hero_box_btn_url : BASE_URL . ltrim($hero_box_btn_url, '/')) : BASE_URL . 'fidelidade.php';
+                            ?>
+                            <!-- Coluna Direita: Card de Agendamento Rápido em 1 Minuto (Configurável no Admin) -->
                             <div class="col-lg-5 text-center mt-3 mt-lg-0 py-2">
                                 <div class="card-simulacao-hero">
                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                         <span class="badge rounded-pill px-3 py-1 text-white fw-bold" style="background: var(--ps-primary); font-size: 0.76rem;">
-                                            ATENDIMENTO ÁGIL
+                                            <?= htmlspecialchars($hero_box_badge_left ?: 'ATENDIMENTO ÁGIL'); ?>
                                         </span>
-                                        <span class="small fw-semibold text-success"><i class="fas fa-bolt me-1"></i> Retorno Rápido</span>
+                                        <span class="small fw-semibold text-success"><i class="fas fa-bolt me-1"></i> <?= htmlspecialchars($hero_box_badge_right ?: 'Retorno Rápido'); ?></span>
                                     </div>
-                                    <h5 class="fw-bold mb-1 text-start" style="color: var(--ps-title);">Agendamento em 1 Minuto</h5>
-                                    <p class="small text-muted mb-3 text-start">Escolha o serviço desejado e fale diretamente com a nossa recepção:</p>
+                                    <h5 class="fw-bold mb-1 text-start" style="color: var(--ps-title);"><?= htmlspecialchars($hero_box_title ?: 'Agendamento em 1 Minuto'); ?></h5>
+                                    <p class="small text-muted mb-3 text-start"><?= htmlspecialchars($hero_box_desc ?: 'Escolha o serviço desejado e fale diretamente com a nossa recepção:'); ?></p>
                                     
                                     <div class="row g-2 mb-3">
                                         <div class="col-6">
-                                            <a href="<?= BASE_URL; ?>servicos.php" class="btn-tipo-veiculo">
-                                                <i class="fas fa-user-md fs-4 d-block mb-1"></i>
-                                                <span class="fw-bold d-block small">Consultas</span>
-                                                <span class="text-muted" style="font-size: 0.72rem;">Diversas Áreas</span>
+                                            <a href="<?= htmlspecialchars($btn1_url); ?>" class="btn-tipo-veiculo">
+                                                <i class="<?= htmlspecialchars($hero_box_item1_icon ?: 'fas fa-user-md'); ?> fs-4 d-block mb-1"></i>
+                                                <span class="fw-bold d-block small"><?= htmlspecialchars($hero_box_item1_title ?: 'Consultas'); ?></span>
+                                                <span class="text-muted" style="font-size: 0.72rem;"><?= htmlspecialchars($hero_box_item1_subtitle ?: 'Diversas Áreas'); ?></span>
                                             </a>
                                         </div>
                                         <div class="col-6">
-                                            <a href="<?= BASE_URL; ?>servicos.php" class="btn-tipo-veiculo">
-                                                <i class="fas fa-flask fs-4 d-block mb-1"></i>
-                                                <span class="fw-bold d-block small">Exames</span>
-                                                <span class="text-muted" style="font-size: 0.72rem;">Laudos Precisos</span>
+                                            <a href="<?= htmlspecialchars($btn2_url); ?>" class="btn-tipo-veiculo">
+                                                <i class="<?= htmlspecialchars($hero_box_item2_icon ?: 'fas fa-flask'); ?> fs-4 d-block mb-1"></i>
+                                                <span class="fw-bold d-block small"><?= htmlspecialchars($hero_box_item2_title ?: 'Exames'); ?></span>
+                                                <span class="text-muted" style="font-size: 0.72rem;"><?= htmlspecialchars($hero_box_item2_subtitle ?: 'Laudos Precisos'); ?></span>
                                             </a>
                                         </div>
                                         <div class="col-6">
-                                            <a href="<?= BASE_URL; ?>odontologia.php" class="btn-tipo-veiculo">
-                                                <i class="fas fa-tooth fs-4 d-block mb-1"></i>
-                                                <span class="fw-bold d-block small">Odontologia</span>
-                                                <span class="text-muted" style="font-size: 0.72rem;">Tratamento Dental</span>
+                                            <a href="<?= htmlspecialchars($btn3_url); ?>" class="btn-tipo-veiculo">
+                                                <i class="<?= htmlspecialchars($hero_box_item3_icon ?: 'fas fa-tooth'); ?> fs-4 d-block mb-1"></i>
+                                                <span class="fw-bold d-block small"><?= htmlspecialchars($hero_box_item3_title ?: 'Odontologia'); ?></span>
+                                                <span class="text-muted" style="font-size: 0.72rem;"><?= htmlspecialchars($hero_box_item3_subtitle ?: 'Tratamento Dental'); ?></span>
                                             </a>
                                         </div>
                                         <div class="col-6">
-                                            <a href="<?= BASE_URL; ?>fidelidade.php" class="btn-tipo-veiculo">
-                                                <i class="fas fa-id-card fs-4 d-block mb-1"></i>
-                                                <span class="fw-bold d-block small">Fidelidade</span>
-                                                <span class="text-muted" style="font-size: 0.72rem;">Até 50% Desconto</span>
+                                            <a href="<?= htmlspecialchars($btn4_url); ?>" class="btn-tipo-veiculo">
+                                                <i class="<?= htmlspecialchars($hero_box_item4_icon ?: 'fas fa-id-card'); ?> fs-4 d-block mb-1"></i>
+                                                <span class="fw-bold d-block small"><?= htmlspecialchars($hero_box_item4_title ?: 'Fidelidade'); ?></span>
+                                                <span class="text-muted" style="font-size: 0.72rem;"><?= htmlspecialchars($hero_box_item4_subtitle ?: 'Até 50% Desconto'); ?></span>
                                             </a>
                                         </div>
                                     </div>
-                                    <a href="<?= BASE_URL; ?>fidelidade.php" class="btn-foco-primary w-100 justify-content-center py-2" style="font-size: 0.88rem;">
-                                        <i class="fas fa-shield-alt"></i> CONHEÇA O CARTÃO FIDELIDADE
+                                    <a href="<?= htmlspecialchars($cta_url); ?>" class="btn-foco-primary w-100 justify-content-center py-2" style="font-size: 0.88rem;">
+                                        <i class="fas fa-shield-alt"></i> <?= htmlspecialchars($hero_box_btn_text ?: 'CONHEÇA O CARTÃO FIDELIDADE'); ?>
                                     </a>
                                 </div>
+                            </div>
+                            <?php endif; ?>
                             </div>
                         </div>
                     </div>

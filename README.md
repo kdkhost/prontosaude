@@ -98,6 +98,21 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - **Página de Configurações Geral (`admin/settings.php`) Totalmente Reformulada:** Barra de abas com scroll suave horizontal (`.ps-tabs-scrollable`), 10 seções categorizadas por ícones, upload Drag & Drop para Logo e Favicon com mockup de navegador, busca inteligente por CEP com auto focus no número, prévia de mapa Google Maps, simulador de busca Google SERP com contadores de caracteres, seletor de cores com paletas rápidas do Pronto Saúde e controle de seções da Home com switches visuais.
   - Persistência e restauração automática da aba ativa (`$active_tab`) em todos os formulários submetidos via POST e sincronização bidirecional com a URL hash (`#tab_1` a `#tab_10`).
   - Interceptação global de `window.alert` e `window.confirm` com SweetAlert2 e Toastr em 100% dos fluxos do sistema.
+- **Gestão Integral de Sliders Hero (`admin/slider.php`, `admin/slider-edit.php`, `admin/slider-add.php`):**
+  - Correção definitiva do erro de contagem de colunas do DataTables (`Incorrect column count`), alinhando 10 colunas em `<thead>` e `<tbody>`.
+  - Edição completa de conteúdo do slider (`heading`, `subheading`, `content`, `button_text`, `button_url`, `position`, `status`, `photo`) com persistência em campo `TEXT`.
+  - Renderização fluida do conteúdo textual (`hero-content-extra`) no slide da página principal (`index.php`) com contraste balanceado em modo claro e escuro.
+  - Exclusão com confirmação global humanizada via SweetAlert2 e switches assíncronos de ativação.
+- **Box Fixo de Atendimento Rápido na Hero 100% Editável pelo Painel Admin:**
+  - Card de agendamento em 1 minuto fixo na Hero totalmente dinâmico, parametrizado em `tbl_settings` e gerenciável na aba "Seções Home" (`admin/settings.php`).
+  - Customização de badges (esquerdo/direito), título, descrição, 4 botões de especialidades (ícones FontAwesome, títulos, subtítulos e destinos) e botão CTA principal.
+  - Opção de ativar ou desativar o box, expandindo a apresentação principal da Hero quando inativo.
+- **Refatoração e Edição Completa da Navegação e Menus (`admin/menu.php` e `admin/menu-edit.php`):**
+  - Criação da página `admin/menu-edit.php` para edição integral de nome, tipo (Página, Categoria, Outro/Personalizado), slug de destino, URL externa, menu pai e ordem.
+  - Refatoração da listagem em `admin/menu.php` com botão de edição direta, badges de hierarquia visual e exclusão segura com SweetAlert2.
+- **Integração Facilitada e Paginação dos Comentários do Facebook (`admin/comment.php` e `news.php`):**
+  - Painel facilitado para controle de comentários do Facebook: switch de ativação/desativação, campo para Facebook App ID, gerador inteligente de código SDK padrão em português (`pt_BR`) e controle de paginação de comentários (`data-numposts`) com botões rápidos (3, 5, 10, 15, 20).
+  - Exibição dinâmica da caixa de comentários em cada post do blog (`news.php`), com a URL canônica do artigo e a quantidade limite de comentários por página configurada no admin.
 - **Gestão e Customização Total de Cards (Serviços, Planos e Produtos):**
   - **100% Configurável pelo Painel Admin:** Fim de imagens, links e textos fixos no código-fonte. Tudo é editável em tempo real nos módulos de Serviços (`admin/service.php`), Planos (`admin/pricing-plan.php`) e Odontologia (`admin/dental.php`).
   - **Upload Dinâmico com Preview:** Upload por arrastar e soltar (Drag & Drop) de fotos e ilustrações sem dependência de caminhos estáticos.
