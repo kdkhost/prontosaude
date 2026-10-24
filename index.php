@@ -166,104 +166,110 @@ if (function_exists('pronto_is_page_active')) {
 <!-- ==============================================================================
      2. DIFERENCIAIS CLÍNICOS & SAÚDE PREVENTIVA (DENSE & ROBUST)
      ============================================================================== -->
+<?php if (!empty($home_risco_status) && $home_risco_status == 1): ?>
 <section id="riscos" class="section-risco">
     <div class="container">
         <div class="text-center max-w-700 mx-auto section-header-compact">
             <span class="fw-bold text-uppercase small letter-spacing-1" style="color: var(--ps-primary);">
-                Saúde Preventiva &amp; Cuidado Integrado
+                <?= htmlspecialchars($home_risco_badge ?: 'Saúde Preventiva & Cuidado Integrado'); ?>
             </span>
-            <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);">O cuidado com sua saúde não pode esperar</h2>
-            <p class="text-muted small mb-0">Prevenção e diagnóstico precoce garantem longevidade e bem-estar para você e sua família.</p>
+            <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);"><?= htmlspecialchars($home_risco_title ?: 'O cuidado com sua saúde não pode esperar'); ?></h2>
+            <p class="text-muted small mb-0"><?= nl2br(htmlspecialchars($home_risco_subtitle ?: 'Prevenção e diagnóstico precoce garantem longevidade e bem-estar para você e sua família.')); ?></p>
         </div>
         <div class="row g-3">
             <div class="col-md-4">
                 <div class="card-risco">
-                    <div class="icon-risco"><i class="fas fa-stethoscope"></i></div>
-                    <h5 class="fw-bold mb-2" style="color: var(--ps-title);">Diagnóstico Ágil e Preciso</h5>
-                    <p class="text-muted small mb-3">Consultas especializadas e exames no mesmo endereço, sem perda de tempo e com tecnologia digital integrada.</p>
+                    <div class="icon-risco"><i class="<?= htmlspecialchars($home_risco_item1_icon ?: 'fas fa-stethoscope'); ?>"></i></div>
+                    <h5 class="fw-bold mb-2" style="color: var(--ps-title);"><?= htmlspecialchars($home_risco_item1_title ?: 'Diagnóstico Ágil e Preciso'); ?></h5>
+                    <p class="text-muted small mb-3"><?= nl2br(htmlspecialchars($home_risco_item1_desc ?: 'Consultas especializadas e exames no mesmo endereço, sem perda de tempo e com tecnologia digital integrada.')); ?></p>
                     <div class="d-flex align-items-center fw-semibold small" style="color: var(--ps-primary);">
-                        <i class="fas fa-check-circle me-2 text-success"></i> Laudos rápidos e confiáveis.
+                        <i class="fas fa-check-circle me-2 text-success"></i> <?= htmlspecialchars($home_risco_item1_highlight ?: 'Laudos rápidos e confiáveis.'); ?>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card-risco">
-                    <div class="icon-risco"><i class="fas fa-user-doctor"></i></div>
-                    <h5 class="fw-bold mb-2" style="color: var(--ps-title);">Corpo Clínico Humanizado</h5>
-                    <p class="text-muted small mb-3">Médicos especialistas dedicados a ouvir com empatia e construir um plano terapêutico individualizado.</p>
+                    <div class="icon-risco"><i class="<?= htmlspecialchars($home_risco_item2_icon ?: 'fas fa-user-doctor'); ?>"></i></div>
+                    <h5 class="fw-bold mb-2" style="color: var(--ps-title);"><?= htmlspecialchars($home_risco_item2_title ?: 'Corpo Clínico Humanizado'); ?></h5>
+                    <p class="text-muted small mb-3"><?= nl2br(htmlspecialchars($home_risco_item2_desc ?: 'Médicos especialistas dedicados a ouvir com empatia e construir um plano terapêutico individualizado.')); ?></p>
                     <div class="d-flex align-items-center fw-semibold small" style="color: var(--ps-primary);">
-                        <i class="fas fa-check-circle me-2 text-success"></i> Atendimento com hora marcada.
+                        <i class="fas fa-check-circle me-2 text-success"></i> <?= htmlspecialchars($home_risco_item2_highlight ?: 'Atendimento com hora marcada.'); ?>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card-risco">
-                    <div class="icon-risco"><i class="fas fa-wallet"></i></div>
-                    <h5 class="fw-bold mb-2" style="color: var(--ps-title);">Economia Sem Carências</h5>
-                    <p class="text-muted small mb-3">Acesso a saúde de alta qualidade sem as mensalidades exorbitantes e sem as carências dos planos tradicionais.</p>
+                    <div class="icon-risco"><i class="<?= htmlspecialchars($home_risco_item3_icon ?: 'fas fa-wallet'); ?>"></i></div>
+                    <h5 class="fw-bold mb-2" style="color: var(--ps-title);"><?= htmlspecialchars($home_risco_item3_title ?: 'Economia Sem Carências'); ?></h5>
+                    <p class="text-muted small mb-3"><?= nl2br(htmlspecialchars($home_risco_item3_desc ?: 'Acesso a saúde de alta qualidade sem as mensalidades exorbitantes e sem as carências dos planos tradicionais.')); ?></p>
                     <div class="d-flex align-items-center fw-semibold small" style="color: var(--ps-primary);">
-                        <i class="fas fa-check-circle me-2 text-success"></i> Descontos reais de até 50%.
+                        <i class="fas fa-check-circle me-2 text-success"></i> <?= htmlspecialchars($home_risco_item3_highlight ?: 'Descontos reais de até 50%.'); ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <!-- ==============================================================================
      3. QUEM SOMOS E AUTORIDADE MÉDICA (ESTRUTURA INTEGRADA)
      ============================================================================== -->
+<?php if (!empty($home_about_status) && $home_about_status == 1): 
+    $about_btn1_href = !empty($home_about_btn1_url) ? (strpos($home_about_btn1_url, 'http') === 0 ? $home_about_btn1_url : BASE_URL . ltrim($home_about_btn1_url, '/')) : BASE_URL . 'page/sobre';
+    $about_btn2_href = !empty($home_about_btn2_url) ? (strpos($home_about_btn2_url, 'http') === 0 ? $home_about_btn2_url : BASE_URL . ltrim($home_about_btn2_url, '/')) : 'https://wa.me/' . $whats_clean . '?text=' . urlencode('Olá! Gostaria de agendar uma visita ou atendimento na Pronto Saúde.');
+?>
 <section id="sobre" class="section-sobre">
     <div class="container">
         <div class="row align-items-center g-4">
             <div class="col-lg-6">
-                <span class="fw-bold text-uppercase small" style="color: var(--ps-primary);">Centro Médico Moderno</span>
-                <h2 class="h3 fw-bold mt-1 mb-3" style="color: var(--ps-title);">Referência em Cuidados Médicos e Odontológicos</h2>
-                <p class="text-muted small leading-relaxed mb-4">
-                    A <strong class="text-dark">Pronto Saúde</strong> nasceu com o propósito de aproximar a excelência médica da comunidade. Contamos com consultórios modernos, equipamentos de alta tecnologia e laboratório próprio de análises clínicas para oferecer atendimento completo e humanizado em um único local.
-                </p>
+                <span class="fw-bold text-uppercase small" style="color: var(--ps-primary);"><?= htmlspecialchars($home_about_badge ?: 'Centro Médico Moderno'); ?></span>
+                <h2 class="h3 fw-bold mt-1 mb-3" style="color: var(--ps-title);"><?= htmlspecialchars($home_about_title ?: 'Referência em Cuidados Médicos e Odontológicos'); ?></h2>
+                <div class="text-muted small leading-relaxed mb-4">
+                    <?= nl2br(htmlspecialchars($home_about_desc ?: 'A Pronto Saúde nasceu com o propósito de aproximar a excelência médica da comunidade. Contamos com consultórios modernos, equipamentos de alta tecnologia e laboratório próprio de análises clínicas para oferecer atendimento completo e humanizado em um único local.')); ?>
+                </div>
                 <div class="row g-2">
                     <div class="col-sm-6">
                         <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-sm border">
                             <div class="text-white rounded-3 p-2 fs-4 d-flex align-items-center justify-content-center" style="background: var(--ps-primary); width: 44px; height: 44px;">
-                                <i class="fas fa-user-md"></i>
+                                <i class="<?= htmlspecialchars($home_about_stat1_icon ?: 'fas fa-user-md'); ?>"></i>
                             </div>
                             <div>
-                                <h5 class="fw-bold mb-0" style="color: var(--ps-title);">+15 Áreas</h5>
-                                <span class="text-muted" style="font-size: 0.76rem;">Especialidades Médicas</span>
+                                <h5 class="fw-bold mb-0" style="color: var(--ps-title);"><?= htmlspecialchars($home_about_stat1_val ?: '+15 Áreas'); ?></h5>
+                                <span class="text-muted" style="font-size: 0.76rem;"><?= htmlspecialchars($home_about_stat1_lbl ?: 'Especialidades Médicas'); ?></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-sm border">
                             <div class="text-white rounded-3 p-2 fs-4 d-flex align-items-center justify-content-center" style="background: var(--ps-primary); width: 44px; height: 44px;">
-                                <i class="fas fa-hospital-user"></i>
+                                <i class="<?= htmlspecialchars($home_about_stat2_icon ?: 'fas fa-hospital-user'); ?>"></i>
                             </div>
                             <div>
-                                <h5 class="fw-bold mb-0" style="color: var(--ps-title);">+10.000</h5>
-                                <span class="text-muted" style="font-size: 0.76rem;">Pacientes Atendidos</span>
+                                <h5 class="fw-bold mb-0" style="color: var(--ps-title);"><?= htmlspecialchars($home_about_stat2_val ?: '+10.000'); ?></h5>
+                                <span class="text-muted" style="font-size: 0.76rem;"><?= htmlspecialchars($home_about_stat2_lbl ?: 'Pacientes Atendidos'); ?></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-sm border">
                             <div class="text-white rounded-3 p-2 fs-4 d-flex align-items-center justify-content-center" style="background: var(--ps-primary); width: 44px; height: 44px;">
-                                <i class="fas fa-star"></i>
+                                <i class="<?= htmlspecialchars($home_about_stat3_icon ?: 'fas fa-star'); ?>"></i>
                             </div>
                             <div>
-                                <h5 class="fw-bold mb-0" style="color: var(--ps-title);">98.6%</h5>
-                                <span class="text-muted" style="font-size: 0.76rem;">Satisfação Comprovada</span>
+                                <h5 class="fw-bold mb-0" style="color: var(--ps-title);"><?= htmlspecialchars($home_about_stat3_val ?: '98.6%'); ?></h5>
+                                <span class="text-muted" style="font-size: 0.76rem;"><?= htmlspecialchars($home_about_stat3_lbl ?: 'Satisfação Comprovada'); ?></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-sm border">
                             <div class="text-white rounded-3 p-2 fs-4 d-flex align-items-center justify-content-center" style="background: var(--ps-primary); width: 44px; height: 44px;">
-                                <i class="fas fa-file-medical"></i>
+                                <i class="<?= htmlspecialchars($home_about_stat4_icon ?: 'fas fa-file-medical'); ?>"></i>
                             </div>
                             <div>
-                                <h5 class="fw-bold mb-0" style="color: var(--ps-title);">100%</h5>
-                                <span class="text-muted" style="font-size: 0.76rem;">Laudos Digitais Ágeis</span>
+                                <h5 class="fw-bold mb-0" style="color: var(--ps-title);"><?= htmlspecialchars($home_about_stat4_val ?: '100%'); ?></h5>
+                                <span class="text-muted" style="font-size: 0.76rem;"><?= htmlspecialchars($home_about_stat4_lbl ?: 'Laudos Digitais Ágeis'); ?></span>
                             </div>
                         </div>
                     </div>
@@ -274,37 +280,45 @@ if (function_exists('pronto_is_page_active')) {
                 <div class="card p-4 rounded-4 shadow-sm border bg-white">
                     <div class="d-flex align-items-center gap-3 mb-3">
                         <div class="text-white p-3 rounded-circle d-flex align-items-center justify-content-center" style="background: var(--ps-primary); width: 48px; height: 48px;">
-                            <i class="fas fa-clinic-medical fs-4"></i>
+                            <i class="<?= htmlspecialchars($home_about_card_icon ?: 'fas fa-clinic-medical'); ?> fs-4"></i>
                         </div>
                         <div>
-                            <h6 class="fw-bold mb-0" style="color: var(--ps-title);">Centro Integrado Pronto Saúde</h6>
-                            <span class="text-muted" style="font-size: 0.78rem;">Gardênia Azul • Jacarepaguá • RJ</span>
+                            <h6 class="fw-bold mb-0" style="color: var(--ps-title);"><?= htmlspecialchars($home_about_card_title ?: 'Centro Integrado Pronto Saúde'); ?></h6>
+                            <span class="text-muted" style="font-size: 0.78rem;"><?= htmlspecialchars($home_about_card_subtitle ?: 'Gardênia Azul • Jacarepaguá • RJ'); ?></span>
                         </div>
                     </div>
                     <ul class="list-unstyled mb-3 small">
+                        <?php if(!empty($home_about_card_item1)): ?>
                         <li class="py-2 border-bottom d-flex align-items-center text-muted">
                             <i class="fas fa-check-circle text-success me-2 fs-6"></i>
-                            <span>Consultórios médicos climatizados, acessíveis e confortáveis</span>
+                            <span><?= htmlspecialchars($home_about_card_item1); ?></span>
                         </li>
+                        <?php endif; ?>
+                        <?php if(!empty($home_about_card_item2)): ?>
                         <li class="py-2 border-bottom d-flex align-items-center text-muted">
                             <i class="fas fa-check-circle text-success me-2 fs-6"></i>
-                            <span>Laboratório de análises clínicas com coleta humanizada</span>
+                            <span><?= htmlspecialchars($home_about_card_item2); ?></span>
                         </li>
+                        <?php endif; ?>
+                        <?php if(!empty($home_about_card_item3)): ?>
                         <li class="py-2 border-bottom d-flex align-items-center text-muted">
                             <i class="fas fa-check-circle text-success me-2 fs-6"></i>
-                            <span>Odontologia moderna com raio-x e procedimentos integrados</span>
+                            <span><?= htmlspecialchars($home_about_card_item3); ?></span>
                         </li>
+                        <?php endif; ?>
+                        <?php if(!empty($home_about_card_item4)): ?>
                         <li class="py-2 d-flex align-items-center text-muted">
                             <i class="fas fa-check-circle text-success me-2 fs-6"></i>
-                            <span>Agendamento ágil pelo WhatsApp em menos de 1 minuto</span>
+                            <span><?= htmlspecialchars($home_about_card_item4); ?></span>
                         </li>
+                        <?php endif; ?>
                     </ul>
                     <div class="d-flex gap-2">
-                        <a href="<?= BASE_URL; ?>page/sobre" class="btn btn-outline-secondary w-50 py-2 small fw-bold">
-                            <i class="fas fa-info-circle me-1"></i> Conheça Nossa História
+                        <a href="<?= htmlspecialchars($about_btn1_href); ?>" class="btn btn-outline-secondary w-50 py-2 small fw-bold">
+                            <i class="fas fa-info-circle me-1"></i> <?= htmlspecialchars($home_about_btn1_text ?: 'Conheça Nossa História'); ?>
                         </a>
-                        <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de agendar uma visita ou atendimento na Pronto Saúde.'); ?>" target="_blank" rel="noopener noreferrer" class="btn-foco-primary w-50 justify-content-center py-2" style="font-size: 0.88rem;">
-                            <i class="fab fa-whatsapp me-1"></i> Falar com Atendente
+                        <a href="<?= htmlspecialchars($about_btn2_href); ?>" target="_blank" rel="noopener noreferrer" class="btn-foco-primary w-50 justify-content-center py-2" style="font-size: 0.88rem;">
+                            <i class="fab fa-whatsapp me-1"></i> <?= htmlspecialchars($home_about_btn2_text ?: 'Falar com Atendente'); ?>
                         </a>
                     </div>
                 </div>
@@ -312,6 +326,7 @@ if (function_exists('pronto_is_page_active')) {
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <!-- ==============================================================================
      4. PLANOS E CARTÃO FIDELIDADE (RESPEITA BANCO DE DADOS: $home_status_pricing)

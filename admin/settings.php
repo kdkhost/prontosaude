@@ -204,6 +204,7 @@ if(isset($_POST['form7'])) {
 	$home_status_news = isset($_POST['home_status_news']) ? 1 : 0;
 	$home_status_partner = isset($_POST['home_status_partner']) ? 1 : 0;
 
+	// Hero Box
 	$hero_box_status        = isset($_POST['hero_box_status']) ? 1 : 0;
 	$hero_box_badge_left    = trim($_POST['hero_box_badge_left'] ?? 'ATENDIMENTO ÁGIL');
 	$hero_box_badge_right   = trim($_POST['hero_box_badge_right'] ?? 'Retorno Rápido');
@@ -227,6 +228,53 @@ if(isset($_POST['form7'])) {
 	$hero_box_item4_url     = trim($_POST['hero_box_item4_url'] ?? 'fidelidade.php');
 	$hero_box_btn_text      = trim($_POST['hero_box_btn_text'] ?? 'CONHEÇA O CARTÃO FIDELIDADE');
 	$hero_box_btn_url       = trim($_POST['hero_box_btn_url'] ?? 'fidelidade.php');
+
+	// Diferenciais Clínicos & Saúde Preventiva
+	$home_risco_status           = isset($_POST['home_risco_status']) ? 1 : 0;
+	$home_risco_badge            = trim($_POST['home_risco_badge'] ?? 'Saúde Preventiva & Cuidado Integrado');
+	$home_risco_title            = trim($_POST['home_risco_title'] ?? 'O cuidado com sua saúde não pode esperar');
+	$home_risco_subtitle         = trim($_POST['home_risco_subtitle'] ?? '');
+	$home_risco_item1_icon       = trim($_POST['home_risco_item1_icon'] ?? 'fas fa-stethoscope');
+	$home_risco_item1_title      = trim($_POST['home_risco_item1_title'] ?? 'Diagnóstico Ágil e Preciso');
+	$home_risco_item1_desc       = trim($_POST['home_risco_item1_desc'] ?? '');
+	$home_risco_item1_highlight  = trim($_POST['home_risco_item1_highlight'] ?? 'Laudos rápidos e confiáveis.');
+	$home_risco_item2_icon       = trim($_POST['home_risco_item2_icon'] ?? 'fas fa-user-doctor');
+	$home_risco_item2_title      = trim($_POST['home_risco_item2_title'] ?? 'Corpo Clínico Humanizado');
+	$home_risco_item2_desc       = trim($_POST['home_risco_item2_desc'] ?? '');
+	$home_risco_item2_highlight  = trim($_POST['home_risco_item2_highlight'] ?? 'Atendimento com hora marcada.');
+	$home_risco_item3_icon       = trim($_POST['home_risco_item3_icon'] ?? 'fas fa-wallet');
+	$home_risco_item3_title      = trim($_POST['home_risco_item3_title'] ?? 'Economia Sem Carências');
+	$home_risco_item3_desc       = trim($_POST['home_risco_item3_desc'] ?? '');
+	$home_risco_item3_highlight  = trim($_POST['home_risco_item3_highlight'] ?? 'Descontos reais de até 50%.');
+
+	// Quem Somos & Autoridade Médica / Centro Médico Moderno
+	$home_about_status          = isset($_POST['home_about_status']) ? 1 : 0;
+	$home_about_badge           = trim($_POST['home_about_badge'] ?? 'Centro Médico Moderno');
+	$home_about_title           = trim($_POST['home_about_title'] ?? 'Referência em Cuidados Médicos e Odontológicos');
+	$home_about_desc            = trim($_POST['home_about_desc'] ?? '');
+	$home_about_stat1_icon      = trim($_POST['home_about_stat1_icon'] ?? 'fas fa-user-md');
+	$home_about_stat1_val       = trim($_POST['home_about_stat1_val'] ?? '+15 Áreas');
+	$home_about_stat1_lbl       = trim($_POST['home_about_stat1_lbl'] ?? 'Especialidades Médicas');
+	$home_about_stat2_icon      = trim($_POST['home_about_stat2_icon'] ?? 'fas fa-hospital-user');
+	$home_about_stat2_val       = trim($_POST['home_about_stat2_val'] ?? '+10.000');
+	$home_about_stat2_lbl       = trim($_POST['home_about_stat2_lbl'] ?? 'Pacientes Atendidos');
+	$home_about_stat3_icon      = trim($_POST['home_about_stat3_icon'] ?? 'fas fa-star');
+	$home_about_stat3_val       = trim($_POST['home_about_stat3_val'] ?? '98.6%');
+	$home_about_stat3_lbl       = trim($_POST['home_about_stat3_lbl'] ?? 'Satisfação Comprovada');
+	$home_about_stat4_icon      = trim($_POST['home_about_stat4_icon'] ?? 'fas fa-file-medical');
+	$home_about_stat4_val       = trim($_POST['home_about_stat4_val'] ?? '100%');
+	$home_about_stat4_lbl       = trim($_POST['home_about_stat4_lbl'] ?? 'Laudos Digitais Ágeis');
+	$home_about_card_icon       = trim($_POST['home_about_card_icon'] ?? 'fas fa-clinic-medical');
+	$home_about_card_title      = trim($_POST['home_about_card_title'] ?? 'Centro Integrado Pronto Saúde');
+	$home_about_card_subtitle   = trim($_POST['home_about_card_subtitle'] ?? 'Gardênia Azul • Jacarepaguá • RJ');
+	$home_about_card_item1      = trim($_POST['home_about_card_item1'] ?? '');
+	$home_about_card_item2      = trim($_POST['home_about_card_item2'] ?? '');
+	$home_about_card_item3      = trim($_POST['home_about_card_item3'] ?? '');
+	$home_about_card_item4      = trim($_POST['home_about_card_item4'] ?? '');
+	$home_about_btn1_text       = trim($_POST['home_about_btn1_text'] ?? 'Conheça Nossa História');
+	$home_about_btn1_url        = trim($_POST['home_about_btn1_url'] ?? 'page/sobre');
+	$home_about_btn2_text       = trim($_POST['home_about_btn2_text'] ?? 'Falar com Atendente');
+	$home_about_btn2_url        = trim($_POST['home_about_btn2_url'] ?? '');
 
 	$statement = $pdo->prepare("UPDATE tbl_settings SET 
 	                           home_title_service=?, 
@@ -272,7 +320,50 @@ if(isset($_POST['form7'])) {
 	                           hero_box_item4_subtitle=?,
 	                           hero_box_item4_url=?,
 	                           hero_box_btn_text=?,
-	                           hero_box_btn_url=?
+	                           hero_box_btn_url=?,
+	                           home_risco_status=?,
+	                           home_risco_badge=?,
+	                           home_risco_title=?,
+	                           home_risco_subtitle=?,
+	                           home_risco_item1_icon=?,
+	                           home_risco_item1_title=?,
+	                           home_risco_item1_desc=?,
+	                           home_risco_item1_highlight=?,
+	                           home_risco_item2_icon=?,
+	                           home_risco_item2_title=?,
+	                           home_risco_item2_desc=?,
+	                           home_risco_item2_highlight=?,
+	                           home_risco_item3_icon=?,
+	                           home_risco_item3_title=?,
+	                           home_risco_item3_desc=?,
+	                           home_risco_item3_highlight=?,
+	                           home_about_status=?,
+	                           home_about_badge=?,
+	                           home_about_title=?,
+	                           home_about_desc=?,
+	                           home_about_stat1_icon=?,
+	                           home_about_stat1_val=?,
+	                           home_about_stat1_lbl=?,
+	                           home_about_stat2_icon=?,
+	                           home_about_stat2_val=?,
+	                           home_about_stat2_lbl=?,
+	                           home_about_stat3_icon=?,
+	                           home_about_stat3_val=?,
+	                           home_about_stat3_lbl=?,
+	                           home_about_stat4_icon=?,
+	                           home_about_stat4_val=?,
+	                           home_about_stat4_lbl=?,
+	                           home_about_card_icon=?,
+	                           home_about_card_title=?,
+	                           home_about_card_subtitle=?,
+	                           home_about_card_item1=?,
+	                           home_about_card_item2=?,
+	                           home_about_card_item3=?,
+	                           home_about_card_item4=?,
+	                           home_about_btn1_text=?,
+	                           home_about_btn1_url=?,
+	                           home_about_btn2_text=?,
+	                           home_about_btn2_url=?
 	                           WHERE id=1");
 	$statement->execute(array(
 		$_POST['home_title_service'] ?? '',
@@ -318,10 +409,62 @@ if(isset($_POST['form7'])) {
 		$hero_box_item4_subtitle,
 		$hero_box_item4_url,
 		$hero_box_btn_text,
-		$hero_box_btn_url
+		$hero_box_btn_url,
+		$home_risco_status,
+		$home_risco_badge,
+		$home_risco_title,
+		$home_risco_subtitle,
+		$home_risco_item1_icon,
+		$home_risco_item1_title,
+		$home_risco_item1_desc,
+		$home_risco_item1_highlight,
+		$home_risco_item2_icon,
+		$home_risco_item2_title,
+		$home_risco_item2_desc,
+		$home_risco_item2_highlight,
+		$home_risco_item3_icon,
+		$home_risco_item3_title,
+		$home_risco_item3_desc,
+		$home_risco_item3_highlight,
+		$home_about_status,
+		$home_about_badge,
+		$home_about_title,
+		$home_about_desc,
+		$home_about_stat1_icon,
+		$home_about_stat1_val,
+		$home_about_stat1_lbl,
+		$home_about_stat2_icon,
+		$home_about_stat2_val,
+		$home_about_stat2_lbl,
+		$home_about_stat3_icon,
+		$home_about_stat3_val,
+		$home_about_stat3_lbl,
+		$home_about_stat4_icon,
+		$home_about_stat4_val,
+		$home_about_stat4_lbl,
+		$home_about_card_icon,
+		$home_about_card_title,
+		$home_about_card_subtitle,
+		$home_about_card_item1,
+		$home_about_card_item2,
+		$home_about_card_item3,
+		$home_about_card_item4,
+		$home_about_btn1_text,
+		$home_about_btn1_url,
+		$home_about_btn2_text,
+		$home_about_btn2_url
 	));
 
-	$success_message = 'Os títulos, subtítulos e status das seções da Home foram atualizados com sucesso.';
+	$success_message = 'As configurações de todas as seções da página inicial (Hero, Diferenciais Clínicos, Quem Somos e Serviços) foram atualizadas com sucesso!';
+
+	if ((!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') || !empty($_POST['is_ajax'])) {
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode([
+			'status' => 'success',
+			'message' => $success_message
+		], JSON_UNESCAPED_UNICODE);
+		exit;
+	}
 }
 
 // Form 8: Cor & Tema do Portal Público
@@ -433,6 +576,54 @@ $hero_box_item4_subtitle        = $row['hero_box_item4_subtitle'] ?? 'Até 50% D
 $hero_box_item4_url             = $row['hero_box_item4_url'] ?? 'fidelidade.php';
 $hero_box_btn_text              = $row['hero_box_btn_text'] ?? 'CONHEÇA O CARTÃO FIDELIDADE';
 $hero_box_btn_url               = $row['hero_box_btn_url'] ?? 'fidelidade.php';
+
+// Diferenciais Clínicos & Saúde Preventiva
+$home_risco_status           = intval($row['home_risco_status'] ?? 1);
+$home_risco_badge            = $row['home_risco_badge'] ?? 'Saúde Preventiva & Cuidado Integrado';
+$home_risco_title            = $row['home_risco_title'] ?? 'O cuidado com sua saúde não pode esperar';
+$home_risco_subtitle         = $row['home_risco_subtitle'] ?? 'Prevenção e diagnóstico precoce garantem longevidade e bem-estar para você e sua família.';
+$home_risco_item1_icon       = $row['home_risco_item1_icon'] ?? 'fas fa-stethoscope';
+$home_risco_item1_title      = $row['home_risco_item1_title'] ?? 'Diagnóstico Ágil e Preciso';
+$home_risco_item1_desc       = $row['home_risco_item1_desc'] ?? 'Consultas especializadas e exames no mesmo endereço, sem perda de tempo e com tecnologia digital integrada.';
+$home_risco_item1_highlight  = $row['home_risco_item1_highlight'] ?? 'Laudos rápidos e confiáveis.';
+$home_risco_item2_icon       = $row['home_risco_item2_icon'] ?? 'fas fa-user-doctor';
+$home_risco_item2_title      = $row['home_risco_item2_title'] ?? 'Corpo Clínico Humanizado';
+$home_risco_item2_desc       = $row['home_risco_item2_desc'] ?? 'Médicos especialistas dedicados a ouvir com empatia e construir um plano terapêutico individualizado.';
+$home_risco_item2_highlight  = $row['home_risco_item2_highlight'] ?? 'Atendimento com hora marcada.';
+$home_risco_item3_icon       = $row['home_risco_item3_icon'] ?? 'fas fa-wallet';
+$home_risco_item3_title      = $row['home_risco_item3_title'] ?? 'Economia Sem Carências';
+$home_risco_item3_desc       = $row['home_risco_item3_desc'] ?? 'Acesso a saúde de alta qualidade sem as mensalidades exorbitantes e sem as carências dos planos tradicionais.';
+$home_risco_item3_highlight  = $row['home_risco_item3_highlight'] ?? 'Descontos reais de até 50%.';
+
+// Quem Somos & Autoridade Médica / Centro Médico Moderno
+$home_about_status          = intval($row['home_about_status'] ?? 1);
+$home_about_badge           = $row['home_about_badge'] ?? 'Centro Médico Moderno';
+$home_about_title           = $row['home_about_title'] ?? 'Referência em Cuidados Médicos e Odontológicos';
+$home_about_desc            = $row['home_about_desc'] ?? 'A Pronto Saúde nasceu com o propósito de aproximar a excelência médica da comunidade. Contamos com consultórios modernos, equipamentos de alta tecnologia e laboratório próprio de análises clínicas para oferecer atendimento completo e humanizado em um único local.';
+$home_about_stat1_icon      = $row['home_about_stat1_icon'] ?? 'fas fa-user-md';
+$home_about_stat1_val       = $row['home_about_stat1_val'] ?? '+15 Áreas';
+$home_about_stat1_lbl       = $row['home_about_stat1_lbl'] ?? 'Especialidades Médicas';
+$home_about_stat2_icon      = $row['home_about_stat2_icon'] ?? 'fas fa-hospital-user';
+$home_about_stat2_val       = $row['home_about_stat2_val'] ?? '+10.000';
+$home_about_stat2_lbl       = $row['home_about_stat2_lbl'] ?? 'Pacientes Atendidos';
+$home_about_stat3_icon      = $row['home_about_stat3_icon'] ?? 'fas fa-star';
+$home_about_stat3_val       = $row['home_about_stat3_val'] ?? '98.6%';
+$home_about_stat3_lbl       = $row['home_about_stat3_lbl'] ?? 'Satisfação Comprovada';
+$home_about_stat4_icon      = $row['home_about_stat4_icon'] ?? 'fas fa-file-medical';
+$home_about_stat4_val       = $row['home_about_stat4_val'] ?? '100%';
+$home_about_stat4_lbl       = $row['home_about_stat4_lbl'] ?? 'Laudos Digitais Ágeis';
+$home_about_card_icon       = $row['home_about_card_icon'] ?? 'fas fa-clinic-medical';
+$home_about_card_title      = $row['home_about_card_title'] ?? 'Centro Integrado Pronto Saúde';
+$home_about_card_subtitle   = $row['home_about_card_subtitle'] ?? 'Gardênia Azul • Jacarepaguá • RJ';
+$home_about_card_item1      = $row['home_about_card_item1'] ?? 'Consultórios médicos climatizados, acessíveis e confortáveis';
+$home_about_card_item2      = $row['home_about_card_item2'] ?? 'Laboratório de análises clínicas com coleta humanizada';
+$home_about_card_item3      = $row['home_about_card_item3'] ?? 'Odontologia moderna com raio-x e procedimentos integrados';
+$home_about_card_item4      = $row['home_about_card_item4'] ?? 'Agendamento ágil pelo WhatsApp em menos de 1 minuto';
+$home_about_btn1_text       = $row['home_about_btn1_text'] ?? 'Conheça Nossa História';
+$home_about_btn1_url        = $row['home_about_btn1_url'] ?? 'page/sobre';
+$home_about_btn2_text       = $row['home_about_btn2_text'] ?? 'Falar com Atendente';
+$home_about_btn2_url        = $row['home_about_btn2_url'] ?? '';
+
 $color                           = $row['color'] ?? '0a6b74';
 $preloader                       = $row['preloader'] ?? 0;
 $frontend_dark_mode_status       = intval($row['frontend_dark_mode_status'] ?? 1);
@@ -1177,6 +1368,290 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 									</div>
 								</div>
 
+								<!-- 1. Diferenciais Clínicos & Saúde Preventiva (3 Cards) -->
+								<div class="col-12">
+									<div class="card border border-success shadow-sm">
+										<div class="card-header bg-success-subtle d-flex flex-wrap align-items-center justify-content-between py-2 px-3">
+											<span class="fw-bold text-success fs-6">
+												<i class="bi bi-shield-plus me-1"></i> 2ª Seção: Diferenciais Clínicos &amp; Saúde Preventiva (3 Cards)
+											</span>
+											<div class="d-flex align-items-center gap-2">
+												<span class="small fw-semibold text-muted">Exibir Seção:</span>
+												<div class="form-check form-switch m-0">
+													<input class="form-check-input" type="checkbox" name="home_risco_status" value="1" id="swHomeRisco" <?= ($home_risco_status == 1) ? 'checked' : ''; ?>>
+												</div>
+											</div>
+										</div>
+										<div class="card-body">
+											<div class="row g-3 mb-4">
+												<div class="col-md-4">
+													<label class="form-label small fw-semibold mb-1">Badge Superior</label>
+													<input type="text" name="home_risco_badge" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_badge); ?>" placeholder="Ex: Saúde Preventiva & Cuidado Integrado">
+												</div>
+												<div class="col-md-8">
+													<label class="form-label small fw-semibold mb-1">Título Principal da Seção</label>
+													<input type="text" name="home_risco_title" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_title); ?>" placeholder="Ex: O cuidado com sua saúde não pode esperar">
+												</div>
+												<div class="col-12">
+													<label class="form-label small fw-semibold mb-1">Subtítulo / Descrição Superior</label>
+													<textarea name="home_risco_subtitle" class="form-control form-control-sm no-summernote" rows="2" placeholder="Ex: Prevenção e diagnóstico precoce garantem longevidade e bem-estar para você e sua família."><?= htmlspecialchars($home_risco_subtitle); ?></textarea>
+												</div>
+											</div>
+
+											<h6 class="fw-bold text-body-secondary border-bottom pb-2 mb-3 small text-uppercase">
+												<i class="bi bi-collection-fill text-success me-1"></i> Os 3 Cards de Diferenciais
+											</h6>
+
+											<div class="row g-3">
+												<!-- Card 1 -->
+												<div class="col-md-4">
+													<div class="p-3 border rounded bg-body-tertiary h-100">
+														<span class="badge bg-success-subtle text-success border border-success-subtle mb-2">Card 1</span>
+														<div class="mb-2">
+															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
+															<input type="text" name="home_risco_item1_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item1_icon); ?>" placeholder="fas fa-stethoscope">
+														</div>
+														<div class="mb-2">
+															<label class="form-label extra-small fw-semibold mb-0">Título</label>
+															<input type="text" name="home_risco_item1_title" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item1_title); ?>" placeholder="Diagnóstico Ágil e Preciso">
+														</div>
+														<div class="mb-2">
+															<label class="form-label extra-small fw-semibold mb-0">Descrição</label>
+															<textarea name="home_risco_item1_desc" class="form-control form-control-sm no-summernote" rows="3" placeholder="Consultas especializadas e exames..."><?= htmlspecialchars($home_risco_item1_desc); ?></textarea>
+														</div>
+														<div class="mb-0">
+															<label class="form-label extra-small fw-semibold mb-0">Texto do Destaque (Check Verde)</label>
+															<input type="text" name="home_risco_item1_highlight" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item1_highlight); ?>" placeholder="Laudos rápidos e confiáveis.">
+														</div>
+													</div>
+												</div>
+
+												<!-- Card 2 -->
+												<div class="col-md-4">
+													<div class="p-3 border rounded bg-body-tertiary h-100">
+														<span class="badge bg-success-subtle text-success border border-success-subtle mb-2">Card 2</span>
+														<div class="mb-2">
+															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
+															<input type="text" name="home_risco_item2_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item2_icon); ?>" placeholder="fas fa-user-doctor">
+														</div>
+														<div class="mb-2">
+															<label class="form-label extra-small fw-semibold mb-0">Título</label>
+															<input type="text" name="home_risco_item2_title" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item2_title); ?>" placeholder="Corpo Clínico Humanizado">
+														</div>
+														<div class="mb-2">
+															<label class="form-label extra-small fw-semibold mb-0">Descrição</label>
+															<textarea name="home_risco_item2_desc" class="form-control form-control-sm no-summernote" rows="3" placeholder="Médicos especialistas dedicados..."><?= htmlspecialchars($home_risco_item2_desc); ?></textarea>
+														</div>
+														<div class="mb-0">
+															<label class="form-label extra-small fw-semibold mb-0">Texto do Destaque (Check Verde)</label>
+															<input type="text" name="home_risco_item2_highlight" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item2_highlight); ?>" placeholder="Atendimento com hora marcada.">
+														</div>
+													</div>
+												</div>
+
+												<!-- Card 3 -->
+												<div class="col-md-4">
+													<div class="p-3 border rounded bg-body-tertiary h-100">
+														<span class="badge bg-success-subtle text-success border border-success-subtle mb-2">Card 3</span>
+														<div class="mb-2">
+															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
+															<input type="text" name="home_risco_item3_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item3_icon); ?>" placeholder="fas fa-wallet">
+														</div>
+														<div class="mb-2">
+															<label class="form-label extra-small fw-semibold mb-0">Título</label>
+															<input type="text" name="home_risco_item3_title" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item3_title); ?>" placeholder="Economia Sem Carências">
+														</div>
+														<div class="mb-2">
+															<label class="form-label extra-small fw-semibold mb-0">Descrição</label>
+															<textarea name="home_risco_item3_desc" class="form-control form-control-sm no-summernote" rows="3" placeholder="Acesso a saúde de alta qualidade..."><?= htmlspecialchars($home_risco_item3_desc); ?></textarea>
+														</div>
+														<div class="mb-0">
+															<label class="form-label extra-small fw-semibold mb-0">Texto do Destaque (Check Verde)</label>
+															<input type="text" name="home_risco_item3_highlight" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item3_highlight); ?>" placeholder="Descontos reais de até 50%.">
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- 2. Quem Somos / Centro Médico Moderno & Estatísticas -->
+								<div class="col-12">
+									<div class="card border border-info shadow-sm">
+										<div class="card-header bg-info-subtle d-flex flex-wrap align-items-center justify-content-between py-2 px-3">
+											<span class="fw-bold text-info-emphasis fs-6">
+												<i class="bi bi-hospital me-1"></i> 3ª Seção: Quem Somos &amp; Centro Médico Moderno (Estatísticas e Card de Destaque)
+											</span>
+											<div class="d-flex align-items-center gap-2">
+												<span class="small fw-semibold text-muted">Exibir Seção:</span>
+												<div class="form-check form-switch m-0">
+													<input class="form-check-input" type="checkbox" name="home_about_status" value="1" id="swHomeAbout" <?= ($home_about_status == 1) ? 'checked' : ''; ?>>
+												</div>
+											</div>
+										</div>
+										<div class="card-body">
+											<div class="row g-4 mb-4">
+												<!-- Coluna Esquerda: Textos e 4 Estatísticas -->
+												<div class="col-lg-6">
+													<h6 class="fw-bold text-primary border-bottom pb-2 mb-3 small text-uppercase">
+														<i class="bi bi-card-text me-1"></i> Apresentação Institucional
+													</h6>
+													<div class="mb-3">
+														<label class="form-label small fw-semibold mb-1">Badge Superior</label>
+														<input type="text" name="home_about_badge" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_badge); ?>" placeholder="Ex: Centro Médico Moderno">
+													</div>
+													<div class="mb-3">
+														<label class="form-label small fw-semibold mb-1">Título Principal</label>
+														<input type="text" name="home_about_title" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_title); ?>" placeholder="Ex: Referência em Cuidados Médicos e Odontológicos">
+													</div>
+													<div class="mb-4">
+														<label class="form-label small fw-semibold mb-1">Texto Institucional Completo</label>
+														<textarea name="home_about_desc" class="form-control form-control-sm no-summernote" rows="4" placeholder="Descrição completa da história e propósito da clínica..."><?= htmlspecialchars($home_about_desc); ?></textarea>
+													</div>
+
+													<h6 class="fw-bold text-primary border-bottom pb-2 mb-3 small text-uppercase">
+														<i class="bi bi-bar-chart-fill me-1"></i> 4 Estatísticas / Métricas em Grid
+													</h6>
+													<div class="row g-2">
+														<!-- Stat 1 -->
+														<div class="col-6">
+															<div class="p-2 border rounded bg-body-tertiary">
+																<span class="badge bg-secondary mb-1">Métrica 1</span>
+																<div class="mb-1">
+																	<label class="form-label extra-small fw-semibold mb-0">Ícone</label>
+																	<input type="text" name="home_about_stat1_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat1_icon); ?>" placeholder="fas fa-user-md">
+																</div>
+																<div class="mb-1">
+																	<label class="form-label extra-small fw-semibold mb-0">Número / Valor</label>
+																	<input type="text" name="home_about_stat1_val" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat1_val); ?>" placeholder="+15 Áreas">
+																</div>
+																<div>
+																	<label class="form-label extra-small fw-semibold mb-0">Rótulo</label>
+																	<input type="text" name="home_about_stat1_lbl" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat1_lbl); ?>" placeholder="Especialidades Médicas">
+																</div>
+															</div>
+														</div>
+														<!-- Stat 2 -->
+														<div class="col-6">
+															<div class="p-2 border rounded bg-body-tertiary">
+																<span class="badge bg-secondary mb-1">Métrica 2</span>
+																<div class="mb-1">
+																	<label class="form-label extra-small fw-semibold mb-0">Ícone</label>
+																	<input type="text" name="home_about_stat2_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat2_icon); ?>" placeholder="fas fa-hospital-user">
+																</div>
+																<div class="mb-1">
+																	<label class="form-label extra-small fw-semibold mb-0">Número / Valor</label>
+																	<input type="text" name="home_about_stat2_val" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat2_val); ?>" placeholder="+10.000">
+																</div>
+																<div>
+																	<label class="form-label extra-small fw-semibold mb-0">Rótulo</label>
+																	<input type="text" name="home_about_stat2_lbl" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat2_lbl); ?>" placeholder="Pacientes Atendidos">
+																</div>
+															</div>
+														</div>
+														<!-- Stat 3 -->
+														<div class="col-6">
+															<div class="p-2 border rounded bg-body-tertiary">
+																<span class="badge bg-secondary mb-1">Métrica 3</span>
+																<div class="mb-1">
+																	<label class="form-label extra-small fw-semibold mb-0">Ícone</label>
+																	<input type="text" name="home_about_stat3_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat3_icon); ?>" placeholder="fas fa-star">
+																</div>
+																<div class="mb-1">
+																	<label class="form-label extra-small fw-semibold mb-0">Número / Valor</label>
+																	<input type="text" name="home_about_stat3_val" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat3_val); ?>" placeholder="98.6%">
+																</div>
+																<div>
+																	<label class="form-label extra-small fw-semibold mb-0">Rótulo</label>
+																	<input type="text" name="home_about_stat3_lbl" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat3_lbl); ?>" placeholder="Satisfação Comprovada">
+																</div>
+															</div>
+														</div>
+														<!-- Stat 4 -->
+														<div class="col-6">
+															<div class="p-2 border rounded bg-body-tertiary">
+																<span class="badge bg-secondary mb-1">Métrica 4</span>
+																<div class="mb-1">
+																	<label class="form-label extra-small fw-semibold mb-0">Ícone</label>
+																	<input type="text" name="home_about_stat4_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat4_icon); ?>" placeholder="fas fa-file-medical">
+																</div>
+																<div class="mb-1">
+																	<label class="form-label extra-small fw-semibold mb-0">Número / Valor</label>
+																	<input type="text" name="home_about_stat4_val" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat4_val); ?>" placeholder="100%">
+																</div>
+																<div>
+																	<label class="form-label extra-small fw-semibold mb-0">Rótulo</label>
+																	<input type="text" name="home_about_stat4_lbl" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat4_lbl); ?>" placeholder="Laudos Digitais Ágeis">
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<!-- Coluna Direita: Card Destaque da Unidade -->
+												<div class="col-lg-6">
+													<div class="p-3 border rounded-3 bg-body-tertiary h-100">
+														<h6 class="fw-bold text-success border-bottom pb-2 mb-3 small text-uppercase">
+															<i class="bi bi-building-check me-1"></i> Card Destaque da Unidade (Lado Direito)
+														</h6>
+														<div class="row g-2 mb-3">
+															<div class="col-md-4">
+																<label class="form-label extra-small fw-semibold mb-0">Ícone do Cabeçalho</label>
+																<input type="text" name="home_about_card_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_card_icon); ?>" placeholder="fas fa-clinic-medical">
+															</div>
+															<div class="col-md-8">
+																<label class="form-label extra-small fw-semibold mb-0">Título da Unidade</label>
+																<input type="text" name="home_about_card_title" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_card_title); ?>" placeholder="Centro Integrado Pronto Saúde">
+															</div>
+															<div class="col-12">
+																<label class="form-label extra-small fw-semibold mb-0">Subtítulo / Bairro / Cidade</label>
+																<input type="text" name="home_about_card_subtitle" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_card_subtitle); ?>" placeholder="Gardênia Azul • Jacarepaguá • RJ">
+															</div>
+														</div>
+
+														<label class="form-label extra-small fw-bold text-uppercase text-body-secondary mb-2">4 Tópicos com Checkmark Verde</label>
+														<div class="mb-2">
+															<input type="text" name="home_about_card_item1" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_card_item1); ?>" placeholder="Tópico 1...">
+														</div>
+														<div class="mb-2">
+															<input type="text" name="home_about_card_item2" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_card_item2); ?>" placeholder="Tópico 2...">
+														</div>
+														<div class="mb-2">
+															<input type="text" name="home_about_card_item3" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_card_item3); ?>" placeholder="Tópico 3...">
+														</div>
+														<div class="mb-3">
+															<input type="text" name="home_about_card_item4" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_card_item4); ?>" placeholder="Tópico 4...">
+														</div>
+
+														<h6 class="fw-bold text-body-secondary border-top pt-2 mb-2 small text-uppercase">
+															<i class="bi bi-link-45deg text-primary me-1"></i> Botões de Ação do Card
+														</h6>
+														<div class="row g-2">
+															<div class="col-md-6">
+																<label class="form-label extra-small fw-semibold mb-0">Texto Botão 1</label>
+																<input type="text" name="home_about_btn1_text" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_btn1_text); ?>" placeholder="Conheça Nossa História">
+															</div>
+															<div class="col-md-6">
+																<label class="form-label extra-small fw-semibold mb-0">Link / Destino Botão 1</label>
+																<input type="text" name="home_about_btn1_url" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_btn1_url); ?>" placeholder="page/sobre">
+															</div>
+															<div class="col-md-6">
+																<label class="form-label extra-small fw-semibold mb-0">Texto Botão 2</label>
+																<input type="text" name="home_about_btn2_text" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_btn2_text); ?>" placeholder="Falar com Atendente">
+															</div>
+															<div class="col-md-6">
+																<label class="form-label extra-small fw-semibold mb-0">Link / Destino Botão 2 (ou vazio p/ WhatsApp)</label>
+																<input type="text" name="home_about_btn2_url" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_btn2_url); ?>" placeholder="Ex: https://wa.me/...">
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
 								<!-- 1. Serviços -->
 								<div class="col-md-6 col-xl-4">
 									<div class="card border shadow-xs h-100">
@@ -1683,6 +2158,70 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 				targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 			} catch(e) {}
 		}
+	}
+
+	// Submissão assíncrona com AJAX para o Formulário de Seções da Home (form7)
+	const form7 = document.querySelector('form button[name="form7"]')?.closest('form');
+	if (form7) {
+		form7.addEventListener('submit', function(e) {
+			e.preventDefault();
+			const btn = form7.querySelector('button[name="form7"]');
+			const originalHtml = btn ? btn.innerHTML : '';
+			if (btn) {
+				btn.disabled = true;
+				btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Salvando seções...';
+			}
+
+			const formData = new FormData(form7);
+			formData.append('form7', '1');
+			formData.append('is_ajax', '1');
+
+			fetch('settings.php', {
+				method: 'POST',
+				body: formData,
+				headers: {
+					'X-Requested-With': 'XMLHttpRequest'
+				}
+			})
+			.then(res => res.json())
+			.then(data => {
+				if (btn) {
+					btn.disabled = false;
+					btn.innerHTML = originalHtml;
+				}
+				if (data.status === 'success') {
+					if (typeof Swal !== 'undefined') {
+						Swal.fire({
+							icon: 'success',
+							title: 'Sucesso!',
+							text: data.message,
+							toast: true,
+							position: 'top-end',
+							showConfirmButton: false,
+							timer: 4000,
+							timerProgressBar: true
+						});
+					} else if (typeof toastr !== 'undefined') {
+						toastr.success(data.message);
+					}
+				} else {
+					if (typeof Swal !== 'undefined') {
+						Swal.fire({
+							icon: 'error',
+							title: 'Atenção',
+							text: data.message || 'Ocorreu um erro ao salvar.'
+						});
+					}
+				}
+			})
+			.catch(err => {
+				if (btn) {
+					btn.disabled = false;
+					btn.innerHTML = originalHtml;
+				}
+				form7.submit();
+			});
+		});
 	}
 
 	// Ao carregar a página

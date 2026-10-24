@@ -68,6 +68,9 @@ if ($page_id > 0 || $tipo === 'page') {
 
 // Caso 2: Controle de Seções da Home e Manutenção
 $secoes_validas = [
+    'hero_box_status'         => 'Atendimento Rápido na Hero (Card 1 Minuto)',
+    'home_risco_status'       => 'Diferenciais Clínicos & Saúde Preventiva',
+    'home_about_status'       => 'Quem Somos & Centro Médico Moderno',
     'home_status_service'     => 'Serviços Médicos',
     'home_status_department'  => 'Clínicas e Departamentos',
     'home_status_doctor'      => 'Corpo Clínico (Médicos)',

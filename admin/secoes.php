@@ -11,6 +11,9 @@ $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
 $statement->execute();
 $config = $statement->fetch(PDO::FETCH_ASSOC) ?: [];
 
+$status_hero_box    = (int)($config['hero_box_status'] ?? 1);
+$status_risco       = (int)($config['home_risco_status'] ?? 1);
+$status_about       = (int)($config['home_about_status'] ?? 1);
 $status_service     = (int)($config['home_status_service'] ?? 1);
 $status_department  = (int)($config['home_status_department'] ?? 1);
 $status_doctor      = (int)($config['home_status_doctor'] ?? 1);
@@ -232,7 +235,7 @@ function getPageIconAndColor($slug, $layout = '') {
 					<div class="card-body p-3 d-flex align-items-center justify-content-between">
 						<div>
 							<div class="text-body-secondary small fw-semibold">Seções da Home</div>
-							<div class="fs-4 fw-bold text-primary">7 Seções</div>
+							<div class="fs-4 fw-bold text-primary">10 Seções</div>
 						</div>
 						<div class="rounded-circle p-3 bg-primary-subtle text-primary fs-4">
 							<i class="bi bi-layout-text-window-reverse"></i>
@@ -310,10 +313,10 @@ function getPageIconAndColor($slug, $layout = '') {
 					<!-- Botões de Filtro -->
 					<div class="btn-group btn-group-sm" role="group" id="filterNavButtons">
 						<button type="button" class="btn btn-outline-primary active" data-filter="all">
-							<i class="bi bi-grid-fill me-1"></i> Ver Todos (<?= 7 + count($all_pages) ?>)
+							<i class="bi bi-grid-fill me-1"></i> Ver Todos (<?= 10 + count($all_pages) ?>)
 						</button>
 						<button type="button" class="btn btn-outline-primary" data-filter="home">
-							<i class="bi bi-layout-text-window-reverse me-1"></i> Seções da Home (7)
+							<i class="bi bi-layout-text-window-reverse me-1"></i> Seções da Home (10)
 						</button>
 						<button type="button" class="btn btn-outline-primary" data-filter="pages">
 							<i class="bi bi-file-earmark-text-fill me-1"></i> Páginas do Sistema (<?= count($all_pages) ?>)
@@ -350,10 +353,109 @@ function getPageIconAndColor($slug, $layout = '') {
 						<small class="text-body-secondary">Controle de exibição dos blocos e seções dinâmicas na Home do portal</small>
 					</div>
 				</div>
-				<span class="badge bg-primary-subtle text-primary fw-bold px-3 py-2 rounded-pill">7 Seções</span>
+				<span class="badge bg-primary-subtle text-primary fw-bold px-3 py-2 rounded-pill">10 Seções</span>
 			</div>
 
 			<div class="row g-3">
+
+				<!-- 0. Atendimento Rápido na Hero -->
+				<div class="col-12 col-md-6 col-xl-4 filterable-item" data-group="home" data-status="<?= $status_hero_box == 1 ? 'active' : 'inactive' ?>" data-search="hero card agendamento rapido atendimento 1 minuto hero_box_status">
+					<div class="card border-0 shadow-sm rounded-4 h-100 card-hover-shadow">
+						<div class="card-body p-4 d-flex flex-column justify-content-between">
+							<div class="d-flex align-items-start justify-content-between mb-3">
+								<div class="d-flex align-items-center gap-2">
+									<div class="p-2 rounded-3 bg-primary-subtle text-primary fs-4">
+										<i class="bi bi-layout-sidebar-inset"></i>
+									</div>
+									<div>
+										<h6 class="fw-bold mb-0">Atendimento Rápido (Hero)</h6>
+										<small class="text-body-secondary">Home &bull; Card 1 Minuto no Slider</small>
+									</div>
+								</div>
+								<div class="form-check form-switch fs-4 mb-0">
+									<input class="form-check-input switch-ajax-section" type="checkbox" role="switch" data-secao="hero_box_status" <?= $status_hero_box == 1 ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<p class="text-body-secondary small mb-3">
+								Card de acesso rápido com 4 botões de serviços diretos e botão de fidelidade sobreposto no slider.
+							</p>
+							<div class="d-flex align-items-center justify-content-between pt-2 border-top">
+								<span class="badge status-badge-indicator <?= $status_hero_box == 1 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' ?>">
+									<?= $status_hero_box == 1 ? 'Visível na Home' : 'Oculto na Home' ?>
+								</span>
+								<a href="settings.php?tab=tab_7" class="btn btn-sm btn-link text-decoration-none text-primary p-0 fw-semibold">
+									<i class="bi bi-sliders me-1"></i> Personalizar Card
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 0.1 Diferenciais Clínicos & Saúde Preventiva -->
+				<div class="col-12 col-md-6 col-xl-4 filterable-item" data-group="home" data-status="<?= $status_risco == 1 ? 'active' : 'inactive' ?>" data-search="diferenciais clinicos saude preventiva 3 cards diagnósticos home_risco_status">
+					<div class="card border-0 shadow-sm rounded-4 h-100 card-hover-shadow">
+						<div class="card-body p-4 d-flex flex-column justify-content-between">
+							<div class="d-flex align-items-start justify-content-between mb-3">
+								<div class="d-flex align-items-center gap-2">
+									<div class="p-2 rounded-3 bg-success-subtle text-success fs-4">
+										<i class="bi bi-shield-plus"></i>
+									</div>
+									<div>
+										<h6 class="fw-bold mb-0">Diferenciais Clínicos</h6>
+										<small class="text-body-secondary">Home &bull; 3 Cards de Saúde Preventiva</small>
+									</div>
+								</div>
+								<div class="form-check form-switch fs-4 mb-0">
+									<input class="form-check-input switch-ajax-section" type="checkbox" role="switch" data-secao="home_risco_status" <?= $status_risco == 1 ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<p class="text-body-secondary small mb-3">
+								Seção de diagnóstico ágil, corpo clínico humanizado e economia sem carências com destaques em verde.
+							</p>
+							<div class="d-flex align-items-center justify-content-between pt-2 border-top">
+								<span class="badge status-badge-indicator <?= $status_risco == 1 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' ?>">
+									<?= $status_risco == 1 ? 'Visível na Home' : 'Oculto na Home' ?>
+								</span>
+								<a href="settings.php?tab=tab_7" class="btn btn-sm btn-link text-decoration-none text-success p-0 fw-semibold">
+									<i class="bi bi-sliders me-1"></i> Personalizar 3 Cards
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 0.2 Quem Somos & Centro Médico Moderno -->
+				<div class="col-12 col-md-6 col-xl-4 filterable-item" data-group="home" data-status="<?= $status_about == 1 ? 'active' : 'inactive' ?>" data-search="quem somos sobre centro medico moderno autoridade estatisticas home_about_status">
+					<div class="card border-0 shadow-sm rounded-4 h-100 card-hover-shadow">
+						<div class="card-body p-4 d-flex flex-column justify-content-between">
+							<div class="d-flex align-items-start justify-content-between mb-3">
+								<div class="d-flex align-items-center gap-2">
+									<div class="p-2 rounded-3 bg-info-subtle text-info fs-4">
+										<i class="bi bi-hospital"></i>
+									</div>
+									<div>
+										<h6 class="fw-bold mb-0">Quem Somos &amp; Estrutura</h6>
+										<small class="text-body-secondary">Home &bull; Estatísticas &amp; Unidade</small>
+									</div>
+								</div>
+								<div class="form-check form-switch fs-4 mb-0">
+									<input class="form-check-input switch-ajax-section" type="checkbox" role="switch" data-secao="home_about_status" <?= $status_about == 1 ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<p class="text-body-secondary small mb-3">
+								Apresentação da clínica com 4 métricas em grid e o card de destaques da unidade com tópicos e botões de ação.
+							</p>
+							<div class="d-flex align-items-center justify-content-between pt-2 border-top">
+								<span class="badge status-badge-indicator <?= $status_about == 1 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' ?>">
+									<?= $status_about == 1 ? 'Visível na Home' : 'Oculto na Home' ?>
+								</span>
+								<a href="settings.php?tab=tab_7" class="btn btn-sm btn-link text-decoration-none text-info p-0 fw-semibold">
+									<i class="bi bi-sliders me-1"></i> Personalizar Textos &amp; Stats
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<!-- 1. Serviços Médicos -->
 				<div class="col-12 col-md-6 col-xl-4 filterable-item" data-group="home" data-status="<?= $status_service == 1 ? 'active' : 'inactive' ?>" data-search="servicos medicos procedimentos consultas exames home_status_service">

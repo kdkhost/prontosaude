@@ -103,6 +103,53 @@ $hero_box_item4_url     = $row['hero_box_item4_url'] ?? 'fidelidade.php';
 $hero_box_btn_text      = $row['hero_box_btn_text'] ?? 'CONHEÇA O CARTÃO FIDELIDADE';
 $hero_box_btn_url       = $row['hero_box_btn_url'] ?? 'fidelidade.php';
 
+// Diferenciais Clínicos & Saúde Preventiva (Configurável no Painel Admin)
+$home_risco_status           = (int)($row['home_risco_status'] ?? 1);
+$home_risco_badge            = $row['home_risco_badge'] ?? 'Saúde Preventiva & Cuidado Integrado';
+$home_risco_title            = $row['home_risco_title'] ?? 'O cuidado com sua saúde não pode esperar';
+$home_risco_subtitle         = $row['home_risco_subtitle'] ?? 'Prevenção e diagnóstico precoce garantem longevidade e bem-estar para você e sua família.';
+$home_risco_item1_icon       = $row['home_risco_item1_icon'] ?? 'fas fa-stethoscope';
+$home_risco_item1_title      = $row['home_risco_item1_title'] ?? 'Diagnóstico Ágil e Preciso';
+$home_risco_item1_desc       = $row['home_risco_item1_desc'] ?? 'Consultas especializadas e exames no mesmo endereço, sem perda de tempo e com tecnologia digital integrada.';
+$home_risco_item1_highlight  = $row['home_risco_item1_highlight'] ?? 'Laudos rápidos e confiáveis.';
+$home_risco_item2_icon       = $row['home_risco_item2_icon'] ?? 'fas fa-user-doctor';
+$home_risco_item2_title      = $row['home_risco_item2_title'] ?? 'Corpo Clínico Humanizado';
+$home_risco_item2_desc       = $row['home_risco_item2_desc'] ?? 'Médicos especialistas dedicados a ouvir com empatia e construir um plano terapêutico individualizado.';
+$home_risco_item2_highlight  = $row['home_risco_item2_highlight'] ?? 'Atendimento com hora marcada.';
+$home_risco_item3_icon       = $row['home_risco_item3_icon'] ?? 'fas fa-wallet';
+$home_risco_item3_title      = $row['home_risco_item3_title'] ?? 'Economia Sem Carências';
+$home_risco_item3_desc       = $row['home_risco_item3_desc'] ?? 'Acesso a saúde de alta qualidade sem as mensalidades exorbitantes e sem as carências dos planos tradicionais.';
+$home_risco_item3_highlight  = $row['home_risco_item3_highlight'] ?? 'Descontos reais de até 50%.';
+
+// Quem Somos & Autoridade Médica / Centro Médico Moderno (Configurável no Painel Admin)
+$home_about_status          = (int)($row['home_about_status'] ?? 1);
+$home_about_badge           = $row['home_about_badge'] ?? 'Centro Médico Moderno';
+$home_about_title           = $row['home_about_title'] ?? 'Referência em Cuidados Médicos e Odontológicos';
+$home_about_desc            = $row['home_about_desc'] ?? 'A Pronto Saúde nasceu com o propósito de aproximar a excelência médica da comunidade. Contamos com consultórios modernos, equipamentos de alta tecnologia e laboratório próprio de análises clínicas para oferecer atendimento completo e humanizado em um único local.';
+$home_about_stat1_icon      = $row['home_about_stat1_icon'] ?? 'fas fa-user-md';
+$home_about_stat1_val       = $row['home_about_stat1_val'] ?? '+15 Áreas';
+$home_about_stat1_lbl       = $row['home_about_stat1_lbl'] ?? 'Especialidades Médicas';
+$home_about_stat2_icon      = $row['home_about_stat2_icon'] ?? 'fas fa-hospital-user';
+$home_about_stat2_val       = $row['home_about_stat2_val'] ?? '+10.000';
+$home_about_stat2_lbl       = $row['home_about_stat2_lbl'] ?? 'Pacientes Atendidos';
+$home_about_stat3_icon      = $row['home_about_stat3_icon'] ?? 'fas fa-star';
+$home_about_stat3_val       = $row['home_about_stat3_val'] ?? '98.6%';
+$home_about_stat3_lbl       = $row['home_about_stat3_lbl'] ?? 'Satisfação Comprovada';
+$home_about_stat4_icon      = $row['home_about_stat4_icon'] ?? 'fas fa-file-medical';
+$home_about_stat4_val       = $row['home_about_stat4_val'] ?? '100%';
+$home_about_stat4_lbl       = $row['home_about_stat4_lbl'] ?? 'Laudos Digitais Ágeis';
+$home_about_card_icon       = $row['home_about_card_icon'] ?? 'fas fa-clinic-medical';
+$home_about_card_title      = $row['home_about_card_title'] ?? 'Centro Integrado Pronto Saúde';
+$home_about_card_subtitle   = $row['home_about_card_subtitle'] ?? 'Gardênia Azul • Jacarepaguá • RJ';
+$home_about_card_item1      = $row['home_about_card_item1'] ?? 'Consultórios médicos climatizados, acessíveis e confortáveis';
+$home_about_card_item2      = $row['home_about_card_item2'] ?? 'Laboratório de análises clínicas com coleta humanizada';
+$home_about_card_item3      = $row['home_about_card_item3'] ?? 'Odontologia moderna com raio-x e procedimentos integrados';
+$home_about_card_item4      = $row['home_about_card_item4'] ?? 'Agendamento ágil pelo WhatsApp em menos de 1 minuto';
+$home_about_btn1_text       = $row['home_about_btn1_text'] ?? 'Conheça Nossa História';
+$home_about_btn1_url        = $row['home_about_btn1_url'] ?? 'page/sobre';
+$home_about_btn2_text       = $row['home_about_btn2_text'] ?? 'Falar com Atendente';
+$home_about_btn2_url        = $row['home_about_btn2_url'] ?? '';
+
 // Controle do Tema Dark/Light no Portal Público
 $frontend_dark_mode_status = (int)($row['frontend_dark_mode_status'] ?? 1);
 
