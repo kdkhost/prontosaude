@@ -54,6 +54,18 @@ $logo = $config['logo'] ?? '';
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Acesso Restrito - <?= htmlspecialchars($empresa) ?></title>
 
+	<!-- Script de Inicialização Instantânea do Tema Dark/Light (Zero Flash / FOUC) -->
+	<script>
+		(function () {
+			try {
+				var stored = localStorage.getItem('theme');
+				var preferred = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+				var resolved = preferred === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : preferred;
+				document.documentElement.setAttribute('data-bs-theme', resolved);
+			} catch (e) {}
+		})();
+	</script>
+
 	<!-- Favicon -->
 	<link href="<?= BASE_URL; ?>assets/uploads/<?= htmlspecialchars($favicon); ?>" rel="shortcut icon" type="image/png">
 
@@ -75,9 +87,10 @@ $logo = $config['logo'] ?? '';
 			background-size: cover;
 			font-family: 'Source Sans 3', sans-serif;
 			padding: 1.5rem;
+			position: relative;
 		}
 		.login-card-modern {
-			background: rgba(255, 255, 255, 0.95);
+			background: rgba(255, 255, 255, 0.96);
 			backdrop-filter: blur(12px);
 			border: 1px solid rgba(255, 255, 255, 0.3);
 			border-radius: 1.25rem;
@@ -87,16 +100,42 @@ $logo = $config['logo'] ?? '';
 			overflow: hidden;
 			transition: all 0.3s ease;
 		}
+		[data-bs-theme="dark"] .login-card-modern {
+			background: rgba(19, 31, 51, 0.96);
+			border: 1px solid rgba(255, 255, 255, 0.12);
+			box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55);
+			color: #f8fafc;
+		}
 		.login-header-logo {
 			background: rgba(10, 107, 116, 0.05);
 			padding: 2rem 1.5rem 1.25rem 1.5rem;
 			text-align: center;
 			border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+			position: relative;
+		}
+		[data-bs-theme="dark"] .login-header-logo {
+			background: rgba(10, 107, 116, 0.15);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 		}
 		.login-header-logo img {
 			max-height: 48px;
 			max-width: 240px;
 			width: auto;
+		}
+		[data-bs-theme="dark"] .ps-login-logo-light { display: inline-block; }
+		[data-bs-theme="dark"] .ps-login-logo-dark { display: none; }
+		:root:not([data-bs-theme="dark"]) .ps-login-logo-light,
+		[data-bs-theme="light"] .ps-login-logo-light { display: none; }
+		:root:not([data-bs-theme="dark"]) .ps-login-logo-dark,
+		[data-bs-theme="light"] .ps-login-logo-dark { display: inline-block; }
+
+		[data-bs-theme="dark"] .form-control {
+			background-color: #152238;
+			border-color: #2e4363;
+			color: #f8fafc;
+		}
+		[data-bs-theme="dark"] .form-floating > label {
+			color: #94a3b8;
 		}
 		.form-floating > .form-control:focus ~ label,
 		.form-floating > .form-control:not(:placeholder-shown) ~ label {
@@ -122,14 +161,50 @@ $logo = $config['logo'] ?? '';
 			transform: translateY(-2px);
 			box-shadow: 0 6px 16px rgba(10, 107, 116, 0.4);
 		}
+		.btn-login-theme-toggle {
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+			background: rgba(255, 255, 255, 0.2);
+			border: 1px solid rgba(255, 255, 255, 0.3);
+			color: #ffffff;
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			backdrop-filter: blur(8px);
+			transition: all 0.2s;
+			z-index: 10;
+		}
+		.btn-login-theme-toggle:hover {
+			background: rgba(255, 255, 255, 0.35);
+			transform: scale(1.08);
+			color: #ffffff;
+		}
+		[data-bs-theme="dark"] .icon-theme-dark { display: none; }
+		[data-bs-theme="dark"] .icon-theme-light { display: inline-block; color: #ffc107; }
+		:root:not([data-bs-theme="dark"]) .icon-theme-light,
+		[data-bs-theme="light"] .icon-theme-light { display: none; }
+		:root:not([data-bs-theme="dark"]) .icon-theme-dark,
+		[data-bs-theme="light"] .icon-theme-dark { display: inline-block; color: #ffffff; }
 	</style>
 </head>
 
 <body>
+	<!-- Botão Flutuante de Alternância de Tema -->
+	<button type="button" class="btn-login-theme-toggle" id="btnLoginThemeToggle" aria-label="Alternar Tema Claro / Escuro" title="Alternar Modo Escuro / Claro">
+		<i class="bi bi-moon-stars-fill icon-theme-dark"></i>
+		<i class="bi bi-sun-fill icon-theme-light"></i>
+	</button>
+
 	<div class="login-card-modern">
 		<div class="login-header-logo">
 			<?php if(!empty($logo)): ?>
-				<img src="../assets/uploads/<?= htmlspecialchars($logo) ?>" alt="<?= htmlspecialchars($empresa) ?>">
+				<img src="../assets/uploads/<?= htmlspecialchars($logo) ?>" alt="<?= htmlspecialchars($empresa) ?>" class="ps-login-logo-light">
+				<img src="../assets/uploads/logo-dark.png" alt="<?= htmlspecialchars($empresa) ?>" class="ps-login-logo-dark">
 			<?php else: ?>
 				<h3 class="fw-bold text-primary mb-0"><i class="bi bi-hospital me-2"></i><?= htmlspecialchars($empresa) ?></h3>
 			<?php endif; ?>
@@ -179,6 +254,18 @@ $logo = $config['logo'] ?? '';
 	<script src="js/sweetalert2.all.min.js"></script>
 	<script src="js/toastr.min.js"></script>
 	<script src="js/pronto-global.js"></script>
+
+	<script>
+		document.getElementById('btnLoginThemeToggle')?.addEventListener('click', function() {
+			var current = document.documentElement.getAttribute('data-bs-theme') || 'light';
+			var next = current === 'dark' ? 'light' : 'dark';
+			document.documentElement.setAttribute('data-bs-theme', next);
+			localStorage.setItem('theme', next);
+			if (window.toastr) {
+				toastr.info('Tema: ' + (next === 'dark' ? 'Modo Escuro' : 'Modo Claro'), '', { timeOut: 1500, positionClass: 'toast-bottom-center' });
+			}
+		});
+	</script>
 
 	<?php if (!empty($error_message)): ?>
 	<script>

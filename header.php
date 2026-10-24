@@ -335,6 +335,17 @@ $email   = $row2['dep_email'] ?? '';
 
         <!-- Título e Metadados Básicos (Totalmente Sanitizados sem HTML) -->
         <title><?= pronto_clean_meta_string($seo_title, 70); ?></title>
+        <!-- Script de Inicialização Instantânea do Tema Dark/Light no Frontend (Zero FOUC) -->
+        <script>
+            (function () {
+                try {
+                    var stored = localStorage.getItem('theme');
+                    var preferred = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                    var resolved = preferred === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : preferred;
+                    document.documentElement.setAttribute('data-bs-theme', resolved);
+                } catch (e) {}
+            })();
+        </script>
         <meta name="description" content="<?= pronto_clean_meta_string($seo_desc, 160); ?>">
         <meta name="keywords" content="<?= pronto_clean_meta_string($seo_keywords, 255); ?>">
         <link rel="canonical" href="<?= htmlspecialchars($page_canonical, ENT_QUOTES, 'UTF-8'); ?>">
@@ -575,6 +586,12 @@ $email   = $row2['dep_email'] ?? '';
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
+                        <!-- Alternador de Tema Dark/Light no Topo -->
+                        <button type="button" class="btn-theme-toggle-frontend" id="btnThemeToggleFrontend" aria-label="Alternar Tema Claro / Escuro" title="Alternar Modo Escuro / Claro">
+                            <i class="fas fa-moon icon-theme-dark"></i>
+                            <i class="fas fa-sun icon-theme-light"></i>
+                            <span class="d-none d-xl-inline ms-1 text-theme-label">Tema</span>
+                        </button>
                         <a href="<?= BASE_URL; ?>admin/login.php" class="btn-cliente-topo">
                             <i class="fas fa-user-lock me-1"></i> Área do Paciente / Painel
                         </a>
@@ -731,6 +748,15 @@ $email   = $row2['dep_email'] ?? '';
 
                 <!-- 3. Informações Estáticas Fixadas no Rodapé do Side Menu (NUNCA saem do campo de visão) -->
                 <div class="android-drawer-footer flex-shrink-0 border-top bg-white p-3 shadow-sm mt-auto">
+                    <!-- Alternador de Tema Dark/Light no Menu Móvel -->
+                    <div class="d-flex align-items-center justify-content-between mb-3 px-1">
+                        <span class="small fw-semibold text-body"><i class="fas fa-circle-half-stroke me-2 text-primary"></i>Tema do Portal</span>
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 btn-theme-toggle-mobile" id="btnThemeToggleMobile" aria-label="Alternar Tema Claro / Escuro">
+                            <i class="fas fa-moon me-1 icon-theme-dark"></i>
+                            <i class="fas fa-sun me-1 icon-theme-light"></i>
+                            <span class="small text-theme-label">Alternar</span>
+                        </button>
+                    </div>
                     <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de agendar uma consulta médica na Pronto Saúde.'); ?>" target="_blank" rel="noopener noreferrer" class="btn-foco-primary w-100 justify-content-center mb-2">
                         <i class="fab fa-whatsapp me-2"></i> Agendamento via WhatsApp
                     </a>

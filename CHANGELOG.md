@@ -4,6 +4,18 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.23.0] - 2026-10-24
+
+### Corrigido & Aprimorado
+- **Consistência, Coerência e Harmonização Integral do Tema Dark / Light (AdminLTE 4 + Portal)**:
+  - **Zero Flash of Unstyled Content (FOUC):** Implementado script síncrono inline no `<head>` tanto do Painel Administrativo (`admin/header.php`, `admin/login.php`) quanto do Portal Público (`header.php`) para aplicar imediatamente o atributo `data-bs-theme` antes da renderização do DOM a partir do `localStorage`, eliminando totalmente qualquer piscar ou tremor claro na transição de páginas.
+  - **Sidebar Dinâmica no Painel Admin:** Eliminado o `data-bs-theme="dark"` estático que forçava a barra lateral preta mesmo quando o gestor selecionava Modo Claro. A sidebar agora se adapta dinamicamente: no Modo Claro adota fundo branco puro (`#ffffff`), bordas suaves (`#e2e8f0`), tipografia escura nítida (`#334155`), itens ativos na paleta Teal Pronto Saúde (`#0a6b74`) e logo escura oficial (`logo-dark.png`); no Modo Escuro adota fundo escuro hospitalar (`#0b1320`), bordas noturnas (`#24354f`), textos claros (`#cbd5e1`) e logo clara (`logo.png`).
+  - **Gráficos ApexCharts Transparentes e Reativos:** Corrigido o fundo cinza opaco rígido que destoava do tema escuro na dashboard (`admin/index.php`), configurando `background: 'transparent'`, além de escuta em tempo real do evento customizado `prontoThemeChanged` para sincronizar os gráficos instantaneamente ao alternar o tema sem recarregar a página.
+  - **Correção dos Títulos dos Cards de Gráficos:** Corrigida a sobreposição inline dos títulos e subtítulos (`.card-title` com `display: block; float: none;`), organizando o layout hierárquico com espaçamento adequado.
+  - **Fundo Checkerboard (Xadrez) para Pré-visualização de Imagens e Logos:** Implementado padrão xadrez suave em campos de upload e fotos existentes em `admin/settings.php` e formulários do sistema, assegurando que logotipos com fundo transparente (sejam brancos ou escuros) tenham perfeita visibilidade tanto no Modo Claro quanto no Modo Escuro.
+  - **Suporte Nativo a Tema Dark / Light no Portal Público:** Adicionado botão alternador de Tema (Sol/Lua) na Topbar Desktop e no Drawer Móvel Android com notificações discretas via **Toastr**, sincronizando as variáveis CSS do Bootstrap 5.3.3 e a folha moderna `assets/css/pronto-modern-frontend.css` para toda a experiência dos pacientes web.
+  - **Tela de Login com Suporte a Tema:** Adicionado botão flutuante de alternância de tema e adaptação de formulário com glassmorphism tanto no modo claro quanto escuro.
+
 ## [2.22.0] - 2026-10-23
 
 ### Refatorado & Corrigido

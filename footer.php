@@ -419,6 +419,43 @@ $(function () {
             }
         });
     });
+
+    // ==========================================================================
+    // GERENCIADOR UNIFICADO DE TEMA DARK / LIGHT DO PORTAL PRONTO SAÚDE
+    // ==========================================================================
+    function applyFrontendTheme(theme) {
+        var resolved = theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme;
+        document.documentElement.setAttribute('data-bs-theme', resolved);
+        localStorage.setItem('theme', theme);
+
+        // Atualizar textos e estados dos botões
+        var isDark = resolved === 'dark';
+        $('.btn-theme-toggle-frontend .text-theme-label').text(isDark ? 'Escuro' : 'Claro');
+        $('.btn-theme-toggle-mobile .text-theme-label').text(isDark ? 'Modo Escuro' : 'Modo Claro');
+
+        // Disparar evento global
+        window.dispatchEvent(new CustomEvent('prontoThemeChanged', { detail: { theme: resolved, raw: theme } }));
+    }
+
+    var currentStoredTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyFrontendTheme(currentStoredTheme);
+
+    $(document).on('click', '#btnThemeToggleFrontend, #btnThemeToggleMobile', function (e) {
+        e.preventDefault();
+        var current = document.documentElement.getAttribute('data-bs-theme') || 'light';
+        var next = current === 'dark' ? 'light' : 'dark';
+        applyFrontendTheme(next);
+        
+        if (window.toastr) {
+            toastr.info('Tema visual: ' + (next === 'dark' ? 'Modo Escuro' : 'Modo Claro'), 'Aparência', { timeOut: 2000, positionClass: 'toast-bottom-right' });
+        }
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (!localStorage.getItem('theme')) {
+            applyFrontendTheme(e.matches ? 'dark' : 'light');
+        }
+    });
 });
 </script>
 </body>

@@ -4,15 +4,44 @@
  * Padrão: Bootstrap 5.3 + AdminLTE 4 + Suporte a Dark/Light Theme
  */
 
-:root {
+:root, [data-bs-theme="light"] {
   --ps-primary: #0a6b74;
   --ps-primary-hover: #075259;
   --ps-primary-subtle: #e6f3f4;
+  --ps-primary-light: #128994;
   --ps-success: #198754;
   --ps-info: #0dcaf0;
   --ps-warning: #ffc107;
   --ps-danger: #dc3545;
   --ps-radius: 0.75rem;
+
+  --bs-body-bg: #f8fafc;
+  --bs-body-color: #334155;
+  --bs-secondary-color: #64748b;
+  --bs-tertiary-bg: #f1f5f9;
+  --bs-card-bg: #ffffff;
+  --bs-border-color: #e2e8f0;
+  --bs-heading-color: #1e293b;
+}
+
+[data-bs-theme="dark"] {
+  --ps-primary: #0a6b74;
+  --ps-primary-hover: #075259;
+  --ps-primary-subtle: rgba(10, 107, 116, 0.25);
+  --ps-primary-light: #16a3af;
+  --ps-success: #198754;
+  --ps-info: #0dcaf0;
+  --ps-warning: #ffc107;
+  --ps-danger: #dc3545;
+  --ps-radius: 0.75rem;
+
+  --bs-body-bg: #0b1320;
+  --bs-body-color: #f1f5f9;
+  --bs-secondary-color: #94a3b8;
+  --bs-tertiary-bg: #152238;
+  --bs-card-bg: #131f33;
+  --bs-border-color: #24354f;
+  --bs-heading-color: #f8fafc;
 }
 
 body {
@@ -1661,3 +1690,161 @@ td .d-flex {
 
 
 
+
+
+/* ==============================================================================
+   SIDEBAR DINÂMICA (SUPORTE COMPLETO A MODO CLARO E MODO ESCURO)
+   ============================================================================== */
+
+/* Modo Claro (Light Mode) */
+:root:not([data-bs-theme="dark"]) .app-sidebar,
+[data-bs-theme="light"] .app-sidebar {
+  background-color: #ffffff !important;
+  border-right: 1px solid #e2e8f0 !important;
+}
+:root:not([data-bs-theme="dark"]) .app-sidebar .sidebar-brand,
+[data-bs-theme="light"] .app-sidebar .sidebar-brand {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+:root:not([data-bs-theme="dark"]) .app-sidebar .sidebar-brand .ps-sidebar-logo-light,
+[data-bs-theme="light"] .app-sidebar .sidebar-brand .ps-sidebar-logo-light {
+  display: none !important;
+}
+:root:not([data-bs-theme="dark"]) .app-sidebar .sidebar-brand .ps-sidebar-logo-dark,
+[data-bs-theme="light"] .app-sidebar .sidebar-brand .ps-sidebar-logo-dark {
+  display: inline-block !important;
+}
+:root:not([data-bs-theme="dark"]) .sidebar-menu .nav-header,
+[data-bs-theme="light"] .sidebar-menu .nav-header {
+  color: #64748b !important;
+  font-weight: 700;
+}
+:root:not([data-bs-theme="dark"]) .sidebar-menu .nav-link,
+[data-bs-theme="light"] .sidebar-menu .nav-link {
+  color: #334155 !important;
+}
+:root:not([data-bs-theme="dark"]) .sidebar-menu .nav-link:hover,
+[data-bs-theme="light"] .sidebar-menu .nav-link:hover {
+  background-color: rgba(10, 107, 116, 0.08) !important;
+  color: #0a6b74 !important;
+}
+:root:not([data-bs-theme="dark"]) .sidebar-menu .nav-item.menu-open > .nav-link.active-parent,
+:root:not([data-bs-theme="dark"]) .sidebar-menu .nav-item.menu-open > .nav-link.active,
+[data-bs-theme="light"] .sidebar-menu .nav-item.menu-open > .nav-link.active-parent,
+[data-bs-theme="light"] .sidebar-menu .nav-item.menu-open > .nav-link.active {
+  background-color: rgba(10, 107, 116, 0.1) !important;
+  color: #0a6b74 !important;
+  border-left: 3px solid #0a6b74 !important;
+}
+:root:not([data-bs-theme="dark"]) .sidebar-menu .nav-treeview .nav-link,
+[data-bs-theme="light"] .sidebar-menu .nav-treeview .nav-link {
+  color: #475569 !important;
+}
+:root:not([data-bs-theme="dark"]) .sidebar-menu .nav-treeview .nav-link:hover,
+[data-bs-theme="light"] .sidebar-menu .nav-treeview .nav-link:hover {
+  color: #0a6b74 !important;
+  background-color: rgba(10, 107, 116, 0.08) !important;
+}
+:root:not([data-bs-theme="dark"]) .sidebar-menu .nav-link .nav-arrow,
+[data-bs-theme="light"] .sidebar-menu .nav-link .nav-arrow {
+  color: #64748b;
+}
+
+/* Modo Escuro (Dark Mode) */
+[data-bs-theme="dark"] .app-sidebar {
+  background-color: #0b1320 !important;
+  border-right: 1px solid #24354f !important;
+}
+[data-bs-theme="dark"] .app-sidebar .sidebar-brand {
+  background-color: #0b1320 !important;
+  border-bottom: 1px solid #24354f !important;
+}
+[data-bs-theme="dark"] .app-sidebar .sidebar-brand .ps-sidebar-logo-light {
+  display: inline-block !important;
+}
+[data-bs-theme="dark"] .app-sidebar .sidebar-brand .ps-sidebar-logo-dark {
+  display: none !important;
+}
+[data-bs-theme="dark"] .sidebar-menu .nav-header {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+[data-bs-theme="dark"] .sidebar-menu .nav-link {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+[data-bs-theme="dark"] .sidebar-menu .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+[data-bs-theme="dark"] .sidebar-menu .nav-item.menu-open > .nav-link.active-parent,
+[data-bs-theme="dark"] .sidebar-menu .nav-item.menu-open > .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border-left: 3px solid #0a6b74 !important;
+}
+[data-bs-theme="dark"] .sidebar-menu .nav-treeview .nav-link {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+[data-bs-theme="dark"] .sidebar-menu .nav-treeview .nav-link:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Equalização de Card Titles e Headers */
+.card-header .card-title,
+.box-header .box-title {
+  float: none !important;
+  display: block !important;
+  margin-bottom: 0.25rem !important;
+}
+
+/* Fundo Checkerboard para Pré-visualização de Imagens e Logos */
+img.existing-photo,
+.ps-logo-preview-box,
+.existing-photo {
+  background-color: var(--bs-card-bg);
+  background-image: 
+    linear-gradient(45deg, rgba(0,0,0,0.06) 25%, transparent 25%), 
+    linear-gradient(-45deg, rgba(0,0,0,0.06) 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, rgba(0,0,0,0.06) 75%), 
+    linear-gradient(-45deg, transparent 75%, rgba(0,0,0,0.06) 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+  padding: 10px;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.5rem;
+}
+[data-bs-theme="dark"] img.existing-photo,
+[data-bs-theme="dark"] .ps-logo-preview-box,
+[data-bs-theme="dark"] .existing-photo {
+  background-color: #131f33;
+  background-image: 
+    linear-gradient(45deg, rgba(255,255,255,0.06) 25%, transparent 25%), 
+    linear-gradient(-45deg, rgba(255,255,255,0.06) 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.06) 75%), 
+    linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.06) 75%);
+  border-color: #24354f;
+}
+
+/* Substituição de verdes incoerentes por Teal Oficial */
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus,
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_filter input:focus {
+  background-color: #19273f !important;
+  border-color: #0a6b74 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 0.25rem rgba(10, 107, 116, 0.25) !important;
+}
+
+[data-bs-theme="dark"] .nav-tabs .nav-link:hover,
+[data-bs-theme="dark"] .card-outline-tabs .nav-tabs .nav-link:hover {
+  color: #16a3af !important;
+  background-color: rgba(10, 107, 116, 0.12) !important;
+}
+
+[data-bs-theme="dark"] .nav-tabs .nav-link.active,
+[data-bs-theme="dark"] .card-outline-tabs .nav-tabs .nav-link.active {
+  color: #16a3af !important;
+  background-color: var(--bs-card-bg) !important;
+  border-bottom: 3px solid #0a6b74 !important;
+}

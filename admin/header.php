@@ -69,6 +69,18 @@ $logo = $row['logo'] ?? '';
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 	<title>Painel Administrativo | <?= htmlspecialchars($empresa); ?></title>
 	
+	<!-- Script de Inicialização Instantânea do Tema Dark/Light (Zero Flash / FOUC) -->
+	<script>
+		(function () {
+			try {
+				var stored = localStorage.getItem('theme');
+				var preferred = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+				var resolved = preferred === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : preferred;
+				document.documentElement.setAttribute('data-bs-theme', resolved);
+			} catch (e) {}
+		})();
+	</script>
+	
 	<!-- Favicon -->
 	<link href="<?= BASE_URL; ?>assets/uploads/<?= htmlspecialchars($favicon); ?>" rel="shortcut icon" type="image/png">
 	
@@ -188,15 +200,16 @@ $logo = $row['logo'] ?? '';
 			</div>
 		</nav>
 
-		<!-- Barra Lateral (Sidebar / Aside) -->
-		<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+		<!-- Barra Lateral (Sidebar / Aside com Suporte Dinâmico a Dark / Light) -->
+		<aside class="app-sidebar shadow" id="mainAppSidebar">
 			<!-- Logo do Painel -->
 			<div class="sidebar-brand">
 				<a href="index.php" class="brand-link text-decoration-none d-flex align-items-center justify-content-center">
 					<?php if(!empty($logo)): ?>
-						<img src="<?= BASE_URL . "assets/uploads/" . $logo ;?>" alt="<?= htmlspecialchars($empresa); ?>" class="brand-image">
+						<img src="<?= BASE_URL . "assets/uploads/" . $logo ;?>" alt="<?= htmlspecialchars($empresa); ?>" class="brand-image ps-sidebar-logo-light">
+						<img src="<?= BASE_URL . "assets/uploads/logo-dark.png"; ?>" alt="<?= htmlspecialchars($empresa); ?>" class="brand-image ps-sidebar-logo-dark">
 					<?php else: ?>
-						<span class="brand-text fw-bold text-white fs-5"><i class="bi bi-hospital me-2 text-info"></i><?= htmlspecialchars($empresa); ?></span>
+						<span class="brand-text fw-bold fs-5"><i class="bi bi-hospital me-2 text-info"></i><?= htmlspecialchars($empresa); ?></span>
 					<?php endif; ?>
 				</a>
 			</div>

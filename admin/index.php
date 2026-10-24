@@ -269,10 +269,10 @@ $total_partners = (int)$statement->fetchColumn();
 				<div class="card border-0 shadow-sm rounded-4 h-100">
 					<div class="card-header bg-transparent border-bottom p-3 d-flex align-items-center justify-content-between">
 						<div>
-							<h5 class="card-title fw-bold mb-0">
+							<h5 class="card-title d-block float-none fw-bold mb-1">
 								<i class="bi bi-bar-chart-line-fill text-primary me-2"></i>Distribuição e Volume do Sistema
 							</h5>
-							<small class="text-body-secondary">Métricas consolidadas de atendimento e conteúdos</small>
+							<small class="text-body-secondary d-block">Métricas consolidadas de atendimento e conteúdos</small>
 						</div>
 						<span class="badge bg-primary-subtle text-primary border border-primary-subtle">
 							Interativo
@@ -289,10 +289,10 @@ $total_partners = (int)$statement->fetchColumn();
 				<div class="card border-0 shadow-sm rounded-4 h-100">
 					<div class="card-header bg-transparent border-bottom p-3 d-flex align-items-center justify-content-between">
 						<div>
-							<h5 class="card-title fw-bold mb-0">
+							<h5 class="card-title d-block float-none fw-bold mb-1">
 								<i class="bi bi-pie-chart-fill text-info me-2"></i>Módulos de Saúde
 							</h5>
-							<small class="text-body-secondary">Proporção dos recursos assistenciais</small>
+							<small class="text-body-secondary d-block">Proporção dos recursos assistenciais</small>
 						</div>
 					</div>
 					<div class="card-body p-3 d-flex flex-column justify-content-center align-items-center">
@@ -454,7 +454,8 @@ window.renderDashboardCharts = function(isDark) {
 			type: 'bar',
 			height: 320,
 			toolbar: { show: false },
-			fontFamily: 'Source Sans 3, sans-serif'
+			fontFamily: 'Source Sans 3, sans-serif',
+			background: 'transparent'
 		},
 		theme: { mode: themeMode },
 		plotOptions: {
@@ -482,7 +483,7 @@ window.renderDashboardCharts = function(isDark) {
 			}
 		},
 		grid: {
-			borderColor: isDark ? '#334155' : '#e2e8f0',
+			borderColor: isDark ? '#24354f' : '#e2e8f0',
 			strokeDashArray: 4
 		},
 		tooltip: {
@@ -509,7 +510,8 @@ window.renderDashboardCharts = function(isDark) {
 		chart: {
 			type: 'donut',
 			height: 300,
-			fontFamily: 'Source Sans 3, sans-serif'
+			fontFamily: 'Source Sans 3, sans-serif',
+			background: 'transparent'
 		},
 		theme: { mode: themeMode },
 		labels: ['Médicos', 'Clínicas', 'Odontologia', 'Vagas'],
@@ -561,6 +563,12 @@ window.renderDashboardCharts = function(isDark) {
 document.addEventListener('DOMContentLoaded', function () {
 	const currentTheme = document.documentElement.getAttribute('data-bs-theme') || 'light';
 	window.renderDashboardCharts(currentTheme === 'dark');
+});
+
+window.addEventListener('prontoThemeChanged', function (e) {
+	if (window.renderDashboardCharts) {
+		window.renderDashboardCharts(e.detail.theme === 'dark');
+	}
 });
 </script>
 
