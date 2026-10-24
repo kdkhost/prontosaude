@@ -56,11 +56,11 @@ $page_banner_src = (!empty($banner) && file_exists(__DIR__ . '/assets/uploads/' 
      1. FULL WIDTH PAGE LAYOUT (SOBRE, PRIVACIDADE, TERMOS, ETC.)
      ============================================================================== -->
 <?php if($page_layout == 'Full Width Page Layout'): ?>
-<section class="about-v2" style="padding: 60px 0; background: #f8fafc;">
+<section class="about-v2" style="padding: 60px 0;">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<div style="background: #ffffff; border-radius: 16px; padding: 36px 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; font-size: 15.5px; line-height: 1.85; color: #334155;">
+				<div class="ps-page-content-box">
 					<?php echo $page_content; ?>
 				</div>
 			</div>
@@ -205,7 +205,7 @@ $page_banner_src = (!empty($banner) && file_exists(__DIR__ . '/assets/uploads/' 
 		}
 	}
 ?>
-<section class="contact-v1" style="padding: 60px 0; background: #f8fafc;">
+<section class="contact-v1" style="padding: 60px 0;">
 	<div class="container">
 		<div class="row mb-4">
 			<div class="col-md-12 text-center">
@@ -357,7 +357,7 @@ $page_banner_src = (!empty($banner) && file_exists(__DIR__ . '/assets/uploads/' 
      3. FAQ PAGE LAYOUT (PERGUNTAS FREQUENTES POR CATEGORIA)
      ============================================================================== -->
 <?php if($page_layout == 'FAQ Page Layout'): ?>
-<section class="faq" style="padding: 60px 0; background: #f8fafc;">
+<section class="faq" style="padding: 60px 0;">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
@@ -1154,7 +1154,7 @@ document.addEventListener('DOMContentLoaded', function () {
      7. DOCTOR PAGE LAYOUT (CORPO CLÍNICO / MÉDICOS)
      ============================================================================== -->
 <?php if($page_layout == 'Doctor Page Layout'): ?>
-<section class="doctor-v3" style="padding: 60px 0; background: #f8fafc;">
+<section class="doctor-v3" style="padding: 60px 0;">
 	<div class="container">
 		<div class="row g-3">
 			<?php

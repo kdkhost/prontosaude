@@ -49,7 +49,7 @@ foreach ($result as $row) {
 
 <?php if($home_status_pricing == 1): ?>
 <!-- Pricing Start -->
-<section class="ps-foco-plans" id="fidelidade" style="padding: 70px 0; background: #f8fafc;">
+<section class="ps-foco-plans section-planos" id="fidelidade" style="padding: 70px 0;">
 	<div class="container">
 		<div class="row g-4 justify-content-center">
 			<?php

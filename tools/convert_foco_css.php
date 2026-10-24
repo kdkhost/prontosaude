@@ -2929,3 +2929,110 @@ if (substr($css, 0, 3) === "\xEF\xBB\xBF") {
 }
 file_put_contents($dest, $css);
 echo "Sucesso: pronto-modern-frontend.css compilado com " . strlen($css) . " bytes.\n";
+
+
+/* ==============================================================================
+   15. SUPORTE UNIVERSAL A PÁGINAS INTERNAS E COMPONENTES MULTIPAGE (DARK MODE)
+   ============================================================================== */
+.ps-page-content-box {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 36px 32px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    font-size: 15.5px;
+    line-height: 1.85;
+    color: #334155;
+    transition: var(--ps-transition);
+}
+
+[data-bs-theme="dark"] .ps-page-content-box {
+    background: #131f33 !important;
+    border-color: #24354f !important;
+    color: #cbd5e1 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-bs-theme="dark"] .ps-page-content-box h1,
+[data-bs-theme="dark"] .ps-page-content-box h2,
+[data-bs-theme="dark"] .ps-page-content-box h3,
+[data-bs-theme="dark"] .ps-page-content-box h4,
+[data-bs-theme="dark"] .ps-page-content-box h5,
+[data-bs-theme="dark"] .ps-page-content-box h6,
+[data-bs-theme="dark"] .ps-page-content-box strong,
+[data-bs-theme="dark"] .ps-page-content-box b {
+    color: #f8fafc !important;
+}
+
+/* Seções Internas (Sobre, Contato, FAQ, Blog, Médicos, Especialidades, Trabalhe Conosco) */
+[data-bs-theme="dark"] .about-v2,
+[data-bs-theme="dark"] .contact-v1,
+[data-bs-theme="dark"] .faq,
+[data-bs-theme="dark"] .blog,
+[data-bs-theme="dark"] .doctor-v3,
+[data-bs-theme="dark"] .doctor-detail,
+[data-bs-theme="dark"] .service-v1,
+[data-bs-theme="dark"] .ps-foco-services,
+[data-bs-theme="dark"] .ps-foco-plans,
+[data-bs-theme="dark"] .ps-service-detail-section {
+    background-color: #0b1320 !important;
+    background: #0b1320 !important;
+    color: #cbd5e1 !important;
+}
+
+/* Regras Universais para Elementos com Estilos Inline no Dark Mode */
+[data-bs-theme="dark"] [style*="background: #f8fafc"],
+[data-bs-theme="dark"] [style*="background:#f8fafc"] {
+    background-color: #0b1320 !important;
+    background: #0b1320 !important;
+}
+
+[data-bs-theme="dark"] [style*="background: #ffffff"],
+[data-bs-theme="dark"] [style*="background:#ffffff"],
+[data-bs-theme="dark"] [style*="background: #fff"],
+[data-bs-theme="dark"] [style*="background:#fff"] {
+    background-color: #131f33 !important;
+    background: #131f33 !important;
+    border-color: #24354f !important;
+}
+
+[data-bs-theme="dark"] [style*="color: #334155"],
+[data-bs-theme="dark"] [style*="color: #475569"],
+[data-bs-theme="dark"] [style*="color: #64748b"] {
+    color: #cbd5e1 !important;
+}
+
+[data-bs-theme="dark"] [style*="border: 1px solid #e2e8f0"],
+[data-bs-theme="dark"] [style*="border-top: 1px solid #e2e8f0"],
+[data-bs-theme="dark"] [style*="border-bottom: 1px solid #e2e8f0"],
+[data-bs-theme="dark"] [style*="border-top: 1px solid #f1f5f9"] {
+    border-color: #24354f !important;
+}
+
+[data-bs-theme="dark"] .accordion-item {
+    background-color: #131f33 !important;
+    border-color: #24354f !important;
+}
+
+[data-bs-theme="dark"] .accordion-button {
+    background-color: #131f33 !important;
+    color: #f8fafc !important;
+    border-color: #24354f !important;
+}
+
+[data-bs-theme="dark"] .accordion-button:not(.collapsed) {
+    background-color: #16243a !important;
+    color: #0dcaf0 !important;
+}
+
+[data-bs-theme="dark"] .accordion-body {
+    background-color: #0b1320 !important;
+    color: #cbd5e1 !important;
+}
+
+[data-bs-theme="dark"] .post-item,
+[data-bs-theme="dark"] .widget {
+    background-color: #131f33 !important;
+    border-color: #24354f !important;
+    color: #cbd5e1 !important;
+}

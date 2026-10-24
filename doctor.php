@@ -62,7 +62,7 @@ $zap_doc_msg = urlencode("*Olá! Gostaria de agendar uma consulta com Dr(a).* " 
 <!-- Banner End -->
 
 <!-- Doctor Detail Start -->
-<section class="doctor-detail" style="padding: 60px 0 80px 0; background: #f8fafc;">
+<section class="doctor-detail" style="padding: 60px 0 80px 0;">
 	<div class="container">
 		<div class="row g-4">
 			

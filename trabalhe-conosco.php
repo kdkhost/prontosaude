@@ -17,7 +17,7 @@
 <!-- Banner End -->
 
 <!-- Vagas Section Start -->
-<section class="service-v1" style="padding: 70px 0; background: #f8fafc;">
+<section class="service-v1" style="padding: 70px 0;">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
@@ -137,7 +137,7 @@
 				<?php endforeach; ?>
 			<?php else: ?>
 				<div class="col-md-12 text-center" style="margin-bottom: 40px;">
-					<div class="p-5" style="background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.04);">
+					<div class="p-5 ps-page-content-box">
 						<i class="fa fa-briefcase text-muted" style="font-size: 48px; opacity: 0.5; margin-bottom: 16px;"></i>
 						<h4>No momento não há vagas abertas para preenchimento imediato.</h4>
 						<p class="text-muted">Mesmo assim, adoraríamos conhecer o seu talento! Cadastre seu currículo em nosso banco de talentos abaixo.</p>

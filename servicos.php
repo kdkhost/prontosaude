@@ -48,7 +48,7 @@ foreach ($result as $row) {
 
 <?php if($home_status_service == 1): ?>
 <!-- Service Start -->
-<section class="ps-foco-services" style="padding: 70px 0; background: #f8fafc;">
+<section class="ps-foco-services section-servicos" id="servicos" style="padding: 70px 0;">
 	<div class="container">
 		<div class="row g-4">
 			<?php

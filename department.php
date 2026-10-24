@@ -83,7 +83,7 @@ $zap_dep_msg = urlencode("*Olá! Gostaria de informações e agendamento para a 
 <!-- Banner End -->
 
 <!-- Department Main Start -->
-<section class="blog" style="padding: 60px 0; background: #f8fafc;">
+<section class="blog" style="padding: 60px 0;">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-8">

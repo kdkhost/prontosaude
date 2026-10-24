@@ -48,11 +48,11 @@ if (!empty($banner_raw)) {
 </div>
 
 <!-- Conteúdo da Política de Privacidade -->
-<section class="about-v2" style="padding: 60px 0; background: #f8fafc;">
+<section class="about-v2 section-sobre" style="padding: 60px 0;">
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-lg-10 col-md-12">
-				<div style="background: #ffffff; border-radius: 20px; padding: 42px 36px; box-shadow: 0 10px 30px rgba(10, 107, 116, 0.06); border: 1px solid #e2e8f0; font-size: 15.5px; line-height: 1.85; color: #334155;">
+				<div class="ps-page-content-box">
 					
 					<div class="d-flex align-items-center gap-3 pb-3 mb-4 border-bottom border-slate-200">
 						<div class="d-flex align-items-center justify-content-center text-white rounded-3 p-3" style="background: var(--ps-primary); width: 48px; height: 48px; font-size: 1.25rem;">
