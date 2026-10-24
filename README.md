@@ -38,6 +38,10 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - Botão flutuante integrado de **Voltar ao Topo** (`#btnVoltarAoTopo`) com detecção de scroll e animação suave.
 - **Trabalhe Conosco:** Divulgação de vagas de emprego ativas com modal hospitalar de detalhes, badges de requisitos e candidatura direta via WhatsApp ou e-mail.
 - **Blog/Notícias & Busca:** Sistema de categorias, artigos completos, paginação moderna, contagem atômica de visualizações e barra lateral com anúncios e busca rápida.
+- **Tema Dark / Light Dinâmico e 100% Independente:**
+  - Alternador de tema Claro / Escuro de alto contraste no cabeçalho e menu móvel, com notificações via Toastr.
+  - **Isolamento de Estado:** O tema do site público é totalmente desacoplado do Painel Administrativo (`pronto_frontend_theme` vs `pronto_admin_theme`), garantindo que o tema escolhido pelo administrador no painel nunca interfira na navegação dos visitantes do portal.
+  - **Controle Centralizado no Painel:** Opção nas configurações gerais (`admin/settings.php`) para ativar ou desativar o modo dark no site público com um único clique.
 - **Interface e Feedback 100% Interativos:** Formulários públicos integrados com AJAX assíncrono (sem reload), notificações flutuantes com **Toastr** e caixas de diálogo elegantes com **SweetAlert2** substituindo qualquer alerta nativo de navegador.
 
 ### Painel Administrativo Moderno e Desacoplado (AdminLTE 4 + SPA)

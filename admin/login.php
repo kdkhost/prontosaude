@@ -58,7 +58,7 @@ $logo = $config['logo'] ?? '';
 	<script>
 		(function () {
 			try {
-				var stored = localStorage.getItem('theme');
+				var stored = localStorage.getItem('pronto_admin_theme') || localStorage.getItem('theme');
 				var preferred = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 				var resolved = preferred === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : preferred;
 				document.documentElement.setAttribute('data-bs-theme', resolved);
@@ -260,7 +260,7 @@ $logo = $config['logo'] ?? '';
 			var current = document.documentElement.getAttribute('data-bs-theme') || 'light';
 			var next = current === 'dark' ? 'light' : 'dark';
 			document.documentElement.setAttribute('data-bs-theme', next);
-			localStorage.setItem('theme', next);
+			localStorage.setItem('pronto_admin_theme', next);
 			if (window.toastr) {
 				toastr.info('Tema: ' + (next === 'dark' ? 'Modo Escuro' : 'Modo Claro'), '', { timeOut: 1500, positionClass: 'toast-bottom-center' });
 			}

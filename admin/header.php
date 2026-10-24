@@ -73,7 +73,7 @@ $logo = $row['logo'] ?? '';
 	<script>
 		(function () {
 			try {
-				var stored = localStorage.getItem('theme');
+				var stored = localStorage.getItem('pronto_admin_theme') || localStorage.getItem('theme');
 				var preferred = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 				var resolved = preferred === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : preferred;
 				document.documentElement.setAttribute('data-bs-theme', resolved);

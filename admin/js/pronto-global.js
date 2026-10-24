@@ -8,9 +8,10 @@
 
   // ==========================================
   // 1. GERENCIADOR DE TEMA DARK / LIGHT (AdminLTE 4)
-  // ==========================================
-  const getStoredTheme = () => localStorage.getItem('theme');
-  const setStoredTheme = theme => localStorage.setItem('theme', theme);
+  const getStoredTheme = () => localStorage.getItem('pronto_admin_theme') || localStorage.getItem('theme');
+  const setStoredTheme = theme => {
+    localStorage.setItem('pronto_admin_theme', theme);
+  };
 
   const getPreferredTheme = () => {
     const storedTheme = getStoredTheme();

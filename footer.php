@@ -421,41 +421,46 @@ $(function () {
     });
 
     // ==========================================================================
-    // GERENCIADOR UNIFICADO DE TEMA DARK / LIGHT DO PORTAL PRONTO SAÚDE
+    // GERENCIADOR UNIFICADO DE TEMA DARK / LIGHT DO PORTAL PRONTO SAÚDE (ISOLADO)
     // ==========================================================================
+    var isThemeToggleAllowed = <?= (int)($frontend_dark_mode_status ?? 1); ?>;
+
     function applyFrontendTheme(theme) {
-        var resolved = theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme;
+        if (!isThemeToggleAllowed) {
+            document.documentElement.setAttribute('data-bs-theme', 'light');
+            return;
+        }
+        var resolved = theme === 'dark' ? 'dark' : 'light';
         document.documentElement.setAttribute('data-bs-theme', resolved);
-        localStorage.setItem('theme', theme);
+        localStorage.setItem('pronto_frontend_theme', resolved);
 
         // Atualizar textos e estados dos botões
         var isDark = resolved === 'dark';
         $('.btn-theme-toggle-frontend .text-theme-label').text(isDark ? 'Escuro' : 'Claro');
         $('.btn-theme-toggle-mobile .text-theme-label').text(isDark ? 'Modo Escuro' : 'Modo Claro');
 
-        // Disparar evento global
+        // Disparar evento global para componentes que reagem à mudança de tema
         window.dispatchEvent(new CustomEvent('prontoThemeChanged', { detail: { theme: resolved, raw: theme } }));
     }
 
-    var currentStoredTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    applyFrontendTheme(currentStoredTheme);
+    if (isThemeToggleAllowed) {
+        // Inicializa com o tema salvo no frontend ou padrão 'light' (nunca herdando do admin)
+        var currentStoredTheme = localStorage.getItem('pronto_frontend_theme') || 'light';
+        applyFrontendTheme(currentStoredTheme);
 
-    $(document).on('click', '#btnThemeToggleFrontend, #btnThemeToggleMobile', function (e) {
-        e.preventDefault();
-        var current = document.documentElement.getAttribute('data-bs-theme') || 'light';
-        var next = current === 'dark' ? 'light' : 'dark';
-        applyFrontendTheme(next);
-        
-        if (window.toastr) {
-            toastr.info('Tema visual: ' + (next === 'dark' ? 'Modo Escuro' : 'Modo Claro'), 'Aparência', { timeOut: 2000, positionClass: 'toast-bottom-right' });
-        }
-    });
-
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
-        if (!localStorage.getItem('theme')) {
-            applyFrontendTheme(e.matches ? 'dark' : 'light');
-        }
-    });
+        $(document).on('click', '#btnThemeToggleFrontend, #btnThemeToggleMobile', function (e) {
+            e.preventDefault();
+            var current = document.documentElement.getAttribute('data-bs-theme') || 'light';
+            var next = current === 'dark' ? 'light' : 'dark';
+            applyFrontendTheme(next);
+            
+            if (window.toastr) {
+                toastr.info('Tema visual: ' + (next === 'dark' ? 'Modo Escuro' : 'Modo Claro'), 'Aparência', { timeOut: 2000, positionClass: 'toast-bottom-right' });
+            }
+        });
+    } else {
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+    }
 });
 </script>
 </body>

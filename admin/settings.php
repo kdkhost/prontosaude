@@ -254,13 +254,16 @@ if(isset($_POST['form7'])) {
 	$success_message = 'Os títulos, subtítulos e status das seções da Home foram atualizados com sucesso.';
 }
 
-// Form 8: Cor
+// Form 8: Cor & Tema do Portal Público
 if(isset($_POST['form8'])) {
 	$active_tab = 'tab_8';
-	$statement = $pdo->prepare("UPDATE tbl_settings SET color=? WHERE id=1");
-	$statement->execute(array($_POST['color'] ?? '0a6b74'));
+	$frontend_dark_mode_status = isset($_POST['frontend_dark_mode_status']) ? 1 : 0;
+	$color_val = $_POST['color'] ?? '0a6b74';
 
-	$success_message = 'A cor temática principal do portal foi atualizada com sucesso.';
+	$statement = $pdo->prepare("UPDATE tbl_settings SET color=?, frontend_dark_mode_status=? WHERE id=1");
+	$statement->execute(array($color_val, $frontend_dark_mode_status));
+
+	$success_message = 'A cor principal e o status do tema dark/light do site público foram atualizados com sucesso.';
 }
 
 // Preloader
@@ -339,6 +342,7 @@ $home_subtitle_partner           = $row['home_subtitle_partner'] ?? '';
 $home_status_partner             = $row['home_status_partner'] ?? 0;
 $color                           = $row['color'] ?? '0a6b74';
 $preloader                       = $row['preloader'] ?? 0;
+$frontend_dark_mode_status       = intval($row['frontend_dark_mode_status'] ?? 1);
 $recaptcha_status                = $row['recaptcha_status'] ?? 0;
 $recaptcha_site_key              = $row['recaptcha_site_key'] ?? '';
 $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
@@ -1100,6 +1104,36 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 					<div class="tab-pane fade <?= ($active_tab == 'tab_8') ? 'show active' : ''; ?>" id="tab_8" role="tabpanel" aria-labelledby="tab8-btn">
 						<form action="" method="post">
 							<input type="hidden" name="active_tab" value="tab_8">
+
+							<!-- Seção: Ativação do Tema Dark/Light no Site Público -->
+							<div class="card border mb-4 shadow-xs">
+								<div class="card-header bg-body-tertiary d-flex flex-wrap align-items-center justify-content-between gap-2 py-2 px-3">
+									<span class="fw-bold text-primary"><i class="bi bi-moon-stars-fill me-2"></i> Tema Dark / Light no Site Público (Visitantes)</span>
+									<span class="badge <?= ($frontend_dark_mode_status == 1) ? 'bg-success' : 'bg-secondary'; ?> px-3 py-1">
+										<?= ($frontend_dark_mode_status == 1) ? '<i class="bi bi-check-circle-fill me-1"></i> Alternador Ativo no Site' : '<i class="bi bi-slash-circle me-1"></i> Desativado (Apenas Claro)'; ?>
+									</span>
+								</div>
+								<div class="card-body">
+									<p class="text-body-secondary small mb-3">
+										Controle se os visitantes do portal público podem alternar entre os modos <strong>Claro</strong> e <strong>Escuro</strong>.
+										Quando desativado, o site público fica fixado exclusivamente no Modo Claro padrão e os botões de alternância no cabeçalho e menu móvel são ocultados.
+									</p>
+
+									<div class="form-check form-switch form-switch-md mb-2">
+										<input class="form-check-input" type="checkbox" name="frontend_dark_mode_status" id="frontend_dark_mode_status" value="1" <?= ($frontend_dark_mode_status == 1) ? 'checked' : ''; ?>>
+										<label class="form-check-label fw-semibold" for="frontend_dark_mode_status">
+											<?= ($frontend_dark_mode_status == 1) ? '<span class="text-success fw-bold">Permitir Alternância de Tema no Site Público</span>' : '<span class="text-body-secondary">Alternador Desativado (Fixo no Modo Claro)</span>'; ?>
+										</label>
+									</div>
+
+									<div class="alert alert-light border mt-3 mb-0 py-2 px-3 d-flex align-items-center gap-2">
+										<i class="bi bi-shield-check text-success fs-5"></i>
+										<span class="small text-body-secondary">
+											<strong>Independência de Temas:</strong> O tema do site público é 100% isolado do Painel Administrativo. As preferências escolhidas por administradores dentro do painel não trocam o tema dos visitantes no site público.
+										</span>
+									</div>
+								</div>
+							</div>
 
 							<div class="row g-4">
 								<div class="col-lg-6">

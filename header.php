@@ -78,6 +78,9 @@ $home_status_news            = $row['home_status_news'] ?? 0;
 $home_title_partner          = $row['home_title_partner'] ?? '';
 $home_status_partner         = $row['home_status_partner'] ?? 0;
 
+// Controle do Tema Dark/Light no Portal Público
+$frontend_dark_mode_status = (int)($row['frontend_dark_mode_status'] ?? 1);
+
 // Parâmetros PWA & Popup Promocional
 $pwa_status      = (int)($row['pwa_status'] ?? 1);
 $pwa_app_name    = $row['pwa_app_name'] ?? 'Pronto Saúde | Centro Médico & Odontológico';
@@ -339,9 +342,13 @@ $email   = $row2['dep_email'] ?? '';
         <script>
             (function () {
                 try {
-                    var stored = localStorage.getItem('theme');
-                    var preferred = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                    var resolved = preferred === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : preferred;
+                    var isAllowed = <?= $frontend_dark_mode_status; ?>;
+                    if (!isAllowed) {
+                        document.documentElement.setAttribute('data-bs-theme', 'light');
+                        return;
+                    }
+                    var stored = localStorage.getItem('pronto_frontend_theme');
+                    var resolved = (stored === 'dark' || stored === 'light') ? stored : 'light';
                     document.documentElement.setAttribute('data-bs-theme', resolved);
                 } catch (e) {}
             })();
@@ -586,12 +593,14 @@ $email   = $row2['dep_email'] ?? '';
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
+                        <?php if ($frontend_dark_mode_status == 1): ?>
                         <!-- Alternador de Tema Dark/Light no Topo -->
                         <button type="button" class="btn-theme-toggle-frontend" id="btnThemeToggleFrontend" aria-label="Alternar Tema Claro / Escuro" title="Alternar Modo Escuro / Claro">
                             <i class="fas fa-moon icon-theme-dark"></i>
                             <i class="fas fa-sun icon-theme-light"></i>
                             <span class="d-none d-xl-inline ms-1 text-theme-label">Tema</span>
                         </button>
+                        <?php endif; ?>
                         <a href="<?= BASE_URL; ?>admin/login.php" class="btn-cliente-topo">
                             <i class="fas fa-user-lock me-1"></i> Área do Paciente / Painel
                         </a>
@@ -748,6 +757,7 @@ $email   = $row2['dep_email'] ?? '';
 
                 <!-- 3. Informações Estáticas Fixadas no Rodapé do Side Menu (NUNCA saem do campo de visão) -->
                 <div class="android-drawer-footer flex-shrink-0 border-top bg-white p-3 shadow-sm mt-auto">
+                    <?php if ($frontend_dark_mode_status == 1): ?>
                     <!-- Alternador de Tema Dark/Light no Menu Móvel -->
                     <div class="d-flex align-items-center justify-content-between mb-3 px-1">
                         <span class="small fw-semibold text-body"><i class="fas fa-circle-half-stroke me-2 text-primary"></i>Tema do Portal</span>
@@ -757,6 +767,7 @@ $email   = $row2['dep_email'] ?? '';
                             <span class="small text-theme-label">Alternar</span>
                         </button>
                     </div>
+                    <?php endif; ?>
                     <a href="https://wa.me/<?= $whats_clean; ?>?text=<?= urlencode('Olá! Gostaria de agendar uma consulta médica na Pronto Saúde.'); ?>" target="_blank" rel="noopener noreferrer" class="btn-foco-primary w-100 justify-content-center mb-2">
                         <i class="fab fa-whatsapp me-2"></i> Agendamento via WhatsApp
                     </a>
