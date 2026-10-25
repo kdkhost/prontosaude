@@ -372,7 +372,7 @@ if (function_exists('pronto_is_page_active')) {
             ];
         }
 
-        $col_class = count($planos) <= 2 ? 'col-lg-5 col-md-6' : (count($planos) == 3 ? 'col-lg-4 col-md-6' : 'col-xl-3 col-lg-6 col-md-6');
+        $col_class = (count($planos) >= 4) ? 'col-xl-3 col-lg-6 col-md-6' : 'col-lg-4 col-md-6';
         ?>
 
         <div class="row g-4 justify-content-center">
