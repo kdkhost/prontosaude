@@ -170,8 +170,24 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - **Ocultação em Seções da Home e Rodapé:** A página desativada também é ocultada dinamicamente das seções da página inicial e dos links institucionais do rodapé (`footer.php`).
   - **Bloqueio de Rota Direta com Proteção Ativa:** Qualquer tentativa de acesso direto à URL de uma página desativada é interceptada de forma segura e redirecionada para a página inicial com aviso informativo Toastr amigável (*"A página solicitada está temporariamente desativada pelo administrador."*).
   - **Painel com Indicadores Rápidos & Filtros:** Cards no topo com contadores de páginas totais, ativas, desativadas e nativas do sistema, além de busca instantânea e filtros rápidos por status.
-  - **Sincronização Automática das Páginas Nativas:** Catálogo canônico que garante a existência de todas as páginas institucionais em `tbl_page`, preservando o status individual escolhido pelo administrador.
-- **Menu Deslizante Offcanvas do Site Público (Slide da Esquerda para a Direita):**
+- **Central Avançada de Otimização de SEO & Compartilhamento Social (`admin/seo.php`):**
+  - **Otimização Abrangente de Metadados em Todas as Páginas:**
+    - Títulos (Meta Titles) profissionais entre 45 e 65 caracteres com branding consistente (`| Pronto Saúde`).
+    - Descrições (Meta Descriptions) persuasivas e de alta conversão entre 120 e 165 caracteres com chamada para ação clara.
+  - **Palavras-Chave Individuais Separadas por Linha (Enter):**
+    - Cadastro e gravação individual de cada palavra-chave por quebra de linha (`\n`), eliminando a fragilidade de separação por vírgulas no banco de dados.
+    - **Interface Interativa com Badges de Tags:** Input de adição rápida com tecla **Enter**, badges visuais coloridos com botão `x` para exclusão e textarea monoespaçado para conferência.
+    - **Conversor Inteligente de Listas:** Botão utilitário que transforma listas coladas com vírgulas ou ponto-e-vírgula em quebras de linha limpas e desduplicadas automaticamente.
+    - **Compatibilidade Plena com Crawlers (`header.php`):** No portal público, as palavras-chave gravadas por Enter são convertidas automaticamente para o formato padrão W3C separado por vírgula na tag `<meta name="keywords" content="...">`.
+  - **Imagens de Compartilhamento Social (Open Graph / WhatsApp / Facebook / Twitter):**
+    - Dimensão oficial ouro: **1200 x 630 pixels** (proporção widescreen 1.91:1) com gradiente corporativo hospitalar, logotipo em alta resolução e ícones temáticos dedicados.
+    - Conjunto exclusivo de imagens temáticas geradas para cada página do portal (`og_home.jpg`, `og_doctor.jpg`, `og_servicos.jpg`, `og_fidelidade.jpg`, `og_odontologia.jpg`, `og_news.jpg`, `og_trabalhe_conosco.jpg`, `og_convenio.jpg`, `og_privacidade.jpg`, `og_rsocial.jpg`).
+    - Zona moderna de Upload Drag & Drop com medição de dimensões em tempo real, validação de proporção ideal e restauração com 1 clique para a imagem padrão da página.
+  - **Gerador Automático de Hashtags para Redes Sociais (`#tab-social`):**
+    - Geração em tempo real de hashtags formatadas a partir das palavras-chave configuradas (ex: `#ProntoSaude #ClinicaMedicaRJ #ConsultasExames`) com botão rápido *"Copiar Hashtags"* para a área de transferência.
+  - **Simulador Visual de Busca Google (SERP) & Social Card:**
+    - Visualização fidedigna em tempo real com alternador de exibição Desktop (650px) e Mobile (375px), contadores coloridos e checklist com cálculo automático da pontuação técnica de SEO (0 a 100).
+- **Gestão Integral do Cartão Fidelidade (`admin/pricing-plan.php`):**
   - Menu mobile/tablet deslizante de alta performance acelerado por hardware (`translate3d`), com animação elástica suave.
   - Suporte completo a gestos de toque (*swipe* para a esquerda para fechar), tecla `ESC`, botão `X` e backdrop blur com desfoque de vidro.
   - Submenus em formato acordeão com chevrons rotativos e canais de contato rápido integrados.

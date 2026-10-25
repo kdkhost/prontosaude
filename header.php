@@ -379,6 +379,8 @@ $email   = $row2['dep_email'] ?? '';
             $og_image_url = rtrim(BASE_URL, '/') . '/assets/uploads/' . ltrim($seo_image, '/');
         } elseif (!empty($og_image_home) && file_exists(__DIR__ . '/assets/uploads/' . $og_image_home)) {
             $og_image_url = rtrim(BASE_URL, '/') . '/assets/uploads/' . ltrim($og_image_home, '/');
+        } elseif (file_exists(__DIR__ . '/assets/uploads/og_home.jpg')) {
+            $og_image_url = rtrim(BASE_URL, '/') . '/assets/uploads/og_home.jpg';
         } else {
             $og_image_url = rtrim(BASE_URL, '/') . '/assets/uploads/department-1.png';
         }
@@ -406,6 +408,11 @@ $email   = $row2['dep_email'] ?? '';
                 return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
             }
         }
+
+        // Converte palavras-chave separadas por enter para vírgulas na tag HTML
+        $keywords_html = preg_replace('/[\r\n]+/', ', ', (string)$seo_keywords);
+        $keywords_html = preg_replace('/,\s*,+/', ', ', $keywords_html);
+        $keywords_html = trim($keywords_html, ", \t\n\r");
         ?>
 
         <!-- Título e Metadados Básicos (Totalmente Sanitizados sem HTML) -->
@@ -426,7 +433,7 @@ $email   = $row2['dep_email'] ?? '';
             })();
         </script>
         <meta name="description" content="<?= pronto_clean_meta_string($seo_desc, 160); ?>">
-        <meta name="keywords" content="<?= pronto_clean_meta_string($seo_keywords, 255); ?>">
+        <meta name="keywords" content="<?= pronto_clean_meta_string($keywords_html, 300); ?>">
         <link rel="canonical" href="<?= htmlspecialchars($page_canonical, ENT_QUOTES, 'UTF-8'); ?>">
 
         <!-- Metadados Open Graph (WhatsApp, Facebook, LinkedIn - Proporção Ideal 1.91:1 / 1200x630 px) -->

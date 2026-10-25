@@ -59,6 +59,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 		}
 	}
 
+	// Função estrita de limpeza para palavras-chave gravadas individualmente por Enter
+	if (!function_exists('seo_clean_keywords')) {
+		function seo_clean_keywords($text) {
+			if (empty($text) && !is_numeric($text)) return '';
+			$text = preg_replace('/<(script|style)[^>]*?>.*?<\/\\1>/si', '', (string)$text);
+			$text = strip_tags($text);
+			$text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+			$text = str_replace(["\xc2\xa0", '&nbsp;'], ' ', $text);
+			$lines = preg_split('/[\r\n]+/', (string)$text);
+			$clean = [];
+			foreach ($lines as $line) {
+				$line = trim(preg_replace('/\s+/', ' ', $line));
+				if (!empty($line)) {
+					$clean[] = $line;
+				}
+			}
+			return implode("\n", array_unique($clean));
+		}
+	}
+
 	// Endpoint AJAX: Alternar visibilidade/status da página (Active / Inactive)
 	if ($_POST['action'] === 'toggle_page_status') {
 		while (ob_get_level()) {
@@ -102,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 		$page_name = trim($_POST['page_name'] ?? '');
 		$meta_title = seo_clean_text($_POST['meta_title'] ?? '');
 		$meta_description = seo_clean_text($_POST['meta_description'] ?? '');
-		$meta_keyword = seo_clean_text($_POST['meta_keyword'] ?? '');
+		$meta_keyword = seo_clean_keywords($_POST['meta_keyword'] ?? '');
 
 		if (empty($meta_title)) {
 			echo json_encode(['success' => false, 'message' => 'O título da página (Meta Title) é obrigatório para indexação no Google.']);
@@ -260,17 +280,12 @@ try {
 // Monta lista completa e unificada de páginas auditáveis
 $pagesList = [];
 
-// Imagem padrão de fallback
-$defaultHomeBanner = '';
+// 1. Página Inicial (Home)
+$defaultHomeBanner = 'assets/uploads/og_home.jpg';
 if (!empty($settingsSEO['og_image']) && file_exists('../assets/uploads/' . $settingsSEO['og_image'])) {
 	$defaultHomeBanner = 'assets/uploads/' . $settingsSEO['og_image'];
-} elseif (!empty($settingsSEO['logo']) && file_exists('../assets/uploads/' . $settingsSEO['logo'])) {
-	$defaultHomeBanner = 'assets/uploads/' . $settingsSEO['logo'];
-} else {
-	$defaultHomeBanner = 'assets/images/about.jpg';
 }
 
-// 1. Página Inicial (Home)
 $pagesList[] = [
 	'type' => 'home',
 	'id' => 1,
@@ -278,20 +293,22 @@ $pagesList[] = [
 	'slug' => '',
 	'url' => BASE_URL,
 	'status' => 'Active',
-	'title' => seo_clean_text($settingsSEO['meta_title_home'] ?? 'Pronto Saúde | Centro Médico e Odontológico'),
-	'description' => seo_clean_text($settingsSEO['meta_description_home'] ?? 'Atendimento médico e odontológico humanizado no Rio de Janeiro com mais de 30 especialidades.'),
-	'keywords' => seo_clean_text($settingsSEO['meta_keyword_home'] ?? 'clinica medica, odontologia, exames, saude rj, pronto saude'),
+	'title' => seo_clean_text($settingsSEO['meta_title_home'] ?? 'Pronto Saúde | Centro Médico, Odontologia e Exames no RJ'),
+	'description' => seo_clean_text($settingsSEO['meta_description_home'] ?? 'Atendimento médico humanizado com mais de 30 especialidades, exames rápidos, odontologia completa e cartão fidelidade com descontos. Agende agora!'),
+	'keywords' => seo_clean_keywords($settingsSEO['meta_keyword_home'] ?? "pronto saude\nclinica medica rj\ncentro medico rio de janeiro\nconsulta medica rio de janeiro\nexames laboratoriais\nodontologia rj\ncartao fidelidade saude\natendimento humanizado"),
 	'banner' => $defaultHomeBanner
 ];
 
 // 2. Páginas registradas em tbl_page
 foreach ($allPages as $p) {
-	$bannerPath = 'assets/images/about.jpg';
+	$slug = $p['page_slug'];
+	$bannerPath = 'assets/uploads/og_home.jpg';
 	if (!empty($p['banner']) && file_exists('../assets/uploads/' . $p['banner'])) {
 		$bannerPath = 'assets/uploads/' . $p['banner'];
+	} elseif (file_exists('../assets/uploads/og_' . str_replace('-', '_', $slug) . '.jpg')) {
+		$bannerPath = 'assets/uploads/og_' . str_replace('-', '_', $slug) . '.jpg';
 	}
 
-	$slug = $p['page_slug'];
 	$targetUrl = BASE_URL . $slug;
 	if (strpos($slug, '.php') === false) {
 		// Verifica se existe arquivo PHP físico na raiz com esse nome
@@ -311,7 +328,7 @@ foreach ($allPages as $p) {
 		'url' => $targetUrl,
 		'title' => seo_clean_text($p['meta_title'] ?: $p['page_name'] . ' | Pronto Saúde'),
 		'description' => seo_clean_text($p['meta_description'] ?: 'Informações completas sobre ' . $p['page_name'] . ' na Pronto Saúde.'),
-		'keywords' => seo_clean_text($p['meta_keyword'] ?: $p['page_name'] . ', saude, clinica, pronto saude'),
+		'keywords' => seo_clean_keywords($p['meta_keyword'] ?: "pronto saude\n" . $p['page_name'] . "\nclinica medica rj\nsaude rio de janeiro"),
 		'banner' => $bannerPath
 	];
 }
@@ -667,16 +684,41 @@ foreach ($systemFixed as $idx => $sfp) {
 										</div>
 									</div>
 
-									<!-- Meta Keywords -->
+									<!-- Meta Keywords com Separação Individual por ENTER e Badges de Tags -->
 									<div class="mb-4">
 										<div class="d-flex justify-content-between align-items-center mb-1">
-											<label class="form-label fw-bold mb-0">
-												Palavras-chave (Meta Keywords)
+											<label class="form-label fw-bold mb-0 d-flex align-items-center gap-2">
+												<i class="bi bi-tags-fill text-primary"></i>
+												Palavras-chave Individuais (Meta Keywords & Hashtags)
 											</label>
-											<span class="badge text-bg-light border" id="kwCounter">0 palavras-chave</span>
+											<span class="badge text-bg-light border" id="kwCounter">0 palavras-chave cadastradas</span>
 										</div>
-										<input type="text" class="form-control no-summernote" data-no-summernote="true" name="meta_keyword" id="inputMetaKeywords" placeholder="Ex: clinica medica rj, exames laboratoriais, dentista, consulta medica, pronto saude" autocomplete="off">
-										<div class="form-text small">Separe as palavras-chave principais por vírgula para reforço semântico.</div>
+
+										<!-- Campo de Digitação Rápida com Enter -->
+										<div class="input-group mb-2 shadow-xs">
+											<span class="input-group-text bg-body-tertiary text-primary"><i class="bi bi-plus-circle-fill"></i></span>
+											<input type="text" class="form-control" id="quickAddKeyword" placeholder="Digite uma palavra-chave e pressione ENTER para adicionar..." autocomplete="off">
+											<button class="btn btn-primary d-inline-flex align-items-center gap-1 px-3" type="button" id="btnAddKeyword">
+												<i class="bi bi-arrow-return-left"></i> Adicionar (Enter)
+											</button>
+										</div>
+
+										<!-- Badges Visuais Interativos com Botão Excluir -->
+										<div class="d-flex flex-wrap gap-2 p-2 bg-body-tertiary rounded-3 border mb-2" id="keywordsTagsContainer" style="min-height: 48px; max-height: 140px; overflow-y: auto;">
+											<span class="text-muted small align-self-center fst-italic p-1" id="noKeywordsMsg">Nenhuma palavra-chave cadastrada ainda. Digite acima e tecle Enter.</span>
+										</div>
+
+										<!-- Textarea com linhas individuais gravadas no banco -->
+										<div class="d-flex justify-content-between align-items-center mb-1">
+											<span class="small text-body-secondary fw-semibold">Armazenamento no Banco (Uma palavra-chave por linha):</span>
+											<button type="button" class="btn btn-link btn-sm text-decoration-none p-0 small" id="btnConvertCommaToEnter" title="Se você colou uma lista com vírgulas, converta tudo em quebras de linha">
+												<i class="bi bi-arrow-down-up me-1"></i> Separar vírgulas em linhas por Enter
+											</button>
+										</div>
+										<textarea class="form-control font-monospace no-summernote" data-no-summernote="true" name="meta_keyword" id="inputMetaKeywords" rows="4" placeholder="Digite ou cole uma palavra-chave por linha...&#10;Ex:&#10;pronto saude&#10;clinica medica rj&#10;exames laboratoriais&#10;dentista pronto saude" style="line-height: 1.6; font-size: 13.5px;"></textarea>
+										<div class="form-text small">
+											<i class="bi bi-info-circle me-1"></i> Cada linha é gravada de forma individual e limpa no banco de dados, sendo indexada como termo único e convertida em hashtag para compartilhamento social.
+										</div>
 									</div>
 
 									<!-- Checklist de Auditoria Técnica em Tempo Real -->
@@ -776,6 +818,21 @@ foreach ($systemFixed as $idx => $sfp) {
 									</div>
 								</div>
 
+								<!-- Card de Hashtags Sugeridas para Redes Sociais -->
+								<div class="card border rounded-3 p-3 bg-body-tertiary mb-3 shadow-xs" style="max-width: 540px;">
+									<div class="d-flex justify-content-between align-items-center mb-2">
+										<span class="small fw-bold text-body d-flex align-items-center gap-1">
+											<i class="bi bi-hash text-primary"></i> Hashtags Geradas para o Compartilhamento:
+										</span>
+										<button type="button" class="btn btn-sm btn-outline-primary py-0 px-2" id="btnCopyHashtags" style="font-size: 11px;">
+											<i class="bi bi-clipboard me-1"></i> Copiar Hashtags
+										</button>
+									</div>
+									<div class="small font-monospace text-primary fw-semibold lh-base" id="socialHashtagsDisplay">
+										#ProntoSaude #ClinicaMedicaRJ #SaudeRioDeJaneiro
+									</div>
+								</div>
+
 								<div class="alert alert-success py-2 px-3 small d-flex align-items-center gap-2 mb-0">
 									<i class="bi bi-check-circle-fill fs-5"></i>
 									<span>As meta tags <code>og:title</code>, <code>og:description</code>, <code>og:image</code> (1200x630 px) e <code>twitter:card</code> são geradas automaticamente no <code>&lt;head&gt;</code> do portal público.</span>
@@ -826,6 +883,12 @@ foreach ($systemFixed as $idx => $sfp) {
 		const inputTitle = container.querySelector('#inputMetaTitle');
 		const inputDesc = container.querySelector('#inputMetaDesc');
 		const inputKeywords = container.querySelector('#inputMetaKeywords');
+		const quickAddKeyword = container.querySelector('#quickAddKeyword');
+		const btnAddKeyword = container.querySelector('#btnAddKeyword');
+		const keywordsTagsContainer = container.querySelector('#keywordsTagsContainer');
+		const btnConvertCommaToEnter = container.querySelector('#btnConvertCommaToEnter');
+		const socialHashtagsDisplay = container.querySelector('#socialHashtagsDisplay');
+		const btnCopyHashtags = container.querySelector('#btnCopyHashtags');
 		const inputOgFile = container.querySelector('#inputOgImage');
 
 		const currentOgPreview = container.querySelector('#currentOgImagePreview');
@@ -871,6 +934,125 @@ foreach ($systemFixed as $idx => $sfp) {
 			}
 		}
 
+		// Escape seguro de strings HTML
+		function escapeHtml(text) {
+			if (!text) return '';
+			return String(text)
+				.replace(/&/g, '&amp;')
+				.replace(/</g, '&lt;')
+				.replace(/>/g, '&gt;')
+				.replace(/"/g, '&quot;')
+				.replace(/'/g, '&#039;');
+		}
+
+		// Parser de palavras-chave individuais separadas por linha (Enter)
+		function parseKeywords(raw) {
+			if (!raw) return [];
+			const lines = String(raw).split(/\r?\n/);
+			const result = [];
+			const seen = new Set();
+			for (let line of lines) {
+				const trimmed = line.trim();
+				if (!trimmed) continue;
+				const lower = trimmed.toLowerCase();
+				if (!seen.has(lower)) {
+					seen.add(lower);
+					result.push(trimmed);
+				}
+			}
+			return result;
+		}
+
+		// Converte palavra-chave em formato Hashtag (#ProntoSaude)
+		function keywordToHashtag(str) {
+			if (!str) return '';
+			let clean = str.replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+			if (!clean) return '';
+			return '#' + clean.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('');
+		}
+
+		// Renderiza badges visuais de palavras-chave e atualiza bloco de hashtags
+		function renderKeywordTags() {
+			if (!inputKeywords || !keywordsTagsContainer) return;
+			const kwList = parseKeywords(inputKeywords.value);
+
+			keywordsTagsContainer.innerHTML = '';
+			if (kwList.length === 0) {
+				keywordsTagsContainer.innerHTML = '<span class="text-muted small fst-italic">Nenhuma palavra-chave adicionada ainda. Digite no campo acima e pressione Enter.</span>';
+			} else {
+				kwList.forEach(kw => {
+					const badge = document.createElement('span');
+					badge.className = 'badge bg-primary-subtle text-primary border border-primary-subtle d-inline-flex align-items-center gap-1 px-2 py-1 fs-6 shadow-sm';
+					badge.innerHTML = `<span>${escapeHtml(kw)}</span><button type="button" class="btn-close btn-close-sm ms-1" style="font-size: 0.60rem;" title="Remover termo"></button>`;
+					
+					const closeBtn = badge.querySelector('button');
+					closeBtn.addEventListener('click', function(e) {
+						e.preventDefault();
+						removeKeyword(kw);
+					});
+
+					keywordsTagsContainer.appendChild(badge);
+				});
+			}
+
+			// Atualiza contagem de palavras-chave
+			if (kwCounter) {
+				kwCounter.textContent = `${kwList.length} palavra${kwList.length === 1 ? '' : 's'}-chave`;
+				kwCounter.className = kwList.length >= 3 ? 'badge text-bg-success' : 'badge text-bg-secondary';
+			}
+
+			// Atualiza bloco de hashtags no preview social
+			if (socialHashtagsDisplay) {
+				const hashtags = kwList.map(keywordToHashtag).filter(Boolean);
+				if (!hashtags.some(h => h.toLowerCase() === '#prontosaude')) {
+					hashtags.unshift('#ProntoSaude');
+				}
+				socialHashtagsDisplay.textContent = hashtags.join(' ');
+			}
+		}
+
+		// Adiciona nova palavra-chave individual via Enter
+		function addKeyword(term) {
+			if (!term || !inputKeywords) return;
+			const trimmed = term.trim();
+			if (!trimmed) return;
+
+			// Trata quebras de linha ou vírgulas caso venha colado
+			const incoming = trimmed.split(/[\r\n,]+/).map(t => t.trim()).filter(Boolean);
+			const current = parseKeywords(inputKeywords.value);
+
+			let added = 0;
+			incoming.forEach(t => {
+				const lower = t.toLowerCase();
+				if (!current.some(c => c.toLowerCase() === lower)) {
+					current.push(t);
+					added++;
+				}
+			});
+
+			if (added > 0) {
+				inputKeywords.value = current.join('\n');
+				isDirty = true;
+				renderKeywordTags();
+				updateLiveView();
+				notify('info', `${added} palavra-chave adicionada.`, 'Palavra-chave');
+			} else {
+				notify('warning', 'Essa palavra-chave já está cadastrada nesta página.', 'Termo Repetido');
+			}
+		}
+
+		// Remove palavra-chave individual
+		function removeKeyword(termToRemove) {
+			if (!inputKeywords) return;
+			const current = parseKeywords(inputKeywords.value);
+			const lower = termToRemove.toLowerCase();
+			const updated = current.filter(c => c.toLowerCase() !== lower);
+			inputKeywords.value = updated.join('\n');
+			isDirty = true;
+			renderKeywordTags();
+			updateLiveView();
+		}
+
 		// Cálculo da Pontuação Técnica de SEO (0 a 100)
 		function calculateScore(title, desc, kw) {
 			let score = 30; // Base por URL segura e canonical
@@ -882,9 +1064,9 @@ foreach ($systemFixed as $idx => $sfp) {
 			else if (desc.length >= 60) score += 15;
 			else if (desc.length > 0) score += 5;
 
-			const kwCount = kw ? kw.split(',').filter(k => k.trim().length > 1).length : 0;
-			if (kwCount >= 3) score += 10;
-			else if (kwCount > 0) score += 5;
+			const kwList = parseKeywords(kw);
+			if (kwList.length >= 5) score += 10;
+			else if (kwList.length >= 2) score += 5;
 
 			return Math.min(score, 100);
 		}
@@ -900,11 +1082,11 @@ foreach ($systemFixed as $idx => $sfp) {
 			if (titleCounter) {
 				const len = title.length;
 				titleCounter.textContent = `${len} / 60 caracteres`;
-				if (len >= 50 && len <= 60) {
+				if (len >= 45 && len <= 65) {
 					titleCounter.className = 'badge text-bg-success';
-				} else if (len >= 35 && len < 50) {
+				} else if (len >= 30 && len < 45) {
 					titleCounter.className = 'badge text-bg-info';
-				} else if (len > 60) {
+				} else if (len > 65) {
 					titleCounter.className = 'badge text-bg-warning';
 				} else {
 					titleCounter.className = 'badge text-bg-secondary';
@@ -917,19 +1099,13 @@ foreach ($systemFixed as $idx => $sfp) {
 				descCounter.textContent = `${len} / 160 caracteres`;
 				if (len >= 120 && len <= 165) {
 					descCounter.className = 'badge text-bg-success';
-				} else if (len >= 80 && len < 120) {
+				} else if (len >= 70 && len < 120) {
 					descCounter.className = 'badge text-bg-info';
 				} else if (len > 165) {
 					descCounter.className = 'badge text-bg-warning';
 				} else {
 					descCounter.className = 'badge text-bg-secondary';
 				}
-			}
-
-			// Contador Palavras-chave
-			if (kwCounter) {
-				const kwArr = kw ? kw.split(',').map(s => s.trim()).filter(Boolean) : [];
-				kwCounter.textContent = `${kwArr.length} palavra${kwArr.length === 1 ? '' : 's'}-chave`;
 			}
 
 			// Previews Google SERP
@@ -955,9 +1131,9 @@ foreach ($systemFixed as $idx => $sfp) {
 
 			const chkKeywords = container.querySelector('#chkKeywords');
 			if (chkKeywords) {
-				const kwArr = kw ? kw.split(',').map(s => s.trim()).filter(Boolean) : [];
-				const ok = kwArr.length >= 3;
-				chkKeywords.innerHTML = `<i class="bi bi-${ok ? 'check-circle-fill text-success' : 'dash-circle text-muted'}"></i> <span>Palavras-chave relevantes cadastradas (${kwArr.length} identificada${kwArr.length === 1 ? '' : 's'})</span>`;
+				const kwList = parseKeywords(kw);
+				const ok = kwList.length >= 3;
+				chkKeywords.innerHTML = `<i class="bi bi-${ok ? 'check-circle-fill text-success' : 'dash-circle text-muted'}"></i> <span>Palavras-chave individuais cadastradas (${kwList.length} identificada${kwList.length === 1 ? '' : 's'} por linha)</span>`;
 			}
 
 			// Score
@@ -1018,7 +1194,10 @@ foreach ($systemFixed as $idx => $sfp) {
 			if (inputName) inputName.value = pg.name || '';
 			if (inputTitle) inputTitle.value = pg.title || '';
 			if (inputDesc) inputDesc.value = pg.description || '';
-			if (inputKeywords) inputKeywords.value = pg.keywords || '';
+			if (inputKeywords) {
+				inputKeywords.value = pg.keywords || '';
+				renderKeywordTags();
+			}
 			if (btnView) btnView.href = pg.url || '#';
 			if (pageTag) pageTag.textContent = pg.name || 'Página';
 			if (serpUrl) serpUrl.textContent = pg.url || '<?= BASE_URL ?>';
@@ -1182,13 +1361,91 @@ foreach ($systemFixed as $idx => $sfp) {
 		});
 
 		// Monitor de inputs para Dirty state e Preview
-		[inputTitle, inputDesc, inputKeywords].forEach(el => {
+		[inputTitle, inputDesc].forEach(el => {
 			if (!el) return;
 			el.addEventListener('input', function() {
 				isDirty = true;
 				updateLiveView();
 			});
 		});
+
+		if (inputKeywords) {
+			inputKeywords.addEventListener('input', function() {
+				isDirty = true;
+				renderKeywordTags();
+				updateLiveView();
+			});
+		}
+
+		// Adição rápida de palavra-chave com a tecla Enter
+		if (quickAddKeyword) {
+			quickAddKeyword.addEventListener('keydown', function(e) {
+				if (e.key === 'Enter') {
+					e.preventDefault();
+					const val = this.value;
+					if (val && val.trim()) {
+						addKeyword(val);
+						this.value = '';
+					}
+				}
+			});
+		}
+
+		if (btnAddKeyword && quickAddKeyword) {
+			btnAddKeyword.addEventListener('click', function(e) {
+				e.preventDefault();
+				const val = quickAddKeyword.value;
+				if (val && val.trim()) {
+					addKeyword(val);
+					quickAddKeyword.value = '';
+					quickAddKeyword.focus();
+				}
+			});
+		}
+
+		// Utilitário para converter vírgulas/ponto-e-vírgula em quebras de linha (Enter)
+		if (btnConvertCommaToEnter && inputKeywords) {
+			btnConvertCommaToEnter.addEventListener('click', function(e) {
+				e.preventDefault();
+				const raw = inputKeywords.value;
+				if (!raw.trim()) {
+					notify('warning', 'O campo de palavras-chave está vazio.', 'Aviso');
+					return;
+				}
+				const converted = raw
+					.split(/[,;]+/)
+					.map(s => s.trim())
+					.filter(Boolean)
+					.join('\n');
+				inputKeywords.value = converted;
+				isDirty = true;
+				renderKeywordTags();
+				updateLiveView();
+				const total = parseKeywords(converted).length;
+				notify('success', `Convertido! ${total} palavras-chave agora organizadas individualmente por linha (Enter).`, 'Lista Atualizada');
+			});
+		}
+
+		// Cópia de hashtags prontas para redes sociais
+		if (btnCopyHashtags && socialHashtagsDisplay) {
+			btnCopyHashtags.addEventListener('click', function(e) {
+				e.preventDefault();
+				const text = socialHashtagsDisplay.textContent.trim();
+				if (!text) {
+					notify('warning', 'Nenhuma hashtag disponível para copiar.', 'Aviso');
+					return;
+				}
+				if (navigator.clipboard && navigator.clipboard.writeText) {
+					navigator.clipboard.writeText(text).then(() => {
+						notify('success', 'Hashtags copiadas para a área de transferência!', 'Copiado');
+					}).catch(() => {
+						notify('info', text, 'Hashtags Geradas');
+					});
+				} else {
+					notify('info', text, 'Hashtags Geradas');
+				}
+			});
+		}
 
 		// Descartar alterações não salvas
 		if (btnDiscard) {

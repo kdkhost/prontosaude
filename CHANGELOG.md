@@ -4,6 +4,27 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.24.0] - 2026-10-25
+
+### Adicionado & Otimizado
+- **Central Avançada de Otimização de SEO e Compartilhamento Social (`admin/seo.php`)**:
+  - **Otimização Global de Metadados em Todas as Páginas**:
+    - Meta Titles padronizados entre 45 e 65 caracteres com branding consistente (`| Pronto Saúde`).
+    - Meta Descriptions persuasivas e completas entre 120 e 165 caracteres com foco em conversão e agendamento.
+    - Sincronização automática para Home (`tbl_settings`) e todas as páginas institucionais (`tbl_page`).
+  - **Palavras-Chave Gravadas Individualmente por Linha (Enter)**:
+    - Gravação atômica de cada palavra-chave separada por quebra de linha (`\n`), eliminando a fragilidade e ambiguidades de listas separadas por vírgula no banco de dados.
+    - **Interface Interativa com Badges**: Input de adição rápida ao pressionar **Enter**, badges visuais coloridos com exclusão via botão `x` e textarea monoespaçado sincronizado.
+    - **Conversor Inteligente**: Botão utilitário para converter instantaneamente listas coladas com vírgulas ou ponto-e-vírgula em quebras de linha (`\n`) desduplicadas.
+    - **Compatibilidade Plena com Crawlers (`header.php`)**: Converte automaticamente termos gravados por Enter no banco para formato padrão separado por vírgula na tag `<meta name="keywords" content="...">` do portal público.
+  - **Imagens Oficiais de Compartilhamento Social (1200 x 630 pixels - Proporção 1.91:1)**:
+    - Geração de 10 imagens temáticas exclusivas para cada página (`og_home.jpg`, `og_doctor.jpg`, `og_servicos.jpg`, `og_fidelidade.jpg`, `og_odontologia.jpg`, `og_news.jpg`, `og_trabalhe_conosco.jpg`, `og_convenio.jpg`, `og_privacidade.jpg`, `og_rsocial.jpg`) com gradiente hospitalar, logo e ícones de especialidade.
+    - Upload Drag & Drop com medição em tempo real de dimensões (`1200x630`), proporção ideal (`1.91:1`) e botão de restauração para a imagem nativa.
+  - **Gerador Dinâmico de Hashtags para Redes Sociais (`#tab-social`)**:
+    - Geração instantânea de hashtags camelCase (`#ProntoSaude #ClinicaMedicaRJ #ConsultasExames`) com botão rápido para cópia para a área de transferência.
+  - **Script de Sincronização Automática (`tools/apply_seo.php`)**:
+    - Script utilitário em PHP puro sem BOM para aplicação segura dos metadados e banners tanto em ambiente local quanto em servidores de produção.
+
 ## [2.23.0] - 2026-10-24
 
 ### Corrigido & Aprimorado
