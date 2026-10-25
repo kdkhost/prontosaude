@@ -244,7 +244,7 @@ $logo = $config['logo'] ?? '';
 		</div>
 
 		<div class="py-2 text-center bg-light border-top">
-			<small class="text-body-secondary">&copy; <?= date('Y'); ?> <?= htmlspecialchars($empresa); ?> • PHP 8.4</small>
+			<small class="text-body-secondary">&copy; <?= date('Y'); ?> <?= htmlspecialchars($empresa); ?> • Desenvolvido por <a href="https://kdkhost.com.br" target="_blank" rel="noopener" class="text-decoration-none fw-semibold" style="color: #0a6b74;">KDK Host</a></small>
 		</div>
 	</div>
 

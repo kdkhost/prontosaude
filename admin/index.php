@@ -76,7 +76,7 @@ $total_partners = (int)$statement->fetchColumn();
 					<i class="bi bi-calendar3 me-1 text-primary"></i> <?= date('d/m/Y'); ?> (São Paulo)
 				</span>
 				<span class="badge text-bg-success border border-success-subtle px-3 py-2">
-					<i class="bi bi-lightning-charge-fill me-1"></i> PHP 8.4 Otimizado
+					<i class="bi bi-shield-check me-1"></i> Ambiente Otimizado
 				</span>
 			</div>
 		</div>
@@ -101,7 +101,7 @@ $total_partners = (int)$statement->fetchColumn();
 				</div>
 			</div>
 			<div class="d-none d-md-block">
-				<button class="btn btn-sm btn-primary" onclick="window.notificar('success', 'Todas as funções operando com 100% de estabilidade no PHP 8.4!', 'Painel Atualizado')">
+				<button class="btn btn-sm btn-primary" onclick="window.notificar('success', 'Todas as funções operando com 100% de estabilidade!', 'Painel Atualizado')">
 					<i class="bi bi-bell-fill me-1"></i> Testar Toastr
 				</button>
 			</div>

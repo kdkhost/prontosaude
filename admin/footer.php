@@ -5,13 +5,13 @@
 		<footer class="app-footer text-body-secondary py-3 px-4 border-top bg-body">
 			<div class="float-end d-none d-sm-inline">
 				<span class="badge text-bg-success-subtle text-success border border-success-subtle me-1">
-					<i class="bi bi-check-circle-fill me-1"></i>PHP 8.4 Ativo
+					<i class="bi bi-shield-check me-1"></i>Ambiente Seguro
 				</span>
 				<span class="badge text-bg-info-subtle text-info border border-info-subtle">
 					<i class="bi bi-layers-fill me-1"></i>AdminLTE 4
 				</span>
 			</div>
-			<strong>&copy; <?= date('Y'); ?> <a href="<?= BASE_URL ?>" target="_blank" class="text-decoration-none text-primary fw-semibold"><?= htmlspecialchars($empresa); ?></a>.</strong> Sistema Hospitalar e Clínico Integrado.
+			<strong>&copy; <?= date('Y'); ?> <a href="<?= BASE_URL ?>" target="_blank" class="text-decoration-none text-primary fw-semibold"><?= htmlspecialchars($empresa); ?></a>.</strong> Desenvolvido por <a href="https://kdkhost.com.br" target="_blank" rel="noopener" class="text-decoration-none text-primary fw-semibold">KDK Host</a>.
 		</footer>
 
 		<!-- Botão Flutuante Voltar ao Topo no Painel Admin -->
