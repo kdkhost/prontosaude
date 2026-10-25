@@ -115,6 +115,7 @@ $logo = $row['logo'] ?? '';
 	
 	<!-- Folha de Estilos de Compatibilidade e Customizações AdminLTE 4 -->
 	<link rel="stylesheet" href="css/adminlte4-compat.css?v=<?= time(); ?>">
+	<link rel="stylesheet" href="css/pronto-icon-picker.css?v=<?= time(); ?>">
 	<link rel="stylesheet" href="style.css?v=<?= time(); ?>">
 </head>
 

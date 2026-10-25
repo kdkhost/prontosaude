@@ -59,6 +59,7 @@
 	<script src="js/pronto-security.js?v=<?= time(); ?>"></script>
 	<script src="js/pronto-switches.js?v=<?= time(); ?>"></script>
 	<script src="js/pronto-spa.js?v=<?= time(); ?>"></script>
+	<script src="js/pronto-icon-picker.js?v=<?= time(); ?>"></script>
 
 	<script>
 	// Controle do Botão Voltar ao Topo no Painel Admin

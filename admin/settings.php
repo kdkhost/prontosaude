@@ -1262,8 +1262,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 													<div class="p-2 border rounded bg-body-tertiary">
 														<span class="badge bg-secondary mb-2">Botão 1</span>
 														<div class="mb-1">
-															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
-															<input type="text" name="hero_box_item1_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item1_icon); ?>" placeholder="fas fa-user-md">
+															<label class="form-label extra-small fw-semibold mb-1">Ícone FontAwesome</label>
+															<div class="input-group input-group-sm pronto-icon-picker-group">
+																<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($hero_box_item1_icon ?: 'fas fa-icons'); ?>"></i></span>
+																<input type="text" name="hero_box_item1_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($hero_box_item1_icon); ?>" placeholder="fas fa-user-md" autocomplete="off">
+																<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+															</div>
 														</div>
 														<div class="mb-1">
 															<label class="form-label extra-small fw-semibold mb-0">Título</label>
@@ -1285,8 +1289,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 													<div class="p-2 border rounded bg-body-tertiary">
 														<span class="badge bg-secondary mb-2">Botão 2</span>
 														<div class="mb-1">
-															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
-															<input type="text" name="hero_box_item2_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item2_icon); ?>" placeholder="fas fa-flask">
+															<label class="form-label extra-small fw-semibold mb-1">Ícone FontAwesome</label>
+															<div class="input-group input-group-sm pronto-icon-picker-group">
+																<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($hero_box_item2_icon ?: 'fas fa-icons'); ?>"></i></span>
+																<input type="text" name="hero_box_item2_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($hero_box_item2_icon); ?>" placeholder="fas fa-flask" autocomplete="off">
+																<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+															</div>
 														</div>
 														<div class="mb-1">
 															<label class="form-label extra-small fw-semibold mb-0">Título</label>
@@ -1308,8 +1316,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 													<div class="p-2 border rounded bg-body-tertiary">
 														<span class="badge bg-secondary mb-2">Botão 3</span>
 														<div class="mb-1">
-															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
-															<input type="text" name="hero_box_item3_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item3_icon); ?>" placeholder="fas fa-tooth">
+															<label class="form-label extra-small fw-semibold mb-1">Ícone FontAwesome</label>
+															<div class="input-group input-group-sm pronto-icon-picker-group">
+																<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($hero_box_item3_icon ?: 'fas fa-icons'); ?>"></i></span>
+																<input type="text" name="hero_box_item3_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($hero_box_item3_icon); ?>" placeholder="fas fa-tooth" autocomplete="off">
+																<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+															</div>
 														</div>
 														<div class="mb-1">
 															<label class="form-label extra-small fw-semibold mb-0">Título</label>
@@ -1331,8 +1343,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 													<div class="p-2 border rounded bg-body-tertiary">
 														<span class="badge bg-secondary mb-2">Botão 4</span>
 														<div class="mb-1">
-															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
-															<input type="text" name="hero_box_item4_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($hero_box_item4_icon); ?>" placeholder="fas fa-id-card">
+															<label class="form-label extra-small fw-semibold mb-1">Ícone FontAwesome</label>
+															<div class="input-group input-group-sm pronto-icon-picker-group">
+																<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($hero_box_item4_icon ?: 'fas fa-icons'); ?>"></i></span>
+																<input type="text" name="hero_box_item4_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($hero_box_item4_icon); ?>" placeholder="fas fa-id-card" autocomplete="off">
+																<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+															</div>
 														</div>
 														<div class="mb-1">
 															<label class="form-label extra-small fw-semibold mb-0">Título</label>
@@ -1408,8 +1424,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 													<div class="p-3 border rounded bg-body-tertiary h-100">
 														<span class="badge bg-success-subtle text-success border border-success-subtle mb-2">Card 1</span>
 														<div class="mb-2">
-															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
-															<input type="text" name="home_risco_item1_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item1_icon); ?>" placeholder="fas fa-stethoscope">
+															<label class="form-label extra-small fw-semibold mb-1">Ícone FontAwesome</label>
+															<div class="input-group input-group-sm pronto-icon-picker-group">
+																<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($home_risco_item1_icon ?: 'fas fa-icons'); ?>"></i></span>
+																<input type="text" name="home_risco_item1_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($home_risco_item1_icon); ?>" placeholder="fas fa-stethoscope" autocomplete="off">
+																<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+															</div>
 														</div>
 														<div class="mb-2">
 															<label class="form-label extra-small fw-semibold mb-0">Título</label>
@@ -1431,8 +1451,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 													<div class="p-3 border rounded bg-body-tertiary h-100">
 														<span class="badge bg-success-subtle text-success border border-success-subtle mb-2">Card 2</span>
 														<div class="mb-2">
-															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
-															<input type="text" name="home_risco_item2_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item2_icon); ?>" placeholder="fas fa-user-doctor">
+															<label class="form-label extra-small fw-semibold mb-1">Ícone FontAwesome</label>
+															<div class="input-group input-group-sm pronto-icon-picker-group">
+																<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($home_risco_item2_icon ?: 'fas fa-icons'); ?>"></i></span>
+																<input type="text" name="home_risco_item2_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($home_risco_item2_icon); ?>" placeholder="fas fa-user-doctor" autocomplete="off">
+																<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+															</div>
 														</div>
 														<div class="mb-2">
 															<label class="form-label extra-small fw-semibold mb-0">Título</label>
@@ -1454,8 +1478,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 													<div class="p-3 border rounded bg-body-tertiary h-100">
 														<span class="badge bg-success-subtle text-success border border-success-subtle mb-2">Card 3</span>
 														<div class="mb-2">
-															<label class="form-label extra-small fw-semibold mb-0">Ícone FontAwesome</label>
-															<input type="text" name="home_risco_item3_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_risco_item3_icon); ?>" placeholder="fas fa-wallet">
+															<label class="form-label extra-small fw-semibold mb-1">Ícone FontAwesome</label>
+															<div class="input-group input-group-sm pronto-icon-picker-group">
+																<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($home_risco_item3_icon ?: 'fas fa-icons'); ?>"></i></span>
+																<input type="text" name="home_risco_item3_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($home_risco_item3_icon); ?>" placeholder="fas fa-wallet" autocomplete="off">
+																<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+															</div>
 														</div>
 														<div class="mb-2">
 															<label class="form-label extra-small fw-semibold mb-0">Título</label>
@@ -1519,8 +1547,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 															<div class="p-2 border rounded bg-body-tertiary">
 																<span class="badge bg-secondary mb-1">Métrica 1</span>
 																<div class="mb-1">
-																	<label class="form-label extra-small fw-semibold mb-0">Ícone</label>
-																	<input type="text" name="home_about_stat1_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat1_icon); ?>" placeholder="fas fa-user-md">
+																	<label class="form-label extra-small fw-semibold mb-1">Ícone</label>
+																	<div class="input-group input-group-sm pronto-icon-picker-group">
+																		<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($home_about_stat1_icon ?: 'fas fa-icons'); ?>"></i></span>
+																		<input type="text" name="home_about_stat1_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($home_about_stat1_icon); ?>" placeholder="fas fa-user-md" autocomplete="off">
+																		<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+																	</div>
 																</div>
 																<div class="mb-1">
 																	<label class="form-label extra-small fw-semibold mb-0">Número / Valor</label>
@@ -1537,8 +1569,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 															<div class="p-2 border rounded bg-body-tertiary">
 																<span class="badge bg-secondary mb-1">Métrica 2</span>
 																<div class="mb-1">
-																	<label class="form-label extra-small fw-semibold mb-0">Ícone</label>
-																	<input type="text" name="home_about_stat2_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat2_icon); ?>" placeholder="fas fa-hospital-user">
+																	<label class="form-label extra-small fw-semibold mb-1">Ícone</label>
+																	<div class="input-group input-group-sm pronto-icon-picker-group">
+																		<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($home_about_stat2_icon ?: 'fas fa-icons'); ?>"></i></span>
+																		<input type="text" name="home_about_stat2_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($home_about_stat2_icon); ?>" placeholder="fas fa-hospital-user" autocomplete="off">
+																		<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+																	</div>
 																</div>
 																<div class="mb-1">
 																	<label class="form-label extra-small fw-semibold mb-0">Número / Valor</label>
@@ -1555,8 +1591,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 															<div class="p-2 border rounded bg-body-tertiary">
 																<span class="badge bg-secondary mb-1">Métrica 3</span>
 																<div class="mb-1">
-																	<label class="form-label extra-small fw-semibold mb-0">Ícone</label>
-																	<input type="text" name="home_about_stat3_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat3_icon); ?>" placeholder="fas fa-star">
+																	<label class="form-label extra-small fw-semibold mb-1">Ícone</label>
+																	<div class="input-group input-group-sm pronto-icon-picker-group">
+																		<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($home_about_stat3_icon ?: 'fas fa-icons'); ?>"></i></span>
+																		<input type="text" name="home_about_stat3_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($home_about_stat3_icon); ?>" placeholder="fas fa-star" autocomplete="off">
+																		<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+																	</div>
 																</div>
 																<div class="mb-1">
 																	<label class="form-label extra-small fw-semibold mb-0">Número / Valor</label>
@@ -1573,8 +1613,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 															<div class="p-2 border rounded bg-body-tertiary">
 																<span class="badge bg-secondary mb-1">Métrica 4</span>
 																<div class="mb-1">
-																	<label class="form-label extra-small fw-semibold mb-0">Ícone</label>
-																	<input type="text" name="home_about_stat4_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_stat4_icon); ?>" placeholder="fas fa-file-medical">
+																	<label class="form-label extra-small fw-semibold mb-1">Ícone</label>
+																	<div class="input-group input-group-sm pronto-icon-picker-group">
+																		<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($home_about_stat4_icon ?: 'fas fa-icons'); ?>"></i></span>
+																		<input type="text" name="home_about_stat4_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($home_about_stat4_icon); ?>" placeholder="fas fa-file-medical" autocomplete="off">
+																		<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+																	</div>
 																</div>
 																<div class="mb-1">
 																	<label class="form-label extra-small fw-semibold mb-0">Número / Valor</label>
@@ -1596,9 +1640,13 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 															<i class="bi bi-building-check me-1"></i> Card Destaque da Unidade (Lado Direito)
 														</h6>
 														<div class="row g-2 mb-3">
-															<div class="col-md-4">
-																<label class="form-label extra-small fw-semibold mb-0">Ícone do Cabeçalho</label>
-																<input type="text" name="home_about_card_icon" class="form-control form-control-sm" value="<?= htmlspecialchars($home_about_card_icon); ?>" placeholder="fas fa-clinic-medical">
+															<div class="col-md-5">
+																<label class="form-label extra-small fw-semibold mb-1">Ícone do Cabeçalho</label>
+																<div class="input-group input-group-sm pronto-icon-picker-group">
+																	<span class="input-group-text pronto-icon-preview" title="Pré-visualização (clique para escolher)"><i class="<?= htmlspecialchars($home_about_card_icon ?: 'fas fa-icons'); ?>"></i></span>
+																	<input type="text" name="home_about_card_icon" class="form-control form-control-sm pronto-icon-input" value="<?= htmlspecialchars($home_about_card_icon); ?>" placeholder="fas fa-clinic-medical" autocomplete="off">
+																	<button type="button" class="btn btn-outline-primary btn-sm btn-open-icon-picker" title="Escolher Ícone"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Escolher</button>
+																</div>
 															</div>
 															<div class="col-md-8">
 																<label class="form-label extra-small fw-semibold mb-0">Título da Unidade</label>
