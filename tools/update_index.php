@@ -353,15 +353,38 @@ if (function_exists(\'pronto_is_page_active\')) {
         $col_class = count($planos) <= 2 ? \'col-lg-5 col-md-6\' : (count($planos) == 3 ? \'col-lg-4 col-md-6\' : \'col-xl-3 col-lg-6 col-md-6\');
         ?>
 
-        <div class="row g-3 justify-content-center align-items-stretch">
+        <div class="row g-4 justify-content-center">
             <?php foreach ($planos as $plano): 
                 $p_id = $plano[\'pricing_plan_id\'];
                 $is_destaque = !empty($plano[\'pricing_plan_popular\']) && $plano[\'pricing_plan_popular\'] == 1;
-                $p_badge = $plano[\'pricing_plan_badge\'] ?? ($is_destaque ? \'MAIS ESCOLHIDO\' : \'\');
+                $p_badge = $plano[\'pricing_plan_badge\'] ?? ($is_destaque ? \'Mais Escolhido\' : \'\');
+
+                $plan_photo = $plano[\'pricing_plan_photo\'] ?? \'\';
+                $photo_src = \'\';
+                if(!empty($plan_photo) && file_exists(\'assets/uploads/\' . $plan_photo)) {
+                    $photo_src = BASE_URL . \'assets/uploads/\' . $plan_photo;
+                } elseif(!empty($plan_photo) && file_exists(\'assets/images/planos/\' . $plan_photo)) {
+                    $photo_src = BASE_URL . \'assets/images/planos/\' . $plan_photo;
+                }
+
+                // Fallback de imagem consistente e realista por plano
+                if(empty($photo_src)) {
+                    if (stripos($plano[\'pricing_plan_name\'], \'empresa\') !== false) {
+                        $photo_src = BASE_URL . \'assets/images/planos/empresarial.png\';
+                    } elseif (stripos($plano[\'pricing_plan_name\'], \'odonto\') !== false) {
+                        $photo_src = BASE_URL . \'assets/images/planos/odonto.png\';
+                    } else {
+                        $photo_src = BASE_URL . \'assets/images/planos/top-saude.png\';
+                    }
+                }
+
+                $price_val = trim($plano[\'pricing_plan_price\'] ?? \'\');
+                $clean_price = preg_replace(\'/^R\\$\\s*/i\', \'\', $price_val);
+                $period_val = trim($plano[\'pricing_plan_period\'] ?? \'/mês\');
 
                 $itens = [];
                 try {
-                    $st_itens = $pdo->prepare("SELECT pricing_item_name FROM tbl_pricing_item WHERE pricing_plan_id = ?");
+                    $st_itens = $pdo->prepare("SELECT pricing_item_name FROM tbl_pricing_item WHERE pricing_plan_id = ? ORDER BY pricing_item_id ASC");
                     $st_itens->execute([$p_id]);
                     $itens = $st_itens->fetchAll(PDO::FETCH_COLUMN);
                 } catch (Exception $e) {}
@@ -375,51 +398,45 @@ if (function_exists(\'pronto_is_page_active\')) {
                     ];
                 }
 
-                $p_url = !empty($plano[\'pricing_plan_button_url\']) 
+                $plan_btn_text = !empty($plano[\'pricing_plan_button_text\']) ? $plano[\'pricing_plan_button_text\'] : \'Quero Este Plano\';
+                $plan_btn_url = !empty($plano[\'pricing_plan_button_url\']) 
                     ? $plano[\'pricing_plan_button_url\'] 
                     : \'https://wa.me/\' . $whats_clean . \'?text=\' . urlencode(\'Olá! Gostaria de contratar o \' . $plano[\'pricing_plan_name\']);
+                $btn_target = (strpos($plan_btn_url, \'http\') === 0) ? \'target="_blank" rel="noopener"\' : \'\';
             ?>
-            <div class="<?= $col_class; ?> d-flex">
-                <div class="card-plano w-100 <?= $is_destaque ? \'destaque\' : \'\'; ?>">
-                    <?php if(!empty($p_badge)): ?>
-                        <div class="tag-plano-destaque">
-                            <i class="fas fa-fire me-1"></i> <?= htmlspecialchars($p_badge); ?>
-                        </div>
+            <div class="<?= $col_class; ?> d-flex mb-4">
+                <div class="ps-plan-card w-100 <?= $is_destaque ? \'ps-plan-popular\' : \'\'; ?>">
+                    <?php if($is_destaque || !empty($p_badge)): ?>
+                        <span class="ps-plan-badge-tag"><i class="fas fa-fire me-1"></i><?= htmlspecialchars(!empty($p_badge) ? $p_badge : \'Mais Escolhido\'); ?></span>
                     <?php endif; ?>
-
-                    <div class="text-center">
-                        <div class="icone-plano-box">
-                            <i class="fas fa-id-card"></i>
-                        </div>
-                        <h5 class="plano-titulo"><?= htmlspecialchars($plano[\'pricing_plan_name\']); ?></h5>
-                        <p class="plano-subtitulo">Acesso imediato sem burocracia</p>
+                    <div class="ps-plan-thumb">
+                        <img src="<?= $photo_src; ?>" alt="<?= htmlspecialchars($plano[\'pricing_plan_name\']); ?>" loading="lazy" decoding="async">
                     </div>
-
-                    <div class="bloco-preco">
-                        <div>
-                            <?php $clean_plan_price = preg_replace(\'/^R\\$\\s*/i\', \'\', trim($plano[\'pricing_plan_price\'])); ?>
-                            <span class="preco-valor"><?= (strtolower($clean_plan_price) === \'consultar\' || stripos($clean_plan_price, \'sob\') !== false) ? \'Sob Consulta\' : \'R$ \' . htmlspecialchars($clean_plan_price); ?></span>
-                            <?php if(strtolower($clean_plan_price) !== \'consultar\' && stripos($clean_plan_price, \'sob\') === false): ?>
-                                <span class="preco-periodo"><?= htmlspecialchars($plano[\'pricing_plan_period\'] ?? \'/mês\'); ?></span>
+                    <div class="ps-plan-body">
+                        <h3 class="ps-plan-name"><?= htmlspecialchars($plano[\'pricing_plan_name\']); ?></h3>
+                        <div class="ps-plan-price-wrap">
+                            <?php if(strtolower($clean_price) === \'consultar\' || stripos($price_val, \'sob\') !== false): ?>
+                                <span class="ps-plan-price-val fw-bold" style="font-size: 1.15rem; color: var(--ps-primary);">Sob Consulta</span>
+                            <?php else: ?>
+                                <span class="ps-plan-from">A partir de</span>
+                                <div class="ps-plan-amount">
+                                    <span class="ps-plan-currency">R$</span>
+                                    <span class="ps-plan-number"><?= htmlspecialchars($clean_price); ?></span>
+                                    <?php if(!empty($period_val)): ?>
+                                        <span class="ps-plan-period"><?= htmlspecialchars($period_val); ?></span>
+                                    <?php endif; ?>
+                                </div>
                             <?php endif; ?>
                         </div>
-                        <span class="badge-adesao">
-                            <i class="fas fa-check-circle me-1"></i> SEM CARÊNCIA
-                        </span>
+                        <ul class="ps-plan-features">
+                            <?php foreach ($itens as $item_txt): ?>
+                                <li><i class="fa fa-check-circle"></i> <?= htmlspecialchars($item_txt); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <a href="<?= htmlspecialchars($plan_btn_url); ?>" <?= $btn_target; ?> class="ps-plan-btn">
+                            <?= htmlspecialchars($plan_btn_text); ?> <i class="fa fa-arrow-right"></i>
+                        </a>
                     </div>
-
-                    <ul class="recursos-list">
-                        <?php foreach ($itens as $item_txt): ?>
-                            <li>
-                                <i class="fas fa-check-circle"></i>
-                                <span><?= htmlspecialchars($item_txt); ?></span>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-
-                    <a href="<?= htmlspecialchars($p_url); ?>" target="_blank" rel="noopener noreferrer" class="btn <?= $is_destaque ? \'btn-foco-primary\' : \'btn-outline-secondary\'; ?> w-100 py-2 mt-auto fw-bold text-nowrap justify-content-center" style="font-size: 0.86rem;">
-                        <i class="fas fa-shield-alt me-1"></i> <?= htmlspecialchars($plano[\'pricing_plan_button_text\'] ?: \'ADERIR AO PLANO\'); ?>
-                    </a>
                 </div>
             </div>
             <?php endforeach; ?>
