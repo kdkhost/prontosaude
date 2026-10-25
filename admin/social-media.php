@@ -1,13 +1,61 @@
-<?php require_once('header.php'); ?>
-
 <?php
+// Suporte a submissão via AJAX assíncrono isolado
+$is_ajax = !empty($_POST['ajax']) || (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
+
+if ($is_ajax && $_SERVER['REQUEST_METHOD'] === 'POST') {
+	while (ob_get_level()) {
+		ob_end_clean();
+	}
+	ob_start();
+	if (session_status() === PHP_SESSION_NONE) {
+		session_start();
+	}
+	require_once('config.php');
+
+	if (!isset($_SESSION['user'])) {
+		while (ob_get_level()) { ob_end_clean(); }
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode(['status' => 'error', 'message' => 'Sessão expirada. Faça login novamente.']);
+		exit;
+	}
+
+	$social_names = [
+		'Facebook', 'Twitter', 'LinkedIn', 'Google Plus', 'Pinterest',
+		'YouTube', 'Instagram', 'Tumblr', 'Flickr', 'Reddit',
+		'Snapchat', 'WhatsApp', 'Quora', 'StumbleUpon', 'Delicious', 'Digg'
+	];
+
+	try {
+		$statement = $pdo->prepare("UPDATE tbl_social SET social_url=? WHERE social_name=?");
+		foreach($social_names as $s_name) {
+			$field = strtolower(str_replace(' ', '', $s_name));
+			$url_value = trim($_POST[$field] ?? '');
+			$statement->execute(array($url_value, $s_name));
+		}
+
+		while (ob_get_level()) { ob_end_clean(); }
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode([
+			'status' => 'success',
+			'message' => 'Links das redes sociais atualizados com sucesso no portal!'
+		]);
+	} catch (Exception $e) {
+		while (ob_get_level()) { ob_end_clean(); }
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode([
+			'status' => 'error',
+			'message' => 'Erro ao salvar: ' . $e->getMessage()
+		]);
+	}
+	exit;
+}
+
+require_once('header.php');
+
 $error_message = '';
 $success_message = '';
 
-// Suporte a submissão via AJAX assíncrono ou POST tradicional
-$is_ajax = !empty($_POST['ajax']) || (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
-
-if(isset($_POST['form1']) || isset($_POST['ajax'])) {
+if(isset($_POST['form1'])) {
 	$social_names = [
 		'Facebook', 'Twitter', 'LinkedIn', 'Google Plus', 'Pinterest',
 		'YouTube', 'Instagram', 'Tumblr', 'Flickr', 'Reddit',
@@ -20,16 +68,6 @@ if(isset($_POST['form1']) || isset($_POST['ajax'])) {
 		$url_value = trim($_POST[$field] ?? '');
 		$statement->execute(array($url_value, $s_name));
 	}
-
-	if($is_ajax) {
-		header('Content-Type: application/json; charset=utf-8');
-		echo json_encode([
-			'status' => 'success',
-			'message' => 'Links das redes sociais atualizados com sucesso no portal!'
-		]);
-		exit;
-	}
-
 	$success_message = 'Links das redes sociais atualizados com sucesso!';
 }
 ?>
@@ -550,13 +588,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         input.value = '';
                     });
                     updateMetrics();
-                    Swal.fire({
-                        title: 'Campos Limpos!',
-                        text: 'Clique em "Salvar Redes Sociais" para efetivar a remoção no portal.',
-                        icon: 'info',
-                        timer: 2500,
-                        showConfirmButton: false
-                    });
+                    if (typeof toastr !== 'undefined') {
+                        toastr.info('Campos limpos. Clique em "Salvar Redes Sociais" para confirmar no portal.', 'Campos Limpos');
+                    }
                 }
             });
         });
@@ -590,30 +624,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (data.status === 'success') {
                     if (typeof toastr !== 'undefined') {
-                        toastr.success(data.message || 'Redes sociais salvas com sucesso!');
-                    } else {
-                        Swal.fire({
-                            title: 'Sucesso!',
-                            text: data.message || 'Redes sociais salvas com sucesso!',
-                            icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
+                        toastr.success(data.message || 'Redes sociais salvas com sucesso!', 'Pronto Saúde');
                     }
                     updateMetrics();
                 } else {
-                    Swal.fire({
-                        title: 'Atenção',
-                        text: data.message || 'Não foi possível salvar as redes sociais.',
-                        icon: 'error'
-                    });
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error(data.message || 'Não foi possível salvar as redes sociais.', 'Atenção');
+                    }
                 }
             })
             .catch(function(err) {
                 btnSave.disabled = false;
                 btnSave.innerHTML = originalBtnHtml;
-                // Fallback para envio tradicional se falhar o AJAX
-                form.submit();
+                if (typeof toastr !== 'undefined') {
+                    toastr.error('Erro na comunicação com o servidor ao salvar redes sociais.', 'Falha de Conexão');
+                }
             });
         });
     }

@@ -458,6 +458,9 @@ if(isset($_POST['form7'])) {
 	$success_message = 'As configurações de todas as seções da página inicial (Hero, Diferenciais Clínicos, Quem Somos e Serviços) foram atualizadas com sucesso!';
 
 	if ((!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') || !empty($_POST['is_ajax'])) {
+		while (ob_get_level()) {
+			ob_end_clean();
+		}
 		header('Content-Type: application/json; charset=utf-8');
 		echo json_encode([
 			'status' => 'success',
@@ -2238,27 +2241,12 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 					btn.innerHTML = originalHtml;
 				}
 				if (data.status === 'success') {
-					if (typeof Swal !== 'undefined') {
-						Swal.fire({
-							icon: 'success',
-							title: 'Sucesso!',
-							text: data.message,
-							toast: true,
-							position: 'top-end',
-							showConfirmButton: false,
-							timer: 4000,
-							timerProgressBar: true
-						});
-					} else if (typeof toastr !== 'undefined') {
-						toastr.success(data.message);
+					if (typeof toastr !== 'undefined') {
+						toastr.success(data.message, 'Configurações Salvas');
 					}
 				} else {
-					if (typeof Swal !== 'undefined') {
-						Swal.fire({
-							icon: 'error',
-							title: 'Atenção',
-							text: data.message || 'Ocorreu um erro ao salvar.'
-						});
+					if (typeof toastr !== 'undefined') {
+						toastr.error(data.message || 'Ocorreu um erro ao salvar as configurações.', 'Atenção');
 					}
 				}
 			})
@@ -2267,7 +2255,9 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 					btn.disabled = false;
 					btn.innerHTML = originalHtml;
 				}
-				form7.submit();
+				if (typeof toastr !== 'undefined') {
+					toastr.error('Erro de conexão com o servidor ao salvar as seções.', 'Falha de Conexão');
+				}
 			});
 		});
 	}

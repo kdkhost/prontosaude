@@ -154,31 +154,31 @@
   // ==========================================
   // 3. INTERCEPTAÇÃO GLOBAL DE ALERT() E CONFIRM() NATIVOS
   // ==========================================
-  if (typeof Swal !== 'undefined') {
-    window.alert = function (mensagem) {
-      Swal.fire({
-        title: 'Informação',
-        html: mensagem,
-        icon: 'info',
-        confirmButtonText: 'Entendido',
-        confirmButtonColor: '#0a6b74',
-        customClass: {
-          confirmButton: 'btn btn-primary px-4'
-        },
-        buttonsStyling: false
-      });
-    };
+  window.alert = function (mensagem) {
+    if (window.notificar) {
+      window.notificar('warning', mensagem, 'Aviso');
+    } else if (typeof toastr !== 'undefined') {
+      toastr.warning(mensagem, 'Aviso');
+    } else {
+      console.warn('Alerta do Sistema:', mensagem);
+    }
+  };
 
+  if (typeof Swal !== 'undefined') {
     window.confirm = function (mensagem) {
-      console.warn('Chamada nativa a confirm() interceptada. Utilize SweetAlert2 assíncrono diretamente.');
+      console.warn('Chamada nativa a confirm() interceptada. SweetAlert2 é assíncrono.');
       Swal.fire({
         title: 'Confirmação',
         html: mensagem,
         icon: 'warning',
-        confirmButtonText: 'OK',
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar',
+        cancelButtonText: 'Cancelar',
         confirmButtonColor: '#0a6b74',
+        cancelButtonColor: '#6c757d',
         customClass: {
-          confirmButton: 'btn btn-primary px-4'
+          confirmButton: 'btn btn-primary px-4 me-2',
+          cancelButton: 'btn btn-secondary px-4'
         },
         buttonsStyling: false
       });

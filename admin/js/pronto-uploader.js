@@ -144,12 +144,8 @@
         if (!file.type.startsWith('image/')) {
           if (window.notificar) {
             window.notificar('error', 'Por favor, selecione apenas arquivos de imagem válidos (JPG, PNG, GIF, WEBP).', 'Formato Inválido');
-          } else if (typeof Swal !== 'undefined') {
-            Swal.fire({
-              icon: 'error',
-              title: 'Formato Inválido',
-              text: 'Por favor, selecione apenas arquivos de imagem válidos (JPG, PNG, GIF, WEBP).'
-            });
+          } else if (typeof toastr !== 'undefined') {
+            toastr.error('Por favor, selecione apenas arquivos de imagem válidos (JPG, PNG, GIF, WEBP).', 'Formato Inválido');
           }
           return;
         }

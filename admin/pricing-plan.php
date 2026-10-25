@@ -1,12 +1,18 @@
 <?php 
-require_once('header.php'); 
+ob_start();
+session_start();
+require_once('config.php');
 
 // Endpoint AJAX para alternar status do Cartão Fidelidade / Plano
 if(isset($_POST['action']) && $_POST['action'] === 'toggle_status') {
 	while (ob_get_level()) {
 		ob_end_clean();
 	}
-	header('Content-Type: application/json');
+	header('Content-Type: application/json; charset=utf-8');
+	if (!isset($_SESSION['user'])) {
+		echo json_encode(['success' => false, 'message' => 'Sessão expirada.']);
+		exit;
+	}
 	$id = (int)($_POST['id'] ?? 0);
 	$status = (int)($_POST['status'] ?? 0);
 	$stmt = $pdo->prepare("UPDATE tbl_pricing_plan SET status = ? WHERE pricing_plan_id = ?");
@@ -18,6 +24,8 @@ if(isset($_POST['action']) && $_POST['action'] === 'toggle_status') {
 	]);
 	exit;
 }
+
+require_once('header.php'); 
 ?>
 
 <div class="app-content-header">

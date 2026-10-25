@@ -548,8 +548,15 @@
   // 6. INTERCEPTADOR GLOBAL DE SUBMISSÃO DE FORMULÁRIOS VIA AJAX
   document.addEventListener('submit', function (e) {
     const form = e.target;
-    // Permite que formulários com data-no-spa sejam submetidos normalmente caso necessário
-    if (form.getAttribute('data-no-spa') === 'true') return;
+    if (!form || form.nodeName !== 'FORM') return;
+
+    // Se o evento já foi tratado e cancelado por um script específico do formulário, não intercepta
+    if (e.defaultPrevented) return;
+
+    // Permite que formulários com data-no-spa ou data-ajax sejam submetidos normalmente pelo seu próprio handler
+    if (form.getAttribute('data-no-spa') === 'true' || form.classList.contains('no-spa') || form.getAttribute('data-ajax') === 'true') {
+      return;
+    }
 
     // Apenas formulários dentro do painel
     const formAction = form.getAttribute('action') || window.location.href;
@@ -602,19 +609,72 @@
           window.location.href = response.url;
           return;
         }
-        return response.text().then(html => ({ html, finalUrl: response.url || urlObj.href }));
-      })
-      .then(data => {
-        if (!data) return;
-        const { html, finalUrl } = data;
 
+        const contentType = response.headers.get('content-type') || '';
+        const isJsonHeader = contentType.includes('application/json');
+
+        return response.text().then(text => {
+          let jsonData = null;
+          let isJson = isJsonHeader;
+
+          if (!isJson) {
+            const trimmed = text.trim();
+            if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+              try {
+                jsonData = JSON.parse(trimmed);
+                isJson = true;
+              } catch (parseErr) {}
+            }
+          } else {
+            try {
+              jsonData = JSON.parse(text);
+            } catch (parseErr) {}
+          }
+
+          return { isJson, jsonData, html: text, finalUrl: response.url || urlObj.href };
+        });
+      })
+      .then(result => {
+        if (!result) return;
+        const { isJson, jsonData, html, finalUrl } = result;
+
+        finishProgress();
+
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          if (submitBtn.tagName === 'INPUT') {
+            submitBtn.value = originalBtnHtml;
+          } else {
+            submitBtn.innerHTML = originalBtnHtml;
+          }
+        }
+
+        // Se a resposta for JSON, nunca tenta injetar no DOM (evita tela em branco com JSON cru)
+        if (isJson && jsonData) {
+          const isSuccess = jsonData.success !== false && jsonData.status !== 'error';
+          const msg = jsonData.message || (isSuccess ? 'Dados atualizados com sucesso!' : 'Erro ao processar requisição.');
+          if (window.notificar) {
+            window.notificar(isSuccess ? 'success' : 'error', msg, isSuccess ? 'Salvo com Sucesso' : 'Atenção');
+          }
+
+          if (jsonData.redirect) {
+            if (window.loadPageSPA) {
+              window.loadPageSPA(jsonData.redirect, true);
+            } else {
+              window.location.href = jsonData.redirect;
+            }
+          }
+          return;
+        }
+
+        // Se a resposta for HTML normal, atualiza a view sem piscar
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
 
         const newTitle = doc.querySelector('title') ? doc.querySelector('title').innerText : document.title;
         document.title = newTitle;
 
-        let newContent = doc.querySelector('.app-main') || doc.querySelector('.content-wrapper') || doc.querySelector('body');
+        let newContent = doc.querySelector('.app-main') || doc.querySelector('.content-wrapper');
         const mainContainer = document.querySelector('.app-main');
 
         if (mainContainer && newContent) {
@@ -638,19 +698,9 @@
         const hadCallout = reinitAllComponents(mainContainer);
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        finishProgress();
-
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          if (submitBtn.tagName === 'INPUT') {
-            submitBtn.value = originalBtnHtml;
-          } else {
-            submitBtn.innerHTML = originalBtnHtml;
-          }
-        }
-
-        // Se nenhum callout específico foi retornado pelo backend, emite notificação padrão
-        if (!hadCallout && window.notificar) {
+        // Se nenhum callout ou alert específico foi renderizado pelo backend, emite notificação padrão
+        const hasAlertOnPage = mainContainer ? (mainContainer.querySelector('.alert-success, .callout-success, .alert-danger, .callout-danger') !== null) : false;
+        if (!hadCallout && !hasAlertOnPage && window.notificar) {
           window.notificar('success', 'Dados atualizados com sucesso!', 'Salvo!');
         }
       })

@@ -96,25 +96,16 @@
         .then(res => res.json())
         .then(data => {
           if (data.success) {
-            if (typeof Swal !== 'undefined') {
-              Swal.fire({
-                icon: 'success',
-                title: 'Configurações Salvas!',
-                text: data.message,
-                confirmButtonColor: '#0a6b74',
-                confirmButtonText: 'OK'
-              });
-            } else if (window.notificar) {
-              window.notificar('success', data.message, 'Sucesso');
+            if (window.notificar) {
+              window.notificar('success', data.message, 'Configurações Salvas');
+            } else if (typeof toastr !== 'undefined') {
+              toastr.success(data.message);
             }
           } else {
-            if (typeof Swal !== 'undefined') {
-              Swal.fire({
-                icon: 'error',
-                title: 'Atenção',
-                text: data.message || 'Erro ao salvar.',
-                confirmButtonColor: '#d33'
-              });
+            if (window.notificar) {
+              window.notificar('error', data.message || 'Erro ao salvar configurações.', 'Atenção');
+            } else if (typeof toastr !== 'undefined') {
+              toastr.error(data.message || 'Erro ao salvar configurações.');
             }
           }
         })
@@ -216,13 +207,16 @@
               .then(res => res.json())
               .then(data => {
                 if (data.success) {
-                  Swal.fire('Limpo!', data.message, 'success').then(() => {
-                    if (window.loadPageSPA) {
-                      window.loadPageSPA('seguranca.php', false);
-                    } else {
-                      location.reload();
-                    }
-                  });
+                  if (window.notificar) {
+                    window.notificar('success', data.message, 'Auditoria Limpa');
+                  } else if (typeof toastr !== 'undefined') {
+                    toastr.success(data.message);
+                  }
+                  if (window.loadPageSPA) {
+                    window.loadPageSPA('seguranca.php', false);
+                  } else {
+                    location.reload();
+                  }
                 }
               });
             }

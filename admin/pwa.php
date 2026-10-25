@@ -1,5 +1,7 @@
 <?php
-require_once('header.php');
+ob_start();
+session_start();
+require_once('config.php');
 
 // Endpoint AJAX para alternar status do PWA rapidamente
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'toggle_pwa_status') {
@@ -7,6 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         ob_end_clean();
     }
     header('Content-Type: application/json; charset=utf-8');
+    if (!isset($_SESSION['user'])) {
+        echo json_encode(['success' => false, 'message' => 'Sessão expirada.']);
+        exit;
+    }
     $status = (int)($_POST['status'] ?? 0);
     $stmt = $pdo->prepare("UPDATE tbl_settings SET pwa_status = ? WHERE id = 1");
     $stmt->execute([$status]);
@@ -17,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     ]);
     exit;
 }
+
+require_once('header.php');
 
 $success_message = '';
 $error_message = '';

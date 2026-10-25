@@ -857,7 +857,7 @@ foreach ($systemFixed as $idx => $sfp) {
 		const spinner = container.querySelector('#saveSpinner');
 		const btnSave = container.querySelector('#btnSaveSEO');
 
-		// Notificação padronizada usando sistema global (SweetAlert2 e Toastr)
+		// Notificação padronizada usando Toastr / window.notificar
 		function notify(type, message, title) {
 			if (window.notificar) {
 				window.notificar(type, message, title);
@@ -866,12 +866,8 @@ foreach ($systemFixed as $idx => $sfp) {
 				else if (type === 'error') toastr.error(message, title || 'Erro!');
 				else if (type === 'warning') toastr.warning(message, title || 'Aviso');
 				else toastr.info(message, title || 'Informação');
-			} else if (typeof Swal !== 'undefined') {
-				Swal.fire({
-					icon: type === 'error' ? 'error' : (type === 'warning' ? 'warning' : 'success'),
-					title: title || (type === 'success' ? 'Sucesso' : 'Atenção'),
-					text: message
-				});
+			} else {
+				console.log(`[SEO ${type}]`, message);
 			}
 		}
 

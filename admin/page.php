@@ -1,10 +1,7 @@
 <?php
-require_once('header.php');
-
-// Sincroniza páginas institucionais nativas do sistema com tbl_page
-if (function_exists('pronto_sync_system_pages')) {
-    pronto_sync_system_pages($pdo);
-}
+ob_start();
+session_start();
+require_once('config.php');
 
 // Endpoint AJAX para alternar status da página (Active / Inactive) em tempo real
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'toggle_page_status') {
@@ -12,6 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         ob_end_clean();
     }
     header('Content-Type: application/json; charset=utf-8');
+    if (!isset($_SESSION['user'])) {
+        echo json_encode(['success' => false, 'message' => 'Sessão expirada.']);
+        exit;
+    }
     $page_id = (int)($_POST['page_id'] ?? 0);
     $new_status = ($_POST['status'] ?? '') === 'Active' ? 'Active' : 'Inactive';
 
@@ -45,6 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         echo json_encode(['success' => false, 'message' => 'Erro ao atualizar status: ' . $e->getMessage()]);
     }
     exit;
+}
+
+require_once('header.php');
+
+// Sincroniza páginas institucionais nativas do sistema com tbl_page
+if (function_exists('pronto_sync_system_pages')) {
+    pronto_sync_system_pages($pdo);
 }
 
 // Slugs conhecidos de páginas do sistema

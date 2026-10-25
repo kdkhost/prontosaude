@@ -543,13 +543,8 @@ if(isset($POST['recover']) || (isset($POST['action']) && $POST['action'] === 're
 			var emailVal = (emailInput?.value || '').trim();
 
 			if (!emailVal) {
-				if (typeof Swal !== 'undefined') {
-					Swal.fire({
-						icon: 'warning',
-						title: 'Atenção',
-						text: 'Por favor, informe seu endereço de e-mail.',
-						confirmButtonColor: '#0a6b74'
-					});
+				if (typeof toastr !== 'undefined') {
+					toastr.warning('Por favor, informe seu endereço de e-mail.', 'Atenção');
 				}
 				return;
 			}
@@ -578,40 +573,19 @@ if(isset($POST['recover']) || (isset($POST['action']) && $POST['action'] === 're
 					if (typeof toastr !== 'undefined') {
 						toastr.success(data.message, 'Pronto Saúde');
 					}
-					if (typeof Swal !== 'undefined') {
-						Swal.fire({
-							icon: 'success',
-							title: 'Instruções Enviadas!',
-							text: data.message,
-							confirmButtonText: 'OK',
-							confirmButtonColor: '#0a6b74',
-							customClass: { confirmButton: 'btn btn-primary px-4' },
-							buttonsStyling: false
-						});
-					}
 					emailInput.value = '';
 				} else {
 					if (typeof toastr !== 'undefined') {
 						toastr.error(data.message || 'Erro ao processar solicitação.', 'Atenção');
-					}
-					if (typeof Swal !== 'undefined') {
-						Swal.fire({
-							icon: 'error',
-							title: 'Atenção',
-							text: data.message || 'Não foi possível processar a recuperação.',
-							confirmButtonText: 'Entendido',
-							confirmButtonColor: '#0a6b74',
-							customClass: { confirmButton: 'btn btn-primary px-4' },
-							buttonsStyling: false
-						});
 					}
 				}
 			})
 			.catch(function(err) {
 				btn.disabled = false;
 				btn.innerHTML = originalBtnHtml;
-				// Fallback caso ocorra erro de rede: envia formulário normal
-				form.submit();
+				if (typeof toastr !== 'undefined') {
+					toastr.error('Erro na conexão com o servidor. Tente novamente.', 'Falha de Comunicação');
+				}
 			});
 		});
 
@@ -625,37 +599,22 @@ if(isset($POST['recover']) || (isset($POST['action']) && $POST['action'] === 're
 			var repass = (document.getElementById('re_password')?.value || '').trim();
 
 			if (!pass || !repass) {
-				if (typeof Swal !== 'undefined') {
-					Swal.fire({
-						icon: 'warning',
-						title: 'Campos Obrigatórios',
-						text: 'Por favor, preencha todos os campos.',
-						confirmButtonColor: '#0a6b74'
-					});
+				if (typeof toastr !== 'undefined') {
+					toastr.warning('Por favor, preencha todos os campos.', 'Campos Obrigatórios');
 				}
 				return;
 			}
 
 			if (pass.length < 6) {
-				if (typeof Swal !== 'undefined') {
-					Swal.fire({
-						icon: 'warning',
-						title: 'Senha Curta',
-						text: 'A nova senha deve possuir pelo menos 6 caracteres.',
-						confirmButtonColor: '#0a6b74'
-					});
+				if (typeof toastr !== 'undefined') {
+					toastr.warning('A nova senha deve possuir pelo menos 6 caracteres.', 'Senha Curta');
 				}
 				return;
 			}
 
 			if (pass !== repass) {
-				if (typeof Swal !== 'undefined') {
-					Swal.fire({
-						icon: 'error',
-						title: 'Senhas Diferentes',
-						text: 'As senhas digitadas não coincidem. Digite novamente.',
-						confirmButtonColor: '#0a6b74'
-					});
+				if (typeof toastr !== 'undefined') {
+					toastr.error('As senhas digitadas não coincidem. Digite novamente.', 'Senhas Diferentes');
 				}
 				return;
 			}
@@ -682,42 +641,23 @@ if(isset($POST['recover']) || (isset($POST['action']) && $POST['action'] === 're
 
 				if (data.success) {
 					if (typeof toastr !== 'undefined') {
-						toastr.success('Senha alterada com sucesso!', 'Pronto Saúde');
+						toastr.success('Senha redefinida com sucesso! Redirecionando...', 'Pronto Saúde');
 					}
-					if (typeof Swal !== 'undefined') {
-						Swal.fire({
-							icon: 'success',
-							title: 'Senha Redefinida!',
-							text: 'Sua senha foi redefinida com sucesso. Redirecionando para o login...',
-							timer: 2000,
-							showConfirmButton: false
-						}).then(function() {
-							window.location.href = data.redirect || 'login.php?recovered=1';
-						});
-					} else {
+					setTimeout(function() {
 						window.location.href = data.redirect || 'login.php?recovered=1';
-					}
+					}, 1500);
 				} else {
 					if (typeof toastr !== 'undefined') {
-						toastr.error(data.message, 'Atenção');
-					}
-					if (typeof Swal !== 'undefined') {
-						Swal.fire({
-							icon: 'error',
-							title: 'Atenção',
-							text: data.message || 'Erro ao redefinir senha.',
-							confirmButtonText: 'Entendido',
-							confirmButtonColor: '#0a6b74',
-							customClass: { confirmButton: 'btn btn-primary px-4' },
-							buttonsStyling: false
-						});
+						toastr.error(data.message || 'Erro ao redefinir senha.', 'Atenção');
 					}
 				}
 			})
 			.catch(function(err) {
 				btn.disabled = false;
 				btn.innerHTML = originalBtnHtml;
-				form.submit();
+				if (typeof toastr !== 'undefined') {
+					toastr.error('Erro na conexão com o servidor. Tente novamente.', 'Falha de Comunicação');
+				}
 			});
 		});
 	</script>
@@ -725,17 +665,6 @@ if(isset($POST['recover']) || (isset($POST['action']) && $POST['action'] === 're
 	<?php if (!empty($error_message)): ?>
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
-			if (typeof Swal !== 'undefined') {
-				Swal.fire({
-					icon: 'error',
-					title: 'Atenção',
-					text: '<?= addslashes($error_message) ?>',
-					confirmButtonText: 'Entendido',
-					confirmButtonColor: '#0a6b74',
-					customClass: { confirmButton: 'btn btn-primary px-4' },
-					buttonsStyling: false
-				});
-			}
 			if (typeof toastr !== 'undefined') {
 				toastr.error('<?= addslashes($error_message) ?>', 'Pronto Saúde');
 			}
@@ -746,17 +675,6 @@ if(isset($POST['recover']) || (isset($POST['action']) && $POST['action'] === 're
 	<?php if (!empty($success_message)): ?>
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
-			if (typeof Swal !== 'undefined') {
-				Swal.fire({
-					icon: 'success',
-					title: 'Sucesso',
-					text: '<?= addslashes($success_message) ?>',
-					confirmButtonText: 'OK',
-					confirmButtonColor: '#0a6b74',
-					customClass: { confirmButton: 'btn btn-primary px-4' },
-					buttonsStyling: false
-				});
-			}
 			if (typeof toastr !== 'undefined') {
 				toastr.success('<?= addslashes($success_message) ?>', 'Pronto Saúde');
 			}

@@ -239,13 +239,11 @@ document.addEventListener('DOMContentLoaded', function() {
             var sdkCode = '<div id="fb-root"></div>\n<script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v19.0' + appIdParam + '"><\/script>';
             codeArea.value = sdkCode;
             
-            Swal.fire({
-                title: 'Código SDK Gerado!',
-                text: 'O código oficial do Facebook SDK em Português do Brasil foi inserido no campo.',
-                icon: 'success',
-                timer: 2000,
-                showConfirmButton: false
-            });
+            if (window.notificar) {
+                window.notificar('success', 'O código oficial do Facebook SDK em Português do Brasil foi inserido no campo.', 'Código SDK Gerado!');
+            } else if (typeof toastr !== 'undefined') {
+                toastr.success('O código oficial do Facebook SDK em Português do Brasil foi inserido no campo.', 'Código SDK Gerado!');
+            }
         });
     }
 

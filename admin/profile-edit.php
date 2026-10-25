@@ -1,76 +1,82 @@
 <?php
-require_once('header.php');
-
-$error_message = '';
-$success_message = '';
-$active_tab = 'tab_1';
-
-// Suporte a detecção de aba ativa via parâmetro GET
-if (isset($_GET['tab']) && in_array($_GET['tab'], ['tab_1', 'tab_2', 'tab_3'])) {
-    $active_tab = $_GET['tab'];
-}
-
-// Detecção de requisição AJAX
+// Detecção antecipada de requisição AJAX (executa antes de carregar o HTML de header.php)
 $is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
     || (isset($_POST['ajax']) && $_POST['ajax'] == '1')
     || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false);
 
-// ========================================================
-// 1. ATUALIZAR INFORMAÇÕES PESSOAIS (FORM 1)
-// ========================================================
-if (isset($_POST['form1']) || (isset($_POST['action']) && $_POST['action'] === 'update_info')) {
-    $active_tab = 'tab_1';
-    $valid = 1;
-    $user_id = $_SESSION['user']['id'];
-    $phone_input = strip_tags(trim($_POST['phone'] ?? ''));
+if ($is_ajax && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+    ob_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    require_once('config.php');
 
-    if ($_SESSION['user']['role'] === 'Super Admin' || $_SESSION['user']['role'] === 'Admin') {
-        $full_name_input = strip_tags(trim($_POST['full_name'] ?? ''));
-        $email_input = strip_tags(trim($_POST['email'] ?? ''));
-
-        if (empty($full_name_input)) {
-            $valid = 0;
-            $error_message .= "O nome completo não pode ficar vazio.<br>";
-        }
-
-        if ($_SESSION['user']['role'] === 'Super Admin') {
-            if (empty($email_input)) {
-                $valid = 0;
-                $error_message .= "O endereço de e-mail não pode ficar vazio.<br>";
-            } elseif (!filter_var($email_input, FILTER_VALIDATE_EMAIL)) {
-                $valid = 0;
-                $error_message .= "O endereço de e-mail informado é inválido.<br>";
-            } else {
-                $st_email = $pdo->prepare("SELECT id FROM tbl_user WHERE email = ? AND id != ?");
-                $st_email->execute([$email_input, $user_id]);
-                if ($st_email->rowCount() > 0) {
-                    $valid = 0;
-                    $error_message .= "Este endereço de e-mail já está em uso por outro usuário.<br>";
-                }
-            }
-        }
-
-        if ($valid == 1) {
-            if ($_SESSION['user']['role'] === 'Super Admin') {
-                $st_update = $pdo->prepare("UPDATE tbl_user SET full_name = ?, email = ?, phone = ? WHERE id = ?");
-                $st_update->execute([$full_name_input, $email_input, $phone_input, $user_id]);
-                $_SESSION['user']['email'] = $email_input;
-            } else {
-                $st_update = $pdo->prepare("UPDATE tbl_user SET full_name = ?, phone = ? WHERE id = ?");
-                $st_update->execute([$full_name_input, $phone_input, $user_id]);
-            }
-            $_SESSION['user']['full_name'] = $full_name_input;
-            $_SESSION['user']['phone'] = $phone_input;
-            $success_message = "Informações do perfil atualizadas com sucesso.";
-        }
-    } else {
-        $st_update = $pdo->prepare("UPDATE tbl_user SET phone = ? WHERE id = ?");
-        $st_update->execute([$phone_input, $user_id]);
-        $_SESSION['user']['phone'] = $phone_input;
-        $success_message = "Informações de contato atualizadas com sucesso.";
+    if (!isset($_SESSION['user'])) {
+        while (ob_get_level()) { ob_end_clean(); }
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['success' => false, 'message' => 'Sessão expirada. Faça login novamente.']);
+        exit;
     }
 
-    if ($is_ajax) {
+    $error_message = '';
+    $success_message = '';
+    $user_id = (int)$_SESSION['user']['id'];
+
+    // 1. ATUALIZAR INFORMAÇÕES PESSOAIS (FORM 1)
+    if (isset($_POST['form1']) || (isset($_POST['action']) && $_POST['action'] === 'update_info')) {
+        $valid = 1;
+        $phone_input = strip_tags(trim($_POST['phone'] ?? ''));
+
+        if ($_SESSION['user']['role'] === 'Super Admin' || $_SESSION['user']['role'] === 'Admin') {
+            $full_name_input = strip_tags(trim($_POST['full_name'] ?? ''));
+            $email_input = strip_tags(trim($_POST['email'] ?? ''));
+
+            if (empty($full_name_input)) {
+                $valid = 0;
+                $error_message .= "O nome completo não pode ficar vazio.<br>";
+            }
+
+            if ($_SESSION['user']['role'] === 'Super Admin') {
+                if (empty($email_input)) {
+                    $valid = 0;
+                    $error_message .= "O endereço de e-mail não pode ficar vazio.<br>";
+                } elseif (!filter_var($email_input, FILTER_VALIDATE_EMAIL)) {
+                    $valid = 0;
+                    $error_message .= "O endereço de e-mail informado é inválido.<br>";
+                } else {
+                    $st_email = $pdo->prepare("SELECT id FROM tbl_user WHERE email = ? AND id != ?");
+                    $st_email->execute([$email_input, $user_id]);
+                    if ($st_email->rowCount() > 0) {
+                        $valid = 0;
+                        $error_message .= "Este endereço de e-mail já está em uso por outro usuário.<br>";
+                    }
+                }
+            }
+
+            if ($valid == 1) {
+                if ($_SESSION['user']['role'] === 'Super Admin') {
+                    $st_update = $pdo->prepare("UPDATE tbl_user SET full_name = ?, email = ?, phone = ? WHERE id = ?");
+                    $st_update->execute([$full_name_input, $email_input, $phone_input, $user_id]);
+                    $_SESSION['user']['email'] = $email_input;
+                } else {
+                    $st_update = $pdo->prepare("UPDATE tbl_user SET full_name = ?, phone = ? WHERE id = ?");
+                    $st_update->execute([$full_name_input, $phone_input, $user_id]);
+                }
+                $_SESSION['user']['full_name'] = $full_name_input;
+                $_SESSION['user']['phone'] = $phone_input;
+                $success_message = "Informações do perfil atualizadas com sucesso.";
+            }
+        } else {
+            $st_update = $pdo->prepare("UPDATE tbl_user SET phone = ? WHERE id = ?");
+            $st_update->execute([$phone_input, $user_id]);
+            $_SESSION['user']['phone'] = $phone_input;
+            $success_message = "Informações de contato atualizadas com sucesso.";
+        }
+
+        while (ob_get_level()) { ob_end_clean(); }
         header('Content-Type: application/json; charset=utf-8');
         if (!empty($error_message)) {
             echo json_encode(['success' => false, 'message' => $error_message]);
@@ -85,47 +91,39 @@ if (isset($_POST['form1']) || (isset($_POST['action']) && $_POST['action'] === '
         }
         exit;
     }
-}
 
-// ========================================================
-// 2. ATUALIZAR FOTO DE PERFIL (FORM 2)
-// ========================================================
-if (isset($_POST['form2']) || (isset($_POST['action']) && $_POST['action'] === 'update_photo')) {
-    $active_tab = 'tab_2';
-    $valid = 1;
-    $user_id = $_SESSION['user']['id'];
+    // 2. ATUALIZAR FOTO DE PERFIL (FORM 2)
+    if (isset($_POST['form2']) || (isset($_POST['action']) && $_POST['action'] === 'update_photo')) {
+        $valid = 1;
+        $path = $_FILES['photo']['name'] ?? '';
+        $path_tmp = $_FILES['photo']['tmp_name'] ?? '';
 
-    $path = $_FILES['photo']['name'] ?? '';
-    $path_tmp = $_FILES['photo']['tmp_name'] ?? '';
-
-    if (!empty($path)) {
-        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+        if (!empty($path)) {
+            $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+            if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                $valid = 0;
+                $error_message .= "Formato inválido. A foto deve ser JPG, JPEG, PNG, GIF ou WEBP.<br>";
+            }
+        } else {
             $valid = 0;
-            $error_message .= "Formato inválido. A foto deve ser JPG, JPEG, PNG, GIF ou WEBP.<br>";
-        }
-    } else {
-        $valid = 0;
-        $error_message .= "Por favor, selecione uma imagem para atualizar seu perfil.<br>";
-    }
-
-    if ($valid == 1) {
-        // Remove imagem física antiga
-        if (!empty($_SESSION['user']['photo']) && file_exists('../assets/uploads/' . $_SESSION['user']['photo'])) {
-            @unlink('../assets/uploads/' . $_SESSION['user']['photo']);
+            $error_message .= "Por favor, selecione uma imagem para atualizar seu perfil.<br>";
         }
 
-        $final_name = 'user-' . $user_id . '-' . time() . '.' . $ext;
-        move_uploaded_file($path_tmp, '../assets/uploads/' . $final_name);
+        $final_name = '';
+        if ($valid == 1) {
+            if (!empty($_SESSION['user']['photo']) && file_exists('../assets/uploads/' . $_SESSION['user']['photo'])) {
+                @unlink('../assets/uploads/' . $_SESSION['user']['photo']);
+            }
+            $final_name = 'user-' . $user_id . '-' . time() . '.' . $ext;
+            move_uploaded_file($path_tmp, '../assets/uploads/' . $final_name);
 
-        $_SESSION['user']['photo'] = $final_name;
-        $st_photo = $pdo->prepare("UPDATE tbl_user SET photo = ? WHERE id = ?");
-        $st_photo->execute([$final_name, $user_id]);
+            $_SESSION['user']['photo'] = $final_name;
+            $st_photo = $pdo->prepare("UPDATE tbl_user SET photo = ? WHERE id = ?");
+            $st_photo->execute([$final_name, $user_id]);
+            $success_message = "Foto de perfil atualizada com sucesso.";
+        }
 
-        $success_message = "Foto de perfil atualizada com sucesso.";
-    }
-
-    if ($is_ajax) {
+        while (ob_get_level()) { ob_end_clean(); }
         header('Content-Type: application/json; charset=utf-8');
         if (!empty($error_message)) {
             echo json_encode(['success' => false, 'message' => $error_message]);
@@ -138,41 +136,33 @@ if (isset($_POST['form2']) || (isset($_POST['action']) && $_POST['action'] === '
         }
         exit;
     }
-}
 
-// ========================================================
-// 3. ATUALIZAR SENHA (FORM 3)
-// ========================================================
-if (isset($_POST['form3']) || (isset($_POST['action']) && $_POST['action'] === 'update_password')) {
-    $active_tab = 'tab_3';
-    $valid = 1;
-    $user_id = $_SESSION['user']['id'];
+    // 3. ATUALIZAR SENHA (FORM 3)
+    if (isset($_POST['form3']) || (isset($_POST['action']) && $_POST['action'] === 'update_password')) {
+        $valid = 1;
+        $password = strip_tags(trim($_POST['password'] ?? ''));
+        $re_password = strip_tags(trim($_POST['re_password'] ?? ''));
 
-    $password = strip_tags(trim($_POST['password'] ?? ''));
-    $re_password = strip_tags(trim($_POST['re_password'] ?? ''));
+        if (empty($password) || empty($re_password)) {
+            $valid = 0;
+            $error_message .= "A nova senha e a confirmação são campos obrigatórios.<br>";
+        } elseif (strlen($password) < 6) {
+            $valid = 0;
+            $error_message .= "A nova senha deve possuir no mínimo 6 caracteres.<br>";
+        } elseif ($password !== $re_password) {
+            $valid = 0;
+            $error_message .= "As senhas digitadas não coincidem. Digite-as novamente.<br>";
+        }
 
-    if (empty($password) || empty($re_password)) {
-        $valid = 0;
-        $error_message .= "A nova senha e a confirmação são campos obrigatórios.<br>";
-    } elseif (strlen($password) < 6) {
-        $valid = 0;
-        $error_message .= "A nova senha deve possuir no mínimo 6 caracteres.<br>";
-    } elseif ($password !== $re_password) {
-        $valid = 0;
-        $error_message .= "As senhas digitadas não coincidem. Digite-as novamente.<br>";
-    }
+        if ($valid == 1) {
+            $hash = md5($password);
+            $_SESSION['user']['password'] = $hash;
+            $st_pass = $pdo->prepare("UPDATE tbl_user SET password = ? WHERE id = ?");
+            $st_pass->execute([$hash, $user_id]);
+            $success_message = "Sua senha de acesso foi atualizada com sucesso.";
+        }
 
-    if ($valid == 1) {
-        $hash = md5($password);
-        $_SESSION['user']['password'] = $hash;
-
-        $st_pass = $pdo->prepare("UPDATE tbl_user SET password = ? WHERE id = ?");
-        $st_pass->execute([$hash, $user_id]);
-
-        $success_message = "Sua senha de acesso foi atualizada com sucesso.";
-    }
-
-    if ($is_ajax) {
+        while (ob_get_level()) { ob_end_clean(); }
         header('Content-Type: application/json; charset=utf-8');
         if (!empty($error_message)) {
             echo json_encode(['success' => false, 'message' => $error_message]);
@@ -180,6 +170,56 @@ if (isset($_POST['form3']) || (isset($_POST['action']) && $_POST['action'] === '
             echo json_encode(['success' => true, 'message' => $success_message]);
         }
         exit;
+    }
+}
+
+require_once('header.php');
+
+$error_message = '';
+$success_message = '';
+$active_tab = 'tab_1';
+
+// Suporte a detecção de aba ativa via parâmetro GET
+if (isset($_GET['tab']) && in_array($_GET['tab'], ['tab_1', 'tab_2', 'tab_3'])) {
+    $active_tab = $_GET['tab'];
+}
+
+// ========================================================
+// Processamento tradicional (Fallback caso não seja AJAX)
+// ========================================================
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user_id = (int)$_SESSION['user']['id'];
+    if (isset($_POST['form1'])) {
+        $active_tab = 'tab_1';
+        $valid = 1;
+        $phone_input = strip_tags(trim($_POST['phone'] ?? ''));
+        if ($_SESSION['user']['role'] === 'Super Admin' || $_SESSION['user']['role'] === 'Admin') {
+            $full_name_input = strip_tags(trim($_POST['full_name'] ?? ''));
+            $email_input = strip_tags(trim($_POST['email'] ?? ''));
+            if (empty($full_name_input)) { $valid = 0; $error_message .= "O nome completo não pode ficar vazio.<br>"; }
+            if ($_SESSION['user']['role'] === 'Super Admin') {
+                if (empty($email_input)) { $valid = 0; $error_message .= "O e-mail não pode ficar vazio.<br>"; }
+                elseif (!filter_var($email_input, FILTER_VALIDATE_EMAIL)) { $valid = 0; $error_message .= "E-mail inválido.<br>"; }
+                else {
+                    $st_email = $pdo->prepare("SELECT id FROM tbl_user WHERE email = ? AND id != ?");
+                    $st_email->execute([$email_input, $user_id]);
+                    if ($st_email->rowCount() > 0) { $valid = 0; $error_message .= "E-mail já em uso.<br>"; }
+                }
+            }
+            if ($valid == 1) {
+                if ($_SESSION['user']['role'] === 'Super Admin') {
+                    $st_update = $pdo->prepare("UPDATE tbl_user SET full_name = ?, email = ?, phone = ? WHERE id = ?");
+                    $st_update->execute([$full_name_input, $email_input, $phone_input, $user_id]);
+                    $_SESSION['user']['email'] = $email_input;
+                } else {
+                    $st_update = $pdo->prepare("UPDATE tbl_user SET full_name = ?, phone = ? WHERE id = ?");
+                    $st_update->execute([$full_name_input, $phone_input, $user_id]);
+                }
+                $_SESSION['user']['full_name'] = $full_name_input;
+                $_SESSION['user']['phone'] = $phone_input;
+                $success_message = "Informações do perfil atualizadas com sucesso.";
+            }
+        }
     }
 }
 
@@ -949,7 +989,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	// ========================================================
-	// 5. SUBMISSÃO ASSÍNCRONA AJAX COM SWEETALERT2 & TOASTR
+	// 5. SUBMISSÃO ASSÍNCRONA AJAX COM NOTIFICAÇÕES TOASTR
 	// ========================================================
 	
 	// A. FORM 1 - DADOS PESSOAIS
@@ -975,14 +1015,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			btn.innerHTML = origHtml;
 
 			if (data.success) {
-				if (typeof toastr !== 'undefined') toastr.success(data.message, 'Pronto Saúde');
-				if (typeof Swal !== 'undefined') {
-					Swal.fire({
-						icon: 'success',
-						title: 'Informações Atualizadas!',
-						text: data.message,
-						confirmButtonColor: '#0a6b74'
-					});
+				if (typeof toastr !== 'undefined') {
+					toastr.success(data.message, 'Pronto Saúde');
 				}
 				// Atualiza textos visíveis na tela em tempo real
 				if (data.full_name) {
@@ -995,21 +1029,17 @@ document.addEventListener('DOMContentLoaded', function () {
 					document.querySelectorAll('.user-live-email').forEach(function(el) { el.textContent = data.email; });
 				}
 			} else {
-				if (typeof toastr !== 'undefined') toastr.error(data.message.replace(/<br>/g, ' '), 'Atenção');
-				if (typeof Swal !== 'undefined') {
-					Swal.fire({
-						icon: 'error',
-						title: 'Não foi possível salvar',
-						html: data.message,
-						confirmButtonColor: '#0a6b74'
-					});
+				if (typeof toastr !== 'undefined') {
+					toastr.error(data.message.replace(/<br>/g, ' '), 'Atenção');
 				}
 			}
 		})
 		.catch(function () {
 			btn.disabled = false;
 			btn.innerHTML = origHtml;
-			form.submit();
+			if (typeof toastr !== 'undefined') {
+				toastr.error('Erro de comunicação com o servidor ao salvar dados.', 'Falha de Conexão');
+			}
 		});
 	});
 
@@ -1021,13 +1051,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		var origHtml = btn.innerHTML;
 
 		if (!photoInput || !photoInput.files || photoInput.files.length === 0) {
-			if (typeof Swal !== 'undefined') {
-				Swal.fire({
-					icon: 'warning',
-					title: 'Selecione uma Imagem',
-					text: 'Por favor, escolha um arquivo de imagem para atualizar.',
-					confirmButtonColor: '#0a6b74'
-				});
+			if (typeof toastr !== 'undefined') {
+				toastr.warning('Por favor, escolha um arquivo de imagem para atualizar.', 'Selecione uma Imagem');
 			}
 			return;
 		}
@@ -1049,14 +1074,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			btn.innerHTML = origHtml;
 
 			if (data.success) {
-				if (typeof toastr !== 'undefined') toastr.success(data.message, 'Pronto Saúde');
-				if (typeof Swal !== 'undefined') {
-					Swal.fire({
-						icon: 'success',
-						title: 'Foto Atualizada!',
-						text: data.message,
-						confirmButtonColor: '#0a6b74'
-					});
+				if (typeof toastr !== 'undefined') {
+					toastr.success(data.message, 'Pronto Saúde');
 				}
 				// Atualiza avatares do painel sem reload
 				if (data.photo_url) {
@@ -1067,21 +1086,17 @@ document.addEventListener('DOMContentLoaded', function () {
 				}
 				btnCancelPhoto.style.display = 'none';
 			} else {
-				if (typeof toastr !== 'undefined') toastr.error(data.message.replace(/<br>/g, ' '), 'Atenção');
-				if (typeof Swal !== 'undefined') {
-					Swal.fire({
-						icon: 'error',
-						title: 'Erro no Upload',
-						html: data.message,
-						confirmButtonColor: '#0a6b74'
-					});
+				if (typeof toastr !== 'undefined') {
+					toastr.error(data.message.replace(/<br>/g, ' '), 'Erro no Upload');
 				}
 			}
 		})
 		.catch(function () {
 			btn.disabled = false;
 			btn.innerHTML = origHtml;
-			form.submit();
+			if (typeof toastr !== 'undefined') {
+				toastr.error('Erro de comunicação com o servidor ao enviar foto.', 'Falha de Conexão');
+			}
 		});
 	});
 
@@ -1096,37 +1111,22 @@ document.addEventListener('DOMContentLoaded', function () {
 		var p2 = rePassInput ? rePassInput.value.trim() : '';
 
 		if (!p1 || !p2) {
-			if (typeof Swal !== 'undefined') {
-				Swal.fire({
-					icon: 'warning',
-					title: 'Preencha os Campos',
-					text: 'A nova senha e a confirmação são obrigatórias.',
-					confirmButtonColor: '#0a6b74'
-				});
+			if (typeof toastr !== 'undefined') {
+				toastr.warning('A nova senha e a confirmação são obrigatórias.', 'Preencha os Campos');
 			}
 			return;
 		}
 
 		if (p1.length < 6) {
-			if (typeof Swal !== 'undefined') {
-				Swal.fire({
-					icon: 'warning',
-					title: 'Senha Curta',
-					text: 'A nova senha deve possuir pelo menos 6 caracteres.',
-					confirmButtonColor: '#0a6b74'
-				});
+			if (typeof toastr !== 'undefined') {
+				toastr.warning('A nova senha deve possuir pelo menos 6 caracteres.', 'Senha Curta');
 			}
 			return;
 		}
 
 		if (p1 !== p2) {
-			if (typeof Swal !== 'undefined') {
-				Swal.fire({
-					icon: 'error',
-					title: 'Senhas Diferentes',
-					text: 'As senhas digitadas não coincidem. Digite novamente.',
-					confirmButtonColor: '#0a6b74'
-				});
+			if (typeof toastr !== 'undefined') {
+				toastr.error('As senhas digitadas não coincidem. Digite novamente.', 'Senhas Diferentes');
 			}
 			return;
 		}
@@ -1148,14 +1148,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			btn.innerHTML = origHtml;
 
 			if (data.success) {
-				if (typeof toastr !== 'undefined') toastr.success(data.message, 'Pronto Saúde');
-				if (typeof Swal !== 'undefined') {
-					Swal.fire({
-						icon: 'success',
-						title: 'Senha Atualizada com Sucesso!',
-						text: data.message,
-						confirmButtonColor: '#0a6b74'
-					});
+				if (typeof toastr !== 'undefined') {
+					toastr.success(data.message, 'Pronto Saúde');
 				}
 				// Limpa os campos de senha e medidor
 				form.reset();
@@ -1166,21 +1160,17 @@ document.addEventListener('DOMContentLoaded', function () {
 				}
 				if (matchMessage) matchMessage.innerHTML = '';
 			} else {
-				if (typeof toastr !== 'undefined') toastr.error(data.message.replace(/<br>/g, ' '), 'Atenção');
-				if (typeof Swal !== 'undefined') {
-					Swal.fire({
-						icon: 'error',
-						title: 'Erro na Atualização',
-						html: data.message,
-						confirmButtonColor: '#0a6b74'
-					});
+				if (typeof toastr !== 'undefined') {
+					toastr.error(data.message.replace(/<br>/g, ' '), 'Erro na Atualização');
 				}
 			}
 		})
 		.catch(function () {
 			btn.disabled = false;
 			btn.innerHTML = origHtml;
-			form.submit();
+			if (typeof toastr !== 'undefined') {
+				toastr.error('Erro de comunicação com o servidor ao atualizar senha.', 'Falha de Conexão');
+			}
 		});
 	});
 

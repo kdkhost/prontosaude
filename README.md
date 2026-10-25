@@ -42,13 +42,17 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - Alternador de tema Claro / Escuro de alto contraste no cabeçalho e menu móvel, com notificações via Toastr.
   - **Isolamento de Estado:** O tema do site público é totalmente desacoplado do Painel Administrativo (`pronto_frontend_theme` vs `pronto_admin_theme`), garantindo que o tema escolhido pelo administrador no painel nunca interfira na navegação dos visitantes do portal.
   - **Controle Centralizado no Painel:** Opção nas configurações gerais (`admin/settings.php`) para ativar ou desativar o modo dark no site público com um único clique.
-- **Interface e Feedback 100% Interativos:** Formulários públicos integrados com AJAX assíncrono (sem reload), notificações flutuantes com **Toastr** e caixas de diálogo elegantes com **SweetAlert2** substituindo qualquer alerta nativo de navegador.
+- **Interface e Feedback 100% Interativos:** Formulários públicos integrados com AJAX assíncrono (sem reload), notificações flutuantes com **Toastr** e caixas de diálogo elegantes com **SweetAlert2** para confirmações.
+- **Padronização Estrita de Feedback Visual (SweetAlert2 vs. Toastr):**
+  - **SweetAlert2 Exclusivo para Confirmações:** Modais com botões de confirmar/cancelar são acionados unicamente para ações críticas e irreversíveis (exclusão de registros, descarte de dados e logout). Nunca para retorno de salvamento ou validações.
+  - **Toastr Global para Retornos do Banco e Validações:** Todo feedback de inserção, alteração, validação ou login é emitido via notificações Toastr elegantes no canto superior direito, sem interromper a navegação.
+  - **Blindagem Anti-JSON e Eliminação de Flashes:** Motor SPA e endpoints AJAX isolados antes de cabeçalhos HTML, garantindo que respostas em JSON puro nunca sejam renderizadas como texto cru no DOM nem causem recarregamento de página.
 
 ### Painel Administrativo Moderno e Desacoplado (AdminLTE 4 + SPA)
 - **Painel Totalmente Desacoplado via AJAX (SPA):**
   - Navegação fluida entre rotas sem refresh de página e sem cintilação (`admin/js/pronto-spa.js`).
   - Cabeçalho, menu lateral (sidebar), navbar e rodapé desacoplados, com transições instantâneas e barra de progresso no topo.
-  - Submissão de formulários e uploads via `FormData` e `fetch` assíncrono.
+  - Submissão de formulários e uploads via `FormData` e `fetch` assíncrono com suporte nativo e transparente a respostas JSON e HTML.
   - **Ciclo de Vida Unificado e Blindagem Anti-Duplicação:** Inicialização centralizada de componentes (`reinitAllComponents`) com guardas atômicas e restritivas (`ps-summernote-init`, `ps-datatable-init`, `ps-select2-init`, `ps-datepicker-init`), eliminando por completo ferramentas duplicadas, toolbars sobrepostas ou conflitos entre abas.
 - **Upload Drag & Drop com Preview em Tempo Real:**
   - Utilitário universal (`admin/js/pronto-uploader.js`) que transforma todos os campos de imagem em zonas modernas de arrastar e soltar com preview visual instantâneo e informações do arquivo.
