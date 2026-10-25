@@ -286,5 +286,29 @@ $logo = $config['logo'] ?? '';
 		});
 	</script>
 	<?php endif; ?>
+
+	<?php if (!empty($_GET['recovered']) && $_GET['recovered'] == '1'): ?>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			if (typeof Swal !== 'undefined') {
+				Swal.fire({
+					icon: 'success',
+					title: 'Senha Redefinida!',
+					text: 'Sua senha foi alterada com sucesso. Faça login agora utilizando suas novas credenciais.',
+					confirmButtonText: 'Acessar',
+					confirmButtonColor: '#0a6b74',
+					customClass: { confirmButton: 'btn btn-primary px-4' },
+					buttonsStyling: false
+				});
+			}
+			if (typeof toastr !== 'undefined') {
+				toastr.success('Senha alterada com sucesso!', 'Pronto Saúde');
+			}
+			if (window.history && window.history.replaceState) {
+				window.history.replaceState({}, document.title, 'login.php');
+			}
+		});
+	</script>
+	<?php endif; ?>
 </body>
 </html>

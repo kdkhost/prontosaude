@@ -1,38 +1,51 @@
 <?php
-if (!isset($pdo)) {
-    require_once __DIR__ . '/../../admin/config.php';
+if (!isset($pdo) || !$pdo) {
+    global $pdo;
+    if (!isset($pdo) || !$pdo) {
+        $config_file = __DIR__ . '/../../admin/config.php';
+        if (file_exists($config_file)) {
+            require_once $config_file;
+        }
+    }
 }
 
 $receive_email = '';
 $logo = '';
 $color_email = '#0A6B74';
 $footer_copyright = '';
+$empresa = 'Pronto Saúde';
 $social_facebook = '#';
 $social_twitter = '#';
 
-try {
-    $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
-    $statement->execute();
-    $result = $statement->fetch(PDO::FETCH_ASSOC);
-    if ($result) {
-        $receive_email = $result['receive_email'] ?? '';
-        $logo = $result['logo'] ?? '';
-        $color_email = !empty($result['color']) ? '#' . ltrim($result['color'], '#') : '#0A6B74';
-        $footer_copyright = $result['footer_copyright'] ?? '';
-    }
-
-    $stmt_social = $pdo->query("SELECT social_name, social_url FROM tbl_social");
-    while ($srow = $stmt_social->fetch(PDO::FETCH_ASSOC)) {
-        if (stripos($srow['social_name'] ?? '', 'facebook') !== false) {
-            $social_facebook = $srow['social_url'] ?? '#';
-        } elseif (stripos($srow['social_name'] ?? '', 'twitter') !== false) {
-            $social_twitter = $srow['social_url'] ?? '#';
+if (isset($pdo) && $pdo) {
+    try {
+        $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            $receive_email = $result['receive_email'] ?? '';
+            $logo = $result['logo'] ?? '';
+            $color_email = !empty($result['color']) ? '#' . ltrim($result['color'], '#') : '#0A6B74';
+            $footer_copyright = $result['footer_copyright'] ?? '';
+            $empresa = $result['empresa'] ?? 'Pronto Saúde';
         }
+
+        $stmt_social = $pdo->query("SELECT social_name, social_url FROM tbl_social");
+        if ($stmt_social) {
+            while ($srow = $stmt_social->fetch(PDO::FETCH_ASSOC)) {
+                if (stripos($srow['social_name'] ?? '', 'facebook') !== false) {
+                    $social_facebook = $srow['social_url'] ?? '#';
+                } elseif (stripos($srow['social_name'] ?? '', 'twitter') !== false) {
+                    $social_twitter = $srow['social_url'] ?? '#';
+                }
+            }
+        }
+    } catch (Exception $e) {
+        // Falha silenciosa com valores padrão
     }
-} catch (Exception $e) {
-    // Falha silenciosa com valores padrão
 }
 
+if (!defined('HEADER')) {
 define('HEADER', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt_br" xml:lang="pt_br">
@@ -220,8 +233,12 @@ define('HEADER', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
                                             </tr>
                                             </tbody>
                                         </table>');
-                                        define('BODY', '<p>#body#</p>');
-                                        define('FOOTER', ' </td>
+}
+if (!defined('BODY')) {
+    define('BODY', '<p>#body#</p>');
+}
+if (!defined('FOOTER')) {
+    define('FOOTER', ' </td>
                             </tr>
                             </tbody>
 
@@ -449,19 +466,40 @@ define('HEADER', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     </tbody>
 </table>
 </body></html>');
+}
 
 function SendMail($email, $nome, $assunto, $texto) {
-	
-	  $headers = 'From: ' . $email . "\r\n" .
-                'Reply-to: ' . $email . "\r\n" .
-                'X-Mailer: PHP/' . phpversion() . "\r\n" .
-                "MIME-Version: 1.0\r\n" .
-                "Content-Type: text/html; charset=UTF-8\r\n";
+    global $pdo, $receive_email, $empresa;
 
-        // Sending email to admin				   
-      return  mail($email, $assunto, HEADER . str_replace("#body#", $texto, BODY) . FOOTER, $headers);
-     
-     
+    if (empty($receive_email) && isset($pdo) && $pdo) {
+        try {
+            $stmt = $pdo->query("SELECT receive_email, empresa FROM tbl_settings WHERE id=1 LIMIT 1");
+            $cfg = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($cfg) {
+                $receive_email = $cfg['receive_email'] ?? '';
+                $empresa = $cfg['empresa'] ?? 'Pronto Saúde';
+            }
+        } catch (Exception $e) {}
+    }
+
+    $domain = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'prontosaude.kdkhost.com.br';
+    $domain = preg_replace('/:\d+$/', '', $domain);
+
+    $from_name = !empty($empresa) ? $empresa : 'Pronto Saúde';
+    $from_email = !empty($receive_email) && filter_var($receive_email, FILTER_VALIDATE_EMAIL)
+        ? $receive_email
+        : "nao-responder@{$domain}";
+
+    $headers = "From: =?UTF-8?B?" . base64_encode($from_name) . "?= <{$from_email}>\r\n" .
+               "Reply-To: {$from_email}\r\n" .
+               "X-Mailer: PHP/" . phpversion() . "\r\n" .
+               "MIME-Version: 1.0\r\n" .
+               "Content-Type: text/html; charset=UTF-8\r\n";
+
+    $subject_encoded = "=?UTF-8?B?" . base64_encode($assunto) . "?=";
+    $body_content = HEADER . str_replace("#body#", $texto, BODY) . FOOTER;
+
+    return @mail($email, $subject_encoded, $body_content, $headers);
 }
 
 

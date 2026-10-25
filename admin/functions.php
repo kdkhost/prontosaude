@@ -233,6 +233,42 @@ if (!function_exists('pronto_sync_system_pages')) {
     }
 }
 
+if (!function_exists('pronto_ensure_user_recovery_columns')) {
+    /**
+     * Garante que a tabela tbl_user possua as colunas token e token_time para o fluxo seguro de recuperação de senha
+     */
+    function pronto_ensure_user_recovery_columns($pdo = null) {
+        if ($pdo === null) {
+            global $pdo;
+        }
+        if (!$pdo) return;
+
+        static $userColsChecked = false;
+        if ($userColsChecked) return;
+        $userColsChecked = true;
+
+        $userCols = [
+            'token' => "VARCHAR(255) NULL DEFAULT ''",
+            'token_time' => "INT NULL DEFAULT 0"
+        ];
+        foreach ($userCols as $uCol => $uDef) {
+            try {
+                $pdo->query("SELECT {$uCol} FROM tbl_user LIMIT 1");
+            } catch (Exception $e) {
+                try {
+                    $pdo->query("ALTER TABLE tbl_user ADD COLUMN {$uCol} {$uDef}");
+                } catch (Exception $e2) {
+                    error_log("Falha ao adicionar coluna {$uCol} em tbl_user: " . $e2->getMessage());
+                }
+            }
+        }
+    }
+}
+
+if (isset($pdo) && $pdo) {
+    pronto_ensure_user_recovery_columns($pdo);
+}
+
 if (!function_exists('pronto_is_page_active')) {
     /**
      * Verifica de forma segura e com cache em memória se uma página está ativa
