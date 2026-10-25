@@ -4,6 +4,41 @@
 // Endpoint AJAX de alta precisão e renderizador visual
 // =========================================================================
 
+// Funções auxiliares globais de limpeza e formatação de metadados de SEO
+if (!function_exists('seo_clean_text')) {
+	function seo_clean_text($text) {
+		if (empty($text) && !is_numeric($text)) return '';
+		$text = preg_replace('/<(script|style)[^>]*?>.*?<\/\\1>/si', '', (string)$text);
+		$text = preg_replace('/<br\s*\/?>/i', ' ', $text);
+		$text = preg_replace('/<\/(p|div|h[1-6]|li)>/i', ' ', $text);
+		$text = strip_tags($text);
+		$text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+		$text = str_replace(["\xc2\xa0", '&nbsp;'], ' ', $text);
+		$text = preg_replace('/[\r\n\t]+/', ' ', $text);
+		$text = preg_replace('/\s+/', ' ', $text);
+		return trim($text);
+	}
+}
+
+if (!function_exists('seo_clean_keywords')) {
+	function seo_clean_keywords($text) {
+		if (empty($text) && !is_numeric($text)) return '';
+		$text = preg_replace('/<(script|style)[^>]*?>.*?<\/\\1>/si', '', (string)$text);
+		$text = strip_tags($text);
+		$text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+		$text = str_replace(["\xc2\xa0", '&nbsp;'], ' ', $text);
+		$lines = preg_split('/[\r\n]+/', (string)$text);
+		$clean = [];
+		foreach ($lines as $line) {
+			$line = trim(preg_replace('/\s+/', ' ', $line));
+			if (!empty($line)) {
+				$clean[] = $line;
+			}
+		}
+		return implode("\n", array_unique($clean));
+	}
+}
+
 // 1. Processamento AJAX Isolado (Executado antes de qualquer saída HTML)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 	while (ob_get_level()) {
@@ -41,42 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 	// Sincroniza páginas institucionais com tbl_page
 	if (function_exists('pronto_sync_system_pages')) {
 		pronto_sync_system_pages($pdo);
-	}
-
-	// Função auxiliar estrita de limpeza de metadados contra tags HTML escapadas
-	if (!function_exists('seo_clean_text')) {
-		function seo_clean_text($text) {
-			if (empty($text) && !is_numeric($text)) return '';
-			$text = preg_replace('/<(script|style)[^>]*?>.*?<\/\\1>/si', '', (string)$text);
-			$text = preg_replace('/<br\s*\/?>/i', ' ', $text);
-			$text = preg_replace('/<\/(p|div|h[1-6]|li)>/i', ' ', $text);
-			$text = strip_tags($text);
-			$text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-			$text = str_replace(["\xc2\xa0", '&nbsp;'], ' ', $text);
-			$text = preg_replace('/[\r\n\t]+/', ' ', $text);
-			$text = preg_replace('/\s+/', ' ', $text);
-			return trim($text);
-		}
-	}
-
-	// Função estrita de limpeza para palavras-chave gravadas individualmente por Enter
-	if (!function_exists('seo_clean_keywords')) {
-		function seo_clean_keywords($text) {
-			if (empty($text) && !is_numeric($text)) return '';
-			$text = preg_replace('/<(script|style)[^>]*?>.*?<\/\\1>/si', '', (string)$text);
-			$text = strip_tags($text);
-			$text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-			$text = str_replace(["\xc2\xa0", '&nbsp;'], ' ', $text);
-			$lines = preg_split('/[\r\n]+/', (string)$text);
-			$clean = [];
-			foreach ($lines as $line) {
-				$line = trim(preg_replace('/\s+/', ' ', $line));
-				if (!empty($line)) {
-					$clean[] = $line;
-				}
-			}
-			return implode("\n", array_unique($clean));
-		}
 	}
 
 	// Endpoint AJAX: Alternar visibilidade/status da página (Active / Inactive)
@@ -246,22 +245,6 @@ try {
 // Sincroniza páginas institucionais com tbl_page
 if (function_exists('pronto_sync_system_pages')) {
 	pronto_sync_system_pages($pdo);
-}
-
-// Função de limpeza estrita de metadados
-if (!function_exists('seo_clean_text')) {
-	function seo_clean_text($text) {
-		if (empty($text) && !is_numeric($text)) return '';
-		$text = preg_replace('/<(script|style)[^>]*?>.*?<\/\\1>/si', '', (string)$text);
-		$text = preg_replace('/<br\s*\/?>/i', ' ', $text);
-		$text = preg_replace('/<\/(p|div|h[1-6]|li)>/i', ' ', $text);
-		$text = strip_tags($text);
-		$text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-		$text = str_replace(["\xc2\xa0", '&nbsp;'], ' ', $text);
-		$text = preg_replace('/[\r\n\t]+/', ' ', $text);
-		$text = preg_replace('/\s+/', ' ', $text);
-		return trim($text);
-	}
 }
 
 // Carrega configurações globais (Home)
