@@ -87,7 +87,10 @@ $logo = $row['logo'] ?? '';
 	<!-- Fontes do Sistema -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css">
 	
-	<!-- Ícones: Bootstrap Icons e FontAwesome 6 -->
+	<!-- Ícones: FontAwesome 6 Completo e Bootstrap Icons (Universal) -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/v4-shims.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 	<link rel="stylesheet" href="css/bootstrap-icons.min.css">
 	<link rel="stylesheet" href="css/font-awesome6.min.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
