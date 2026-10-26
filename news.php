@@ -227,9 +227,9 @@ $news_banner_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ?
 							<div class="tab-pane fade show active" id="tab-local" role="tabpanel">
 								
 								<!-- Formulário de Envio de Comentário -->
-								<div class="p-3 p-md-4 rounded-4 mb-4" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-									<h5 class="fw-bold mb-3" style="color: var(--ps-title); font-size: 1rem;">
-										<i class="fas fa-pen-to-square me-2" style="color: var(--ps-primary);"></i> Deixe sua dúvida ou comentário
+								<div class="ps-comment-form-box">
+									<h5 class="ps-comment-form-title">
+										<i class="fas fa-pen-to-square"></i> Deixe sua dúvida ou comentário
 									</h5>
 									<form id="formPostComment" autocomplete="off">
 										<!-- Honeypot anti-spam invisível -->
@@ -238,31 +238,37 @@ $news_banner_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ?
 										
 										<div class="row g-3 mb-3">
 											<div class="col-md-6">
-												<label class="form-label small fw-bold text-muted mb-1">Seu Nome Completo *</label>
-												<div class="input-group input-group-sm">
-													<span class="input-group-text bg-white border-end-0"><i class="fas fa-user text-muted"></i></span>
-													<input type="text" name="c_name" class="form-control border-start-0" placeholder="Ex: Maria Ferreira" required minlength="2" maxlength="120">
+												<label class="ps-comment-label">Seu Nome Completo <span class="ps-text-teal">*</span></label>
+												<div class="ps-comment-input-wrap">
+													<i class="fas fa-user ps-comment-input-icon"></i>
+													<input type="text" name="c_name" class="ps-comment-input" placeholder="Ex: Maria Ferreira" required minlength="2" maxlength="120">
 												</div>
 											</div>
 											<div class="col-md-6">
-												<label class="form-label small fw-bold text-muted mb-1">Seu E-mail * <small class="text-muted fw-normal">(não será exibido)</small></label>
-												<div class="input-group input-group-sm">
-													<span class="input-group-text bg-white border-end-0"><i class="fas fa-envelope text-muted"></i></span>
-													<input type="email" name="c_email" class="form-control border-start-0" placeholder="seu.email@exemplo.com" required>
+												<label class="ps-comment-label">
+													<span>Seu E-mail <span class="ps-text-teal">*</span></span>
+													<span class="ps-comment-label-hint">(não será exibido)</span>
+												</label>
+												<div class="ps-comment-input-wrap">
+													<i class="fas fa-envelope ps-comment-input-icon"></i>
+													<input type="email" name="c_email" class="ps-comment-input" placeholder="seu.email@exemplo.com" required>
 												</div>
 											</div>
 										</div>
 
-										<div class="mb-3">
-											<label class="form-label small fw-bold text-muted mb-1">Seu Comentário *</label>
-											<textarea name="c_comment" class="form-control" rows="3" placeholder="Compartilhe suas dúvidas, observações ou experiência sobre o assunto..." required minlength="4" maxlength="2500" style="font-size: 0.9rem;"></textarea>
+										<div class="mb-4">
+											<label class="ps-comment-label">Seu Comentário ou Pergunta <span class="ps-text-teal">*</span></label>
+											<div class="ps-comment-input-wrap ps-comment-textarea-wrap">
+												<i class="fas fa-comment-dots ps-comment-input-icon ps-comment-textarea-icon"></i>
+												<textarea name="c_comment" class="ps-comment-input ps-comment-textarea" rows="4" placeholder="Compartilhe suas dúvidas, observações ou experiência sobre o assunto..." required minlength="4" maxlength="2500"></textarea>
+											</div>
 										</div>
 
-										<div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-											<small class="text-muted" style="font-size: 0.76rem;">
-												<i class="fas fa-shield-alt text-success me-1"></i> Ambiente moderado e livre de spam.
+										<div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+											<small class="text-muted d-inline-flex align-items-center gap-1" style="font-size: 0.8rem;">
+												<i class="fas fa-shield-alt text-success"></i> Ambiente moderado e livre de spam.
 											</small>
-											<button type="submit" id="btnSubmitComment" class="btn btn-sm btn-submit-comment fw-bold px-4 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2">
+											<button type="submit" id="btnSubmitComment" class="btn btn-submit-comment fw-bold px-4 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2">
 												<i class="fas fa-paper-plane"></i> <span>Publicar Comentário</span>
 											</button>
 										</div>
