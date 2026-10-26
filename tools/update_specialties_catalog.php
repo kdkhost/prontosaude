@@ -235,16 +235,17 @@ $especialidades = [
         'name' => 'Fonoaudiologia',
         'slug' => 'fonoaudiologia',
         'price' => 'Consulte',
-        'short_description' => '<p>Prevenção, avaliação e reabilitação dos distúrbios da comunicação humana: fala, linguagem infantil e adulta, voz profissional, deglutição (disfagia) e audição com fonoaudiólogas dedicadas.</p>',
-        'description' => '<p>A <strong>Fonoaudiologia</strong> na <strong>Pronto Saúde</strong> cuida de funções essenciais para a qualidade de vida e a conexão humana: falar, ouvir, mastigar e engolir com harmonia e segurança. Nossas profissionais atuam tanto na reabilitação clínica quanto no aperfeiçoamento da comunicação.</p>
+        'short_description' => '<p>Prevenção, avaliação e reabilitação dos distúrbios da comunicação humana: fala, linguagem infantil e adulta, voz profissional, deglutição (disfagia) e saúde auditiva com fonoaudiólogas dedicadas.</p>',
+        'description' => '<p>A <strong>Fonoaudiologia</strong> na <strong>Pronto Saúde</strong> cuida de funções essenciais para a qualidade de vida e a conexão humana: falar, ouvir, mastigar e engolir com harmonia e segurança. Nossas profissionais atuam tanto na avaliação audiológica e reabilitação clínica quanto no aperfeiçoamento da comunicação.</p>
 <h4>Principais Linhas de Cuidado</h4>
 <ul>
     <li><strong>Desenvolvimento da Fala Infantil:</strong> Auxílio especializado para crianças com atraso na fala, trocas ou omissões de letras (ceceio, dislalia).</li>
+    <li><strong>Audição e Processamento Auditivo:</strong> Avaliação clínica da audição, orientação fonoaudiológica e acompanhamento de queixas auditivas.</li>
     <li><strong>Gagueira e Fluência:</strong> Estratégias terapêuticas para controle de bloqueios e fluência verbal em qualquer faixa etária.</li>
     <li><strong>Aprimoramento e Terapia Vocal:</strong> Tratamento de rouquidão, cansaço vocal, nódulos ou pólipos nas cordas vocais para professores, cantores e comunicadores.</li>
     <li><strong>Disfagia e Deglutição:</strong> Reabilitação de dificuldades de engasgo e deglutição decorrentes de pós-AVC, doenças neurológicas ou envelhecimento.</li>
 </ul>',
-        'benefits' => "Sessões personalizadas e lúdicas para crianças\nExercícios vocais práticos para profissionais da voz\nReabilitação segura para disfagia e pós-AVC\nAtendimento individualizado com fonoaudiólogas experientes",
+        'benefits' => "Avaliação fonoaudiológica e auditiva completa\nSessões personalizadas e lúdicas para crianças\nExercícios vocais práticos para profissionais da voz\nReabilitação segura para disfagia e pós-AVC",
         'button_text' => 'Agendar Fonoaudióloga',
         'button_url' => '',
         'photo' => 'service-fonoaudiologia.jpg',
