@@ -6,7 +6,7 @@
     <!-- 1. Campo de Busca de Alta Conversão -->
     <div class="ps-sidebar-card">
         <h5 class="ps-sidebar-title">
-            <i class="fas fa-search text-primary me-2"></i> Buscar no Blog
+            <i class="fas fa-search ps-text-teal me-2"></i> Buscar no Blog
         </h5>
         <form action="<?php echo BASE_URL; ?>search" method="post" class="ps-search-form">
             <input type="text" name="search_string" class="ps-search-input" placeholder="Buscar artigos, notícias e dicas..." required>
@@ -19,7 +19,7 @@
     <!-- 2. Categorias com Contagem Real de Posts -->
     <div class="ps-sidebar-card">
         <h5 class="ps-sidebar-title">
-            <i class="fas fa-folder-open text-primary me-2"></i> Categorias
+            <i class="fas fa-folder-open ps-text-teal me-2"></i> Categorias
         </h5>
         <ul class="ps-cat-list">
             <?php
@@ -47,7 +47,7 @@
     <!-- 3. Postagens Recentes com Miniaturas e Datas -->
     <div class="ps-sidebar-card">
         <h5 class="ps-sidebar-title">
-            <i class="far fa-clock text-primary me-2"></i> Artigos Recentes
+            <i class="far fa-clock ps-text-teal me-2"></i> Artigos Recentes
         </h5>
         <div class="ps-recent-list">
             <?php
@@ -64,7 +64,7 @@
                     <div class="ps-recent-info">
                         <h6 class="ps-recent-title"><?php echo htmlspecialchars($post['news_title']); ?></h6>
                         <span class="ps-recent-date">
-                            <i class="far fa-calendar-alt text-primary"></i> <?php echo pronto_format_date($post['news_date']); ?>
+                            <i class="far fa-calendar-alt ps-text-teal"></i> <?php echo pronto_format_date($post['news_date']); ?>
                         </span>
                     </div>
                 </a>
@@ -94,7 +94,7 @@
                     <div class="ps-recent-info">
                         <h6 class="ps-recent-title"><?php echo htmlspecialchars($pop['news_title']); ?></h6>
                         <span class="ps-recent-date">
-                            <i class="fas fa-eye text-primary"></i> <?php echo (int)($pop['total_view'] ?? 0); ?> visualizações
+                            <i class="fas fa-eye ps-text-teal"></i> <?php echo (int)($pop['total_view'] ?? 0); ?> visualizações
                         </span>
                     </div>
                 </a>

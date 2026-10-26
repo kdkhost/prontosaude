@@ -1086,13 +1086,13 @@ document.addEventListener('DOMContentLoaded', function () {
 							$cat_link = BASE_URL . 'category/' . $row['category_slug'];
 							?>
 							<article class="ps-blog-card">
-								<div class="row g-0 align-items-center">
-									<div class="col-md-5 mb-3 mb-md-0">
-										<a href="<?= $n_link; ?>" class="ps-blog-thumb-wrap d-block">
+								<div class="row g-0 ps-blog-card-row">
+									<div class="col-md-5 ps-blog-thumb-col">
+										<a href="<?= $n_link; ?>" class="ps-blog-thumb-wrap">
 											<img src="<?= $n_photo; ?>" alt="<?= htmlspecialchars($row['news_title']); ?>" class="ps-blog-thumb" loading="lazy">
 										</a>
 									</div>
-									<div class="col-md-7 ps-md-3">
+									<div class="col-md-7 ps-blog-content-col">
 										<div class="ps-blog-card-body">
 											<div class="ps-blog-meta-top">
 												<a href="<?= $cat_link; ?>" class="ps-blog-cat-badge">
@@ -1110,12 +1110,12 @@ document.addEventListener('DOMContentLoaded', function () {
 											</h3>
 											
 											<p class="ps-blog-excerpt">
-												<?= mb_strimwidth($content_plain, 0, 150, '...'); ?>
+												<?= mb_strimwidth($content_plain, 0, 160, '...'); ?>
 											</p>
 											
 											<div class="ps-blog-card-footer">
 												<span class="ps-blog-date">
-													<i class="far fa-calendar-alt text-primary"></i> <?= pronto_format_date($row['news_date']); ?>
+													<i class="far fa-calendar-alt ps-text-teal"></i> <?= pronto_format_date($row['news_date']); ?>
 												</span>
 												<a href="<?= $n_link; ?>" class="btn-blog-read">
 													Ler Artigo <i class="fas fa-arrow-right"></i>

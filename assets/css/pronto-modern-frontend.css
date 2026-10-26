@@ -34,6 +34,76 @@
     --bs-primary: #0a6b74;
 }
 
+/* ==============================================================================
+   PADRONIZAÇÃO DE CORES PRONTO SAÚDE (NEUTRALIZA O AZUL GENÉRICO NO FRONTEND)
+   ============================================================================== */
+.text-primary,
+.ps-text-teal {
+    color: var(--ps-primary) !important;
+}
+
+.bg-primary {
+    background-color: var(--ps-primary) !important;
+}
+
+.border-primary {
+    border-color: var(--ps-primary) !important;
+}
+
+/* ==============================================================================
+   BARRA DE ROLAGEM GLOBAL PADRONIZADA (CUSTOM SCROLLBAR PRONTO SAÚDE)
+   ============================================================================== */
+/* Firefox */
+html, * {
+    scrollbar-width: thin;
+    scrollbar-color: #0a6b74 #f0f7f8;
+}
+
+/* Chrome, Edge, Safari, Opera (WebKit / Blink) */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f0f7f8;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0a6b74;
+    border-radius: 999px;
+    border: 2px solid #f0f7f8;
+    transition: background 0.25s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #07474d;
+}
+
+/* Suporte ao Modo Escuro na Barra de Rolagem */
+[data-bs-theme="dark"],
+[data-bs-theme="dark"] *,
+body.dark-mode,
+body.dark-mode * {
+    scrollbar-color: #0e838f #071822;
+}
+
+[data-bs-theme="dark"] ::-webkit-scrollbar-track,
+body.dark-mode ::-webkit-scrollbar-track {
+    background: #071822;
+}
+
+[data-bs-theme="dark"] ::-webkit-scrollbar-thumb,
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: #0e838f;
+    border-color: #071822;
+}
+
+[data-bs-theme="dark"] ::-webkit-scrollbar-thumb:hover,
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #10b981;
+}
+
 /* Reset Global & Tipografia */
 body.ps-foco-body {
     font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
@@ -2136,50 +2206,87 @@ body.ps-foco-body {
     background: #f8fafc;
 }
 
-/* Card Moderno do Artigo */
+/* Card Moderno do Artigo - Layout Lateral Full-Height Edge-to-Edge */
 .ps-blog-card {
     background: #ffffff;
-    border-radius: 16px;
+    border-radius: 18px;
     border: 1px solid var(--ps-border);
     box-shadow: 0 4px 18px rgba(10, 107, 116, 0.05);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
     margin-bottom: 26px;
-    padding: 20px;
+    padding: 0; /* Imagem preenche 100% da lateral sem vãos */
 }
 
 .ps-blog-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 14px 32px rgba(10, 107, 116, 0.12);
-    border-color: rgba(10, 107, 116, 0.25);
+    box-shadow: 0 16px 36px rgba(10, 107, 116, 0.12);
+    border-color: rgba(10, 107, 116, 0.28);
+}
+
+.ps-blog-card-row {
+    margin: 0 !important;
+    align-items: stretch !important;
+    min-height: 100%;
+}
+
+.ps-blog-thumb-col {
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
 }
 
 .ps-blog-thumb-wrap {
     position: relative;
     overflow: hidden;
+    width: 100%;
     height: 100%;
-    min-height: 220px;
-    max-height: 260px;
-    background: #0f2430;
-    border-radius: 14px;
+    min-height: 250px;
+    flex: 1;
+    display: block;
+    background: #0a6b74;
+    border-radius: 0;
 }
 
 .ps-blog-thumb {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ps-blog-card:hover .ps-blog-thumb {
-    transform: scale(1.05);
+    transform: scale(1.06);
+}
+
+.ps-blog-content-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 !important;
 }
 
 .ps-blog-card-body {
-    padding: 8px 12px;
+    padding: 24px 28px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     height: 100%;
+}
+
+@media (max-width: 767.98px) {
+    .ps-blog-thumb-wrap {
+        height: 220px;
+        min-height: 220px;
+    }
+    .ps-blog-card-body {
+        padding: 20px;
+    }
 }
 
 .ps-blog-meta-top {
@@ -2656,6 +2763,7 @@ body.ps-foco-body {
 [data-bs-theme="dark"] .section-parceiros,
 [data-bs-theme="dark"] .section-differentials,
 [data-bs-theme="dark"] .foco-section-alt,
+[data-bs-theme="dark"] .ps-blog-section,
 [data-bs-theme="dark"] .bg-light {
     background-color: #0e1a2c !important;
     border-color: #24354f !important;
@@ -2834,6 +2942,46 @@ body.ps-foco-body {
     border-color: #0a6b74 !important;
     box-shadow: 0 0 0 0.25rem rgba(10, 107, 116, 0.25) !important;
     color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .ps-cat-item a {
+    background-color: #131f33 !important;
+    border-color: #24354f !important;
+    color: #cbd5e1 !important;
+}
+[data-bs-theme="dark"] .ps-cat-item a:hover {
+    background-color: rgba(10, 107, 116, 0.3) !important;
+    color: #ffffff !important;
+}
+[data-bs-theme="dark"] .ps-cat-badge {
+    background-color: #19273f !important;
+    border-color: #24354f !important;
+    color: #94a3b8 !important;
+}
+[data-bs-theme="dark"] .ps-recent-item {
+    border-bottom-color: #1e2f47 !important;
+}
+[data-bs-theme="dark"] .ps-recent-thumb {
+    border-color: #24354f !important;
+}
+[data-bs-theme="dark"] .ps-recent-title {
+    color: #f8fafc !important;
+}
+[data-bs-theme="dark"] .ps-sidebar-title {
+    color: #f8fafc !important;
+    border-bottom-color: #24354f !important;
+}
+[data-bs-theme="dark"] .ps-blog-card-footer {
+    border-top-color: #1e2f47 !important;
+}
+[data-bs-theme="dark"] .ps-blog-excerpt {
+    color: #94a3b8 !important;
+}
+[data-bs-theme="dark"] .ps-blog-title a {
+    color: #f8fafc !important;
+}
+[data-bs-theme="dark"] .ps-blog-title a:hover {
+    color: var(--ps-mint) !important;
 }
 
 /* 11. WhatsApp Flutuante e Canais */

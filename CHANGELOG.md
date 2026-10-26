@@ -4,6 +4,18 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.26.0] - 2026-10-25
+
+### Aprimorado & Padronizado
+- **Layout Full-Height Edge-to-Edge para Imagens dos Cards do Blog (`page.php`, `category.php`, `search.php`)**:
+  - Imagem ocupando 100% da altura e largura da lateral do card (`.ps-blog-thumb-wrap` e `.ps-blog-thumb`), eliminando qualquer faixa escura, corte ou vão ocioso sob as fotos.
+  - Efeito suave de zoom progressivo no hover (`transform: scale(1.06)`).
+  - Adaptação responsiva no mobile com proporção 16:9 limpa no topo do card sem margens brancas.
+- **Harmonização de Cores e Ícones na Identidade Visual Pronto Saúde**:
+  - Substituição do azul genérico (`#0d6efd`) pelo Teal Hospitalar Oficial (`#0a6b74` / `.ps-text-teal`) em todos os ícones da barra lateral (Buscar no Blog, Categorias, Relógios, Calendários e Visualizações) e nos metadados dos artigos.
+- **Barra de Rolagem Global Customizada (Scrollbar)**:
+  - Estilização universal para Chrome, Edge, Safari, Opera e Firefox com indicador em Teal Hospitalar (`#0a6b74`), hover em Dark Teal (`#07474d`), canal sutil `#f0f7f8` e transição automática para o Modo Escuro (`#0e838f` e `#10b981`).
+
 ## [2.25.0] - 2026-10-25
 
 ### Adicionado & Aprimorado

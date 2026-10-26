@@ -131,7 +131,7 @@ $news_banner_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ?
 								<?php endif; ?>
 								<?php if(!empty($news_date)): ?>
 									<li style="background: #f1f5f9; color: #64748b; font-weight: 600; font-size: 13px; padding: 5px 14px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
-										<i class="far fa-calendar-alt text-primary"></i> <?php echo pronto_format_date($news_date); ?>
+										<i class="far fa-calendar-alt ps-text-teal"></i> <?php echo pronto_format_date($news_date); ?>
 									</li>
 								<?php endif; ?>
 							</ul>
@@ -153,7 +153,7 @@ $news_banner_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ?
 									<div>
 										<span class="d-block text-uppercase fw-bold text-muted small" style="font-size: 0.72rem; letter-spacing: 0.5px;">Gostou deste artigo?</span>
 										<h5 class="fw-bold mb-0" style="color: var(--ps-title); font-size: 1.05rem;">
-											<i class="fas fa-share-nodes text-primary me-2"></i> Compartilhe com amigos e familiares:
+											<i class="fas fa-share-nodes ps-text-teal me-2"></i> Compartilhe com amigos e familiares:
 										</h5>
 									</div>
 									<div class="d-flex flex-wrap align-items-center gap-2">
@@ -319,7 +319,7 @@ $news_banner_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ?
 							<div class="tab-pane fade" id="tab-fb" role="tabpanel">
 								<div class="p-3 bg-light rounded-3 mb-3 border">
 									<small class="text-muted d-block">
-										<i class="fab fa-facebook text-primary me-1"></i> <strong>Aviso de Integração:</strong> Caso a caixa do Facebook não carregue por bloqueadores de rastreamento no navegador ou ausência de App ID configurado, utilize a aba <strong>Comentários no Site</strong> acima.
+										<i class="fab fa-facebook ps-text-teal me-1"></i> <strong>Aviso de Integração:</strong> Caso a caixa do Facebook não carregue por bloqueadores de rastreamento no navegador ou ausência de App ID configurado, utilize a aba <strong>Comentários no Site</strong> acima.
 									</small>
 								</div>
 								<div class="fb-comments" data-href="<?= $final_url; ?>" data-numposts="<?= $limit_posts; ?>" data-width="100%"></div>
