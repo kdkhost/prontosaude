@@ -58,6 +58,7 @@ foreach ($result as $row) {
 			foreach ($result as $row) {
 				$link_btn = !empty($row['button_url']) ? $row['button_url'] : BASE_URL . 'service/' . $row['slug'];
 				$btn_target = (!empty($row['button_url']) && strpos($row['button_url'], 'http') === 0) ? 'target="_blank" rel="noopener"' : '';
+				$btn_label = !empty($row['button_text']) ? $row['button_text'] : 'Agendar Consulta';
 				$photo_rel = !empty($row['photo']) ? 'assets/uploads/' . $row['photo'] : '';
 				$photo_src = (!empty($photo_rel) && file_exists($photo_rel)) ? BASE_URL . $photo_rel . '?v=' . filemtime($photo_rel) : BASE_URL . 'assets/images/sem-foto.gif';
 				$benefits_items = !empty($row['benefits']) ? explode("\n", str_replace("\r", "", $row['benefits'])) : [];
