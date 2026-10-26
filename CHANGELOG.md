@@ -4,6 +4,19 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.27.0] - 2026-10-26
+
+### Alterado & Otimizado
+- **Reformulação Integral do FAQ (Perguntas Frequentes)**:
+  - **Eliminação de Livre Escolha**: Removidas todas as categorias e perguntas relacionadas a "Sistema Livre Escolha" e pedidos de reembolso.
+  - **Novas Perguntas de Exames e Consultas Cadastradas**:
+    1. *Como marcar uma consulta?* (Consultas Médicas)
+    2. *Posso retornar ao médico após o exame?* (Consultas Médicas)
+    3. *Como faço para agendar um exame?* (Exames & Diagnósticos)
+    4. *Posso fazer meus exames na Pronto Saúde?* (Exames & Diagnósticos)
+  - Respostas detalhadas, acolhedoras, com links para o WhatsApp oficial `(21) 99088-2462` e endereço da unidade.
+  - Sincronização automática na página institucional `/page/faq` e na seção de Dúvidas da Home (`index.php`).
+
 ## [2.26.0] - 2026-10-25
 
 ### Aprimorado & Padronizado
