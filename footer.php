@@ -42,12 +42,12 @@ if (strlen($whats_clean) <= 11) {
             <div class="col-lg-2 col-md-6 col-6">
                 <h6 class="text-white fw-bold mb-3 foco-footer-title">Especialidades</h6>
                 <ul class="list-unstyled small">
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php">Clínica Médica</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php">Cardiologia</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php">Odontologia</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php">Exames de Sangue</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php">Ultrassonografia</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php" style="color: var(--ps-accent); font-weight: 700;"><i class="fas fa-th-large me-1"></i> Ver Todas</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>service/toxicologico">Exame Toxicológico</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>service/oftalmologia">Oftalmologia</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>service/pediatria">Pediatria</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>service/ginecologia">Ginecologia</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>service/usg">Ultrassonografia</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL; ?>servicos.php" style="color: var(--ps-accent); font-weight: 700;"><i class="fas fa-th-large me-1"></i> Ver Todas (16)</a></li>
                 </ul>
             </div>
 

@@ -52,7 +52,7 @@ foreach ($result as $row) {
 	<div class="container">
 		<div class="row g-4">
 			<?php
-			$statement = $pdo->prepare("SELECT * FROM tbl_service WHERE status = 'Active' ORDER BY id ASC");
+			$statement = $pdo->prepare("SELECT * FROM tbl_service WHERE status = 'Active' ORDER BY FIELD(slug, 'toxicologico', 'oftalmologia', 'teste-de-alergia', 'dna', 'exames-laboratoriais', 'usg', 'mapa', 'holter', 'eletro-cardiograma', 'psiquiatria', 'fonoaudiologia', 'psicologia', 'ginecologia', 'gastroenterologia', 'pediatria', 'contraprova') ASC, id ASC");
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 			foreach ($result as $row) {
@@ -65,9 +65,18 @@ foreach ($result as $row) {
 				<div class="col-lg-4 col-md-6 mb-4">
 					<div class="ps-service-card-modern">
 						<div class="ps-service-thumb">
-							<img src="<?php echo $photo_src; ?>" alt="<?php echo htmlspecialchars($row['name']); ?>" loading="lazy" decoding="async">
-							<?php if(!empty($row['price'])): ?>
-								<span class="ps-service-price-tag">A partir de R$ <?php echo htmlspecialchars($row['price']); ?></span>
+							<img src="<?php echo $photo_src; ?>" alt="<?php echo htmlspecialchars($row['name']); ?>" decoding="async">
+							<?php if(!empty($row['price'])): 
+								$price_raw = trim($row['price']);
+								if (stripos($price_raw, 'consul') !== false) {
+									$price_label = 'Sob Consulta';
+								} elseif (stripos($price_raw, 'a partir') !== false) {
+									$price_label = htmlspecialchars($price_raw);
+								} else {
+									$price_label = 'A partir de R$ ' . htmlspecialchars($price_raw);
+								}
+							?>
+								<span class="ps-service-price-tag"><?php echo $price_label; ?></span>
 							<?php endif; ?>
 						</div>
 						<div class="ps-service-body">

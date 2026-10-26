@@ -106,7 +106,7 @@ $zap_msg = urlencode("*Olá! Gostaria de mais informações e agendamento para o
 						</h4>
 						<ul style="list-style: none; padding-left: 0; margin-bottom: 0;">
 							<?php
-							$statement = $pdo->prepare("SELECT * FROM tbl_service ORDER BY name ASC");
+							$statement = $pdo->prepare("SELECT * FROM tbl_service WHERE status = 'Active' ORDER BY FIELD(slug, 'toxicologico', 'oftalmologia', 'teste-de-alergia', 'dna', 'exames-laboratoriais', 'usg', 'mapa', 'holter', 'eletro-cardiograma', 'psiquiatria', 'fonoaudiologia', 'psicologia', 'ginecologia', 'gastroenterologia', 'pediatria', 'contraprova') ASC, name ASC");
 							$statement->execute();
 							$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 							foreach ($result as $row_s) { 

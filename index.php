@@ -490,7 +490,14 @@ if (function_exists('pronto_is_page_active')) {
         <?php
         $servicos = [];
         try {
-            $st_serv = $pdo->query("SELECT * FROM tbl_service WHERE status = 'Active' ORDER BY id ASC LIMIT 6");
+            $st_serv = $pdo->query("SELECT * FROM tbl_service WHERE status = 'Active' ORDER BY CASE 
+                WHEN slug = 'toxicologico' THEN 1
+                WHEN slug = 'oftalmologia' THEN 2
+                WHEN slug = 'pediatria' THEN 3
+                WHEN slug = 'ginecologia' THEN 4
+                WHEN slug = 'usg' THEN 5
+                WHEN slug = 'exames-laboratoriais' THEN 6
+                ELSE 99 END ASC, id ASC LIMIT 6");
             $servicos = $st_serv->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {}
         ?>

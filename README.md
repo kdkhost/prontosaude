@@ -129,13 +129,29 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - **Badges de Status Dinâmicos:** Indicadores visuais (`● Ativa` / `○ Oculta`) atualizados instantaneamente conforme o usuário digita ou limpa os links.
   - **Ações Rápidas por Rede:** Botão integrado *"Testar Link"* (abre o destino em nova aba) e botão *"Limpar"* para remoção rápida.
   - **Submissão 100% Assíncrona via AJAX:** Atualização instantânea com feedback via **Toastr**, animação de carregamento e fallback com **SweetAlert2** para limpeza geral de campos.
-- **Gestão e Customização Total de Cards (Serviços, Planos e Produtos):**
-  - **100% Configurável pelo Painel Admin:** Fim de imagens, links e textos fixos no código-fonte. Tudo é editável em tempo real nos módulos de Serviços (`admin/service.php`), Planos (`admin/pricing-plan.php`) e Odontologia (`admin/dental.php`).
-  - **Upload Dinâmico com Preview:** Upload por arrastar e soltar (Drag & Drop) de fotos e ilustrações sem dependência de caminhos estáticos.
-  - **Preços e Valores Flexíveis:** Definição livre de valores monetários (`R$ 49,90`), prazos (`/mês`, `/ano`) ou modalidades especiais (`Sob Consulta`).
-  - **Benefícios Inclusos:** Edição simplificada de tópicos/benefícios (um por linha no painel) com renderização automática de ícones de checkmark nos cards do portal.
-  - **Botões e Links Customizáveis:** Personalização do texto da ação (ex: *Contratar Agora*, *Agendar Consulta*, *Saiba Mais*) e URL de destino flexível (WhatsApp direto, link de checkout ou página de detalhes).
-  - **Destaque e Selos (Badges):** Opção de marcar planos recomendados com efeito de elevação e selos dinâmicos (*Mais Popular*, *Recomendado*).
+- **Catálogo Oficial das 16 Especialidades & Exames Clínicos (`admin/service.php`, `servicos.php` e `service/<slug>`):**
+  - **16 Especialidades & Exames Ativos com Conteúdo Técnico Humanizado:**
+    1. *Exame Toxicológico:* Detecção de larga janela (CNH categorias C, D e E, admissão/demissão CLT e concursos) com cadeia de custódia e laudo no RENACH.
+    2. *Oftalmologia:* Consultas com biomicroscopia (lâmpada de fenda), refração computadorizada (grau de óculos e lentes), tonometria e fundo de olho.
+    3. *Teste de Alergia:* Prick Test (teste de puntura cutânea) para alérgenos inalantes e alimentares com laudo imediato em 20 minutos.
+    4. *Teste de Paternidade (DNA):* Marcadores STR com precisão superior a 99,99%, coleta indolor por swab bucal ou sangue e sigilo ético absoluto.
+    5. *Exames Laboratoriais:* Mais de 1.500 análises clínicas (sangue, urina, fezes, hormonais, bioquímicos) com coleta humanizada e resultado online.
+    6. *Ultrassonografia (Ultra):* Aparelhos modernos para ultrassom geral, obstétrico, morfológico, pélvico, transvaginal, articular e com Doppler.
+    7. *MAPA 24 Horas:* Monitorização ambulatorial da pressão arterial com gravador digital compacto e laudo com parecer cardiológico.
+    8. *Holter 24 Horas:* Monitoramento contínuo do ritmo elétrico cardíaco durante 1 dia para investigação precisa de arritmias e palpitações.
+    9. *Eletrocardiograma (ECG):* Traçado de repouso para check-up de rotina, risco cirúrgico pré-operatório e atestados esportivos.
+    10. *Psiquiatria:* Acolhimento médico humanizado para ansiedade, depressão, insônia, burnout, TDAH e prescrição responsável de receitas controladas.
+    11. *Fonoaudiologia:* Reabilitação de fala infantil (troca de letras), gagueira, aperfeiçoamento da voz profissional, disfagia e audição.
+    12. *Psicologia:* Psicoterapia individual para crianças, jovens e adultos com abordagens comprovadas (TCC e Psicanálise) sob sigilo ético.
+    13. *Ginecologia & Obstetrícia:* Cuidado integral da mulher, preventivo (Papanicolau), pré-natal acolhedor, inserção de DIU, contracepção e menopausa.
+    14. *Gastroenterologia (Gastro):* Diagnóstico de refluxo gastroesofágico, azia, gastrite, H. Pylori, síndrome do intestino irritável e esteatose hepática.
+    15. *Pediatria:* Puericultura mensal, monitoramento de marcos do desenvolvimento da OMS, introdução alimentar e atendimento infantil carinhoso.
+    16. *Contraprova Toxicológica & Laboratorial:* Custódia segura da amostra testemunha (Amostra B), abertura pericial e emissão de laudo para o Detran/CLT.
+  - **Fotografias Dedicadas de Alta Resolução:** Conjunto exclusivo de fotos clínicas temáticas para cada um dos 16 serviços, acabando com imagens genéricas ou esquemas de baixa resolução.
+  - **Exibição Inteligente na Home & Catálogo Completo:**
+    - Home (`index.php`): Destaque harmônico para 6 pilares essenciais (Toxicológico, Oftalmologia, Pediatria, Ginecologia, Ultrassonografia e Exames Laboratoriais).
+    - Catálogo (`servicos.php`): Exibição dos 16 cards na ordem exata de procura com tags de valores higienizadas (*Sob Consulta* e *A partir de R$ XX*) e botões de ação com integração direta ao WhatsApp.
+    - Página Individual (`service.php`): Detalhes completos com navegação lateral dinâmica filtrando estritamente os serviços ativos.
 - **Padronização Universal de Atalhos Rápidos (Switches Toggle AJAX) no Painel:**
   - **Correção Definitiva de Comunicação:** Resolução completa da falha de buffer em endpoints AJAX que gerava mensagens de "Falha na comunicação com o servidor". Esvaziamento proativo de buffers (`ob_end_clean()`) e criação do controlador universal `admin/toggle-ajax.php`.
   - **Switches de Status em Todo o Sistema:** Implementação padronizada de switches toggle instantâneos (`.form-switch`) em **100% das tabelas do painel**, permitindo ativar e desativar qualquer registro com 1 clique sem recarregar a tela:
