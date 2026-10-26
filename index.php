@@ -621,45 +621,115 @@ if (function_exists('pronto_is_page_active')) {
 <?php
 $depoimentos = [];
 try {
-    $st_dep = $pdo->query("SELECT * FROM tbl_testimonial ORDER BY id DESC LIMIT 3");
+    $st_dep = $pdo->query("SELECT * FROM tbl_testimonial WHERE status = 'Active' ORDER BY id ASC");
     $depoimentos = $st_dep->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {}
 ?>
 <?php if(!empty($depoimentos)): ?>
-<section id="depoimentos" class="section-depoimentos">
-    <div class="container position-relative">
-        <div class="text-center max-w-700 mx-auto section-header-compact">
-            <span class="fw-bold text-uppercase small" style="color: var(--ps-primary);">A Voz dos Pacientes</span>
+<section id="depoimentos" class="section-depoimentos py-5" style="background: #f8fafc;">
+    <div class="container position-relative" style="max-width: 1240px;">
+        <div class="text-center max-w-700 mx-auto section-header-compact mb-4">
+            <span class="fw-bold text-uppercase small letter-spacing-1" style="color: var(--ps-primary);">A Voz dos Pacientes</span>
             <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);"><?= !empty($home_title_testimonial) ? htmlspecialchars($home_title_testimonial) : 'Quem Cuida da Saúde Conosco, Recomenda'; ?></h2>
-            <p class="text-muted small mb-0"><?= !empty($home_subtitle_testimonial) ? htmlspecialchars($home_subtitle_testimonial) : 'Depoimentos reais de quem confia na dedicação e no acolhimento da Pronto Saúde.'; ?></p>
+            <p class="text-muted small mb-0"><?= !empty($home_subtitle_testimonial) ? htmlspecialchars($home_subtitle_testimonial) : 'Avaliações reais sobre nossos serviços médicos, laboratoriais e odontológicos.'; ?></p>
         </div>
 
-        <div class="row g-3 justify-content-center">
-            <?php foreach ($depoimentos as $dep): ?>
-            <div class="col-lg-4 col-md-6">
-                <div class="card-risco bg-white h-100 d-flex flex-column p-4">
-                    <div class="text-warning mb-2 small">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <p class="text-muted small mb-3 flex-grow-1" style="font-style: italic;">
-                        "<?= strip_tags($dep['comment']); ?>"
-                    </p>
-                    <div class="d-flex align-items-center gap-3 pt-3 border-top">
-                        <div class="text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="background: var(--ps-primary); width: 38px; height: 38px; font-size: 0.95rem;">
-                            <?= strtoupper(substr($dep['name'], 0, 1)); ?>
+        <div class="position-relative px-2 px-md-4">
+            <div class="swiper ps-home-testimonial-carousel">
+                <div class="swiper-wrapper align-items-stretch">
+                    <?php foreach ($depoimentos as $dep): 
+                        $is_google = (!empty($dep['company']) && stripos($dep['company'], 'google') !== false);
+                        $photo_file = !empty($dep['photo']) ? 'assets/uploads/' . $dep['photo'] : '';
+                        $has_photo = (!empty($photo_file) && file_exists(__DIR__ . '/' . $photo_file));
+                        $photo_src = $has_photo ? BASE_URL . $photo_file . '?v=' . filemtime(__DIR__ . '/' . $photo_file) : '';
+                    ?>
+                    <div class="swiper-slide h-auto">
+                        <div class="ps-testimonial-card h-100 d-flex flex-column">
+                            
+                            <!-- Header do Depoimento: Estrelas + Badge de Origem -->
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="text-warning small d-flex gap-1" aria-label="Avaliação 5 estrelas">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <?php if ($is_google): ?>
+                                    <span class="badge bg-light text-dark border d-inline-flex align-items-center gap-1 px-2 py-1" style="font-size: 0.72rem; font-weight: 600; border-radius: 6px;" title="Avaliação verificada no Google">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" style="vertical-align: middle;">
+                                            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/>
+                                            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.13C3.26 21.36 7.33 24 12 24z"/>
+                                            <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.58H1.26C.46 8.18 0 9.99 0 12s.46 3.82 1.26 5.42l4.02-3.13z"/>
+                                            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.26 6.58l4.02 3.13c.95-2.83 3.6-4.96 6.72-4.96z"/>
+                                        </svg>
+                                        Google Avaliações
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge bg-light border d-inline-flex align-items-center gap-1 px-2 py-1" style="font-size: 0.72rem; font-weight: 600; border-radius: 6px; color: var(--ps-primary, #0a6b74);" title="Avaliação via Painel do Paciente">
+                                        <i class="fas fa-shield-alt text-success" style="font-size: 11px;"></i>
+                                        Painel do Paciente
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- Texto do Depoimento sobre a Clínica/Serviços -->
+                            <p class="text-muted small mb-3 flex-grow-1" style="font-style: italic; line-height: 1.65; font-size: 0.88rem;">
+                                "<?= strip_tags($dep['comment']); ?>"
+                            </p>
+
+                            <!-- Autor / Paciente + Avatar com Badge -->
+                            <div class="d-flex align-items-center gap-3 pt-3 border-top mt-auto">
+                                <div class="position-relative d-inline-block flex-shrink-0" style="width: 46px; height: 46px;">
+                                    <?php if ($has_photo): ?>
+                                        <img src="<?= $photo_src; ?>" alt="<?= htmlspecialchars($dep['name']); ?>" class="rounded-circle object-fit-cover shadow-sm" style="width: 46px; height: 46px; border: 2px solid #fff;">
+                                    <?php else: ?>
+                                        <div class="text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="background: var(--ps-primary, #0a6b74); width: 46px; height: 46px; font-size: 1rem;">
+                                            <?= strtoupper(substr($dep['name'], 0, 1)); ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    
+                                    <!-- Selo miniatura sobreposto no canto do avatar -->
+                                    <?php if ($is_google): ?>
+                                        <span class="position-absolute bottom-0 end-0 bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 17px; height: 17px; border: 1px solid #e2e8f0;" title="Google Review">
+                                            <svg width="10" height="10" viewBox="0 0 24 24">
+                                                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/>
+                                                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.13C3.26 21.36 7.33 24 12 24z"/>
+                                                <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.58H1.26C.46 8.18 0 9.99 0 12s.46 3.82 1.26 5.42l4.02-3.13z"/>
+                                                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.26 6.58l4.02 3.13c.95-2.83 3.6-4.96 6.72-4.96z"/>
+                                            </svg>
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="position-absolute bottom-0 end-0 bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 17px; height: 17px; border: 1px solid #e2e8f0;" title="Paciente Verificado">
+                                            <i class="fas fa-check-circle text-primary" style="font-size: 11px;"></i>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="overflow-hidden">
+                                    <h6 class="fw-bold mb-0 text-dark text-truncate" style="font-size: 0.92rem;"><?= htmlspecialchars($dep['name']); ?></h6>
+                                    <span class="text-muted text-truncate d-block" style="font-size: 0.74rem;">
+                                        <?= htmlspecialchars($dep['designation'] ?: 'Paciente Pronto Saúde'); ?>
+                                    </span>
+                                </div>
+                            </div>
+
                         </div>
-                        <div>
-                            <h6 class="fw-bold mb-0 text-dark small"><?= htmlspecialchars($dep['name']); ?></h6>
-                            <span class="text-muted" style="font-size: 0.72rem;"><?= htmlspecialchars($dep['designation'] ?: 'Paciente Pronto Saúde'); ?></span>
-                        </div>
                     </div>
+                    <?php endforeach; ?>
                 </div>
+
+                <!-- Paginação e Botões de Navegação -->
+                <div class="ps-testimonial-pagination text-center mt-3"></div>
             </div>
-            <?php endforeach; ?>
+
+            <!-- Botões Laterais do Carrossel de Depoimentos -->
+            <button type="button" class="ps-testimonial-nav-btn ps-testimonial-prev d-none d-md-flex" aria-label="Depoimento Anterior">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button type="button" class="ps-testimonial-nav-btn ps-testimonial-next d-none d-md-flex" aria-label="Próximo Depoimento">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
     </div>
 </section>

@@ -26,11 +26,11 @@
 					<table id="example1" class="table table-hover table-striped align-middle w-100">
 						<thead>
 							<tr>
-								<th width="30">ID</th>
-								<th>Foto</th>
-								<th width="100">Nome</th>
-								<th width="100">Designação</th>
-								<th width="100">Empres</th>
+								<th width="30">#</th>
+								<th>Avatar</th>
+								<th width="130">Paciente</th>
+								<th width="140">Serviço Avaliado</th>
+								<th width="130">Origem</th>
 								<th>Depoimento</th>
 								<th width="110" class="text-center">Status</th>
 								<th width="80">Ação</th>

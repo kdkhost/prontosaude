@@ -253,6 +253,41 @@ $(function () {
         });
     }
 
+    // Inicialização do Carrossel de Depoimentos da Home (Loop, Autoplay Suave e Controles)
+    if ($('.ps-home-testimonial-carousel').length && typeof Swiper !== 'undefined') {
+        var testSlidesCount = $('.ps-home-testimonial-carousel .swiper-slide').length;
+        new Swiper('.ps-home-testimonial-carousel', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: testSlidesCount > 3,
+            speed: 700,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true
+            },
+            pagination: {
+                el: '.ps-testimonial-pagination',
+                clickable: true,
+                dynamicBullets: true
+            },
+            navigation: {
+                nextEl: '.ps-testimonial-next',
+                prevEl: '.ps-testimonial-prev'
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20
+                },
+                992: {
+                    slidesPerView: 3,
+                    spaceBetween: 24
+                }
+            }
+        });
+    }
+
     // Controle do Botão e Popup do WhatsApp Flutuante
     var $btnWhatsappFloat = $('#btnFocoWhatsappFloat');
     var $popupSupport = $('#popupSupportWhatsapp');

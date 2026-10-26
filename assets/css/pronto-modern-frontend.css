@@ -3575,3 +3575,91 @@ body.ps-foco-body {
     color: #ffffff !important;
 }
 
+/* ==============================================================================
+   CARROSSEL DE DEPOIMENTOS DE PACIENTES (SWIPER)
+   ============================================================================== */
+.ps-home-testimonial-carousel {
+    overflow: hidden;
+    padding: 12px 4px 24px 4px;
+}
+
+.ps-testimonial-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+.ps-testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(10, 107, 116, 0.12);
+    border-color: rgba(10, 107, 116, 0.3);
+}
+
+.ps-testimonial-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: var(--ps-primary, #0a6b74);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    z-index: 10;
+}
+
+.ps-testimonial-nav-btn:hover {
+    background: var(--ps-primary, #0a6b74);
+    color: #ffffff;
+    border-color: var(--ps-primary, #0a6b74);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.ps-testimonial-prev { left: -8px; }
+.ps-testimonial-next { right: -8px; }
+
+.ps-testimonial-pagination .swiper-pagination-bullet {
+    background: #94a3b8;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.ps-testimonial-pagination .swiper-pagination-bullet-active {
+    background: var(--ps-primary, #0a6b74) !important;
+    opacity: 1 !important;
+    width: 24px !important;
+    border-radius: 6px !important;
+}
+
+[data-bs-theme="dark"] .ps-testimonial-card {
+    background: #111e31 !important;
+    border-color: #1e293b !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-bs-theme="dark"] .ps-testimonial-card:hover {
+    border-color: rgba(45, 212, 191, 0.3) !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-bs-theme="dark"] .ps-testimonial-nav-btn {
+    background: #131f33 !important;
+    border-color: #24354f !important;
+    color: #38bdf8 !important;
+}
+
+[data-bs-theme="dark"] .ps-testimonial-nav-btn:hover {
+    background: var(--ps-primary, #0a6b74) !important;
+    color: #ffffff !important;
+}
+
+

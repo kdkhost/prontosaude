@@ -109,38 +109,38 @@ if(isset($_POST['form1'])) {
 				<div class="card card-outline card-primary shadow-sm mb-4">
 					<div class="card-body">
 						<div class="row mb-3">
-							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nome <span class="text-danger">*</span></label>
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nome do Paciente <span class="text-danger">*</span></label>
 							<div class="col-12 col-sm-9 col-lg-6">
-								<input type="text" autocomplete="off" class="form-control" name="name" value="<?php if(isset($_POST['name'])){echo $_POST['name'];} ?>">
+								<input type="text" autocomplete="off" class="form-control" name="name" placeholder="Ex: Camila Vasconcellos" value="<?php if(isset($_POST['name'])){echo $_POST['name'];} ?>">
 							</div>
 						</div>
 						<div class="row mb-3">
-							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Designação <span class="text-danger">*</span></label>
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Serviço Avaliado <span class="text-danger">*</span></label>
 							<div class="col-12 col-sm-9 col-lg-6">
-								<input type="text" autocomplete="off" class="form-control" name="designation" value="<?php if(isset($_POST['designation'])){echo $_POST['designation'];} ?>">
+								<input type="text" autocomplete="off" class="form-control" name="designation" placeholder="Ex: Exames Laboratoriais & Ultrassom" value="<?php if(isset($_POST['designation'])){echo $_POST['designation'];} ?>">
 							</div>
 						</div>
 						<div class="row mb-3">
-							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Empresa <span class="text-danger">*</span></label>
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Origem da Avaliação <span class="text-danger">*</span></label>
 							<div class="col-12 col-sm-9 col-lg-6">
-								<input type="text" autocomplete="off" class="form-control" name="company" value="<?php if(isset($_POST['company'])){echo $_POST['company'];} ?>">
+								<input type="text" autocomplete="off" class="form-control" name="company" placeholder="Ex: Google Avaliações ou Painel do Paciente" value="<?php if(isset($_POST['company'])){echo $_POST['company'];} ?>">
 							</div>
 						</div>
 						<div class="row mb-3">
-							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto <span class="text-danger">*</span></label>
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Foto / Avatar <span class="text-danger">*</span></label>
 							<div class="col-12 col-sm-9 col-lg-9">
 								<input type="file" name="photo">
 								<p class="text-danger">
 								    <tt style="color:#ccc;">
-								        (Apenas jpg, jpeg, gif e png são permitidos)
+								        (Apenas jpg, jpeg, gif e png são permitidos - Formato quadrado ideal)
 								    </tt>
 								</p>
 							</div>
 						</div>						
 						<div class="row mb-3">
-							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Depoimento <span class="text-danger">*</span></label>
+							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Depoimento do Paciente <span class="text-danger">*</span></label>
 							<div class="col-12 col-sm-9 col-lg-7">
-								<textarea id="1" class="form-control" name="comment" style="height:200px;"><?php if(isset($_POST['comment'])){echo $_POST['comment'];} ?></textarea>
+								<textarea id="1" class="form-control" name="comment" placeholder="Relato do paciente sobre o atendimento na clínica..." style="height:150px;"><?php if(isset($_POST['comment'])){echo $_POST['comment'];} ?></textarea>
 							</div>
 						</div>
 						<div class="row mb-3">
