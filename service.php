@@ -36,9 +36,10 @@ foreach ($result as $row)
 }
 ?>
 				
-<?php
-$banner_src = (!empty($banner) && file_exists('assets/uploads/' . $banner)) ? BASE_URL . 'assets/uploads/' . $banner : BASE_URL . 'assets/uploads/department-1.png';
-$photo_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ? BASE_URL . 'assets/uploads/' . $photo : BASE_URL . 'assets/images/sem-foto.gif';
+$banner_rel = (!empty($banner) && file_exists('assets/uploads/' . $banner)) ? 'assets/uploads/' . $banner : 'assets/uploads/department-1.png';
+$banner_src = BASE_URL . $banner_rel . (file_exists($banner_rel) ? '?v=' . filemtime($banner_rel) : '');
+$photo_rel = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ? 'assets/uploads/' . $photo : '';
+$photo_src = !empty($photo_rel) ? BASE_URL . $photo_rel . '?v=' . filemtime($photo_rel) : BASE_URL . 'assets/images/sem-foto.gif';
 $zap_num = !empty($contact_phone) ? preg_replace('/[^0-9]/', '', $contact_phone) : '5521985831464';
 if (strlen($zap_num) <= 11 && substr($zap_num, 0, 2) !== '55') {
     $zap_num = '55' . $zap_num;
