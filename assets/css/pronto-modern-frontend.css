@@ -50,6 +50,31 @@
     border-color: var(--ps-primary) !important;
 }
 
+/* Neutralização Global de Botões Primários e Abas Nav-Pills */
+.btn-primary {
+    background-color: var(--ps-primary) !important;
+    border-color: var(--ps-primary) !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--ps-primary-dark) !important;
+    border-color: var(--ps-primary-dark) !important;
+    color: #ffffff !important;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background-color: var(--ps-primary) !important;
+    color: #ffffff !important;
+}
+
+.nav-pills .nav-link {
+    color: var(--ps-primary);
+}
+
 /* ==============================================================================
    BARRA DE ROLAGEM GLOBAL PADRONIZADA (CUSTOM SCROLLBAR PRONTO SAÚDE)
    ============================================================================== */
@@ -3276,11 +3301,71 @@ body.ps-foco-body {
 /* Componente de Comentários (Nativo + Facebook) */
 .ps-comments-card {
     background: #ffffff;
-    border-radius: 16px;
+    border-radius: 18px;
     padding: 28px 32px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px rgba(10, 107, 116, 0.06);
+    border: 1px solid var(--ps-border);
     margin-bottom: 30px;
+}
+
+/* Abas de Alternância dos Comentários (Pronto Saúde Teal) */
+.ps-comment-pills {
+    gap: 8px;
+}
+
+.ps-comment-pills .nav-link {
+    color: var(--ps-primary) !important;
+    background: rgba(10, 107, 116, 0.08) !important;
+    border: 1.5px solid rgba(10, 107, 116, 0.2) !important;
+    font-size: 0.84rem;
+    font-weight: 700;
+    padding: 8px 20px !important;
+    border-radius: 50px !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.ps-comment-pills .nav-link:hover {
+    background: rgba(10, 107, 116, 0.16) !important;
+    color: var(--ps-primary-dark) !important;
+    border-color: rgba(10, 107, 116, 0.4) !important;
+    transform: translateY(-1px);
+}
+
+.ps-comment-pills .nav-link.active {
+    background: var(--ps-primary) !important;
+    color: #ffffff !important;
+    border-color: var(--ps-primary) !important;
+    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.3) !important;
+}
+
+/* Botão de Envio de Comentário */
+.btn-submit-comment,
+#btnSubmitComment {
+    background: var(--ps-primary) !important;
+    border-color: var(--ps-primary) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(10, 107, 116, 0.25) !important;
+}
+
+.btn-submit-comment:hover,
+#btnSubmitComment:hover {
+    background: var(--ps-primary-dark) !important;
+    border-color: var(--ps-primary-dark) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(10, 107, 116, 0.35) !important;
+    color: #ffffff !important;
+}
+
+/* Foco nos Inputs do Formulário de Comentário */
+#formPostComment .form-control:focus {
+    border-color: var(--ps-primary) !important;
+    box-shadow: 0 0 0 3px rgba(10, 107, 116, 0.18) !important;
 }
 
 .ps-comment-item {
@@ -3316,6 +3401,35 @@ body.ps-foco-body {
 [data-bs-theme="dark"] .ps-comments-card {
     background: #131f33 !important;
     border-color: #24354f !important;
+}
+
+[data-bs-theme="dark"] .ps-comment-pills .nav-link {
+    color: var(--ps-mint) !important;
+    background: rgba(10, 107, 116, 0.2) !important;
+    border-color: rgba(10, 107, 116, 0.35) !important;
+}
+
+[data-bs-theme="dark"] .ps-comment-pills .nav-link:hover {
+    background: rgba(10, 107, 116, 0.35) !important;
+    color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .ps-comment-pills .nav-link.active {
+    background: var(--ps-primary) !important;
+    color: #ffffff !important;
+    border-color: var(--ps-primary) !important;
+}
+
+[data-bs-theme="dark"] #formPostComment .form-control {
+    background-color: #19273f !important;
+    border-color: #2e4363 !important;
+    color: #f8fafc !important;
+}
+
+[data-bs-theme="dark"] #formPostComment .input-group-text {
+    background-color: #152238 !important;
+    border-color: #2e4363 !important;
+    color: #94a3b8 !important;
 }
 
 [data-bs-theme="dark"] .ps-comment-item {

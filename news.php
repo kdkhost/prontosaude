@@ -262,7 +262,7 @@ $news_banner_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ?
 											<small class="text-muted" style="font-size: 0.76rem;">
 												<i class="fas fa-shield-alt text-success me-1"></i> Ambiente moderado e livre de spam.
 											</small>
-											<button type="submit" id="btnSubmitComment" class="btn btn-sm btn-primary fw-bold px-4 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2">
+											<button type="submit" id="btnSubmitComment" class="btn btn-sm btn-submit-comment fw-bold px-4 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2">
 												<i class="fas fa-paper-plane"></i> <span>Publicar Comentário</span>
 											</button>
 										</div>
