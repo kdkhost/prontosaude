@@ -1294,8 +1294,10 @@ body.ps-foco-body {
 .page-banner .overlay {
     position: absolute;
     inset: 0;
-    /* Gradiente translúcido elegante: revela os detalhes da imagem de fundo com nitidez e riqueza de detalhes sem ofuscar a leitura */
-    background: linear-gradient(135deg, rgba(7, 24, 34, 0.55) 0%, rgba(10, 107, 116, 0.45) 100%) !important;
+    /* Gradiente hospitalar atmosférico premium com desfoque de fundo para nitidez absoluta dos títulos */
+    background: linear-gradient(135deg, rgba(7, 24, 34, 0.88) 0%, rgba(10, 107, 116, 0.82) 100%) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     pointer-events: none;
     z-index: 1;
 }
