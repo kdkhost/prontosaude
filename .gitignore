@@ -8,3 +8,4 @@ php.ini
 Thumbs.db
 *.sqlite
 *.db
+scratch/

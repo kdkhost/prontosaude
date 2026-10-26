@@ -36,8 +36,14 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - Botão pulsante fixo (`.foco-whatsapp-float`) com indicador Online em tempo real e abertura interativa do **Box Pop-up Multicanais de Atendimento** (`#popupSupportWhatsapp`).
   - 5 canais categorizados com mensagens pré-formatadas para WhatsApp (Consultas & Especialidades, Exames & Laboratório, Odontologia, Cartão Fidelidade e Recepção/Dúvidas).
   - Botão flutuante integrado de **Voltar ao Topo** (`#btnVoltarAoTopo`) com detecção de scroll e animação suave.
+- **Blog/Notícias Moderno & Carrossel Interativo na Home (`index.php`):**
+  - **Carrossel Swiper 11 com 3 Cards:** Exibição dinâmica de 3 notícias em cards modernos no desktop (2 em tablets e 1 no mobile), com rotação suave, paginação por bullets, setas de navegação e pausa ao passar o mouse (`pauseOnMouseEnter`).
+  - **Ordem Randômica Inteligente:** Embaralhamento (`shuffle`) das notícias mais recentes a cada requisição, oferecendo novidades constantes ao visitante da Home.
+  - **Espaçamento e Hierarquia:** Botão "Ver Todas as Notícias & Artigos" espaçado com respiro generoso, sem tocar ou sobrepor os cards.
+  - **Suíte de Compartilhamento Social nos Artigos (`news.php`):** Botões oficiais com a identidade de cada plataforma (WhatsApp, Facebook, X/Twitter, LinkedIn, Telegram) e botão "Copiar Link" com notificação instantânea via **Toastr**.
+  - **Sistema Duplo de Comentários:** Abas interativas com comentários nativos da clínica (100% assíncronos via AJAX com proteção anti-spam por honeypot e avatar dinâmico) e integração com Facebook Comments.
+  - **Padronização Global de Datas Brasileiras (`DD/MM/YYYY`):** Função unificada `pronto_format_date()` aplicada em todo o portal público e painel administrativo, normalizando datas antigas e garantindo formatação sem inversões.
 - **Trabalhe Conosco:** Divulgação de vagas de emprego ativas com modal hospitalar de detalhes, badges de requisitos e candidatura direta via WhatsApp ou e-mail.
-- **Blog/Notícias & Busca:** Sistema de categorias, artigos completos, paginação moderna, contagem atômica de visualizações e barra lateral com anúncios e busca rápida.
 - **Tema Dark / Light Dinâmico e 100% Independente:**
   - Alternador de tema Claro / Escuro de alto contraste no cabeçalho e menu móvel, com notificações via Toastr.
   - **Isolamento de Estado:** O tema do site público é totalmente desacoplado do Painel Administrativo (`pronto_frontend_theme` vs `pronto_admin_theme`), garantindo que o tema escolhido pelo administrador no painel nunca interfira na navegação dos visitantes do portal.
