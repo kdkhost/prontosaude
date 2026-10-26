@@ -814,10 +814,10 @@ try {
             </div>
 
             <!-- Setas de Navegação Personalizadas -->
-            <button type="button" class="swiper-button-prev ps-news-nav-btn ps-news-prev d-none d-md-flex" aria-label="Notícia Anterior">
+            <button type="button" class="ps-news-nav-btn ps-news-prev d-none d-md-flex" aria-label="Notícia Anterior">
                 <i class="fas fa-chevron-left"></i>
             </button>
-            <button type="button" class="swiper-button-next ps-news-nav-btn ps-news-next d-none d-md-flex" aria-label="Próxima Notícia">
+            <button type="button" class="ps-news-nav-btn ps-news-next d-none d-md-flex" aria-label="Próxima Notícia">
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>
