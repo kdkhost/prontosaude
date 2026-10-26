@@ -665,63 +665,89 @@ try {
 <?php if(!empty($home_status_news) && $home_status_news == 1): ?>
 <?php
 $noticias = [];
-$total_noticias = !empty($total_recent_news_home_page) ? (int)$total_recent_news_home_page : 3;
 try {
-    $st_news = $pdo->prepare("SELECT n.*, c.category_name, c.category_slug FROM tbl_news n LEFT JOIN tbl_category c ON n.category_id = c.category_id ORDER BY n.news_id DESC LIMIT ?");
-    $st_news->bindValue(1, $total_noticias, PDO::PARAM_INT);
+    // Busca até 12 postagens mais recentes e ativas do blog
+    $st_news = $pdo->prepare("SELECT n.*, c.category_name, c.category_slug 
+                              FROM tbl_news n 
+                              LEFT JOIN tbl_category c ON n.category_id = c.category_id 
+                              ORDER BY n.news_id DESC LIMIT 12");
     $st_news->execute();
     $noticias = $st_news->fetchAll(PDO::FETCH_ASSOC);
+
+    // Ordem randômica entre todas as ativas mais recentes do blog a cada requisição
+    if (!empty($noticias)) {
+        shuffle($noticias);
+    }
 } catch (Exception $e) {}
 ?>
 <?php if(!empty($noticias)): ?>
 <section id="noticias" class="section-sobre py-5 bg-light">
     <div class="container" style="max-width: 1240px;">
-        <div class="text-center max-w-700 mx-auto section-header-compact">
+        <div class="text-center max-w-700 mx-auto section-header-compact mb-4">
             <span class="fw-bold text-uppercase small letter-spacing-1" style="color: var(--ps-primary);">Informação &amp; Prevenção</span>
             <h2 class="h3 fw-bold mt-1" style="color: var(--ps-title);"><?= !empty($home_title_news) ? htmlspecialchars($home_title_news) : 'Notícias &amp; Dicas de Saúde'; ?></h2>
             <p class="text-muted small mb-0"><?= !empty($home_subtitle_news) ? htmlspecialchars($home_subtitle_news) : 'Artigos e orientações médicas preparados por nossa equipe para o seu bem-estar.'; ?></p>
         </div>
 
-        <div class="row g-3 justify-content-center">
-            <?php foreach ($noticias as $item): 
-                $n_photo = (!empty($item['photo']) && file_exists(__DIR__ . '/assets/uploads/' . $item['photo']))
-                    ? BASE_URL . 'assets/uploads/' . $item['photo']
-                    : BASE_URL . 'assets/uploads/department-1.png';
-                $n_link = BASE_URL . 'news/' . $item['news_slug'];
-            ?>
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border rounded-4 overflow-hidden shadow-sm bg-white d-flex flex-column">
-                    <div style="height: 180px; overflow: hidden; position: relative;">
-                        <img src="<?= $n_photo; ?>" alt="<?= htmlspecialchars($item['news_title']); ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
-                        <?php if(!empty($item['category_name'])): ?>
-                            <span class="badge position-absolute top-0 start-0 m-3 px-3 py-1 rounded-pill" style="background: var(--ps-primary); font-size: 0.72rem;">
-                                <?= htmlspecialchars($item['category_name']); ?>
-                            </span>
-                        <?php endif; ?>
+        <!-- Carrossel Swiper Responsivo: 3 Notícias por vez no desktop em ordem randômica -->
+        <div class="position-relative px-2 px-md-4">
+            <div class="swiper ps-home-news-carousel py-2">
+                <div class="swiper-wrapper align-items-stretch">
+                    <?php foreach ($noticias as $item): 
+                        $n_photo = (!empty($item['photo']) && file_exists(__DIR__ . '/assets/uploads/' . $item['photo']))
+                            ? BASE_URL . 'assets/uploads/' . $item['photo']
+                            : BASE_URL . 'assets/uploads/department-1.png';
+                        $n_link = BASE_URL . 'news/' . $item['news_slug'];
+                    ?>
+                    <div class="swiper-slide h-auto">
+                        <div class="card h-100 border rounded-4 overflow-hidden shadow-sm bg-white d-flex flex-column" style="transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                            <div style="height: 190px; overflow: hidden; position: relative;">
+                                <a href="<?= $n_link; ?>">
+                                    <img src="<?= $n_photo; ?>" alt="<?= htmlspecialchars($item['news_title']); ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                </a>
+                                <?php if(!empty($item['category_name'])): ?>
+                                    <span class="badge position-absolute top-0 start-0 m-3 px-3 py-1 rounded-pill" style="background: var(--ps-primary); font-size: 0.72rem; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                                        <?= htmlspecialchars($item['category_name']); ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="p-3 d-flex flex-column flex-grow-1">
+                                <span class="text-muted small mb-1" style="font-size: 0.75rem;">
+                                    <i class="far fa-calendar-alt me-1 text-primary"></i> <?= htmlspecialchars($item['news_date']); ?>
+                                </span>
+                                <h6 class="fw-bold mb-2" style="color: var(--ps-title); line-height: 1.4; min-height: 44px;">
+                                    <a href="<?= $n_link; ?>" class="text-decoration-none" style="color: inherit;">
+                                        <?= htmlspecialchars(mb_strimwidth($item['news_title'], 0, 75, '...')); ?>
+                                    </a>
+                                </h6>
+                                <p class="text-muted small flex-grow-1 mb-3" style="font-size: 0.82rem; line-height: 1.6;">
+                                    <?= htmlspecialchars(mb_strimwidth(strip_tags($item['news_content']), 0, 110, '...')); ?>
+                                </p>
+                                <a href="<?= $n_link; ?>" class="btn btn-sm btn-outline-secondary w-100 fw-bold mt-auto py-2">
+                                    Ler Artigo Completo <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-3 d-flex flex-column flex-grow-1">
-                        <span class="text-muted small mb-1" style="font-size: 0.75rem;">
-                            <i class="far fa-calendar-alt me-1"></i> <?= htmlspecialchars($item['news_date']); ?>
-                        </span>
-                        <h6 class="fw-bold mb-2" style="color: var(--ps-title); line-height: 1.4;">
-                            <a href="<?= $n_link; ?>" class="text-decoration-none" style="color: inherit;">
-                                <?= htmlspecialchars(mb_strimwidth($item['news_title'], 0, 75, '...')); ?>
-                            </a>
-                        </h6>
-                        <p class="text-muted small flex-grow-1 mb-3" style="font-size: 0.82rem; line-height: 1.6;">
-                            <?= htmlspecialchars(mb_strimwidth(strip_tags($item['news_content']), 0, 110, '...')); ?>
-                        </p>
-                        <a href="<?= $n_link; ?>" class="btn btn-sm btn-outline-secondary w-100 fw-bold mt-auto py-2">
-                            Ler Artigo Completo <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
+
+                <!-- Paginação por Bullets / Dots do Carrossel -->
+                <div class="swiper-pagination ps-news-pagination position-relative mt-4"></div>
             </div>
-            <?php endforeach; ?>
+
+            <!-- Setas de Navegação Personalizadas -->
+            <button type="button" class="swiper-button-prev ps-news-nav-btn ps-news-prev d-none d-md-flex" aria-label="Notícia Anterior">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button type="button" class="swiper-button-next ps-news-nav-btn ps-news-next d-none d-md-flex" aria-label="Próxima Notícia">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
 
-        <div class="text-center mt-4">
-            <a href="<?= BASE_URL; ?>page/news" class="btn btn-outline-secondary fw-bold px-4 py-2 rounded-pill small">
+        <!-- Botão Ver Todas as Notícias & Artigos sem tocar abaixo dos cards -->
+        <div class="text-center mt-5 pt-2">
+            <a href="<?= BASE_URL; ?>page/blog" class="btn btn-outline-secondary fw-bold px-4 py-2 rounded-pill small shadow-sm">
                 <i class="fas fa-newspaper me-2"></i> Ver Todas as Notícias &amp; Artigos
             </a>
         </div>

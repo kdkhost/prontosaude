@@ -170,13 +170,15 @@ $popup_delay     = max(500, (int)($row['popup_delay'] ?? 2000));
 $popup_expire_hours = max(1, (int)($row['popup_expire_hours'] ?? 24));
 
 // Getting the basic data for the website from database
-$statement = $pdo->prepare("SELECT * FROM tbl_department WHERE dep_id=1");
-$statement->execute();
-$result = $statement->fetchAll(PDO::FETCH_ASSOC);
-$row2 = $result[0] ?? [];
+$row2 = [];
+try {
+	$statement = $pdo->prepare("SELECT * FROM tbl_department WHERE dep_id=1");
+	$statement->execute();
+	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+	$row2 = $result[0] ?? [];
+} catch (Exception $e) {}
 $clinica = $row2['dep_name'] ?? '';
 $email   = $row2['dep_email'] ?? '';
-
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="pt-br">

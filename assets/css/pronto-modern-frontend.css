@@ -3034,3 +3034,152 @@ body.ps-foco-body {
     border-color: #24354f !important;
     color: #cbd5e1 !important;
 }
+
+/* ==============================================================================
+   CARROSSEL DE NOTÍCIAS DA HOME (SWIPER 11) & COMPONENTES DO BLOG
+   ============================================================================== */
+.ps-home-news-carousel {
+    overflow: hidden;
+    padding: 10px 4px 20px 4px;
+}
+
+.ps-news-nav-btn {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: var(--ps-primary, #0a6b74);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    z-index: 10;
+}
+
+.ps-news-nav-btn:hover {
+    background: var(--ps-primary, #0a6b74);
+    color: #ffffff;
+    border-color: var(--ps-primary, #0a6b74);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.ps-news-prev { left: -16px; }
+.ps-news-next { right: -16px; }
+
+.ps-news-pagination .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background: #94a3b8;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.ps-news-pagination .swiper-pagination-bullet-active {
+    width: 26px;
+    border-radius: 6px;
+    background: var(--ps-primary, #0a6b74);
+    opacity: 1;
+}
+
+/* Barra de Compartilhamento Social nos Artigos */
+.ps-social-share-wrapper {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+}
+
+.ps-share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 16px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.ps-share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.14);
+    color: #ffffff;
+}
+
+.ps-share-whatsapp { background: #25D366; }
+.ps-share-facebook { background: #1877F2; }
+.ps-share-twitter  { background: #0f172a; }
+.ps-share-linkedin { background: #0A66C2; }
+.ps-share-telegram { background: #229ED9; }
+.ps-share-copy     { background: #64748b; }
+
+/* Componente de Comentários (Nativo + Facebook) */
+.ps-comments-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px 32px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 30px;
+}
+
+.ps-comment-item {
+    padding: 18px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.ps-comment-item:last-child {
+    border-bottom: none;
+}
+
+.ps-comment-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ps-primary) 0%, var(--ps-secondary) 100%);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(10, 107, 116, 0.2);
+    flex-shrink: 0;
+}
+
+/* Dark Mode Suporte para novos elementos */
+[data-bs-theme="dark"] .ps-social-share-wrapper {
+    background: #131f33 !important;
+    border-color: #24354f !important;
+}
+
+[data-bs-theme="dark"] .ps-comments-card {
+    background: #131f33 !important;
+    border-color: #24354f !important;
+}
+
+[data-bs-theme="dark"] .ps-comment-item {
+    border-color: #1e293b !important;
+}
+
+[data-bs-theme="dark"] .ps-news-nav-btn {
+    background: #131f33 !important;
+    border-color: #24354f !important;
+    color: #38bdf8 !important;
+}
+
+[data-bs-theme="dark"] .ps-news-nav-btn:hover {
+    background: var(--ps-primary, #0a6b74) !important;
+    color: #ffffff !important;
+}
+

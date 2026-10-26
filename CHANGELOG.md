@@ -4,6 +4,25 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.25.0] - 2026-10-25
+
+### Adicionado & Aprimorado
+- **Carrossel Responsivo de Notícias na Página Inicial (`index.php`)**:
+  - Exibição de exatamente **3 notícias por vez no desktop** (2 em tablets e 1 no mobile) integradas ao **Swiper 11**.
+  - **Ordem Randômica Inteligente**: Embaralhamento (`shuffle`) entre as postagens ativas mais recentes a cada requisição, mantendo a home dinâmica e com novidades para o visitante.
+  - **Efeito Carrossel Suave**: Autoplay com pausa ao passar o mouse (`pauseOnMouseEnter`), loop contínuo, setas de navegação personalizadas e paginação dinâmica por bullets.
+  - **Espaçamento Elegante**: Botão "Ver Todas as Notícias & Artigos" posicionado com respiro generoso (`mt-5`), garantindo layout limpo sem sobreposição.
+- **Suíte de Compartilhamento em Redes Sociais nos Detalhes do Artigo (`news.php`)**:
+  - Botões oficiais com identidade visual das plataformas: **WhatsApp**, **Facebook**, **X (Twitter)**, **LinkedIn** e **Telegram**.
+  - **Botão Copiar Link**: Cópia para a área de transferência com fallback e notificação instantânea via **Toastr** ("Link do artigo copiado com sucesso!").
+- **Sistema Duplo de Comentários no Blog (`news.php` e `ajax_comment.php`)**:
+  - **Comentários Nativos no Site**:
+    - Tabela dedicada e autocriada `tbl_news_comment` (SQLite e MySQL).
+    - Formulário moderno com proteção anti-spam via honeypot, validações completas e submissão 100% assíncrona (**AJAX**).
+    - Injeção dinâmica do comentário no topo do feed com animação fluida, avatares estilizados com iniciais, datas em PT-BR e atualização do contador em tempo real.
+  - **Comentários do Facebook**:
+    - Aba integrada com o plugin `fb-comments`, aviso explicativo amigável em caso de bloqueadores de terceiros e reprocessamento automático de XFBML ao alternar abas.
+
 ## [2.24.0] - 2026-10-25
 
 ### Adicionado & Otimizado

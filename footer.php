@@ -218,6 +218,41 @@ $(function () {
         };
     }
 
+    // Inicialização do Carrossel de Notícias da Home (3 Notícias no Desktop, Loop e Autoplay Suave)
+    if ($('.ps-home-news-carousel').length && typeof Swiper !== 'undefined') {
+        var newsSlidesCount = $('.ps-home-news-carousel .swiper-slide').length;
+        new Swiper('.ps-home-news-carousel', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: newsSlidesCount > 3,
+            speed: 650,
+            autoplay: {
+                delay: 4500,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true
+            },
+            pagination: {
+                el: '.ps-news-pagination',
+                clickable: true,
+                dynamicBullets: true
+            },
+            navigation: {
+                nextEl: '.ps-news-next',
+                prevEl: '.ps-news-prev'
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20
+                },
+                992: {
+                    slidesPerView: 3,
+                    spaceBetween: 24
+                }
+            }
+        });
+    }
+
     // Controle do Botão e Popup do WhatsApp Flutuante
     var $btnWhatsappFloat = $('#btnFocoWhatsappFloat');
     var $popupSupport = $('#popupSupportWhatsapp');
