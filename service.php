@@ -36,6 +36,7 @@ foreach ($result as $row)
 }
 ?>
 				
+<?php
 $banner_rel = (!empty($banner) && file_exists('assets/uploads/' . $banner)) ? 'assets/uploads/' . $banner : 'assets/uploads/department-1.png';
 $banner_src = BASE_URL . $banner_rel . (file_exists($banner_rel) ? '?v=' . filemtime($banner_rel) : '');
 $photo_rel = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ? 'assets/uploads/' . $photo : '';
