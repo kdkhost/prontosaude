@@ -285,16 +285,27 @@ $pagesList[] = [
 // 2. Páginas registradas em tbl_page
 foreach ($allPages as $p) {
 	$slug = $p['page_slug'];
+	$cleanSlug = strtolower(str_replace(['-', '.php'], ['_', ''], $slug));
+	
+	// Mapeamentos inteligentes de apelidos para banners oficiais
+	$slugMap = [
+		'doutores' => 'doctor',
+		'medicos' => 'medicos',
+		'dentistas' => 'dentista'
+	];
+	$checkSlug = $slugMap[$cleanSlug] ?? $cleanSlug;
+
 	$bannerPath = 'assets/uploads/og_home.jpg';
-	if (!empty($p['banner']) && file_exists('../assets/uploads/' . $p['banner'])) {
+	if (!empty($p['banner']) && strpos($p['banner'], 'og_') === 0 && file_exists('../assets/uploads/' . $p['banner'])) {
 		$bannerPath = 'assets/uploads/' . $p['banner'];
-	} elseif (file_exists('../assets/uploads/og_' . str_replace('-', '_', $slug) . '.jpg')) {
-		$bannerPath = 'assets/uploads/og_' . str_replace('-', '_', $slug) . '.jpg';
+	} elseif (file_exists('../assets/uploads/og_' . $checkSlug . '.jpg')) {
+		$bannerPath = 'assets/uploads/og_' . $checkSlug . '.jpg';
+	} elseif (!empty($p['banner']) && file_exists('../assets/uploads/' . $p['banner'])) {
+		$bannerPath = 'assets/uploads/' . $p['banner'];
 	}
 
 	$targetUrl = BASE_URL . $slug;
 	if (strpos($slug, '.php') === false) {
-		// Verifica se existe arquivo PHP físico na raiz com esse nome
 		if (file_exists('../' . $slug . '.php')) {
 			$targetUrl = BASE_URL . $slug . '.php';
 		} else {
@@ -318,12 +329,12 @@ foreach ($allPages as $p) {
 
 // 3. Páginas Institucionais Fixas do Sistema (caso não estejam em tbl_page)
 $systemFixed = function_exists('pronto_get_system_pages') ? pronto_get_system_pages() : [
-	['slug' => 'fidelidade', 'name' => 'Planos & Cartão Fidelidade', 'url' => 'fidelidade.php', 'title' => 'Cartão Fidelidade | Pronto Saúde', 'desc' => 'Conheça nossos Planos Fidelidade e aproveite nossos preços para aderir seu plano.', 'kw' => 'cartao fidelidade, planos de saude, convenio'],
-	['slug' => 'servicos', 'name' => 'Nossos Serviços Médicos', 'url' => 'servicos.php', 'title' => 'Nossos Serviços Médicos | Pronto Saúde', 'desc' => 'Conheça nossos serviços médicos, exames laboratoriais, consultas e procedimentos especializados.', 'kw' => 'servicos medicos, exames laboratoriais, consultas'],
-	['slug' => 'odontologia', 'name' => 'Odontologia Especializada', 'url' => 'odontologia.php', 'title' => 'Odontologia Especializada | Pronto Saúde', 'desc' => 'Oferecemos tratamentos ortodônticos avançados, próteses, clareamento e estética dental.', 'kw' => 'dentista, ortodontia, clareamento, aparelhos, odonto'],
-	['slug' => 'doctor', 'name' => 'Corpo Clínico & Médicos', 'url' => 'doctor.php', 'title' => 'Corpo Clínico & Médicos | Pronto Saúde', 'desc' => 'Conheça nossa equipe de médicos e especialistas dedicados ao seu cuidado integral.', 'kw' => 'medicos, especialistas, cardiologia, pediatria, clinicos'],
-	['slug' => 'news', 'name' => 'Notícias & Artigos de Saúde', 'url' => 'news.php', 'title' => 'Notícias & Blog de Saúde | Pronto Saúde', 'desc' => 'Artigos informativos, dicas de bem-estar, prevenção e novidades da medicina.', 'kw' => 'blog saude, dicas de saude, medicina, noticias medicas'],
-	['slug' => 'trabalhe-conosco', 'name' => 'Trabalhe Conosco', 'url' => 'trabalhe-conosco.php', 'title' => 'Trabalhe Conosco | Pronto Saúde', 'desc' => 'Faça parte da nossa equipe médica e administrativa. Confira oportunidades abertas.', 'kw' => 'vagas saude, empregos clinica, trabalhe conosco']
+	['slug' => 'fidelidade', 'name' => 'Planos & Cartão Fidelidade', 'url' => 'fidelidade.php', 'title' => 'Cartão Fidelidade & Planos de Saúde | Pronto Saúde', 'desc' => 'Economize até 70% em consultas, exames e odontologia com o Cartão Fidelidade Pronto Saúde. Sem carência, individual e familiar. Saiba mais!', 'kw' => "cartao fidelidade saude\ndesconto consultas rj\nplano odontologico familiar\nsaude sem carencia"],
+	['slug' => 'servicos', 'name' => 'Nossos Serviços Médicos', 'url' => 'servicos.php', 'title' => 'Serviços Médicos, Consultas e Exames | Pronto Saúde', 'desc' => 'Consultas especializadas, check-up preventivo, exames laboratoriais e diagnósticos por imagem com laudos rápidos e alta precisão. Agende hoje!', 'kw' => "servicos medicos rj\nexames de sangue\ncheckup preventivo\nultrassonografia rj"],
+	['slug' => 'odontologia', 'name' => 'Odontologia Especializada', 'url' => 'odontologia.php', 'title' => 'Odontologia Especializada & Estética Dental | Pronto Saúde', 'desc' => 'Tratamentos odontológicos modernos: ortodontia, clareamento, implantes dentários, próteses e canal com dentistas experientes. Agende sua avaliação!', 'kw' => "dentista rj\nodontologia especializada\nclareamento dental rio de janeiro\naparelho ortodontico"],
+	['slug' => 'doctor', 'name' => 'Corpo Clínico & Médicos', 'url' => 'doctor.php', 'title' => 'Corpo Clínico & Médicos Especialistas | Pronto Saúde', 'desc' => 'Conheça nossos médicos especialistas em cardiologia, pediatria, ortopedia, ginecologia e mais. Atendimento humanizado e agendamento rápido no RJ.', 'kw' => "medicos especialistas rj\ncardiologista rio de janeiro\npediatra rj\nginecologista rio de janeiro"],
+	['slug' => 'news', 'name' => 'Notícias & Blog de Saúde', 'url' => 'news.php', 'title' => 'Blog de Saúde, Bem-Estar e Prevenção | Pronto Saúde', 'desc' => 'Dicas médicas, cuidados com a alimentação, saúde preventiva e novidades científicas preparadas por nossos especialistas para você viver melhor.', 'kw' => "blog saude\ndicas de saude preventiva\nbem estar e nutricao\nnoticias medicas"],
+	['slug' => 'trabalhe-conosco', 'name' => 'Trabalhe Conosco', 'url' => 'trabalhe-conosco.php', 'title' => 'Trabalhe Conosco | Carreiras e Oportunidades Pronto Saúde', 'desc' => 'Faça parte da nossa equipe médica, de enfermagem e administrativa. Envie seu currículo e venha transformar a saúde conosco no Rio de Janeiro.', 'kw' => "trabalhe conosco saude\nvagas clinica medica rj\nempregos medicos rio de janeiro\noportunidades enfermagem"]
 ];
 
 foreach ($systemFixed as $idx => $sfp) {
@@ -337,6 +348,10 @@ foreach ($systemFixed as $idx => $sfp) {
 		}
 	}
 	if (!$found) {
+		$bannerFix = file_exists('../assets/uploads/og_' . str_replace('-', '_', $cleanSlug) . '.jpg') 
+			? 'assets/uploads/og_' . str_replace('-', '_', $cleanSlug) . '.jpg' 
+			: 'assets/uploads/og_home.jpg';
+
 		$pagesList[] = [
 			'type' => 'fixed',
 			'id' => 900 + $idx,
@@ -347,10 +362,31 @@ foreach ($systemFixed as $idx => $sfp) {
 			'title' => $sfp['title'],
 			'description' => $sfp['desc'],
 			'keywords' => $sfp['kw'],
-			'banner' => 'assets/images/about.jpg'
+			'banner' => $bannerFix
 		];
 	}
 }
+
+// 4. Cálculo Global da Pontuação Média Técnica de SEO (PHP)
+$totalScorePHP = 0;
+foreach ($pagesList as $pItem) {
+	$sc = 30;
+	$tl = mb_strlen(trim($pItem['title']));
+	if ($tl >= 40 && $tl <= 65) $sc += 30;
+	elseif ($tl >= 25) $sc += 15;
+	elseif ($tl > 0) $sc += 5;
+
+	$dl = mb_strlen(trim($pItem['description']));
+	if ($dl >= 100 && $dl <= 165) $sc += 30;
+	elseif ($dl >= 60) $sc += 15;
+	elseif ($dl > 0) $sc += 5;
+
+	$kl = array_filter(preg_split('/[\r\n]+/', trim($pItem['keywords'])));
+	if (count($kl) >= 5) $sc += 10;
+	elseif (count($kl) >= 2) $sc += 5;
+	$totalScorePHP += min(100, $sc);
+}
+$avgScorePHP = count($pagesList) > 0 ? (int)round($totalScorePHP / count($pagesList)) : 100;
 ?>
 
 <!-- Cabeçalho da Página -->

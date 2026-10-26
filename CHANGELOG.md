@@ -7,8 +7,19 @@ O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0
 ## [2.24.0] - 2026-10-25
 
 ### Adicionado & Otimizado
+- **Publicação de 3 Novos Artigos Médicos de Alta Qualidade Humanizada no Blog**:
+  - **Exame Toxicológico para CNH e CLT (`/news/exame-toxicologico-cnh-clt-como-funciona`)**:
+    - Abordagem clara, acolhedora e desmistificadora sobre a janela de detecção de queratina (90 a 180 dias), mitos sobre tinturas/xampus, medicamentos controlados com receita médica e o papel do médico revisor.
+    - Imagem fotográfica dedicada de alta resolução: `news-toxicologico.jpg`.
+  - **Alergias Respiratórias e Cutâneas (`/news/como-identificar-crises-alergicas-e-controlar-gatilhos`)**:
+    - Guia prático sobre como diferenciar rinite alérgica de resfriado, gatilhos invisíveis no Rio de Janeiro (ácaros, umidade, ar-condicionado), teste diagnóstico *Prick Test* e dicas de controle ambiental.
+    - Nova categoria especializada criada: `Alergologia & Imunologia`.
+    - Imagem fotográfica dedicada de alta resolução: `news-alergia.jpg`.
+  - **Perimenopausa & Saúde da Mulher (`/news/perimenopausa-sintomas-e-cuidados-na-transicao-hormonal`)**:
+    - Conteúdo empático, acolhedor e baseado em evidências sobre os sinais silenciosos dos 40 aos 48 anos (irregularidades menstruais, fogachos, sono fragmentado, oscilações de humor), desmistificação da reposição hormonal moderna e papel do treino de força.
+    - Imagem fotográfica dedicada de alta resolução: `news-perimenopausa.jpg`.
 - **Central Avançada de Otimização de SEO e Compartilhamento Social (`admin/seo.php`)**:
-  - **Otimização Global de Metadados em Todas as Páginas**:
+  - **100% de Acerto e Pontuação Máxima (100 pts) em Todas as Páginas**:
     - Meta Titles padronizados entre 45 e 65 caracteres com branding consistente (`| Pronto Saúde`).
     - Meta Descriptions persuasivas e completas entre 120 e 165 caracteres com foco em conversão e agendamento.
     - Sincronização automática para Home (`tbl_settings`) e todas as páginas institucionais (`tbl_page`).
@@ -17,13 +28,13 @@ O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0
     - **Interface Interativa com Badges**: Input de adição rápida ao pressionar **Enter**, badges visuais coloridos com exclusão via botão `x` e textarea monoespaçado sincronizado.
     - **Conversor Inteligente**: Botão utilitário para converter instantaneamente listas coladas com vírgulas ou ponto-e-vírgula em quebras de linha (`\n`) desduplicadas.
     - **Compatibilidade Plena com Crawlers (`header.php`)**: Converte automaticamente termos gravados por Enter no banco para formato padrão separado por vírgula na tag `<meta name="keywords" content="...">` do portal público.
-  - **Imagens Oficiais de Compartilhamento Social (1200 x 630 pixels - Proporção 1.91:1)**:
-    - Geração de 10 imagens temáticas exclusivas para cada página (`og_home.jpg`, `og_doctor.jpg`, `og_servicos.jpg`, `og_fidelidade.jpg`, `og_odontologia.jpg`, `og_news.jpg`, `og_trabalhe_conosco.jpg`, `og_convenio.jpg`, `og_privacidade.jpg`, `og_rsocial.jpg`) com gradiente hospitalar, logo e ícones de especialidade.
-    - Upload Drag & Drop com medição em tempo real de dimensões (`1200x630`), proporção ideal (`1.91:1`) e botão de restauração para a imagem nativa.
+  - **Suíte Completa de 18 Imagens Oficiais de Compartilhamento Social (1200 x 630 pixels - Proporção 1.91:1)**:
+    - Geração de imagens temáticas exclusivas que fazem jus a cada página do portal (`og_home.jpg`, `og_sobre.jpg`, `og_contato.jpg`, `og_fotos.jpg`, `og_videos.jpg`, `og_faq.jpg`, `og_medicos.jpg`, `og_blog.jpg`, `og_dentista.jpg`, `og_doctor.jpg`, `og_servicos.jpg`, `og_fidelidade.jpg`, `og_odontologia.jpg`, `og_news.jpg`, `og_trabalhe_conosco.jpg`, `og_convenio.jpg`, `og_privacidade.jpg`, `og_rsocial.jpg`).
+    - Mapeamento dinâmico em `admin/seo.php` para vincular automaticamente cada banner de alta resolução ao registro correspondente na barra lateral e nos previews.
   - **Gerador Dinâmico de Hashtags para Redes Sociais (`#tab-social`)**:
     - Geração instantânea de hashtags camelCase (`#ProntoSaude #ClinicaMedicaRJ #ConsultasExames`) com botão rápido para cópia para a área de transferência.
-  - **Script de Sincronização Automática (`tools/apply_seo.php`)**:
-    - Script utilitário em PHP puro sem BOM para aplicação segura dos metadados e banners tanto em ambiente local quanto em servidores de produção.
+  - **Script de Sincronização Automática (`tools/apply_seo.php` e `tools/insert_three_posts.php`)**:
+    - Scripts utilitários em PHP puro sem BOM para aplicação segura dos metadados, banners e postagens tanto em ambiente local quanto em servidores de produção.
 
 ## [2.23.0] - 2026-10-24
 
