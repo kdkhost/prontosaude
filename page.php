@@ -369,7 +369,7 @@ $page_banner_src = (!empty($banner) && file_exists(__DIR__ . '/assets/uploads/' 
 				$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 				foreach ($result as $row) {
 					$i++;
-					$statement1 = $pdo->prepare("SELECT * FROM tbl_faq WHERE faq_category_id=?");
+					$statement1 = $pdo->prepare("SELECT * FROM tbl_faq WHERE faq_category_id=? AND (status = 'Active' OR status IS NULL) ORDER BY faq_id ASC");
 					$statement1->execute(array($row['faq_category_id']));
 					$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);							
 					if (empty($result1)) {

@@ -796,7 +796,7 @@ try {
 <?php
 $faqs = [];
 try {
-    $st_faq = $pdo->query("SELECT * FROM tbl_faq ORDER BY faq_id ASC LIMIT 6");
+    $st_faq = $pdo->query("SELECT * FROM tbl_faq WHERE status = 'Active' OR status IS NULL ORDER BY faq_id ASC LIMIT 10");
     $faqs = $st_faq->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {}
 ?>
