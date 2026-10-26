@@ -64,3 +64,31 @@ if (file_exists($security_guard_file)) {
     require_once($security_guard_file);
     pronto_security_inspect_request($pdo);
 }
+
+// Função Utilitária Global para Padronização de Datas no Padrão Brasileiro (DD/MM/YYYY)
+if (!function_exists('pronto_format_date')) {
+    function pronto_format_date($raw_date) {
+        $raw = trim((string)$raw_date);
+        if ($raw === '' || $raw === '0000-00-00' || $raw === '00-00-0000') {
+            return '';
+        }
+        // Se já estiver no formato d/m/Y (ex: 25/10/2026)
+        if (preg_match('/^(\d{2})\/(\d{2})\/(\d{4})/', $raw, $m)) {
+            return "{$m[1]}/{$m[2]}/{$m[3]}";
+        }
+        // Se estiver no formato d-m-Y (ex: 10-10-2022)
+        if (preg_match('/^(\d{2})-(\d{2})-(\d{4})/', $raw, $m)) {
+            return "{$m[1]}/{$m[2]}/{$m[3]}";
+        }
+        // Se estiver no formato Y-m-d ou Y/m/d (ex: 2026-10-25 ou 2022-10-10)
+        if (preg_match('/^(\d{4})[-\/\.](\d{2})[-\/\.](\d{2})/', $raw, $m)) {
+            return "{$m[3]}/{$m[2]}/{$m[1]}";
+        }
+        // Fallback via timestamp
+        $timestamp = strtotime($raw);
+        if ($timestamp !== false && $timestamp > 0) {
+            return date('d/m/Y', $timestamp);
+        }
+        return $raw;
+    }
+}

@@ -195,7 +195,7 @@ if(isset($_POST['form1'])) {
 						<div class="row mb-3">
 							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Data de publicação <span class="text-danger">*</span></label>
 							<div class="col-12 col-sm-9 col-lg-6">
-								<input type="text" class="form-control" name="news_date" id="datepicker" value="<?php echo date('d-m-Y'); ?>">(Format: dd-mm-yy)
+								<input type="text" class="form-control" name="news_date" id="datepicker" value="<?php echo date('d/m/Y'); ?>">(Format: dd/mm/aaaa)
 							</div>
 						</div>
 						<div class="row mb-3">

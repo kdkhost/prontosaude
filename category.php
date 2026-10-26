@@ -208,7 +208,7 @@ foreach ($result as $row)
 											
 											<div class="ps-blog-card-footer">
 												<span class="ps-blog-date">
-													<i class="far fa-calendar-alt text-primary"></i> <?= htmlspecialchars($row['news_date']); ?>
+													<i class="far fa-calendar-alt text-primary"></i> <?= pronto_format_date($row['news_date']); ?>
 												</span>
 												<a href="<?= $n_link; ?>" class="btn-blog-read">
 													Ler Artigo <i class="fas fa-arrow-right"></i>

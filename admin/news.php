@@ -36,6 +36,7 @@
 								<th width="180">Título</th>
 								<th width="280">Detalhes</th>
 								<th>Categoria</th>
+								<th>Data</th>
 								<th class="text-center" width="110">Status</th>
 								<th>Ação</th>
 							</tr>
@@ -48,6 +49,7 @@
 														t1.news_id,
 														t1.news_title,
 														t1.news_content,
+														t1.news_date,
 														t1.photo,
 														t1.category_id,
 														t1.status,
@@ -82,6 +84,9 @@
 									<td><?php if(strlen($row['news_content']) > 180){echo substr($row['news_content'],0,180).' ...';} else {echo $row['news_content'];} ?></td>
 									<td>
 										<?php echo $row['category_name']; ?>
+									</td>
+									<td class="text-nowrap small text-muted">
+										<i class="bi bi-calendar3 me-1 text-primary"></i> <?= pronto_format_date($row['news_date'] ?? ''); ?>
 									</td>
 									<td class="text-center">
 										<div class="d-inline-flex align-items-center gap-2">

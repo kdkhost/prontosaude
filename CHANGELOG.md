@@ -22,6 +22,10 @@ O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0
     - Injeção dinâmica do comentário no topo do feed com animação fluida, avatares estilizados com iniciais, datas em PT-BR e atualização do contador em tempo real.
   - **Comentários do Facebook**:
     - Aba integrada com o plugin `fb-comments`, aviso explicativo amigável em caso de bloqueadores de terceiros e reprocessamento automático de XFBML ao alternar abas.
+- **Padronização Global de Datas no Padrão Brasileiro (`DD/MM/YYYY`)**:
+  - Implementação da função utilitária `pronto_format_date()` disponível globalmente em `admin/config.php` e `header.php`.
+  - Normalização e exibição correta de datas em todas as páginas: Home (`index.php`), Detalhes do Artigo (`news.php`), Barra Lateral (`sidebar.php`), Listagem do Blog (`page.php`), Categoria (`category.php`), Busca (`search.php`) e Painel Administrativo (`admin/news.php` e `admin/news-edit.php`).
+  - Correção de datas invertidas no banco e suporte dinâmico a formatos `YYYY-MM-DD`, `DD-MM-YYYY` e `DD/MM/YYYY`.
 
 ## [2.24.0] - 2026-10-25
 

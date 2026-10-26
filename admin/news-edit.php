@@ -231,7 +231,7 @@ foreach ($result as $row) {
 						<div class="row mb-3">
 							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Data de Publicação <span class="text-danger">*</span></label>
 							<div class="col-12 col-sm-9 col-lg-6">
-								<input type="text" class="form-control" name="news_date" id="datepicker" value="<?php echo $news_date; ?>">(Format: dd-mm-yy)
+								<input type="text" class="form-control" name="news_date" id="datepicker" value="<?php echo pronto_format_date($news_date); ?>">(Format: dd/mm/aaaa)
 							</div>
 						</div>
 						<div class="row mb-3">

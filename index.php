@@ -713,7 +713,7 @@ try {
                             </div>
                             <div class="p-3 d-flex flex-column flex-grow-1">
                                 <span class="text-muted small mb-1" style="font-size: 0.75rem;">
-                                    <i class="far fa-calendar-alt me-1 text-primary"></i> <?= htmlspecialchars($item['news_date']); ?>
+                                    <i class="far fa-calendar-alt me-1 text-primary"></i> <?= pronto_format_date($item['news_date']); ?>
                                 </span>
                                 <h6 class="fw-bold mb-2" style="color: var(--ps-title); line-height: 1.4; min-height: 44px;">
                                     <a href="<?= $n_link; ?>" class="text-decoration-none" style="color: inherit;">

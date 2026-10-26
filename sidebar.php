@@ -64,7 +64,7 @@
                     <div class="ps-recent-info">
                         <h6 class="ps-recent-title"><?php echo htmlspecialchars($post['news_title']); ?></h6>
                         <span class="ps-recent-date">
-                            <i class="far fa-calendar-alt text-primary"></i> <?php echo htmlspecialchars($post['news_date']); ?>
+                            <i class="far fa-calendar-alt text-primary"></i> <?php echo pronto_format_date($post['news_date']); ?>
                         </span>
                     </div>
                 </a>

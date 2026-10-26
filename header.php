@@ -411,6 +411,29 @@ $email   = $row2['dep_email'] ?? '';
             }
         }
 
+        if (!function_exists('pronto_format_date')) {
+            function pronto_format_date($raw_date) {
+                $raw = trim((string)$raw_date);
+                if ($raw === '' || $raw === '0000-00-00' || $raw === '00-00-0000') {
+                    return '';
+                }
+                if (preg_match('/^(\d{2})\/(\d{2})\/(\d{4})/', $raw, $m)) {
+                    return "{$m[1]}/{$m[2]}/{$m[3]}";
+                }
+                if (preg_match('/^(\d{2})-(\d{2})-(\d{4})/', $raw, $m)) {
+                    return "{$m[1]}/{$m[2]}/{$m[3]}";
+                }
+                if (preg_match('/^(\d{4})[-\/\.](\d{2})[-\/\.](\d{2})/', $raw, $m)) {
+                    return "{$m[3]}/{$m[2]}/{$m[1]}";
+                }
+                $ts = strtotime($raw);
+                if ($ts !== false && $ts > 0) {
+                    return date('d/m/Y', $ts);
+                }
+                return $raw;
+            }
+        }
+
         // Converte palavras-chave separadas por enter para vírgulas na tag HTML
         $keywords_html = preg_replace('/[\r\n]+/', ', ', (string)$seo_keywords);
         $keywords_html = preg_replace('/,\s*,+/', ', ', $keywords_html);

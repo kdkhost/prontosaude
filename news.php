@@ -131,7 +131,7 @@ $news_banner_src = (!empty($photo) && file_exists('assets/uploads/' . $photo)) ?
 								<?php endif; ?>
 								<?php if(!empty($news_date)): ?>
 									<li style="background: #f1f5f9; color: #64748b; font-weight: 600; font-size: 13px; padding: 5px 14px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
-										<i class="far fa-calendar-alt text-primary"></i> <?php echo htmlspecialchars($news_date); ?>
+										<i class="far fa-calendar-alt text-primary"></i> <?php echo pronto_format_date($news_date); ?>
 									</li>
 								<?php endif; ?>
 							</ul>
