@@ -1,0 +1,405 @@
+/**
+ * Pronto Saúde - Estilos Oficiais do Banner de Instalação PWA
+ * Design System Hospitalar: Glassmorphism, Cores Médicas (#0a6b74, #10b981) e Responsividade
+ * UTF-8 No BOM
+ */
+
+/* Container Principal do Banner */
+.ps-pwa-banner {
+    position: fixed;
+    z-index: 10050;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* Estado Visível */
+.ps-pwa-banner.ps-pwa-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Posicionamentos */
+.ps-pwa-banner.ps-pwa-pos-bottom-right {
+    bottom: 24px;
+    right: 24px;
+    max-width: 440px;
+    width: calc(100% - 32px);
+    transform: translateY(30px);
+}
+.ps-pwa-banner.ps-pwa-pos-bottom-right.ps-pwa-visible {
+    transform: translateY(0);
+}
+
+.ps-pwa-banner.ps-pwa-pos-bottom-left {
+    bottom: 24px;
+    left: 24px;
+    max-width: 440px;
+    width: calc(100% - 32px);
+    transform: translateY(30px);
+}
+.ps-pwa-banner.ps-pwa-pos-bottom-left.ps-pwa-visible {
+    transform: translateY(0);
+}
+
+.ps-pwa-banner.ps-pwa-pos-bottom-center {
+    bottom: 24px;
+    left: 50%;
+    transform: translate(-50%, 30px);
+    max-width: 460px;
+    width: calc(100% - 32px);
+}
+.ps-pwa-banner.ps-pwa-pos-bottom-center.ps-pwa-visible {
+    transform: translate(-50%, 0);
+}
+
+.ps-pwa-banner.ps-pwa-pos-bottom-bar {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    transform: translateY(100%);
+    border-radius: 0;
+}
+.ps-pwa-banner.ps-pwa-pos-bottom-bar.ps-pwa-visible {
+    transform: translateY(0);
+}
+.ps-pwa-banner.ps-pwa-pos-bottom-bar .ps-pwa-card {
+    border-radius: 20px 20px 0 0;
+    margin: 0 auto;
+    max-width: 860px;
+}
+
+/* Card Interno com Efeito Glassmorphism */
+.ps-pwa-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 20px 22px;
+    box-shadow: 0 20px 45px -10px rgba(10, 107, 116, 0.22), 0 0 0 1px rgba(10, 107, 116, 0.12);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+/* Borda luminosa decorativa no topo */
+.ps-pwa-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #0a6b74 0%, #10b981 50%, #14b8a6 100%);
+}
+
+/* Botão Fechar */
+.ps-pwa-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(10, 107, 116, 0.08);
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+.ps-pwa-close-btn:hover {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+    transform: scale(1.08);
+}
+
+/* Badge de Destaque */
+.ps-pwa-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #0a6b74;
+    background: rgba(10, 107, 116, 0.1);
+    padding: 4px 10px;
+    border-radius: 30px;
+    margin-bottom: 12px;
+}
+.ps-pwa-badge i {
+    color: #10b981;
+}
+
+/* Topo do Card: Ícone e Títulos */
+.ps-pwa-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.ps-pwa-app-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    object-fit: cover;
+    box-shadow: 0 8px 16px -4px rgba(10, 107, 116, 0.25);
+    border: 2px solid #ffffff;
+    flex-shrink: 0;
+}
+
+.ps-pwa-titles {
+    flex: 1;
+    min-width: 0;
+}
+
+.ps-pwa-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.3;
+    margin: 0 0 2px 0;
+    font-family: 'Outfit', sans-serif;
+}
+
+.ps-pwa-subtitle {
+    font-size: 0.8rem;
+    color: #0a6b74;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Descrição e Benefícios */
+.ps-pwa-desc {
+    font-size: 0.84rem;
+    color: #475569;
+    line-height: 1.45;
+    margin-bottom: 14px;
+}
+
+/* Lista de Chips de Benefícios */
+.ps-pwa-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+.ps-pwa-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #334155;
+    background: #f1f5f9;
+    padding: 3px 9px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+.ps-pwa-chip i {
+    color: #10b981;
+    font-size: 0.75rem;
+}
+
+/* Ações / Botões */
+.ps-pwa-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ps-pwa-btn-install {
+    flex: 1;
+    background: linear-gradient(135deg, #0a6b74 0%, #0d828d 50%, #10b981 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 11px 18px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 8px 18px -4px rgba(10, 107, 116, 0.35);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+.ps-pwa-btn-install:hover {
+    background: linear-gradient(135deg, #075259 0%, #0a6b74 50%, #059669 100%);
+    box-shadow: 0 10px 22px -4px rgba(10, 107, 116, 0.45);
+    transform: translateY(-2px);
+    color: #ffffff;
+}
+.ps-pwa-btn-install:active {
+    transform: translateY(0);
+}
+
+.ps-pwa-btn-later {
+    background: transparent;
+    color: #64748b;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.ps-pwa-btn-later:hover {
+    background: #f8fafc;
+    color: #334155;
+    border-color: #94a3b8;
+}
+
+/* Suporte a Tema Escuro */
+[data-bs-theme="dark"] .ps-pwa-card {
+    background: rgba(15, 23, 42, 0.94);
+    box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+[data-bs-theme="dark"] .ps-pwa-title {
+    color: #f8fafc;
+}
+[data-bs-theme="dark"] .ps-pwa-subtitle {
+    color: #2dd4bf;
+}
+[data-bs-theme="dark"] .ps-pwa-desc {
+    color: #cbd5e1;
+}
+[data-bs-theme="dark"] .ps-pwa-chip {
+    background: rgba(255, 255, 255, 0.06);
+    color: #e2e8f0;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+[data-bs-theme="dark"] .ps-pwa-btn-later {
+    color: #94a3b8;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+[data-bs-theme="dark"] .ps-pwa-btn-later:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f1f5f9;
+}
+[data-bs-theme="dark"] .ps-pwa-close-btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+}
+[data-bs-theme="dark"] .ps-pwa-app-icon {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Modal / Guia Especial para iOS (Safari iPhone/iPad) */
+.ps-pwa-ios-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 10060;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding: 16px;
+}
+.ps-pwa-ios-modal.ps-pwa-ios-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.ps-pwa-ios-sheet {
+    background: #ffffff;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 460px;
+    padding: 24px 20px;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transform: translateY(40px);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ps-pwa-ios-modal.ps-pwa-ios-visible .ps-pwa-ios-sheet {
+    transform: translateY(0);
+}
+
+[data-bs-theme="dark"] .ps-pwa-ios-sheet {
+    background: #0f172a;
+    color: #f8fafc;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.ps-pwa-ios-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    border: 1px solid #e2e8f0;
+}
+[data-bs-theme="dark"] .ps-pwa-ios-step {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+.ps-pwa-ios-step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #0a6b74;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+/* Ajustes em Telas Pequenas */
+@media (max-width: 576px) {
+    .ps-pwa-banner.ps-pwa-pos-bottom-right,
+    .ps-pwa-banner.ps-pwa-pos-bottom-left,
+    .ps-pwa-banner.ps-pwa-pos-bottom-center {
+        bottom: 16px;
+        left: 12px;
+        right: 12px;
+        width: calc(100% - 24px);
+        max-width: 100%;
+        transform: translateY(40px);
+    }
+    .ps-pwa-banner.ps-pwa-pos-bottom-right.ps-pwa-visible,
+    .ps-pwa-banner.ps-pwa-pos-bottom-left.ps-pwa-visible,
+    .ps-pwa-banner.ps-pwa-pos-bottom-center.ps-pwa-visible {
+        transform: translateY(0);
+    }
+    .ps-pwa-card {
+        padding: 18px 16px;
+    }
+    .ps-pwa-app-icon {
+        width: 48px;
+        height: 48px;
+    }
+    .ps-pwa-title {
+        font-size: 0.98rem;
+    }
+    .ps-pwa-desc {
+        font-size: 0.8rem;
+    }
+}
+

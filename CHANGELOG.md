@@ -4,6 +4,25 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.29.0] - 2026-11-01
+
+### Adicionado & Aprimorado
+- **Banner Inteligente e Moderno de Instalação do PWA (`inc/pwa-install-banner.php`, `assets/css/pronto-pwa-banner.css`, `assets/js/pronto-pwa.js`)**:
+  - **Substituição do Prompt Padrão do Navegador**: Interceptação do evento `beforeinstallprompt` (`e.preventDefault()`), bloqueando o diálogo genérico do Chrome/Edge e apresentando um banner exclusivo, elegante e intuitivo no Design System Pronto Saúde.
+  - **Design Hospitalar de Alto Padrão**: Efeito Glassmorphism com desfoque de fundo (`backdrop-filter: blur(16px)`), gradientes Teal (`#0a6b74`) e Esmeralda (`#10b981`), badge de App Oficial e chips de vantagens rápidas (1 clique, Carteirinha Digital e ultraleveza).
+  - **Guia Visual Especial para iPhone / iPad (iOS Safari)**: Detecção automática de dispositivos iOS com modal ilustrativo e passos claros (Compartilhar -> Adicionar à Tela de Início -> Adicionar).
+  - **Gatilho Global Reutilizável**: Suporte para disparar o banner ou prompt de instalação a partir de qualquer link ou botão do site usando `.btn-trigger-pwa-install` ou `[data-pwa-install]`.
+  - **Suporte Completo aos Modos Claro e Escuro**: Paleta visual coordenada automaticamente com o tema ativo do portal.
+
+- **Central Administrativa Completa do PWA & Banner (`admin/pwa.php`)**:
+  - **Switch Rápido de Status via AJAX**: Ligar ou desligar instantaneamente o Banner de Instalação no site diretamente pelo topo do painel.
+  - **Controle de Tempo de Espera (Delay)**: Configuração de segundos decorridos após o carregamento da página para a entrada suave do banner.
+  - **Frequência de Reexibição (Cooldown)**: Controle de intervalo em dias após o usuário dispensar (a cada sessão, 1 dia, 3 dias, 7 dias recomendados, 14 dias ou 30 dias).
+  - **Posicionamento Flexível na Tela**: Escolha entre Canto Inferior Direito, Canto Inferior Esquerdo, Centro Inferior e Barra Fixa Inferior.
+  - **Customização Total de Conteúdo**: Edição do Título Principal, Texto Descritivo/Benefícios e Botão de Chamada para Ação (CTA).
+  - **Live Preview Dinâmico em Tempo Real**: Simulador interativo que reflete alterações de texto, cores e ícone instantaneamente na coluna lateral, com botões para testar a animação e o modal do iOS.
+  - **Auto-migração de Banco de Dados**: Criação automática transparente das novas colunas na tabela `tbl_settings` com valores padrão higienizados.
+
 ## [2.28.0] - 2026-11-01
 
 ### Adicionado & Aprimorado

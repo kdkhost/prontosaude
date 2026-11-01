@@ -154,6 +154,11 @@ if (strlen($whats_clean) <= 11) {
     </button>
 </div>
 
+<!-- Banner de Instalação do Aplicativo PWA (Pronto Saúde) -->
+<?php if (($pwa_status ?? 0) == 1): ?>
+    <?php require_once(__DIR__ . '/inc/pwa-install-banner.php'); ?>
+<?php endif; ?>
+
 <!-- ==============================================================================
      SCRIPTS MODERNOS BOOTSTRAP 5, JQUERY, TOASTR E SWEETALERT2
      ============================================================================== -->
@@ -163,6 +168,11 @@ if (strlen($whats_clean) <= 11) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+
+<?php if (($pwa_status ?? 0) == 1): ?>
+<!-- Gerenciador do Aplicativo PWA e Instalação -->
+<script src="<?= BASE_URL; ?>assets/js/pronto-pwa.js?v=<?= time(); ?>"></script>
+<?php endif; ?>
 
 <script>
 // Controle Suave do Preloader Oficial

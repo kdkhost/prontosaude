@@ -154,12 +154,20 @@ $home_about_btn2_url        = $row['home_about_btn2_url'] ?? '';
 // Controle do Tema Dark/Light no Portal Público
 $frontend_dark_mode_status = (int)($row['frontend_dark_mode_status'] ?? 1);
 
-// Parâmetros PWA & Popup Promocional
-$pwa_status      = (int)($row['pwa_status'] ?? 1);
-$pwa_app_name    = $row['pwa_app_name'] ?? 'Pronto Saúde | Centro Médico & Odontológico';
-$pwa_short_name  = $row['pwa_short_name'] ?? 'Pronto Saúde';
-$pwa_theme_color = $row['pwa_theme_color'] ?? '#0a6b74';
-$pwa_icon_192    = !empty($row['pwa_icon_192']) ? BASE_URL . 'assets/uploads/' . $row['pwa_icon_192'] : BASE_URL . 'assets/uploads/' . ($favicon ?: 'favicon.png');
+// Parâmetros PWA & Banner de Instalação Inteligente
+$pwa_status          = (int)($row['pwa_status'] ?? 1);
+$pwa_app_name        = $row['pwa_app_name'] ?? 'Pronto Saúde | Centro Médico & Odontológico';
+$pwa_short_name      = $row['pwa_short_name'] ?? 'Pronto Saúde';
+$pwa_theme_color     = $row['pwa_theme_color'] ?? '#0a6b74';
+$pwa_icon_192        = !empty($row['pwa_icon_192']) ? BASE_URL . 'assets/uploads/' . $row['pwa_icon_192'] : BASE_URL . 'assets/uploads/' . ($favicon ?: 'favicon.png');
+$pwa_banner_status   = (int)($row['pwa_banner_status'] ?? 1);
+$pwa_banner_delay    = (int)($row['pwa_banner_delay'] ?? 3);
+$pwa_banner_cooldown = (int)($row['pwa_banner_cooldown'] ?? 7);
+$pwa_banner_title    = $row['pwa_banner_title'] ?? 'Instale o App Pronto Saúde';
+$pwa_banner_desc     = $row['pwa_banner_desc'] ?? 'Agendamento rápido em 1 minuto, carteirinha digital e histórico de consultas sem ocupar memória do aparelho.';
+$pwa_banner_btn_text = $row['pwa_banner_btn_text'] ?? 'Instalar Aplicativo Grátis';
+$pwa_banner_position = $row['pwa_banner_position'] ?? 'bottom-right';
+$pwa_banner_ios_guide= (int)($row['pwa_banner_ios_guide'] ?? 1);
 
 $popup_status    = (int)($row['popup_status'] ?? 0);
 $popup_title     = $row['popup_title'] ?? '';
@@ -522,6 +530,9 @@ $email   = $row2['dep_email'] ?? '';
 
         <!-- Estilos Oficiais Pronto Saúde -->
         <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/pronto-modern-frontend.css?v=<?= time(); ?>">
+        <?php if ($pwa_status == 1 && $pwa_banner_status == 1): ?>
+        <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/pronto-pwa-banner.css?v=<?= time(); ?>">
+        <?php endif; ?>
     </head>
     <body class="ps-foco-body" id="inicio">
 

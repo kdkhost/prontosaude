@@ -167,11 +167,18 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
     - **Galeria de Fotos (`admin/photo.php`) & Vídeos (`admin/video.php`):** Visibilidade em tempo real.
     - **Perguntas Frequentes (`admin/faq.php`):** Controle de exibição de dúvidas frequentes.
   - **Script Global `admin/js/pronto-switches.js`:** Gerenciador universal com suporte a DataTables (mesmo com busca e paginação ativa), atualização dinâmica de badges, feedback por Toastr / SweetAlert2 e reversão automática em caso de instabilidade.
-- **Aplicativo PWA (Progressive Web App) 100% Configurável (`admin/pwa.php`):**
-  - **Painel Administrativo Próprio:** Personalização completa de nome do app, nome curto, descrição, cores do tema (`theme_color`), cor de fundo da splash (`background_color`) e upload de ícones em alta resolução (192x192 e 512x512) com mockup em tempo real de smartphone.
+- **Aplicativo PWA (Progressive Web App) & Banner de Instalação Inteligente (`admin/pwa.php`, `inc/pwa-install-banner.php`, `assets/css/pronto-pwa-banner.css`, `assets/js/pronto-pwa.js`):**
+  - **Substituição do Prompt Padrão e Feio do Navegador:** Interceptação elegante do evento nativo `beforeinstallprompt` (`e.preventDefault()`), suprimindo as caixas cinzas ou genéricas dos navegadores desktop/mobile e disparando uma experiência de conversão premium, acolhedora e alinhada ao Design System Pronto Saúde.
+  - **Banner de Instalação Moderno com Glassmorphism:** Card flutuante com desfoque de fundo (`backdrop-filter: blur(16px)`), gradientes Teal (`#0a6b74`) e Verde Esmeralda (`#10b981`), badge oficial *"App Oficial Pronto Saúde"*, ícone em alta definição e chips ilustrativos de benefícios rápidos (*Acesso em 1 clique*, *Carteirinha Digital*, *Ultraleve 0 MB*).
+  - **Controle Robusto de Tempo de Espera (Delay em Segundos):** Configuração direta no painel administrativo do tempo exato de espera (ex: 3s após o carregamento da página) para entrada suave e não-invasiva do banner.
+  - **Frequência de Reexibição Inteligente (Cooldown em Dias):** Temporizador persistente no navegador (`localStorage`) que evita incomodar o paciente caso ele clique em "Agora não" ou feche o banner (opções para a cada sessão, 1, 3, 7 dias recomendados, 14 ou 30 dias).
+  - **Posicionamento Flexível na Tela:** 4 disposições configuráveis: Canto Inferior Direito, Canto Inferior Esquerdo, Centro Inferior e Barra Fixa no Rodapé.
+  - **Guia Visual Especial para iPhone / iPad (iOS Safari):** Detecção inteligente de dispositivos iOS (onde o prompt nativo não existe), abrindo um modal ilustrado com 3 passos didáticos (Compartilhar -> Adicionar à Tela de Início -> Adicionar).
+  - **Gatilho Global de Instalação:** Qualquer botão ou link no portal público pode disparar o banner ou a instalação imediata bastando adicionar a classe `.btn-trigger-pwa-install` ou o atributo `[data-pwa-install]`.
+  - **Live Preview Dinâmico no Painel:** Simulador interativo em tempo real na coluna lateral do painel administrativo que atualiza textos, cores, ícones e posições simultaneamente durante a digitação, com botões para testar animação e visualizar o modal do iOS.
+  - **Switches Rápidos via AJAX:** Ativação ou desativação instantânea do PWA Global e do Banner de Instalação com 1 clique no topo do painel.
   - **Manifesto Web Dinâmico (`manifest.webmanifest.php`):** Emissão automática e em tempo real dos metadados W3C PWA direto do banco de dados com atalhos de aplicativo integrados.
   - **Service Worker Inteligente (`sw.js`):** Cache avançado com estratégias *Network First* para páginas dinâmicas e *Stale-While-Revalidate* para assets estáticos (CSS, JS, imagens, fontes), garantindo menor tempo de abertura e navegação acelerada mesmo com oscilações de sinal.
-  - **Instalação Amigável no Frontend:** Toast flutuante moderno convidando o visitante a instalar o aplicativo no celular ou desktop, com controle de intervalo para não ser invasivo.
 - **Banner de Popup Promocional & Avisos da Home (`admin/popup.php`):**
   - Gestão de campanhas sazonais, avisos de feriados, vacinação e promoções do cartão fidelidade.
   - Personalização de título, mensagem, banner ilustrativo, botão com link personalizado, tempo de espera para abertura (delay em ms) e frequência de exibição (controle de expiração via cookies).
