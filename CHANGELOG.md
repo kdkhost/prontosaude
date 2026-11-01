@@ -4,6 +4,22 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.28.0] - 2026-11-01
+
+### Adicionado & Aprimorado
+- **Central Oficial de Gerenciamento de Logotipos (`admin/settings.php`)**:
+  - Reestruturação da aba "Logo" em 2 cards independentes com formulários dedicados:
+    1. **Logo Clara (Oficial)**: Para superfícies escuras, exibida na barra lateral (sidebar) e topo do Painel Administrativo, na navbar teal e no rodapé do portal público.
+    2. **Logo Escura (Oficial)**: Para superfícies claras/brancas com tipografia e ícone em tom escuro/teal hospitalar (`#0a6b74`) para alto contraste.
+  - Pré-visualizações independentes em tempo real simulando os fundos reais (fundo dark hospitalar `#0b1320` para a logo clara e fundo branco com textura de transparência para a logo escura).
+  - Auto-migração transparente da coluna `logo_dark` na tabela `tbl_settings` com fallback seguro.
+  - Suporte dinâmico aos novos logotipos no portal público (`header.php`, `footer.php`) e na tela de login (`admin/login.php`).
+
+- **Moldura Externa Fixa em Cor Única do Painel Administrativo (`admin/header.php`, `admin/css/adminlte4-compat.css`)**:
+  - Unificação do cabeçalho superior (`.app-header.navbar`) e da barra lateral (`.app-sidebar` / `.sidebar-brand`) em uma **cor única permanente Dark Hospitalar (`#0b1320`)** com bordas coordenadas em `#1a2536`.
+  - Desacoplamento total do tema das páginas: a moldura externa não muda mais de cor ao alternar entre Modo Claro e Modo Escuro, mantendo estabilidade visual corporativa e legibilidade absoluta.
+  - Ajuste de contraste universal para todos os elementos do topo (ícone de toggle, badge hospitalar, botão Ver Site, alternador de tema e perfil do usuário).
+
 ## [2.27.0] - 2026-10-26
 
 ### Alterado & Otimizado
