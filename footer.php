@@ -84,8 +84,15 @@ if (strlen($whats_clean) <= 11) {
             </div>
         </div>
 
-        <div class="border-top border-secondary border-opacity-25 mt-4 pt-3 text-center small text-secondary">
-            <?= $footer_copyright ?: '© ' . date('Y') . ' Pronto Saúde - Centro Médico & Odontológico. Todos os direitos reservados.'; ?> &bull; <a href="<?= BASE_URL; ?>privacidade.php" class="text-secondary text-decoration-underline ms-1">Termos &amp; LGPD</a>
+        <div class="foco-footer-bottom border-top border-secondary border-opacity-25 mt-4 pt-3 pb-2 text-secondary small">
+            <div class="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2 text-center text-lg-start">
+                <div>
+                    <?= $footer_copyright ?: 'Copyright &copy; ' . date('Y') . '. Todos os Direitos Reservados.'; ?> &bull; <a href="<?= BASE_URL; ?>privacidade.php" class="text-secondary text-decoration-underline ms-1">Termos &amp; LGPD</a>
+                </div>
+                <div class="text-center text-lg-end">
+                    Desenvolvido e Hospedado por: <a href="https://ethestrategias.com.br" target="_blank" rel="noopener noreferrer" class="text-secondary text-decoration-underline">Eth Estrategias - ethestrategias.com.br</a> (hospedagem) e <a href="https://kdkhost.com.br" target="_blank" rel="noopener noreferrer" class="text-secondary text-decoration-underline">Marcelo Brad kdkhost.com.br</a> (desenvolvedor)
+                </div>
+            </div>
         </div>
     </div>
 </footer>

@@ -7,6 +7,11 @@ O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0
 ## [2.29.0] - 2026-11-01
 
 ### Adicionado & Aprimorado
+- **Alinhamento do Sub-Rodapé (Copyright & Créditos de Desenvolvimento) (`footer.php`)**:
+  - **Distribuição Balanceada:** Ajuste da barra inferior de copyright para layout bilateral (`d-flex justify-content-between`), posicionando o Copyright e link para Termos & LGPD à esquerda.
+  - **Créditos Oficiais à Direita:** Inclusão dos links de autoria e infraestrutura: *Desenvolvido e Hospedado por: Eth Estrategias - ethestrategias.com.br (hospedagem) e Marcelo Brad kdkhost.com.br (desenvolvedor)*, com links externos seguros (`target="_blank"` e `rel="noopener noreferrer"`).
+  - **Responsividade Total:** Disposição fluida e adaptável para dispositivos móveis com centralização automática em telas menores.
+
 - **Banner Inteligente e Moderno de Instalação do PWA (`inc/pwa-install-banner.php`, `assets/css/pronto-pwa-banner.css`, `assets/js/pronto-pwa.js`)**:
   - **Substituição do Prompt Padrão do Navegador**: Interceptação do evento `beforeinstallprompt` (`e.preventDefault()`), bloqueando o diálogo genérico do Chrome/Edge e apresentando um banner exclusivo, elegante e intuitivo no Design System Pronto Saúde.
   - **Design Hospitalar de Alto Padrão**: Efeito Glassmorphism com desfoque de fundo (`backdrop-filter: blur(16px)`), gradientes Teal (`#0a6b74`) e Esmeralda (`#10b981`), badge de App Oficial e chips de vantagens rápidas (1 clique, Carteirinha Digital e ultraleveza).
