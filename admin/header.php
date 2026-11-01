@@ -61,6 +61,7 @@ $favicon = $row['favicon'] ?? 'favicon.png';
 $receive_email = $row['receive_email'] ?? '';
 $empresa = $row['empresa'] ?? 'Pronto Saúde';
 $logo = $row['logo'] ?? '';
+$logo_dark = !empty($row['logo_dark']) ? $row['logo_dark'] : (file_exists('../assets/uploads/logo-dark.png') ? 'logo-dark.png' : $logo);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -125,18 +126,18 @@ $logo = $row['logo'] ?? '';
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
 	<div class="app-wrapper">
 
-		<!-- Barra de Navegação Superior (Header / Navbar) Fixa -->
-		<nav class="app-header navbar navbar-expand bg-body shadow-sm sticky-top">
+		<!-- Barra de Navegação Superior (Header / Navbar Fixa na Mesma Cor Escura da Sidebar) -->
+		<nav class="app-header navbar navbar-expand shadow-sm sticky-top" data-bs-theme="dark" style="background-color: #0b1320 !important; border-bottom: 1px solid #1a2536 !important;">
 			<div class="container-fluid">
 				<!-- Lado Esquerdo: Toggle de Sidebar e Título -->
 				<ul class="navbar-nav align-items-center">
 					<li class="nav-item">
-						<a class="nav-link text-body" data-lte-toggle="sidebar" href="#" role="button" title="Recolher / Expandir Menu">
+						<a class="nav-link text-white px-2" data-lte-toggle="sidebar" href="#" role="button" title="Recolher / Expandir Menu">
 							<i class="bi bi-list fs-4"></i>
 						</a>
 					</li>
 					<li class="nav-item d-none d-md-block ms-2">
-						<span class="badge text-bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 fw-semibold">
+						<span class="badge px-3 py-2 fw-semibold" style="background-color: #0e1e2d !important; color: #10b981 !important; border: 1px solid rgba(16, 185, 129, 0.3) !important;">
 							<i class="bi bi-shield-check me-1"></i> Pronto Saúde • Gestão Integrada
 						</span>
 					</li>
@@ -146,7 +147,7 @@ $logo = $row['logo'] ?? '';
 				<ul class="navbar-nav ms-auto align-items-center gap-2">
 					<!-- Botão Ver Site -->
 					<li class="nav-item">
-						<a href="<?= BASE_URL ?>" target="_blank" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 shadow-sm px-3">
+						<a href="<?= BASE_URL ?>" target="_blank" class="btn btn-sm btn-outline-light d-inline-flex align-items-center gap-1 shadow-sm px-3">
 							<i class="bi bi-globe"></i>
 							<span class="d-none d-sm-inline">Ver Site</span>
 						</a>
@@ -154,7 +155,7 @@ $logo = $row['logo'] ?? '';
 
 					<!-- Alternador de Tema (Dark / Light) -->
 					<li class="nav-item dropdown">
-						<button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Alternar Tema">
+						<button class="btn btn-sm btn-outline-light dropdown-toggle d-flex align-items-center gap-1" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Alternar Tema">
 							<i class="bi bi-circle-half theme-icon-active"></i>
 							<span class="d-none d-md-inline ms-1" id="bd-theme-text">Tema</span>
 						</button>
@@ -179,9 +180,9 @@ $logo = $row['logo'] ?? '';
 
 					<!-- Menu do Usuário -->
 					<li class="nav-item dropdown user-menu">
-						<a href="#" class="nav-link dropdown-toggle d-flex align-items-center gap-2 p-1" data-bs-toggle="dropdown">
-							<img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user']['photo'] ?? 'user.png'); ?>" class="rounded-circle border shadow-sm" alt="<?= htmlspecialchars($_SESSION['user']['full_name']); ?>" style="width: 36px; height: 36px; object-fit: cover;">
-							<span class="d-none d-lg-inline fw-semibold text-body"><?= htmlspecialchars($_SESSION['user']['full_name']); ?></span>
+						<a href="#" class="nav-link dropdown-toggle d-flex align-items-center gap-2 p-1 text-white" data-bs-toggle="dropdown">
+							<img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user']['photo'] ?? 'user.png'); ?>" class="rounded-circle border border-secondary shadow-sm" alt="<?= htmlspecialchars($_SESSION['user']['full_name']); ?>" style="width: 36px; height: 36px; object-fit: cover;">
+							<span class="d-none d-lg-inline fw-semibold text-white"><?= htmlspecialchars($_SESSION['user']['full_name']); ?></span>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end shadow border-0" style="min-width: 260px;">
 							<li class="text-center p-3 border-bottom bg-body-tertiary rounded-top">
@@ -204,16 +205,17 @@ $logo = $row['logo'] ?? '';
 			</div>
 		</nav>
 
-		<!-- Barra Lateral (Sidebar / Aside com Suporte Dinâmico a Dark / Light) -->
-		<aside class="app-sidebar shadow" id="mainAppSidebar">
+		<!-- Barra Lateral (Sidebar Fixa Escura no Padrão Oficial Hospitalar) -->
+		<aside class="app-sidebar shadow" id="mainAppSidebar" data-bs-theme="dark" style="background-color: #0b1320 !important; border-right: 1px solid #1a2536 !important;">
 			<!-- Logo do Painel -->
-			<div class="sidebar-brand">
-				<a href="index.php" class="brand-link text-decoration-none d-flex align-items-center justify-content-center">
-					<?php if(!empty($logo)): ?>
-						<img src="<?= BASE_URL . "assets/uploads/" . $logo ;?>" alt="<?= htmlspecialchars($empresa); ?>" class="brand-image ps-sidebar-logo-light">
-						<img src="<?= BASE_URL . "assets/uploads/logo-dark.png"; ?>" alt="<?= htmlspecialchars($empresa); ?>" class="brand-image ps-sidebar-logo-dark">
+			<div class="sidebar-brand" style="background-color: #0b1320 !important; border-bottom: 1px solid #1a2536 !important;">
+				<a href="index.php" class="brand-link text-decoration-none d-flex align-items-center justify-content-center px-3" style="background-color: transparent !important;">
+					<?php if(!empty($logo) && file_exists(__DIR__ . '/../assets/uploads/'.$logo)): ?>
+						<img src="<?= BASE_URL . "assets/uploads/" . htmlspecialchars($logo) ;?>" alt="<?= htmlspecialchars($empresa); ?>" class="brand-image ps-sidebar-logo" style="max-height: 40px; max-width: 190px; width: auto; height: auto; object-fit: contain;">
+					<?php elseif(file_exists(__DIR__ . '/../assets/uploads/logo.png')): ?>
+						<img src="<?= BASE_URL; ?>assets/uploads/logo.png" alt="<?= htmlspecialchars($empresa); ?>" class="brand-image ps-sidebar-logo" style="max-height: 40px; max-width: 190px; width: auto; height: auto; object-fit: contain;">
 					<?php else: ?>
-						<span class="brand-text fw-bold fs-5"><i class="bi bi-hospital me-2 text-info"></i><?= htmlspecialchars($empresa); ?></span>
+						<span class="brand-text fw-bold fs-5 text-white"><i class="bi bi-hospital me-2 text-info"></i><?= htmlspecialchars($empresa); ?></span>
 					<?php endif; ?>
 				</a>
 			</div>

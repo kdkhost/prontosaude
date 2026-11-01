@@ -19,6 +19,7 @@ $statement->execute();
 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 $row = $result[0] ?? [];
 $logo = $row['logo'] ?? '';
+$logo_dark = !empty($row['logo_dark']) ? $row['logo_dark'] : (file_exists(__DIR__ . '/assets/uploads/logo-dark.png') ? 'logo-dark.png' : $logo);
 $favicon = $row['favicon'] ?? '';
 
 // Checagem de Modo de Manutenção
@@ -729,9 +730,9 @@ $email   = $row2['dep_email'] ?? '';
                     <a class="navbar-brand d-flex align-items-center logo-on-dark" href="<?= BASE_URL; ?>">
                         <?php if(!empty($logo)): ?>
                             <!-- Logo Clara para partes escuras -->
-                            <img src="<?= BASE_URL; ?>assets/uploads/<?= $logo; ?>" alt="Pronto Saúde" height="42" class="ps-logo ps-logo-light">
+                            <img src="<?= BASE_URL; ?>assets/uploads/<?= htmlspecialchars($logo); ?>" alt="Pronto Saúde" height="42" class="ps-logo ps-logo-light">
                             <!-- Logo Escura para partes claras -->
-                            <img src="<?= BASE_URL; ?>assets/uploads/logo-dark.png" alt="Pronto Saúde" height="42" class="ps-logo ps-logo-dark">
+                            <img src="<?= BASE_URL; ?>assets/uploads/<?= htmlspecialchars($logo_dark); ?>" alt="Pronto Saúde" height="42" class="ps-logo ps-logo-dark">
                         <?php else: ?>
                             <span class="fw-bold fs-4 text-white"><i class="fas fa-hospital-user text-white-50 me-2"></i> Pronto Saúde</span>
                         <?php endif; ?>

@@ -46,6 +46,7 @@ $config = $statement->fetch(PDO::FETCH_ASSOC) ?: [];
 $favicon = $config['favicon'] ?? 'favicon.png';
 $empresa = $config['empresa'] ?? 'Pronto Saúde';
 $logo = $config['logo'] ?? '';
+$logo_dark = !empty($config['logo_dark']) ? $config['logo_dark'] : (file_exists('../assets/uploads/logo-dark.png') ? 'logo-dark.png' : $logo);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -204,7 +205,7 @@ $logo = $config['logo'] ?? '';
 		<div class="login-header-logo">
 			<?php if(!empty($logo)): ?>
 				<img src="../assets/uploads/<?= htmlspecialchars($logo) ?>" alt="<?= htmlspecialchars($empresa) ?>" class="ps-login-logo-light">
-				<img src="../assets/uploads/logo-dark.png" alt="<?= htmlspecialchars($empresa) ?>" class="ps-login-logo-dark">
+				<img src="../assets/uploads/<?= htmlspecialchars($logo_dark) ?>" alt="<?= htmlspecialchars($empresa) ?>" class="ps-login-logo-dark">
 			<?php else: ?>
 				<h3 class="fw-bold text-primary mb-0"><i class="bi bi-hospital me-2"></i><?= htmlspecialchars($empresa) ?></h3>
 			<?php endif; ?>

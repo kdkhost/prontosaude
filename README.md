@@ -7,7 +7,7 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 ### Portal Público (Frontend Moderno & Responsivo - Identidade Visual Pronto Saúde)
 - **Design System Tailored da Pronto Saúde (`assets/css/pronto-modern-frontend.css`):**
   - Fidelidade absoluta à paleta oficial da Pronto Saúde: Teal Hospitalar (`#0a6b74`), Dark Teal (`#07474d`), Verde Esmeralda (`#10b981`), Menta (`#87cca4`), Dark Slate (`#071822`) e fundos suaves hospitalares (`#f0f9fa`). Nenhuma dependência de paletas externas.
-  - **Suporte Nativo a Logotipos Claro & Escuro:** Renderização inteligente de `logo.png` (clara, com texto branco) em superfícies escuras (navbar teal, rodapé dark slate e cabeçalho do drawer mobile) e `logo-dark.png` (escura, com tipografia `#0a6b74` e anti-aliasing preservado) para partes claras.
+  - **Suporte Nativo a Logotipos Claro & Escuro com Gestão no Painel:** Upload e controle centralizado em `admin/settings.php` tanto da **Logo Principal** (renderizada em superfícies escuras como navbar teal, rodapé dark slate e sidebar do painel) quanto da **Logo para Tema Escuro** (usada em superfícies claras com tipografia `#0a6b74` e anti-aliasing preservado). Auto-migração transparente da coluna `logo_dark` no banco de dados com fallback automático.
   - **Arquitetura Densa, Funcional e sem Vãos em Branco:** Paddings de seção otimizados (45px a 50px no desktop e 34px no mobile), eliminando espaços ociosos e oferecendo navegação direta, encorpada e de alta conversão.
   - Tipografia moderna **Plus Jakarta Sans** e **Outfit** (Google Fonts) em todos os títulos, textos e elementos de navegação.
 - **Topbar Hospitalar & Navbar Oficial Pronto Saúde:**
@@ -58,6 +58,8 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - **Painel Totalmente Desacoplado via AJAX (SPA):**
   - Navegação fluida entre rotas sem refresh de página e sem cintilação (`admin/js/pronto-spa.js`).
   - Cabeçalho, menu lateral (sidebar), navbar e rodapé desacoplados, com transições instantâneas e barra de progresso no topo.
+  - **Moldura Externa Fixa Dark Hospitalar (Sidebar + Navbar):** A barra lateral e o cabeçalho superior do painel administrativo permanecem com cor única fixa e consistente (`#0b1320`), nunca alterando sua tonalidade ao alternar entre tema Claro e Escuro das páginas, garantindo legibilidade impecável e fidelidade à Logo oficial do sistema.
+  - **Central Unificada de Logotipos Oficiais:** Gestão centralizada em `admin/settings.php` para os dois tipos de logotipos: a **Logo Clara** (que alimenta a barra lateral do painel e as superfícies escuras do portal) e a **Logo Escura** (utilizada em superfícies claras e no login).
   - Submissão de formulários e uploads via `FormData` e `fetch` assíncrono com suporte nativo e transparente a respostas JSON e HTML.
   - **Ciclo de Vida Unificado e Blindagem Anti-Duplicação:** Inicialização centralizada de componentes (`reinitAllComponents`) com guardas atômicas e restritivas (`ps-summernote-init`, `ps-datatable-init`, `ps-select2-init`, `ps-datepicker-init`), eliminando por completo ferramentas duplicadas, toolbars sobrepostas ou conflitos entre abas.
 - **Upload Drag & Drop com Preview em Tempo Real:**

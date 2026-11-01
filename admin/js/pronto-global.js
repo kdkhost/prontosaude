@@ -27,10 +27,10 @@
       : theme;
     document.documentElement.setAttribute('data-bs-theme', resolvedTheme);
     
-    // Sincroniza a barra lateral se existir
+    // A barra lateral administrativa permanece sempre fixa no tema Dark Hospitalar
     const sidebar = document.querySelector('#mainAppSidebar');
     if (sidebar) {
-      sidebar.setAttribute('data-bs-theme', resolvedTheme);
+      sidebar.setAttribute('data-bs-theme', 'dark');
     }
 
     // Dispara evento global para componentes reativos (ApexCharts, DataTables, etc.)

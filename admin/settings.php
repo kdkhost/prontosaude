@@ -8,7 +8,16 @@ $success_message2 = '';
 // Recupera a aba ativa a partir de POST, GET ou padrão tab_1
 $active_tab = $_POST['active_tab'] ?? ($_GET['tab'] ?? 'tab_1');
 
-// Form 1: Logo
+// Garante a existência da coluna logo_dark em tbl_settings de forma transparente
+try {
+	$pdo->query("SELECT logo_dark FROM tbl_settings LIMIT 1");
+} catch (Exception $e) {
+	try {
+		$pdo->exec("ALTER TABLE tbl_settings ADD COLUMN logo_dark VARCHAR(255) NULL DEFAULT NULL AFTER logo");
+	} catch (Exception $ex) {}
+}
+
+// Form 1: Logo Principal (Superfícies Escuras / Oficial)
 if(isset($_POST['form1'])) {
 	$active_tab = 'tab_1';
 	$valid = 1;
@@ -18,7 +27,7 @@ if(isset($_POST['form1'])) {
 
     if(empty($path)) {
     	$valid = 0;
-        $error_message .= 'Por favor, selecione um arquivo de imagem para a logo.<br>';
+        $error_message .= 'Por favor, selecione um arquivo de imagem para a logo principal.<br>';
     } else {
         $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
         if(!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
@@ -28,13 +37,13 @@ if(isset($_POST['form1'])) {
     }
 
     if($valid == 1) {
-    	// Removendo a foto existente
+    	// Removendo o arquivo anterior caso não seja o padrão original
     	$statement = $pdo->prepare("SELECT logo FROM tbl_settings WHERE id=1");
     	$statement->execute();
     	$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
     	foreach ($result as $row) {
-    		$old_logo = $row['logo'];
-    		if(!empty($old_logo) && file_exists('../assets/uploads/'.$old_logo)) {
+    		$old_logo = $row['logo'] ?? '';
+    		if(!empty($old_logo) && $old_logo !== 'logo.png' && file_exists('../assets/uploads/'.$old_logo)) {
     			@unlink('../assets/uploads/'.$old_logo);
     		}
     	}
@@ -47,7 +56,50 @@ if(isset($_POST['form1'])) {
 		$statement = $pdo->prepare("UPDATE tbl_settings SET logo=? WHERE id=1");
 		$statement->execute(array($final_name));
 
-        $success_message = 'A Logo do portal foi atualizada com sucesso!';
+        $success_message = 'A Logo Clara oficial foi atualizada com sucesso! Ela já está ativa na barra lateral do painel e nas áreas escuras do portal.';
+    }
+}
+
+// Form 1 - Dark: Logo Escura (Superfícies Claras / Fundo Branco)
+if(isset($_POST['form1_dark'])) {
+	$active_tab = 'tab_1';
+	$valid = 1;
+
+	$path = $_FILES['photo_logo_dark']['name'] ?? '';
+    $path_tmp = $_FILES['photo_logo_dark']['tmp_name'] ?? '';
+
+    if(empty($path)) {
+    	$valid = 0;
+        $error_message .= 'Por favor, selecione um arquivo de imagem para a logo escura.<br>';
+    } else {
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        if(!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
+            $valid = 0;
+            $error_message .= 'Formatos aceitos para logo: JPG, JPEG, PNG, GIF, WEBP ou SVG.<br>';
+        }
+    }
+
+    if($valid == 1) {
+    	// Removendo o arquivo anterior caso não seja o padrão original
+    	$statement = $pdo->prepare("SELECT logo_dark FROM tbl_settings WHERE id=1");
+    	$statement->execute();
+    	$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
+    	foreach ($result as $row_d) {
+    		$old_logo_dark = $row_d['logo_dark'] ?? '';
+    		if(!empty($old_logo_dark) && $old_logo_dark !== 'logo-dark.png' && file_exists('../assets/uploads/'.$old_logo_dark)) {
+    			@unlink('../assets/uploads/'.$old_logo_dark);
+    		}
+    	}
+
+    	// Atualizando o arquivo
+    	$final_name = 'logo-dark-'.time().'.'.$ext;
+        move_uploaded_file($path_tmp, '../assets/uploads/'.$final_name);
+
+        // Atualizando o banco de dados
+		$statement = $pdo->prepare("UPDATE tbl_settings SET logo_dark=? WHERE id=1");
+		$statement->execute(array($final_name));
+
+        $success_message = 'A Logo Escura oficial foi atualizada com sucesso! Ela já está ativa nas áreas com fundo claro.';
     }
 }
 
@@ -515,6 +567,10 @@ $statement->execute();
 $row = $statement->fetch(PDO::FETCH_ASSOC) ?: [];
 
 $logo                            = $row['logo'] ?? '';
+$logo_dark                       = $row['logo_dark'] ?? '';
+if(empty($logo_dark) && file_exists('../assets/uploads/logo-dark.png')) {
+    $logo_dark = 'logo-dark.png';
+}
 $favicon                         = $row['favicon'] ?? '';
 $footer_about                    = $row['footer_about'] ?? '';
 $footer_copyright                = $row['footer_copyright'] ?? '';
@@ -751,38 +807,105 @@ $recaptcha_secret_key            = $row['recaptcha_secret_key'] ?? '';
 				<div class="tab-content" id="settingsTabsContent">
 
 					<!-- ========================================================
-					     ABA 1: LOGO DO PORTAL
+					     ABA 1: LOGOTIPOS OFICIAIS (CLARA & ESCURA)
 					     ======================================================== -->
 					<div class="tab-pane fade <?= ($active_tab == 'tab_1') ? 'show active' : ''; ?>" id="tab_1" role="tabpanel" aria-labelledby="tab1-btn">
-						<form action="" method="post" enctype="multipart/form-data">
-							<input type="hidden" name="active_tab" value="tab_1">
-							
-							<div class="row g-4 align-items-center">
-								<div class="col-lg-5">
-									<label class="form-label fw-bold text-body mb-2">Logo Ativa no Portal</label>
-									<div class="p-3 border rounded-3 bg-body-tertiary text-center shadow-xs" style="min-height: 140px; display: flex; align-items: center; justify-content: center; background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0); background-size: 12px 12px;">
-										<?php if(!empty($logo) && file_exists('../assets/uploads/'.$logo)): ?>
-											<img src="../assets/uploads/<?= htmlspecialchars($logo); ?>" alt="Logo Atual" class="img-fluid" style="max-height: 90px; object-fit: contain;">
-										<?php else: ?>
-											<span class="text-body-secondary fst-italic"><i class="bi bi-image me-1"></i> Nenhuma logo cadastrada</span>
-										<?php endif; ?>
-									</div>
-									<div class="form-text small mt-2">
-										<i class="bi bi-info-circle text-primary me-1"></i>Recomendado formato PNG ou WEBP transparente, com resolução sugerida de <strong>240x70 px</strong>.
-									</div>
-								</div>
+						<div class="alert alert-info border-info-subtle bg-info-subtle d-flex align-items-center gap-2 mb-4">
+							<i class="bi bi-info-circle-fill text-info fs-5 flex-shrink-0"></i>
+							<div class="small">
+								<strong>Central Oficial de Logotipos:</strong> Configure aqui os dois tipos de logotipos do sistema. A <strong>Logo Clara</strong> é exibida na barra lateral e cabeçalho do Painel Administrativo e em superfícies escuras do portal público. A <strong>Logo Escura</strong> é utilizada nas superfícies claras com alto contraste.
+							</div>
+						</div>
 
-								<div class="col-lg-7">
-									<label class="form-label fw-bold text-body mb-2">Enviar Nova Logo</label>
-									<input type="file" name="photo_logo" class="form-control" accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml">
-									<div class="d-flex align-items-center gap-2 mt-3">
-										<button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 shadow-sm" name="form1">
-											<i class="bi bi-cloud-arrow-up-fill"></i> Atualizar Logo
-										</button>
+						<div class="row g-4">
+							<!-- CARD 1: LOGO CLARA (OFICIAL • PAINEL ADMINISTRATIVO & SUPERFÍCIES ESCURAS) -->
+							<div class="col-lg-6">
+								<div class="card border shadow-xs h-100">
+									<div class="card-header bg-body-tertiary d-flex align-items-center justify-content-between py-3">
+										<div class="d-flex align-items-center gap-2">
+											<i class="bi bi-sun text-warning fs-5"></i>
+											<h6 class="mb-0 fw-bold">Logo Clara (Oficial)</h6>
+										</div>
+										<span class="badge bg-primary-subtle text-primary border border-primary-subtle">Painel Administrativo & Topo do Portal</span>
+									</div>
+									<div class="card-body p-4 d-flex flex-column justify-content-between">
+										<div>
+											<p class="small text-body-secondary mb-3">
+												Logotipo oficial com tipografia e ícones em cores claras/brancas. Utilizada na <strong>barra lateral do Painel Administrativo</strong>, na barra de navegação teal e no rodapé do portal.
+											</p>
+											<label class="form-label fw-bold text-body mb-2 small text-uppercase">Pré-visualização (Simulação de Barra Escura)</label>
+											<div class="p-3 rounded-3 text-center mb-3 shadow-xs" style="background-color: #0b1320; border: 1px solid #1a2536; min-height: 120px; display: flex; align-items: center; justify-content: center;">
+												<?php if(!empty($logo) && file_exists(__DIR__ . '/../assets/uploads/'.$logo)): ?>
+													<img src="../assets/uploads/<?= htmlspecialchars($logo); ?>" alt="Logo Clara Oficial" class="img-fluid" style="max-height: 75px; max-width: 100%; object-fit: contain;">
+												<?php elseif(file_exists(__DIR__ . '/../assets/uploads/logo.png')): ?>
+													<img src="../assets/uploads/logo.png" alt="Logo Clara Padrão" class="img-fluid" style="max-height: 75px; max-width: 100%; object-fit: contain;">
+												<?php else: ?>
+													<span class="text-white-50 fst-italic small"><i class="bi bi-image me-1"></i> Nenhuma logo clara cadastrada</span>
+												<?php endif; ?>
+											</div>
+										</div>
+
+										<form action="" method="post" enctype="multipart/form-data">
+											<input type="hidden" name="active_tab" value="tab_1">
+											<div class="mb-3">
+												<label class="form-label fw-semibold small text-body">Enviar Nova Logo Clara</label>
+												<input type="file" name="photo_logo" class="form-control" accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml" required>
+												<div class="form-text small mt-1">
+													Formatos aceitos: PNG, WEBP, SVG ou JPG transparente (sugestão: 240x70 px).
+												</div>
+											</div>
+											<button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 shadow-sm w-100 justify-content-center" name="form1">
+												<i class="bi bi-cloud-arrow-up-fill"></i> Atualizar Logo Clara
+											</button>
+										</form>
 									</div>
 								</div>
 							</div>
-						</form>
+
+							<!-- CARD 2: LOGO ESCURA (OFICIAL • SUPERFÍCIES CLARAS & FUNDO BRANCO) -->
+							<div class="col-lg-6">
+								<div class="card border shadow-xs h-100">
+									<div class="card-header bg-body-tertiary d-flex align-items-center justify-content-between py-3">
+										<div class="d-flex align-items-center gap-2">
+											<i class="bi bi-moon-stars text-info fs-5"></i>
+											<h6 class="mb-0 fw-bold">Logo Escura (Oficial)</h6>
+										</div>
+										<span class="badge bg-secondary-subtle text-body border">Superfícies Claras & Fundo Branco</span>
+									</div>
+									<div class="card-body p-4 d-flex flex-column justify-content-between">
+										<div>
+											<p class="small text-body-secondary mb-3">
+												Logotipo oficial com tipografia e ícones em tom escuro (Teal Hospitalar / Slate). Utilizada quando o portal ou elementos estão sobre superfícies brancas/claras para contraste nítido.
+											</p>
+											<label class="form-label fw-bold text-body mb-2 small text-uppercase">Pré-visualização (Simulação de Fundo Claro)</label>
+											<div class="p-3 rounded-3 text-center mb-3 shadow-xs border" style="background-color: #ffffff; background-image: radial-gradient(rgba(0,0,0,0.08) 1px, transparent 0); background-size: 14px 14px; min-height: 120px; display: flex; align-items: center; justify-content: center;">
+												<?php if(!empty($logo_dark) && file_exists(__DIR__ . '/../assets/uploads/'.$logo_dark)): ?>
+													<img src="../assets/uploads/<?= htmlspecialchars($logo_dark); ?>" alt="Logo Escura Oficial" class="img-fluid" style="max-height: 75px; max-width: 100%; object-fit: contain;">
+												<?php elseif(file_exists(__DIR__ . '/../assets/uploads/logo-dark.png')): ?>
+													<img src="../assets/uploads/logo-dark.png" alt="Logo Escura Padrão" class="img-fluid" style="max-height: 75px; max-width: 100%; object-fit: contain;">
+												<?php else: ?>
+													<span class="text-body-secondary fst-italic small"><i class="bi bi-image me-1"></i> Nenhuma logo escura cadastrada</span>
+												<?php endif; ?>
+											</div>
+										</div>
+
+										<form action="" method="post" enctype="multipart/form-data">
+											<input type="hidden" name="active_tab" value="tab_1">
+											<div class="mb-3">
+												<label class="form-label fw-semibold small text-body">Enviar Nova Logo Escura</label>
+												<input type="file" name="photo_logo_dark" class="form-control" accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml" required>
+												<div class="form-text small mt-1">
+													Formatos aceitos: PNG, WEBP, SVG ou JPG transparente (sugestão: 240x70 px).
+												</div>
+											</div>
+											<button type="submit" class="btn btn-dark d-inline-flex align-items-center gap-2 px-3 shadow-sm w-100 justify-content-center" name="form1_dark">
+												<i class="bi bi-cloud-arrow-up-fill"></i> Atualizar Logo Escura
+											</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 
 					<!-- ========================================================
