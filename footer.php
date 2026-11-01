@@ -90,7 +90,9 @@ if (strlen($whats_clean) <= 11) {
                     <?= $footer_copyright ?: 'Copyright &copy; ' . date('Y') . '. Todos os Direitos Reservados.'; ?> &bull; <a href="<?= BASE_URL; ?>privacidade.php" class="text-secondary text-decoration-underline ms-1">Termos &amp; LGPD</a>
                 </div>
                 <div class="text-center text-lg-end">
-                    Desenvolvido e Hospedado por: <a href="https://ethestrategias.com.br" target="_blank" rel="noopener noreferrer" class="text-secondary text-decoration-underline">Eth Estrategias - ethestrategias.com.br</a> (hospedagem) e <a href="https://kdkhost.com.br" target="_blank" rel="noopener noreferrer" class="text-secondary text-decoration-underline">Marcelo Brad kdkhost.com.br</a> (desenvolvedor)
+                    <span>Desenvolvido por <a href="https://kdkhost.com.br" target="_blank" rel="noopener" class="text-white text-decoration-none fw-semibold">Marcelo Brad</a> (<a href="https://kdkhost.com.br" target="_blank" rel="noopener" class="text-secondary text-decoration-none">kdkhost.com.br</a>)</span>
+                    <span class="mx-1 text-secondary">&bull;</span>
+                    <span>Hospedado por <a href="https://ethestrategias.com.br" target="_blank" rel="noopener" class="text-white text-decoration-none fw-semibold">Eth Estrategias</a> (<a href="https://ethestrategias.com.br" target="_blank" rel="noopener" class="text-secondary text-decoration-none">ethestrategias.com.br</a>)</span>
                 </div>
             </div>
         </div>
