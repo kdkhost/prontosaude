@@ -146,14 +146,14 @@
                 if (choiceResult.outcome === 'accepted') {
                     if (window.Swal) {
                         Swal.fire({
-                            title: 'Aplicativo Instalado!',
-                            text: 'O aplicativo ' + cfg.appName + ' foi instalado com sucesso. Você já pode acessá-lo direto da sua tela inicial!',
+                            title: cfg.successTitle || 'Aplicativo Instalado!',
+                            text: cfg.successMsg || ('O aplicativo ' + cfg.appName + ' foi instalado com sucesso. Você já pode acessá-lo direto da sua tela inicial!'),
                             icon: 'success',
                             confirmButtonColor: '#0a6b74',
                             confirmButtonText: 'Excelente'
                         });
                     } else if (window.toastr) {
-                        toastr.success('Aplicativo Pronto Saúde instalado com sucesso!', 'Tudo Pronto');
+                        toastr.success(cfg.successMsg || 'Aplicativo instalado com sucesso!', cfg.successTitle || 'Tudo Pronto');
                     }
                     try {
                         localStorage.setItem('ps_pwa_installed', '1');

@@ -15,13 +15,15 @@ O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0
   - **Suporte Completo aos Modos Claro e Escuro**: Paleta visual coordenada automaticamente com o tema ativo do portal.
 
 - **Central Administrativa Completa do PWA & Banner (`admin/pwa.php`)**:
+  - **100% dos Textos Totalmente Configuráveis**: Personalização de absolutamente todos os textos exibidos no banner (Selo/Badge superior, Título principal, Subtítulo de apoio, Descrição completa de vantagens, 3 Chips de benefícios rápidos, Texto do Botão de Instalar e Texto do Botão de Fechar/Dispensar).
+  - **Guia Visual para iOS (Safari iPhone/iPad) 100% Editável**: Configuração do Título, Subtítulo, Passo 1 (Compartilhar), Passo 2 (Adicionar à Tela de Início), Passo 3 (Confirmar) e Botão de Conclusão.
+  - **Mensagens de Sucesso Pós-Instalação**: Personalização do título e mensagem de celebração exibidos no SweetAlert2 / Toastr após o app ser instalado pelo paciente.
   - **Switch Rápido de Status via AJAX**: Ligar ou desligar instantaneamente o Banner de Instalação no site diretamente pelo topo do painel.
   - **Controle de Tempo de Espera (Delay)**: Configuração de segundos decorridos após o carregamento da página para a entrada suave do banner.
   - **Frequência de Reexibição (Cooldown)**: Controle de intervalo em dias após o usuário dispensar (a cada sessão, 1 dia, 3 dias, 7 dias recomendados, 14 dias ou 30 dias).
   - **Posicionamento Flexível na Tela**: Escolha entre Canto Inferior Direito, Canto Inferior Esquerdo, Centro Inferior e Barra Fixa Inferior.
-  - **Customização Total de Conteúdo**: Edição do Título Principal, Texto Descritivo/Benefícios e Botão de Chamada para Ação (CTA).
-  - **Live Preview Dinâmico em Tempo Real**: Simulador interativo que reflete alterações de texto, cores e ícone instantaneamente na coluna lateral, com botões para testar a animação e o modal do iOS.
-  - **Auto-migração de Banco de Dados**: Criação automática transparente das novas colunas na tabela `tbl_settings` com valores padrão higienizados.
+  - **Live Preview Dinâmico em Tempo Real**: Simulador interativo que reflete alterações de todos os textos, chips, cores e ícone instantaneamente na coluna lateral enquanto você digita, com botões para testar a animação e o modal do iOS.
+  - **Auto-migração de Banco de Dados**: Criação automática transparente de todas as novas colunas na tabela `tbl_settings` com valores padrão higienizados.
 
 ## [2.28.0] - 2026-11-01
 

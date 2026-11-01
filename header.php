@@ -155,19 +155,39 @@ $home_about_btn2_url        = $row['home_about_btn2_url'] ?? '';
 $frontend_dark_mode_status = (int)($row['frontend_dark_mode_status'] ?? 1);
 
 // Parâmetros PWA & Banner de Instalação Inteligente
-$pwa_status          = (int)($row['pwa_status'] ?? 1);
-$pwa_app_name        = $row['pwa_app_name'] ?? 'Pronto Saúde | Centro Médico & Odontológico';
-$pwa_short_name      = $row['pwa_short_name'] ?? 'Pronto Saúde';
-$pwa_theme_color     = $row['pwa_theme_color'] ?? '#0a6b74';
-$pwa_icon_192        = !empty($row['pwa_icon_192']) ? BASE_URL . 'assets/uploads/' . $row['pwa_icon_192'] : BASE_URL . 'assets/uploads/' . ($favicon ?: 'favicon.png');
-$pwa_banner_status   = (int)($row['pwa_banner_status'] ?? 1);
-$pwa_banner_delay    = (int)($row['pwa_banner_delay'] ?? 3);
-$pwa_banner_cooldown = (int)($row['pwa_banner_cooldown'] ?? 7);
-$pwa_banner_title    = $row['pwa_banner_title'] ?? 'Instale o App Pronto Saúde';
-$pwa_banner_desc     = $row['pwa_banner_desc'] ?? 'Agendamento rápido em 1 minuto, carteirinha digital e histórico de consultas sem ocupar memória do aparelho.';
-$pwa_banner_btn_text = $row['pwa_banner_btn_text'] ?? 'Instalar Aplicativo Grátis';
-$pwa_banner_position = $row['pwa_banner_position'] ?? 'bottom-right';
-$pwa_banner_ios_guide= (int)($row['pwa_banner_ios_guide'] ?? 1);
+$pwa_status               = (int)($row['pwa_status'] ?? 1);
+$pwa_app_name             = $row['pwa_app_name'] ?? 'Pronto Saúde | Centro Médico & Odontológico';
+$pwa_short_name           = $row['pwa_short_name'] ?? 'Pronto Saúde';
+$pwa_theme_color          = $row['pwa_theme_color'] ?? '#0a6b74';
+$pwa_icon_192             = !empty($row['pwa_icon_192']) ? BASE_URL . 'assets/uploads/' . $row['pwa_icon_192'] : BASE_URL . 'assets/uploads/' . ($favicon ?: 'favicon.png');
+$pwa_banner_status        = (int)($row['pwa_banner_status'] ?? 1);
+$pwa_banner_delay         = (int)($row['pwa_banner_delay'] ?? 3);
+$pwa_banner_cooldown      = (int)($row['pwa_banner_cooldown'] ?? 7);
+$pwa_banner_position      = $row['pwa_banner_position'] ?? 'bottom-right';
+$pwa_banner_ios_guide     = (int)($row['pwa_banner_ios_guide'] ?? 1);
+
+// Textos 100% Configuráveis do Banner
+$pwa_banner_badge         = $row['pwa_banner_badge'] ?? 'App Oficial Pronto Saúde';
+$pwa_banner_title         = $row['pwa_banner_title'] ?? 'Instale o App Pronto Saúde';
+$pwa_banner_subtitle      = $row['pwa_banner_subtitle'] ?? 'Pronto Saúde na palma da sua mão';
+$pwa_banner_desc          = $row['pwa_banner_desc'] ?? 'Agendamento rápido em 1 minuto, carteirinha digital e histórico de consultas sem ocupar memória do aparelho.';
+$pwa_banner_chip1         = $row['pwa_banner_chip1'] ?? 'Acesso em 1 clique';
+$pwa_banner_chip2         = $row['pwa_banner_chip2'] ?? 'Carteirinha Digital';
+$pwa_banner_chip3         = $row['pwa_banner_chip3'] ?? 'Ultraleve (0 MB)';
+$pwa_banner_btn_text      = $row['pwa_banner_btn_text'] ?? 'Instalar Aplicativo Grátis';
+$pwa_banner_btn_later     = $row['pwa_banner_btn_later'] ?? 'Agora não';
+
+// Textos do Guia iOS
+$pwa_banner_ios_title     = $row['pwa_banner_ios_title'] ?? 'Instalar no seu iPhone ou iPad';
+$pwa_banner_ios_subtitle  = $row['pwa_banner_ios_subtitle'] ?? 'Siga os 3 passos simples abaixo no navegador Safari:';
+$pwa_banner_ios_step1     = $row['pwa_banner_ios_step1'] ?? 'Toque no ícone de Compartilhar na barra inferior do Safari.';
+$pwa_banner_ios_step2     = $row['pwa_banner_ios_step2'] ?? 'Role a lista para baixo e toque em "Adicionar à Tela de Início".';
+$pwa_banner_ios_step3     = $row['pwa_banner_ios_step3'] ?? 'No canto superior direito, toque em "Adicionar". Pronto!';
+$pwa_banner_ios_btn_text  = $row['pwa_banner_ios_btn_text'] ?? 'Entendi, fechar';
+
+// Textos de Feedback Pós-Instalação
+$pwa_banner_success_title = $row['pwa_banner_success_title'] ?? 'Aplicativo Instalado!';
+$pwa_banner_success_msg   = $row['pwa_banner_success_msg'] ?? 'O aplicativo foi instalado com sucesso. Você já pode acessá-lo direto da sua tela inicial!';
 
 $popup_status    = (int)($row['popup_status'] ?? 0);
 $popup_title     = $row['popup_title'] ?? '';

@@ -3,16 +3,37 @@ ob_start();
 session_start();
 require_once('config.php');
 
-// Garante colunas de suporte ao Banner PWA na tabela tbl_settings de forma transparente
+// Garante todas as colunas de suporte ao Banner PWA na tabela tbl_settings de forma transparente
 $pwa_new_cols = [
-    'pwa_banner_status'    => 'TINYINT(1) DEFAULT 1',
-    'pwa_banner_delay'     => 'INT DEFAULT 3',
-    'pwa_banner_cooldown'  => 'INT DEFAULT 7',
-    'pwa_banner_title'     => 'VARCHAR(255) NULL',
-    'pwa_banner_desc'      => 'TEXT NULL',
-    'pwa_banner_btn_text'  => 'VARCHAR(100) NULL',
-    'pwa_banner_position'  => 'VARCHAR(50) NULL',
-    'pwa_banner_ios_guide' => 'TINYINT(1) DEFAULT 1'
+    // Comportamento e exibição
+    'pwa_banner_status'        => 'TINYINT(1) DEFAULT 1',
+    'pwa_banner_delay'         => 'INT DEFAULT 3',
+    'pwa_banner_cooldown'      => 'INT DEFAULT 7',
+    'pwa_banner_position'      => 'VARCHAR(50) DEFAULT "bottom-right"',
+    'pwa_banner_ios_guide'     => 'TINYINT(1) DEFAULT 1',
+    
+    // Textos do Banner Principal
+    'pwa_banner_badge'         => 'VARCHAR(100) DEFAULT "App Oficial Pronto Saúde"',
+    'pwa_banner_title'         => 'VARCHAR(255) DEFAULT "Instale o App Pronto Saúde"',
+    'pwa_banner_subtitle'      => 'VARCHAR(255) DEFAULT "Pronto Saúde na palma da sua mão"',
+    'pwa_banner_desc'          => 'TEXT NULL',
+    'pwa_banner_chip1'         => 'VARCHAR(100) DEFAULT "Acesso em 1 clique"',
+    'pwa_banner_chip2'         => 'VARCHAR(100) DEFAULT "Carteirinha Digital"',
+    'pwa_banner_chip3'         => 'VARCHAR(100) DEFAULT "Ultraleve (0 MB)"',
+    'pwa_banner_btn_text'      => 'VARCHAR(100) DEFAULT "Instalar Aplicativo Grátis"',
+    'pwa_banner_btn_later'     => 'VARCHAR(100) DEFAULT "Agora não"',
+    
+    // Textos do Guia Especial para iOS (iPhone / iPad)
+    'pwa_banner_ios_title'     => 'VARCHAR(255) DEFAULT "Instalar no seu iPhone ou iPad"',
+    'pwa_banner_ios_subtitle'  => 'VARCHAR(255) DEFAULT "Siga os 3 passos simples abaixo no navegador Safari:"',
+    'pwa_banner_ios_step1'     => 'TEXT NULL',
+    'pwa_banner_ios_step2'     => 'TEXT NULL',
+    'pwa_banner_ios_step3'     => 'TEXT NULL',
+    'pwa_banner_ios_btn_text'  => 'VARCHAR(100) DEFAULT "Entendi, fechar"',
+    
+    // Mensagem de Sucesso pós-instalação
+    'pwa_banner_success_title' => 'VARCHAR(255) DEFAULT "Aplicativo Instalado!"',
+    'pwa_banner_success_msg'   => 'TEXT NULL'
 ];
 foreach ($pwa_new_cols as $c => $d) {
     try {
@@ -73,6 +94,7 @@ $error_message = '';
 
 // Atualização de configurações completas do PWA e do Banner
 if (isset($_POST['form_pwa'])) {
+    // Parâmetros do App
     $pwa_status          = isset($_POST['pwa_status']) ? 1 : 0;
     $pwa_app_name        = trim($_POST['pwa_app_name'] ?? 'Pronto Saúde');
     $pwa_short_name      = trim($_POST['pwa_short_name'] ?? 'ProntoSaúde');
@@ -80,15 +102,35 @@ if (isset($_POST['form_pwa'])) {
     $pwa_theme_color     = trim($_POST['pwa_theme_color'] ?? '#0a6b74');
     $pwa_bg_color        = trim($_POST['pwa_bg_color'] ?? '#ffffff');
 
-    // Configurações do Banner de Instalação
+    // Configurações de Comportamento do Banner
     $pwa_banner_status   = isset($_POST['pwa_banner_status']) ? 1 : 0;
     $pwa_banner_delay    = max(0, min(60, (int)($_POST['pwa_banner_delay'] ?? 3)));
     $pwa_banner_cooldown = max(0, min(90, (int)($_POST['pwa_banner_cooldown'] ?? 7)));
-    $pwa_banner_title    = trim($_POST['pwa_banner_title'] ?? 'Instale o App Pronto Saúde');
-    $pwa_banner_desc     = trim($_POST['pwa_banner_desc'] ?? '');
-    $pwa_banner_btn_text = trim($_POST['pwa_banner_btn_text'] ?? 'Instalar Aplicativo Grátis');
     $pwa_banner_position = in_array($_POST['pwa_banner_position'] ?? '', ['bottom-right', 'bottom-left', 'bottom-center', 'bottom-bar']) ? $_POST['pwa_banner_position'] : 'bottom-right';
     $pwa_banner_ios_guide= isset($_POST['pwa_banner_ios_guide']) ? 1 : 0;
+
+    // Textos 100% Configuráveis do Banner
+    $pwa_banner_badge    = trim($_POST['pwa_banner_badge'] ?? 'App Oficial Pronto Saúde');
+    $pwa_banner_title    = trim($_POST['pwa_banner_title'] ?? 'Instale o App Pronto Saúde');
+    $pwa_banner_subtitle = trim($_POST['pwa_banner_subtitle'] ?? 'Pronto Saúde na palma da sua mão');
+    $pwa_banner_desc     = trim($_POST['pwa_banner_desc'] ?? '');
+    $pwa_banner_chip1    = trim($_POST['pwa_banner_chip1'] ?? 'Acesso em 1 clique');
+    $pwa_banner_chip2    = trim($_POST['pwa_banner_chip2'] ?? 'Carteirinha Digital');
+    $pwa_banner_chip3    = trim($_POST['pwa_banner_chip3'] ?? 'Ultraleve (0 MB)');
+    $pwa_banner_btn_text = trim($_POST['pwa_banner_btn_text'] ?? 'Instalar Aplicativo Grátis');
+    $pwa_banner_btn_later= trim($_POST['pwa_banner_btn_later'] ?? 'Agora não');
+
+    // Textos do Guia iOS Safari
+    $pwa_banner_ios_title    = trim($_POST['pwa_banner_ios_title'] ?? 'Instalar no seu iPhone ou iPad');
+    $pwa_banner_ios_subtitle = trim($_POST['pwa_banner_ios_subtitle'] ?? 'Siga os 3 passos simples abaixo no navegador Safari:');
+    $pwa_banner_ios_step1    = trim($_POST['pwa_banner_ios_step1'] ?? 'Toque no ícone de Compartilhar na barra inferior do Safari.');
+    $pwa_banner_ios_step2    = trim($_POST['pwa_banner_ios_step2'] ?? 'Role a lista para baixo e toque em "Adicionar à Tela de Início".');
+    $pwa_banner_ios_step3    = trim($_POST['pwa_banner_ios_step3'] ?? 'No canto superior direito, toque em "Adicionar". Pronto!');
+    $pwa_banner_ios_btn_text = trim($_POST['pwa_banner_ios_btn_text'] ?? 'Entendi, fechar');
+
+    // Textos de Feedback Pós-Instalação
+    $pwa_banner_success_title = trim($_POST['pwa_banner_success_title'] ?? 'Aplicativo Instalado!');
+    $pwa_banner_success_msg   = trim($_POST['pwa_banner_success_msg'] ?? 'O aplicativo foi instalado com sucesso. Você já pode acessá-lo direto da sua tela inicial!');
 
     // Validações
     if (empty($pwa_app_name)) {
@@ -131,11 +173,25 @@ if (isset($_POST['form_pwa'])) {
                 pwa_banner_status = ?,
                 pwa_banner_delay = ?,
                 pwa_banner_cooldown = ?,
-                pwa_banner_title = ?,
-                pwa_banner_desc = ?,
-                pwa_banner_btn_text = ?,
                 pwa_banner_position = ?,
-                pwa_banner_ios_guide = ?
+                pwa_banner_ios_guide = ?,
+                pwa_banner_badge = ?,
+                pwa_banner_title = ?,
+                pwa_banner_subtitle = ?,
+                pwa_banner_desc = ?,
+                pwa_banner_chip1 = ?,
+                pwa_banner_chip2 = ?,
+                pwa_banner_chip3 = ?,
+                pwa_banner_btn_text = ?,
+                pwa_banner_btn_later = ?,
+                pwa_banner_ios_title = ?,
+                pwa_banner_ios_subtitle = ?,
+                pwa_banner_ios_step1 = ?,
+                pwa_banner_ios_step2 = ?,
+                pwa_banner_ios_step3 = ?,
+                pwa_banner_ios_btn_text = ?,
+                pwa_banner_success_title = ?,
+                pwa_banner_success_msg = ?
                 WHERE id = 1");
             $stmt->execute([
                 $pwa_status,
@@ -149,14 +205,28 @@ if (isset($_POST['form_pwa'])) {
                 $pwa_banner_status,
                 $pwa_banner_delay,
                 $pwa_banner_cooldown,
-                $pwa_banner_title,
-                $pwa_banner_desc,
-                $pwa_banner_btn_text,
                 $pwa_banner_position,
-                $pwa_banner_ios_guide
+                $pwa_banner_ios_guide,
+                $pwa_banner_badge,
+                $pwa_banner_title,
+                $pwa_banner_subtitle,
+                $pwa_banner_desc,
+                $pwa_banner_chip1,
+                $pwa_banner_chip2,
+                $pwa_banner_chip3,
+                $pwa_banner_btn_text,
+                $pwa_banner_btn_later,
+                $pwa_banner_ios_title,
+                $pwa_banner_ios_subtitle,
+                $pwa_banner_ios_step1,
+                $pwa_banner_ios_step2,
+                $pwa_banner_ios_step3,
+                $pwa_banner_ios_btn_text,
+                $pwa_banner_success_title,
+                $pwa_banner_success_msg
             ]);
 
-            $success_message = 'Configurações do PWA e Banner de Instalação salvas com sucesso!';
+            $success_message = 'Todas as configurações e textos do PWA e Banner foram salvos com sucesso!';
             
             // Recarrega dados atualizados
             $st = $pdo->query("SELECT * FROM tbl_settings WHERE id = 1");
@@ -181,11 +251,31 @@ $pwa_icon_512        = $row['pwa_icon_512'] ?? '';
 $pwa_banner_status   = (int)($row['pwa_banner_status'] ?? 1);
 $pwa_banner_delay    = (int)($row['pwa_banner_delay'] ?? 3);
 $pwa_banner_cooldown = (int)($row['pwa_banner_cooldown'] ?? 7);
-$pwa_banner_title    = !empty($row['pwa_banner_title']) ? $row['pwa_banner_title'] : 'Instale o App Pronto Saúde';
-$pwa_banner_desc     = !empty($row['pwa_banner_desc']) ? $row['pwa_banner_desc'] : 'Agendamento rápido em 1 minuto, carteirinha digital e histórico de consultas sem ocupar memória do aparelho.';
-$pwa_banner_btn_text = !empty($row['pwa_banner_btn_text']) ? $row['pwa_banner_btn_text'] : 'Instalar Aplicativo Grátis';
 $pwa_banner_position = !empty($row['pwa_banner_position']) ? $row['pwa_banner_position'] : 'bottom-right';
 $pwa_banner_ios_guide= (int)($row['pwa_banner_ios_guide'] ?? 1);
+
+// Textos do Banner
+$pwa_banner_badge    = !empty($row['pwa_banner_badge']) ? $row['pwa_banner_badge'] : 'App Oficial Pronto Saúde';
+$pwa_banner_title    = !empty($row['pwa_banner_title']) ? $row['pwa_banner_title'] : 'Instale o App Pronto Saúde';
+$pwa_banner_subtitle = !empty($row['pwa_banner_subtitle']) ? $row['pwa_banner_subtitle'] : 'Pronto Saúde na palma da sua mão';
+$pwa_banner_desc     = !empty($row['pwa_banner_desc']) ? $row['pwa_banner_desc'] : 'Agendamento rápido em 1 minuto, carteirinha digital e histórico de consultas sem ocupar memória do aparelho.';
+$pwa_banner_chip1    = !empty($row['pwa_banner_chip1']) ? $row['pwa_banner_chip1'] : 'Acesso em 1 clique';
+$pwa_banner_chip2    = !empty($row['pwa_banner_chip2']) ? $row['pwa_banner_chip2'] : 'Carteirinha Digital';
+$pwa_banner_chip3    = !empty($row['pwa_banner_chip3']) ? $row['pwa_banner_chip3'] : 'Ultraleve (0 MB)';
+$pwa_banner_btn_text = !empty($row['pwa_banner_btn_text']) ? $row['pwa_banner_btn_text'] : 'Instalar Aplicativo Grátis';
+$pwa_banner_btn_later= !empty($row['pwa_banner_btn_later']) ? $row['pwa_banner_btn_later'] : 'Agora não';
+
+// Textos do Guia iOS Safari
+$pwa_banner_ios_title    = !empty($row['pwa_banner_ios_title']) ? $row['pwa_banner_ios_title'] : 'Instalar no seu iPhone ou iPad';
+$pwa_banner_ios_subtitle = !empty($row['pwa_banner_ios_subtitle']) ? $row['pwa_banner_ios_subtitle'] : 'Siga os 3 passos simples abaixo no navegador Safari:';
+$pwa_banner_ios_step1    = !empty($row['pwa_banner_ios_step1']) ? $row['pwa_banner_ios_step1'] : 'Toque no ícone de Compartilhar na barra inferior do Safari.';
+$pwa_banner_ios_step2    = !empty($row['pwa_banner_ios_step2']) ? $row['pwa_banner_ios_step2'] : 'Role a lista para baixo e toque em "Adicionar à Tela de Início".';
+$pwa_banner_ios_step3    = !empty($row['pwa_banner_ios_step3']) ? $row['pwa_banner_ios_step3'] : 'No canto superior direito, toque em "Adicionar". Pronto!';
+$pwa_banner_ios_btn_text = !empty($row['pwa_banner_ios_btn_text']) ? $row['pwa_banner_ios_btn_text'] : 'Entendi, fechar';
+
+// Textos de Feedback Pós-Instalação
+$pwa_banner_success_title = !empty($row['pwa_banner_success_title']) ? $row['pwa_banner_success_title'] : 'Aplicativo Instalado!';
+$pwa_banner_success_msg   = !empty($row['pwa_banner_success_msg']) ? $row['pwa_banner_success_msg'] : 'O aplicativo foi instalado com sucesso. Você já pode acessá-lo direto da sua tela inicial!';
 
 // Fallbacks de ícone caso vazio
 if (empty($pwa_icon_192)) {
@@ -255,7 +345,7 @@ if (empty($pwa_icon_512)) {
                             </div>
                             <div>
                                 <h6 class="fw-bold mb-1">Status Global do Aplicativo PWA</h6>
-                                <p class="text-body-secondary mb-0 small">Habilita manifesto, offline e suporte a instalação no Android, iOS e PC.</p>
+                                <p class="text-body-secondary mb-0 small">Habilita manifesto, offline e suporte a instalação no Android, iOS e Computador.</p>
                             </div>
                         </div>
                         <div class="text-end">
@@ -298,16 +388,93 @@ if (empty($pwa_icon_512)) {
 
         <form action="" method="post" enctype="multipart/form-data" id="formPwaConfig">
             <div class="row">
-                <!-- Coluna Principal: Formulário Completo -->
+                <!-- Coluna Principal: Formulário Completo com Abas/Cards -->
                 <div class="col-lg-7">
 
-                    <!-- SEÇÃO 1: Banner Inteligente de Instalação (FOCO PRINCIPAL) -->
+                    <!-- SEÇÃO 1: Conteúdo e Textos do Banner (100% Customizáveis) -->
                     <div class="card card-outline card-success shadow-sm rounded-4 mb-4 border-top border-4 border-success">
                         <div class="card-header bg-body py-3 border-bottom d-flex align-items-center justify-content-between">
                             <h5 class="fw-bold mb-0 text-success d-flex align-items-center gap-2">
-                                <i class="bi bi-stars"></i> Banner Personalizado de Instalação
+                                <i class="bi bi-chat-left-quote"></i> 1. Textos e Conteúdo do Banner
                             </h5>
-                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Design Hospitalar</span>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">100% Editável</span>
+                        </div>
+                        <div class="card-body p-4">
+                            
+                            <!-- Badge Superior -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold d-flex align-items-center gap-1">
+                                    <i class="bi bi-patch-check text-primary"></i> Selo / Badge Superior do Banner
+                                </label>
+                                <input type="text" class="form-control" name="pwa_banner_badge" id="inputBannerBadge" value="<?= htmlspecialchars($pwa_banner_badge); ?>" placeholder="Ex: App Oficial Pronto Saúde">
+                                <div class="form-text">Texto da pílula no topo do card (ex: "App Oficial Pronto Saúde", "Novidade", etc.).</div>
+                            </div>
+
+                            <!-- Título e Subtítulo -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-7">
+                                    <label class="form-label fw-semibold">Título Principal do Banner</label>
+                                    <input type="text" class="form-control" name="pwa_banner_title" id="inputBannerTitle" value="<?= htmlspecialchars($pwa_banner_title); ?>" required placeholder="Ex: Instale o App Pronto Saúde">
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="form-label fw-semibold">Subtítulo / Linha de Apoio</label>
+                                    <input type="text" class="form-control" name="pwa_banner_subtitle" id="inputBannerSub" value="<?= htmlspecialchars($pwa_banner_subtitle); ?>" placeholder="Ex: Pronto Saúde na palma da sua mão">
+                                </div>
+                            </div>
+
+                            <!-- Descrição / Mensagem Persuasiva -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Descrição / Benefícios para o Paciente</label>
+                                <textarea class="form-control" name="pwa_banner_desc" id="inputBannerDesc" rows="3" placeholder="Destaque as principais vantagens para o paciente..."><?= htmlspecialchars($pwa_banner_desc); ?></textarea>
+                                <div class="form-text">Explique com clareza a praticidade do agendamento, carteirinha digital e economia de memória.</div>
+                            </div>
+
+                            <!-- Chips de Vantagens Rápidas (3 tópicos) -->
+                            <label class="form-label fw-semibold mb-2 d-flex align-items-center gap-1">
+                                <i class="bi bi-tags text-primary"></i> Vantagens em Destaque (3 Chips Rápidos)
+                            </label>
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-4">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text"><i class="bi bi-lightning-charge text-success"></i></span>
+                                        <input type="text" class="form-control" name="pwa_banner_chip1" id="inputBannerChip1" value="<?= htmlspecialchars($pwa_banner_chip1); ?>" placeholder="Vantagem 1">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text"><i class="bi bi-card-heading text-success"></i></span>
+                                        <input type="text" class="form-control" name="pwa_banner_chip2" id="inputBannerChip2" value="<?= htmlspecialchars($pwa_banner_chip2); ?>" placeholder="Vantagem 2">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text"><i class="bi bi-feather text-success"></i></span>
+                                        <input type="text" class="form-control" name="pwa_banner_chip3" id="inputBannerChip3" value="<?= htmlspecialchars($pwa_banner_chip3); ?>" placeholder="Vantagem 3">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botões de Ação -->
+                            <div class="row g-3">
+                                <div class="col-md-7">
+                                    <label class="form-label fw-semibold">Texto do Botão Principal (Instalar)</label>
+                                    <input type="text" class="form-control" name="pwa_banner_btn_text" id="inputBannerBtnText" value="<?= htmlspecialchars($pwa_banner_btn_text); ?>" required placeholder="Ex: Instalar Aplicativo Grátis">
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="form-label fw-semibold">Texto do Botão Secundário (Fechar)</label>
+                                    <input type="text" class="form-control" name="pwa_banner_btn_later" id="inputBannerBtnLater" value="<?= htmlspecialchars($pwa_banner_btn_later); ?>" required placeholder="Ex: Agora não">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- SEÇÃO 2: Comportamento, Tempo e Posicionamento -->
+                    <div class="card card-outline card-info shadow-sm rounded-4 mb-4 border-top border-4 border-info">
+                        <div class="card-header bg-body py-3 border-bottom d-flex align-items-center justify-content-between">
+                            <h5 class="fw-bold mb-0 text-info-emphasis d-flex align-items-center gap-2">
+                                <i class="bi bi-sliders2-vertical"></i> 2. Comportamento, Tempo & Posição
+                            </h5>
                         </div>
                         <div class="card-body p-4">
                             
@@ -322,7 +489,7 @@ if (empty($pwa_icon_512)) {
                                 </div>
                             </div>
 
-                            <!-- Configuração de Tempo (Delay) e Frequência (Cooldown) -->
+                            <!-- Delay e Cooldown -->
                             <div class="row g-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold d-flex align-items-center gap-1">
@@ -332,7 +499,7 @@ if (empty($pwa_icon_512)) {
                                         <input type="number" class="form-control" name="pwa_banner_delay" id="inputBannerDelay" min="0" max="60" value="<?= $pwa_banner_delay; ?>" required>
                                         <span class="input-group-text">segundos</span>
                                     </div>
-                                    <div class="form-text">Tempo após o carregamento da página para exibir o banner (ex: 3s).</div>
+                                    <div class="form-text">Tempo após a abertura da página para exibir o banner (ex: 3s).</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold d-flex align-items-center gap-1">
@@ -350,10 +517,10 @@ if (empty($pwa_icon_512)) {
                                 </div>
                             </div>
 
-                            <!-- Posição do Banner -->
+                            <!-- Posição na Tela -->
                             <div class="mb-3">
                                 <label class="form-label fw-semibold d-flex align-items-center gap-1">
-                                    <i class="bi bi-layout-sidebar-inset-reverse text-primary"></i> Posição na Tela do Usuário
+                                    <i class="bi bi-layout-sidebar-inset-reverse text-primary"></i> Posição do Banner na Tela
                                 </label>
                                 <div class="row g-2">
                                     <div class="col-sm-6">
@@ -395,28 +562,17 @@ if (empty($pwa_icon_512)) {
                                 </div>
                             </div>
 
-                            <!-- Textos do Banner -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Título Principal do Banner</label>
-                                <input type="text" class="form-control" name="pwa_banner_title" id="inputBannerTitle" value="<?= htmlspecialchars($pwa_banner_title); ?>" required placeholder="Ex: Instale o App Pronto Saúde">
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Descrição / Benefícios do Aplicativo</label>
-                                <textarea class="form-control" name="pwa_banner_desc" id="inputBannerDesc" rows="3" placeholder="Destaque as principais vantagens para o paciente..."><?= htmlspecialchars($pwa_banner_desc); ?></textarea>
-                                <div class="form-text">Destaque agilidade, carteirinha digital, exames e economia de memória.</div>
-                            </div>
-
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-7">
-                                    <label class="form-label fw-semibold">Texto do Botão de Instalação</label>
-                                    <input type="text" class="form-control" name="pwa_banner_btn_text" id="inputBannerBtnText" value="<?= htmlspecialchars($pwa_banner_btn_text); ?>" required placeholder="Ex: Instalar Aplicativo Grátis">
-                                </div>
-                                <div class="col-md-5">
-                                    <label class="form-label fw-semibold">Guia Visual iPhone (iOS)</label>
-                                    <div class="form-check form-switch pt-2">
-                                        <input class="form-check-input" type="checkbox" name="pwa_banner_ios_guide" value="1" id="pwaBannerIosGuide" <?= $pwa_banner_ios_guide == 1 ? 'checked' : ''; ?>>
-                                        <label class="form-check-label small" for="pwaBannerIosGuide">Mostrar guia passo a passo no Safari</label>
+                            <!-- Notificação de Sucesso após Instalação -->
+                            <div class="p-3 border rounded-3 bg-body-tertiary">
+                                <h6 class="fw-bold mb-2 small text-primary"><i class="bi bi-bell me-1"></i> Notificação SweetAlert2 pós-instalação:</h6>
+                                <div class="row g-2">
+                                    <div class="col-md-5">
+                                        <label class="form-label small fw-semibold">Título do Alerta</label>
+                                        <input type="text" class="form-control form-control-sm" name="pwa_banner_success_title" value="<?= htmlspecialchars($pwa_banner_success_title); ?>" placeholder="Ex: Aplicativo Instalado!">
+                                    </div>
+                                    <div class="col-md-7">
+                                        <label class="form-label small fw-semibold">Mensagem de Parabéns</label>
+                                        <input type="text" class="form-control form-control-sm" name="pwa_banner_success_msg" value="<?= htmlspecialchars($pwa_banner_success_msg); ?>" placeholder="Ex: O aplicativo foi instalado com sucesso...">
                                     </div>
                                 </div>
                             </div>
@@ -424,10 +580,61 @@ if (empty($pwa_icon_512)) {
                         </div>
                     </div>
 
-                    <!-- SEÇÃO 2: Identidade do Aplicativo (PWA Manifest) -->
-                    <div class="card card-outline card-primary shadow-sm rounded-4 mb-4">
+                    <!-- SEÇÃO 3: Guia Visual Especial para iPhone / iPad (iOS Safari) -->
+                    <div class="card card-outline card-secondary shadow-sm rounded-4 mb-4 border-top border-4 border-secondary">
+                        <div class="card-header bg-body py-3 border-bottom d-flex align-items-center justify-content-between">
+                            <h5 class="fw-bold mb-0 text-secondary-emphasis d-flex align-items-center gap-2">
+                                <i class="bi bi-apple"></i> 3. Guia Visual para iPhone / iPad (iOS Safari)
+                            </h5>
+                            <div class="form-check form-switch fs-5 mb-0">
+                                <input class="form-check-input" type="checkbox" name="pwa_banner_ios_guide" value="1" id="pwaBannerIosGuide" <?= $pwa_banner_ios_guide == 1 ? 'checked' : ''; ?>>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted small mb-3">
+                                Como o navegador Safari no iOS não possui prompt automático, exibimos um modal amigável com os 3 passos para adicionar o app à tela de início. Todos os textos abaixo são configuráveis:
+                            </p>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Título do Modal iOS</label>
+                                    <input type="text" class="form-control" name="pwa_banner_ios_title" id="inputIosTitle" value="<?= htmlspecialchars($pwa_banner_ios_title); ?>" placeholder="Ex: Instalar no seu iPhone ou iPad">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Subtítulo / Instrução Inicial</label>
+                                    <input type="text" class="form-control" name="pwa_banner_ios_subtitle" id="inputIosSub" value="<?= htmlspecialchars($pwa_banner_ios_subtitle); ?>" placeholder="Ex: Siga os 3 passos simples abaixo no navegador Safari:">
+                                </div>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label small fw-semibold">Instrução do Passo 1 (Compartilhar)</label>
+                                <input type="text" class="form-control form-control-sm" name="pwa_banner_ios_step1" id="inputIosStep1" value="<?= htmlspecialchars($pwa_banner_ios_step1); ?>">
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label small fw-semibold">Instrução do Passo 2 (Adicionar à Tela de Início)</label>
+                                <input type="text" class="form-control form-control-sm" name="pwa_banner_ios_step2" id="inputIosStep2" value="<?= htmlspecialchars($pwa_banner_ios_step2); ?>">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Instrução do Passo 3 (Confirmar)</label>
+                                <input type="text" class="form-control form-control-sm" name="pwa_banner_ios_step3" id="inputIosStep3" value="<?= htmlspecialchars($pwa_banner_ios_step3); ?>">
+                            </div>
+
+                            <div>
+                                <label class="form-label small fw-semibold">Texto do Botão de Conclusão do Modal</label>
+                                <input type="text" class="form-control form-control-sm" name="pwa_banner_ios_btn_text" id="inputIosBtnText" value="<?= htmlspecialchars($pwa_banner_ios_btn_text); ?>" placeholder="Ex: Entendi, fechar">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- SEÇÃO 4: Identidade do Aplicativo (PWA Manifest) -->
+                    <div class="card card-outline card-primary shadow-sm rounded-4 mb-4 border-top border-4 border-primary">
                         <div class="card-header bg-body py-3 border-bottom">
-                            <h5 class="fw-bold mb-0"><i class="bi bi-sliders me-1 text-primary"></i> Identidade & Parâmetros do Manifesto</h5>
+                            <h5 class="fw-bold mb-0 text-primary d-flex align-items-center gap-2">
+                                <i class="bi bi-sliders"></i> 4. Identidade Geral & Manifesto PWA
+                            </h5>
                         </div>
                         <div class="card-body p-4">
                             
@@ -539,7 +746,7 @@ if (empty($pwa_icon_512)) {
 
                                 <!-- Badge Simulado -->
                                 <div class="d-inline-flex align-items-center gap-1 px-2 py-1 rounded-pill mb-2 fw-bold" style="font-size: 0.68rem; background: rgba(10, 107, 116, 0.1); color: #0a6b74;">
-                                    <i class="bi bi-patch-check-fill text-success"></i> APP OFICIAL PRONTO SAÚDE
+                                    <i class="bi bi-patch-check-fill text-success"></i> <span id="liveBannerBadge"><?= htmlspecialchars($pwa_banner_badge); ?></span>
                                 </div>
 
                                 <!-- Header do Banner -->
@@ -547,7 +754,7 @@ if (empty($pwa_icon_512)) {
                                     <img src="<?= $pwa_icon_192_url; ?>" id="liveBannerIcon" alt="App" class="rounded-3 shadow-sm border" style="width: 52px; height: 52px; object-fit: cover;">
                                     <div class="flex-grow-1 min-width-0">
                                         <h6 class="fw-bold mb-0 text-dark" id="liveBannerTitle" style="font-size: 0.98rem;"><?= htmlspecialchars($pwa_banner_title); ?></h6>
-                                        <small class="text-teal fw-semibold" id="liveBannerSub" style="color: #0a6b74; font-size: 0.76rem;">Pronto Saúde na palma da sua mão</small>
+                                        <small class="text-teal fw-semibold" id="liveBannerSub" style="color: #0a6b74; font-size: 0.76rem;"><?= htmlspecialchars($pwa_banner_subtitle); ?></small>
                                     </div>
                                 </div>
 
@@ -558,9 +765,9 @@ if (empty($pwa_icon_512)) {
 
                                 <!-- Chips -->
                                 <div class="d-flex flex-wrap gap-1 mb-3">
-                                    <span class="badge bg-light text-dark border small fw-normal py-1 px-2" style="font-size: 0.7rem;"><i class="bi bi-lightning-fill text-success me-1"></i> 1 clique</span>
-                                    <span class="badge bg-light text-dark border small fw-normal py-1 px-2" style="font-size: 0.7rem;"><i class="bi bi-card-heading text-success me-1"></i> Carteirinha Digital</span>
-                                    <span class="badge bg-light text-dark border small fw-normal py-1 px-2" style="font-size: 0.7rem;"><i class="bi bi-feather text-success me-1"></i> 0 MB</span>
+                                    <span class="badge bg-light text-dark border small fw-normal py-1 px-2" style="font-size: 0.7rem;"><i class="bi bi-lightning-fill text-success me-1"></i> <span id="liveBannerChip1"><?= htmlspecialchars($pwa_banner_chip1); ?></span></span>
+                                    <span class="badge bg-light text-dark border small fw-normal py-1 px-2" style="font-size: 0.7rem;"><i class="bi bi-card-heading text-success me-1"></i> <span id="liveBannerChip2"><?= htmlspecialchars($pwa_banner_chip2); ?></span></span>
+                                    <span class="badge bg-light text-dark border small fw-normal py-1 px-2" style="font-size: 0.7rem;"><i class="bi bi-feather text-success me-1"></i> <span id="liveBannerChip3"><?= htmlspecialchars($pwa_banner_chip3); ?></span></span>
                                 </div>
 
                                 <!-- Botões -->
@@ -569,7 +776,7 @@ if (empty($pwa_icon_512)) {
                                         <i class="bi bi-download"></i> <span id="liveBannerBtnText"><?= htmlspecialchars($pwa_banner_btn_text); ?></span>
                                     </button>
                                     <button type="button" class="btn btn-outline-secondary py-2 px-3" style="border-radius: 10px; font-size: 0.8rem;">
-                                        Agora não
+                                        <span id="liveBannerBtnLater"><?= htmlspecialchars($pwa_banner_btn_later); ?></span>
                                     </button>
                                 </div>
                             </div>
@@ -621,7 +828,7 @@ if (empty($pwa_icon_512)) {
     </div>
 </div>
 
-<!-- Modal de Demonstração do Guia iOS Safari -->
+<!-- Modal de Demonstração do Guia iOS Safari (Dinâmico com os textos configurados) -->
 <div class="modal fade" id="modalIosDemo" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
         <div class="modal-content rounded-4 border-0 shadow">
@@ -632,26 +839,26 @@ if (empty($pwa_icon_512)) {
                 <div class="d-inline-flex p-3 rounded-circle bg-primary-subtle text-primary mb-2 fs-3">
                     <i class="bi bi-apple"></i>
                 </div>
-                <h5 class="fw-bold mb-1">Guia Visual para Usuários de iPhone (iOS)</h5>
-                <p class="text-muted small mb-3">Demonstração de como o paciente é orientado no navegador Safari:</p>
+                <h5 class="fw-bold mb-1" id="demoIosTitle"><?= htmlspecialchars($pwa_banner_ios_title); ?></h5>
+                <p class="text-muted small mb-3" id="demoIosSubtitle"><?= htmlspecialchars($pwa_banner_ios_subtitle); ?></p>
 
                 <div class="p-3 bg-light rounded-3 text-start mb-2 border d-flex align-items-center gap-3">
                     <span class="badge bg-primary rounded-circle p-2 fs-6" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">1</span>
-                    <div class="small">Toque no ícone de <strong>Compartilhar</strong> <i class="bi bi-box-arrow-up text-primary mx-1"></i> na barra inferior do Safari.</div>
+                    <div class="small" id="demoIosStep1"><?= htmlspecialchars($pwa_banner_ios_step1); ?></div>
                 </div>
 
                 <div class="p-3 bg-light rounded-3 text-start mb-2 border d-flex align-items-center gap-3">
                     <span class="badge bg-primary rounded-circle p-2 fs-6" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">2</span>
-                    <div class="small">Role o menu e toque em <strong>"Adicionar à Tela de Início"</strong> <i class="bi bi-plus-square text-primary mx-1"></i>.</div>
+                    <div class="small" id="demoIosStep2"><?= htmlspecialchars($pwa_banner_ios_step2); ?></div>
                 </div>
 
                 <div class="p-3 bg-light rounded-3 text-start mb-3 border d-flex align-items-center gap-3">
                     <span class="badge bg-primary rounded-circle p-2 fs-6" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">3</span>
-                    <div class="small">No canto superior direito, confirme em <strong>"Adicionar"</strong>. Pronto!</div>
+                    <div class="small" id="demoIosStep3"><?= htmlspecialchars($pwa_banner_ios_step3); ?></div>
                 </div>
 
-                <button type="button" class="btn btn-primary w-100 py-2 fw-semibold rounded-3" data-bs-dismiss="modal">
-                    Fechar Demonstração
+                <button type="button" class="btn btn-primary w-100 py-2 fw-semibold rounded-3" data-bs-dismiss="modal" id="demoIosBtn">
+                    <?= htmlspecialchars($pwa_banner_ios_btn_text); ?>
                 </button>
             </div>
         </div>
@@ -675,41 +882,65 @@ function previewImg(input, target) {
     }
 }
 
-// Sincronização em tempo real do Live Preview
+// Sincronização em tempo real do Live Preview para TODOS os campos
 document.addEventListener('DOMContentLoaded', function() {
-    const inputTitle = document.getElementById('inputBannerTitle');
-    const inputDesc = document.getElementById('inputBannerDesc');
-    const inputBtnText = document.getElementById('inputBannerBtnText');
-    const inputShortName = document.getElementById('inputAppShortName');
+    // Inputs do Banner
+    const inBadge   = document.getElementById('inputBannerBadge');
+    const inTitle   = document.getElementById('inputBannerTitle');
+    const inSub     = document.getElementById('inputBannerSub');
+    const inDesc    = document.getElementById('inputBannerDesc');
+    const inChip1   = document.getElementById('inputBannerChip1');
+    const inChip2   = document.getElementById('inputBannerChip2');
+    const inChip3   = document.getElementById('inputBannerChip3');
+    const inBtn     = document.getElementById('inputBannerBtnText');
+    const inLater   = document.getElementById('inputBannerBtnLater');
+    const inShort   = document.getElementById('inputAppShortName');
 
+    // Elementos do Live Preview
+    const liveBadge = document.getElementById('liveBannerBadge');
     const liveTitle = document.getElementById('liveBannerTitle');
-    const liveDesc = document.getElementById('liveBannerDesc');
-    const liveBtnText = document.getElementById('liveBannerBtnText');
+    const liveSub   = document.getElementById('liveBannerSub');
+    const liveDesc  = document.getElementById('liveBannerDesc');
+    const liveChip1 = document.getElementById('liveBannerChip1');
+    const liveChip2 = document.getElementById('liveBannerChip2');
+    const liveChip3 = document.getElementById('liveBannerChip3');
+    const liveBtn   = document.getElementById('liveBannerBtnText');
+    const liveLater = document.getElementById('liveBannerBtnLater');
     const mockupTitle = document.getElementById('mockupTitle');
 
-    if (inputTitle && liveTitle) {
-        inputTitle.addEventListener('input', function() {
-            liveTitle.textContent = this.value || 'Instale o App Pronto Saúde';
-        });
-    }
+    // Sincronizadores
+    if (inBadge && liveBadge) inBadge.addEventListener('input', () => liveBadge.textContent = inBadge.value || 'App Oficial Pronto Saúde');
+    if (inTitle && liveTitle) inTitle.addEventListener('input', () => liveTitle.textContent = inTitle.value || 'Instale o App Pronto Saúde');
+    if (inSub && liveSub) inSub.addEventListener('input', () => liveSub.textContent = inSub.value || 'Pronto Saúde na palma da sua mão');
+    if (inDesc && liveDesc) inDesc.addEventListener('input', () => liveDesc.textContent = inDesc.value || 'Agendamento rápido em 1 minuto, carteirinha digital e histórico sem ocupar memória.');
+    if (inChip1 && liveChip1) inChip1.addEventListener('input', () => liveChip1.textContent = inChip1.value || '1 clique');
+    if (inChip2 && liveChip2) inChip2.addEventListener('input', () => liveChip2.textContent = inChip2.value || 'Carteirinha Digital');
+    if (inChip3 && liveChip3) inChip3.addEventListener('input', () => liveChip3.textContent = inChip3.value || '0 MB');
+    if (inBtn && liveBtn) inBtn.addEventListener('input', () => liveBtn.textContent = inBtn.value || 'Instalar Aplicativo Grátis');
+    if (inLater && liveLater) inLater.addEventListener('input', () => liveLater.textContent = inLater.value || 'Agora não');
+    if (inShort && mockupTitle) inShort.addEventListener('input', () => mockupTitle.textContent = inShort.value || 'Pronto Saúde');
 
-    if (inputDesc && liveDesc) {
-        inputDesc.addEventListener('input', function() {
-            liveDesc.textContent = this.value || 'Agendamento rápido em 1 minuto, carteirinha digital e exames sem ocupar memória.';
-        });
-    }
+    // Inputs do Modal iOS
+    const inIosTitle = document.getElementById('inputIosTitle');
+    const inIosSub   = document.getElementById('inputIosSub');
+    const inIosStep1 = document.getElementById('inputIosStep1');
+    const inIosStep2 = document.getElementById('inputIosStep2');
+    const inIosStep3 = document.getElementById('inputIosStep3');
+    const inIosBtn   = document.getElementById('inputIosBtnText');
 
-    if (inputBtnText && liveBtnText) {
-        inputBtnText.addEventListener('input', function() {
-            liveBtnText.textContent = this.value || 'Instalar Aplicativo Grátis';
-        });
-    }
+    const demoTitle = document.getElementById('demoIosTitle');
+    const demoSub   = document.getElementById('demoIosSubtitle');
+    const demoStep1 = document.getElementById('demoIosStep1');
+    const demoStep2 = document.getElementById('demoIosStep2');
+    const demoStep3 = document.getElementById('demoIosStep3');
+    const demoBtn   = document.getElementById('demoIosBtn');
 
-    if (inputShortName && mockupTitle) {
-        inputShortName.addEventListener('input', function() {
-            mockupTitle.textContent = this.value || 'Pronto Saúde';
-        });
-    }
+    if (inIosTitle && demoTitle) inIosTitle.addEventListener('input', () => demoTitle.textContent = inIosTitle.value || 'Instalar no seu iPhone ou iPad');
+    if (inIosSub && demoSub) inIosSub.addEventListener('input', () => demoSub.textContent = inIosSub.value || 'Siga os 3 passos simples abaixo no navegador Safari:');
+    if (inIosStep1 && demoStep1) inIosStep1.addEventListener('input', () => demoStep1.textContent = inIosStep1.value || 'Toque no ícone de Compartilhar na barra inferior do Safari.');
+    if (inIosStep2 && demoStep2) inIosStep2.addEventListener('input', () => demoStep2.textContent = inIosStep2.value || 'Role a lista para baixo e toque em "Adicionar à Tela de Início".');
+    if (inIosStep3 && demoStep3) inIosStep3.addEventListener('input', () => demoStep3.textContent = inIosStep3.value || 'No canto superior direito, toque em "Adicionar". Pronto!');
+    if (inIosBtn && demoBtn) inIosBtn.addEventListener('input', () => demoBtn.textContent = inIosBtn.value || 'Entendi, fechar');
 
     // Cores sincronizadas
     const themePicker = document.getElementById('themeColorPicker');
