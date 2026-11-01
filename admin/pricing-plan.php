@@ -106,8 +106,26 @@ require_once('header.php');
 									<?php endif; ?>
 								</td>
 								<td>
-									<span class="fw-bold text-primary fs-6">R$ <?= htmlspecialchars($row['pricing_plan_price']); ?></span>
-									<small class="text-muted"><?= htmlspecialchars($row['pricing_plan_period'] ?? '/mês'); ?></small>
+									<?php 
+									$p_raw = trim($row['pricing_plan_price'] ?? '');
+									$p_clean = preg_replace('/^R\$\s*/i', '', $p_raw);
+									$p_num = trim(str_replace(',', '.', $p_clean));
+									$is_sc = !empty($row['sob_consulta']) 
+										|| empty($p_raw) 
+										|| $p_clean === '' 
+										|| $p_num === '0' 
+										|| $p_num === '0.00' 
+										|| $p_clean === '0,00' 
+										|| strtolower($p_clean) === 'consultar' 
+										|| stripos($p_raw, 'sob') !== false;
+									if ($is_sc): ?>
+										<span class="badge bg-primary-subtle text-primary border border-primary-subtle fw-semibold px-2 py-1">
+											<i class="bi bi-chat-dots me-1"></i>Sob Consulta
+										</span>
+									<?php else: ?>
+										<span class="fw-bold text-primary fs-6">R$ <?= htmlspecialchars($p_clean); ?></span>
+										<small class="text-muted"><?= htmlspecialchars($row['pricing_plan_period'] ?? '/mês'); ?></small>
+									<?php endif; ?>
 								</td>
 								<td>
 									<span class="badge bg-info-subtle text-info border border-info-subtle mb-1"><?= $total_items; ?> benefício(s)</span>

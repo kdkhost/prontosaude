@@ -4,6 +4,27 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.30.0] - 2026-11-01
+
+### Adicionado & Aprimorado
+- **Suporte Inteligente a Planos "Preço Sob Consulta" (`index.php`, `fidelidade.php`)**:
+  - **Eliminação de Exibições "R$ 0,00 /mês"**: Planos sem valor cadastrado, com preço zerado (`0`, `0.00`, `R$ 0,00`, `0,00`) ou com a nova flag `sob_consulta` ativada agora renderizam a elegante caixinha visual `"Sob Consulta"` (idêntica ao card do Plano Empresa), substituindo o rótulo "A partir de R$ 0,00 /mês".
+  - **Adaptação Automática do Botão de Ação**: Quando em modalidade "Sob Consulta", o texto de fallback do botão de ação é automaticamente alterado de "Quero Este Plano" para "Confira Valores" e a mensagem padrão do WhatsApp direciona para consultar informações sobre o plano.
+
+- **Reformulação Integral do Módulo de Planos & Cartão Fidelidade no Painel Admin (`admin/pricing-plan.php`, `admin/pricing-plan-edit.php`, `admin/pricing-plan-add.php`)**:
+  - **Padronização Visual com AdminLTE 4 e Bootstrap 5.3**:
+    - Layout moderno em duas colunas (`col-lg-8` para formulário e `col-lg-4` para Live Preview).
+    - Divisão em cards semânticos com bordas coloridas temáticas: Identidade do Plano (Primary), Precificação & Modalidade (Success), Imagem do Cartão (Info) e Benefícios/Ação (Secondary).
+  - **Switch Interativo "Preço Sob Consulta"**:
+    - Permite alternar com um clique entre cobrança com valor numérico fixo e modalidade "Sob Consulta".
+    - JavaScript inteligente que esmaece os campos numéricos, remove obrigatoriedade e sincroniza os textos instantaneamente.
+  - **Live Preview Dinâmico em Tempo Real do Card Oficial**:
+    - Simulador interativo do card idêntico ao site público na coluna lateral, atualizando em tempo real conforme o administrador digita (Nome, Badge flutuante de destaque, Imagem do cartão, Preço normal vs. Sob Consulta, lista de benefícios gerada linha por linha com check verde e botão de ação).
+  - **Identificação Visual na Listagem Geral (`admin/pricing-plan.php`)**:
+    - Nova renderização na coluna de Preço com badge azul sutil `Sob Consulta` com ícone de balão de diálogo, facilitando a identificação imediata dos planos corporativos ou com preços sob consulta.
+  - **Auto-migração de Banco de Dados (`tools/migrate_pricing_sob_consulta.php`)**:
+    - Criação transparente e retrocompatível da coluna `sob_consulta TINYINT(1) DEFAULT 0` na tabela `tbl_pricing_plan`.
+
 ## [2.29.0] - 2026-11-01
 
 ### Adicionado & Aprimorado

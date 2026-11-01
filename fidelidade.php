@@ -76,7 +76,7 @@ foreach ($result as $row) {
 					}
 				}
 
-				$plan_btn_text = !empty($row['pricing_plan_button_text']) ? $row['pricing_plan_button_text'] : 'Quero Este Plano';
+				$plan_btn_text = !empty($row['pricing_plan_button_text']) ? $row['pricing_plan_button_text'] : ($is_sob_consulta ? 'Confira Valores' : 'Quero Este Plano');
 				$plan_btn_url = !empty($row['pricing_plan_button_url']) ? $row['pricing_plan_button_url'] : '#';
 				$btn_target = (strpos($plan_btn_url, 'http') === 0) ? 'target="_blank" rel="noopener"' : '';
 				$is_popular = !empty($row['pricing_plan_popular']);
@@ -84,6 +84,17 @@ foreach ($result as $row) {
 				$price_val = trim($row['pricing_plan_price'] ?? '');
 				$clean_price = preg_replace('/^R\$\s*/i', '', $price_val);
 				$period_val = trim($row['pricing_plan_period'] ?? '/mês');
+
+				// Verificação inteligente de Preço Sob Consulta (Flag no banco OU valor vazio/zero)
+				$clean_num = trim(str_replace(',', '.', $clean_price));
+				$is_sob_consulta = !empty($row['sob_consulta'])
+					|| empty($price_val)
+					|| $clean_price === ''
+					|| $clean_num === '0'
+					|| $clean_num === '0.00'
+					|| $clean_price === '0,00'
+					|| strtolower($clean_price) === 'consultar'
+					|| stripos($price_val, 'sob') !== false;
 				?>
 				<div class="col-lg-4 col-md-6 mb-4">
 					<div class="ps-plan-card <?php echo $is_popular ? 'ps-plan-popular' : ''; ?>">
@@ -96,7 +107,7 @@ foreach ($result as $row) {
 						<div class="ps-plan-body">
 							<h3 class="ps-plan-name"><?php echo htmlspecialchars($row['pricing_plan_name']); ?></h3>
 							<div class="ps-plan-price-wrap">
-								<?php if(strtolower($clean_price) === 'consultar' || stripos($price_val, 'sob') !== false): ?>
+								<?php if($is_sob_consulta): ?>
 									<span class="ps-plan-price-val fw-bold" style="font-size: 1.15rem; color: var(--ps-primary);">Sob Consulta</span>
 								<?php else: ?>
 									<span class="ps-plan-from">A partir de</span>

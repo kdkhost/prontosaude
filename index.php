@@ -404,6 +404,17 @@ if (function_exists('pronto_is_page_active')) {
                 $clean_price = preg_replace('/^R\$\s*/i', '', $price_val);
                 $period_val = trim($plano['pricing_plan_period'] ?? '/mês');
 
+                // Verificação inteligente de Preço Sob Consulta (Flag no banco OU valor vazio/zero)
+                $clean_num = trim(str_replace(',', '.', $clean_price));
+                $is_sob_consulta = !empty($plano['sob_consulta'])
+                    || empty($price_val)
+                    || $clean_price === ''
+                    || $clean_num === '0'
+                    || $clean_num === '0.00'
+                    || $clean_price === '0,00'
+                    || strtolower($clean_price) === 'consultar'
+                    || stripos($price_val, 'sob') !== false;
+
                 $itens = [];
                 try {
                     $st_itens = $pdo->prepare("SELECT pricing_item_name FROM tbl_pricing_item WHERE pricing_plan_id = ? ORDER BY pricing_item_id ASC");
@@ -420,10 +431,10 @@ if (function_exists('pronto_is_page_active')) {
                     ];
                 }
 
-                $plan_btn_text = !empty($plano['pricing_plan_button_text']) ? $plano['pricing_plan_button_text'] : 'Quero Este Plano';
+                $plan_btn_text = !empty($plano['pricing_plan_button_text']) ? $plano['pricing_plan_button_text'] : ($is_sob_consulta ? 'Confira Valores' : 'Quero Este Plano');
                 $plan_btn_url = !empty($plano['pricing_plan_button_url']) 
                     ? $plano['pricing_plan_button_url'] 
-                    : 'https://wa.me/' . $whats_clean . '?text=' . urlencode('Olá! Gostaria de contratar o ' . $plano['pricing_plan_name']);
+                    : 'https://wa.me/' . $whats_clean . '?text=' . urlencode('Olá! Gostaria de consultar informações sobre o ' . $plano['pricing_plan_name']);
                 $btn_target = (strpos($plan_btn_url, 'http') === 0) ? 'target="_blank" rel="noopener"' : '';
             ?>
             <div class="<?= $col_class; ?> d-flex mb-4">
@@ -437,7 +448,7 @@ if (function_exists('pronto_is_page_active')) {
                     <div class="ps-plan-body">
                         <h3 class="ps-plan-name"><?= htmlspecialchars($plano['pricing_plan_name']); ?></h3>
                         <div class="ps-plan-price-wrap">
-                            <?php if(strtolower($clean_price) === 'consultar' || stripos($price_val, 'sob') !== false): ?>
+                            <?php if($is_sob_consulta): ?>
                                 <span class="ps-plan-price-val fw-bold" style="font-size: 1.15rem; color: var(--ps-primary);">Sob Consulta</span>
                             <?php else: ?>
                                 <span class="ps-plan-from">A partir de</span>

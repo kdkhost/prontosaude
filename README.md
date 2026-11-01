@@ -23,7 +23,8 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - **Grid Moderno de Serviços & Especialidades (`.ps-service-card-modern`):**
   - Cards com cantos generosos arredondados (`20px`), badges flutuantes de valores "A partir de", tópicos de benefícios com checks verdes e botões de ação com gradiente.
 - **Planos e Cartão Fidelidade (`.ps-plan-card`):**
-  - Selos dourados de "Mais Popular", valores mensais em destaque com tipografia de impacto, lista de coberturas e contratação instantânea.
+  - Suporte inteligente a planos com preço fixo mensal e modalidade **Preço Sob Consulta** (eliminando exibições de R$ 0,00 e exibindo badge elegante idêntico ao Plano Empresa, com botão automatizado para "Confira Valores" e direcionamento direto ao WhatsApp).
+  - Gestão moderna no Painel Administrativo em AdminLTE 4 com divisão por cards, switch interativo "Preço Sob Consulta", badges informativos na listagem e **Live Preview Dinâmico do Card em Tempo Real** no cadastro e na edição.
 - **Corpo Clínico & Médicos:**
   - Cards médicos modernos com fotos redondas, titulação de especialidade, CRM e botão direto de agendamento de consulta com o especialista.
 - **Perguntas Frequentes Interativas (FAQ):**
