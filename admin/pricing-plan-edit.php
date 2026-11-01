@@ -44,13 +44,10 @@ if (isset($_POST['form1'])) {
     $button_url    = trim($_POST['pricing_plan_button_url'] ?? '');
     $benefits_text = trim($_POST['pricing_plan_benefits'] ?? '');
 
-    // Se o valor estiver vazio ou for 0/0,00, define automaticamente como Sob Consulta
+    // Preserva o valor real no banco: se não digitou nada ou digitou zero, ativa Sob Consulta
     $clean_num = trim(str_replace(['R$', ' ', ','], ['', '', '.'], $price));
-    if ($sob_consulta == 1 || empty($price) || $clean_num === '0' || $clean_num === '0.00' || stripos($price, 'sob') !== false) {
+    if (empty($price) || $clean_num === '0' || $clean_num === '0.00' || stripos($price, 'sob') !== false || stripos($price, 'consultar') !== false) {
         $sob_consulta = 1;
-        if (empty($price) || $clean_num === '0' || $clean_num === '0.00') {
-            $price = 'Sob Consulta';
-        }
     }
 
     if (empty($name)) {
@@ -66,7 +63,7 @@ if (isset($_POST['form1'])) {
     }
 
     // Se não for Sob Consulta, o preço é obrigatório
-    if ($sob_consulta == 0 && empty($price)) {
+    if ($sob_consulta == 0 && (empty($price) || $clean_num === '0' || $clean_num === '0.00')) {
         $valid = 0;
         $error_message .= "O valor do plano é obrigatório quando não estiver sob consulta.<br>";
     }
@@ -171,10 +168,10 @@ if (!empty($photo) && file_exists('../assets/uploads/' . $photo)) {
     $photo_src = BASE_URL . 'assets/images/planos/top-saude.png';
 }
 
-$is_sob = !empty($current_plan['sob_consulta']) || empty($current_plan['pricing_plan_price']) || stripos($current_plan['pricing_plan_price'], 'sob') !== false;
-$raw_price = $current_plan['pricing_plan_price'] ?? '';
+$is_sob = !empty($current_plan['sob_consulta']) || empty($current_plan['pricing_plan_price']) || stripos($current_plan['pricing_plan_price'], 'sob') !== false || stripos($current_plan['pricing_plan_price'], 'consultar') !== false;
+$raw_price = trim($current_plan['pricing_plan_price'] ?? '');
 $clean_display_price = preg_replace('/^R\$\s*/i', '', $raw_price);
-if ($clean_display_price === 'Sob Consulta' || $is_sob) {
+if (strtolower($clean_display_price) === 'sob consulta' || strtolower($clean_display_price) === 'consultar') {
     $clean_display_price = '';
 }
 ?>
@@ -301,17 +298,22 @@ if ($clean_display_price === 'Sob Consulta' || $is_sob) {
                             </div>
 
                             <!-- Campos de Preço e Período -->
-                            <div class="row g-3" id="wrapPrecoNumerico" style="<?= $is_sob ? 'opacity: 0.55;' : ''; ?>">
+                            <div class="row g-3" id="wrapPrecoNumerico">
                                 <div class="col-md-7">
-                                    <label class="form-label fw-semibold">
-                                        Valor / Preço do Plano <span class="text-danger" id="reqStar" style="<?= $is_sob ? 'display: none;' : ''; ?>">*</span>
-                                    </label>
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                        <label class="form-label fw-semibold mb-0">
+                                            Valor / Preço do Plano <span class="text-danger" id="reqStar" style="<?= $is_sob ? 'display: none;' : ''; ?>">*</span>
+                                        </label>
+                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle small" id="badgeValorStatus" style="<?= $is_sob ? '' : 'display: none;'; ?>">
+                                            <i class="bi bi-shield-check me-1"></i>Salvo internamente
+                                        </span>
+                                    </div>
                                     <div class="input-group">
                                         <span class="input-group-text fw-bold">R$</span>
                                         <input type="text" class="form-control mascara-moeda" name="pricing_plan_price" id="planPriceInput" value="<?= htmlspecialchars($clean_display_price); ?>" placeholder="0,00" <?= $is_sob ? '' : 'required'; ?>>
                                     </div>
                                     <div class="form-text" id="helpPriceText">
-                                        <?= $is_sob ? '<span class="text-success"><i class="bi bi-check-circle"></i> Sob Consulta ativado: o valor numérico não será exibido no site.</span>' : 'Digite o valor mensal ou de adesão do plano.'; ?>
+                                        <?= $is_sob ? '<span class="text-primary"><i class="bi bi-info-circle-fill me-1"></i>O valor gravado permanece seguro no sistema, mas no site é sobrescrito para "Sob Consulta".</span>' : 'Digite o valor mensal ou de adesão do plano.'; ?>
                                     </div>
                                 </div>
 
@@ -499,11 +501,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputBtnText = document.getElementById('planBtnTextInput');
 
     function updateSobConsultaState(isSob) {
+        const badgeStatus = document.getElementById('badgeValorStatus');
         if (isSob) {
-            wrapPreco.style.opacity = '0.55';
             reqStar.style.display = 'none';
             inputPrice.removeAttribute('required');
-            helpPrice.innerHTML = '<span class="text-success"><i class="bi bi-check-circle"></i> Sob Consulta ativado: o valor numérico não será exibido no site.</span>';
+            helpPrice.innerHTML = '<span class="text-primary"><i class="bi bi-info-circle-fill me-1"></i>O valor gravado permanece seguro no sistema, mas no site é sobrescrito para "Sob Consulta".</span>';
+            if (badgeStatus) badgeStatus.style.display = 'inline-block';
             mockupSob.style.display = 'block';
             mockupPreco.style.display = 'none';
             if (!inputBtnText.value || inputBtnText.value === 'Quero Este Plano') {
@@ -511,10 +514,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 mockupBtnText.textContent = 'Confira Valores';
             }
         } else {
-            wrapPreco.style.opacity = '1';
             reqStar.style.display = 'inline';
             inputPrice.setAttribute('required', 'required');
             helpPrice.textContent = 'Digite o valor mensal ou de adesão do plano.';
+            if (badgeStatus) badgeStatus.style.display = 'none';
             mockupSob.style.display = 'none';
             mockupPreco.style.display = 'block';
             if (inputBtnText.value === 'Confira Valores') {

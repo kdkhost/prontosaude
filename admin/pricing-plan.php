@@ -122,6 +122,11 @@ require_once('header.php');
 										<span class="badge bg-primary-subtle text-primary border border-primary-subtle fw-semibold px-2 py-1">
 											<i class="bi bi-chat-dots me-1"></i>Sob Consulta
 										</span>
+										<?php if(!empty($p_clean) && $p_num !== '0' && $p_num !== '0.00' && strtolower($p_clean) !== 'consultar' && stripos($p_raw, 'sob') === false): ?>
+											<div class="small text-muted mt-1" title="Valor interno de referência gravado no sistema">
+												<i class="bi bi-shield-check me-1"></i>Gravado: R$ <?= htmlspecialchars($p_clean); ?><?= htmlspecialchars($row['pricing_plan_period'] ?? '/mês'); ?>
+											</div>
+										<?php endif; ?>
 									<?php else: ?>
 										<span class="fw-bold text-primary fs-6">R$ <?= htmlspecialchars($p_clean); ?></span>
 										<small class="text-muted"><?= htmlspecialchars($row['pricing_plan_period'] ?? '/mês'); ?></small>
