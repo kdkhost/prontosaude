@@ -9,7 +9,7 @@ O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0
 ### Adicionado & Aprimorado
 - **Alinhamento do Sub-Rodapé (Copyright & Créditos de Desenvolvimento) (`footer.php`)**:
   - **Distribuição Balanceada:** Ajuste da barra inferior de copyright para layout bilateral (`d-flex justify-content-between`), posicionando o Copyright e link para Termos & LGPD à esquerda.
-  - **Créditos Oficiais Padronizados à Direita:** Inclusão dos links de autoria e infraestrutura padronizados: *Desenvolvido por Marcelo Brad (kdkhost.com.br)* e *Hospedado por Eth Estrategias (ethestrategias.com.br)*, com links externos seguros (`target="_blank"` e `rel="noopener"`).
+  - **Créditos Oficiais Padronizados à Direita:** Inclusão dos links de autoria e infraestrutura padronizados: *Desenvolvido por: Marcelo Brad* (link para kdkhost.com.br) e *Hospedado por: Eth Estrategias* (link para ethestrategias.com.br), com links externos seguros (`target="_blank"` e `rel="noopener"`).
   - **Responsividade Total:** Disposição fluida e adaptável para dispositivos móveis com centralização automática em telas menores.
 
 - **Banner Inteligente e Moderno de Instalação do PWA (`inc/pwa-install-banner.php`, `assets/css/pronto-pwa-banner.css`, `assets/js/pronto-pwa.js`)**:
