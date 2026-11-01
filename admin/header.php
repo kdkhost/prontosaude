@@ -494,30 +494,13 @@ $logo_dark = !empty($row['logo_dark']) ? $row['logo_dark'] : (file_exists('../as
 						</li>
 						<?php endif; ?>
 
-						<!-- 6. PLANOS & PREÇOS -->
+						<!-- 6. PLANOS & FIDELIDADE -->
 						<?php if($user_role != 'Publisher'): ?>
-						<li class="nav-item has-treeview <?= $is_price_open ? 'menu-open' : '' ?>">
-							<a href="#" class="nav-link <?= $is_price_open ? 'active' : '' ?>">
-								<i class="nav-icon bi bi-cash-stack text-warning"></i>
-								<p>
-									Planos & Preços
-									<i class="nav-arrow bi bi-chevron-right"></i>
-								</p>
+						<li class="nav-item">
+							<a href="pricing-plan.php" class="nav-link <?= $is_price_open ? 'active' : '' ?>">
+								<i class="nav-icon bi bi-credit-card-2-front-fill text-warning"></i>
+								<p>Planos & Fidelidade</p>
 							</a>
-							<ul class="nav nav-treeview">
-								<li class="nav-item">
-									<a href="pricing-plan.php" class="nav-link <?= in_array($cur_page, ['pricing-plan.php', 'pricing-plan-add.php', 'pricing-plan-edit.php']) ? 'active' : '' ?>">
-										<i class="nav-icon bi bi-credit-card"></i>
-										<p>Planos de Saúde</p>
-									</a>
-								</li>
-								<li class="nav-item">
-									<a href="pricing-item.php" class="nav-link <?= in_array($cur_page, ['pricing-item.php', 'pricing-item-add.php', 'pricing-item-edit.php']) ? 'active' : '' ?>">
-										<i class="nav-icon bi bi-list-check"></i>
-										<p>Itens dos Planos</p>
-									</a>
-								</li>
-							</ul>
 						</li>
 						<?php endif; ?>
 

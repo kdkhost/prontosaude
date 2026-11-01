@@ -23,6 +23,9 @@ O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0
     - Simulador interativo do card idêntico ao site público na coluna lateral, atualizando em tempo real conforme o administrador digita (Nome, Badge flutuante de destaque, Imagem do cartão, Preço normal vs. Sob Consulta, lista de benefícios gerada linha por linha com check verde e botão de ação).
   - **Identificação Visual na Listagem Geral (`admin/pricing-plan.php`)**:
     - Nova renderização na coluna de Preço com badge azul sutil `Sob Consulta` com ícone de balão de diálogo e exibição do valor interno de referência gravado com selo discreto.
+  - **Otimização do Menu Lateral e Descontinuação da Rota Obsoleta (`admin/header.php`, `admin/pricing-item.php`)**:
+    - Eliminação do submenu redundante "Itens dos Planos" na barra lateral, simplificando para o link direto de primeiro nível **"Planos & Fidelidade"** (`pricing-plan.php`).
+    - Redirecionamento automático e transparente das rotas legadas `pricing-item*.php` diretamente para o gerenciamento centralizado de planos.
   - **Auto-migração de Banco de Dados (`tools/migrate_pricing_sob_consulta.php`)**:
     - Criação transparente e retrocompatível da coluna `sob_consulta TINYINT(1) DEFAULT 0` na tabela `tbl_pricing_plan`.
 
