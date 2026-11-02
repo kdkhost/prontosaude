@@ -370,7 +370,17 @@ $meta_social = [
 											<input type="text" class="form-control social-input" name="<?php echo $key; ?>" id="input_<?php echo $key; ?>" value="<?php echo htmlspecialchars($s['url']); ?>" placeholder="<?php echo $meta['placeholder']; ?>" autocomplete="off">
 										</div>
 										<div class="d-flex align-items-center justify-content-between gap-1">
-											<a href="<?php echo $isActive ? htmlspecialchars($s['url']) : '#'; ?>" target="_blank" class="btn btn-outline-secondary btn-xs btn-test-link <?php echo $isActive ? '' : 'disabled'; ?>" id="test_<?php echo $key; ?>" title="Testar link em nova aba">
+											<?php 
+											$test_href = '#';
+											if ($isActive) {
+												if (function_exists('pronto_format_social_url')) {
+													$test_href = pronto_format_social_url($key, $s['url']);
+												} else {
+													$test_href = $s['url'];
+												}
+											}
+											?>
+											<a href="<?php echo htmlspecialchars($test_href); ?>" target="_blank" class="btn btn-outline-secondary btn-xs btn-test-link <?php echo $isActive ? '' : 'disabled'; ?>" id="test_<?php echo $key; ?>" title="Testar link em nova aba">
 												<i class="bi bi-box-arrow-up-right me-1"></i>Testar Link
 											</a>
 											<button type="button" class="btn btn-light btn-xs border text-muted btn-clear-input" data-target="input_<?php echo $key; ?>" title="Limpar URL">
@@ -414,7 +424,17 @@ $meta_social = [
 											<input type="text" class="form-control social-input" name="<?php echo $key; ?>" id="input_<?php echo $key; ?>" value="<?php echo htmlspecialchars($s['url']); ?>" placeholder="<?php echo $meta['placeholder']; ?>" autocomplete="off">
 										</div>
 										<div class="d-flex align-items-center justify-content-between gap-1">
-											<a href="<?php echo $isActive ? htmlspecialchars($s['url']) : '#'; ?>" target="_blank" class="btn btn-outline-secondary btn-xs btn-test-link <?php echo $isActive ? '' : 'disabled'; ?>" id="test_<?php echo $key; ?>" title="Testar link em nova aba">
+											<?php 
+											$test_href = '#';
+											if ($isActive) {
+												if (function_exists('pronto_format_social_url')) {
+													$test_href = pronto_format_social_url($key, $s['url']);
+												} else {
+													$test_href = $s['url'];
+												}
+											}
+											?>
+											<a href="<?php echo htmlspecialchars($test_href); ?>" target="_blank" class="btn btn-outline-secondary btn-xs btn-test-link <?php echo $isActive ? '' : 'disabled'; ?>" id="test_<?php echo $key; ?>" title="Testar link em nova aba">
 												<i class="bi bi-box-arrow-up-right me-1"></i>Testar Link
 											</a>
 											<button type="button" class="btn btn-light btn-xs border text-muted btn-clear-input" data-target="input_<?php echo $key; ?>" title="Limpar URL">
@@ -460,7 +480,17 @@ $meta_social = [
 											<input type="text" class="form-control social-input" name="<?php echo $key; ?>" id="input_<?php echo $key; ?>" value="<?php echo htmlspecialchars($s['url']); ?>" placeholder="<?php echo $meta['placeholder']; ?>" autocomplete="off">
 										</div>
 										<div class="d-flex align-items-center justify-content-between gap-1">
-											<a href="<?php echo $isActive ? htmlspecialchars($s['url']) : '#'; ?>" target="_blank" class="btn btn-outline-secondary btn-xs btn-test-link <?php echo $isActive ? '' : 'disabled'; ?>" id="test_<?php echo $key; ?>">
+											<?php 
+											$test_legacy_href = '#';
+											if ($isActive) {
+												if (function_exists('pronto_format_social_url')) {
+													$test_legacy_href = pronto_format_social_url($key, $s['url']);
+												} else {
+													$test_legacy_href = $s['url'];
+												}
+											}
+											?>
+											<a href="<?php echo htmlspecialchars($test_legacy_href); ?>" target="_blank" class="btn btn-outline-secondary btn-xs btn-test-link <?php echo $isActive ? '' : 'disabled'; ?>" id="test_<?php echo $key; ?>">
 												<i class="bi bi-box-arrow-up-right me-1"></i>Testar
 											</a>
 											<button type="button" class="btn btn-light btn-xs border text-muted btn-clear-input" data-target="input_<?php echo $key; ?>">
@@ -518,12 +548,34 @@ document.addEventListener('DOMContentLoaded', function() {
     var metricInactive = document.getElementById('metricInactive');
     var totalSocials = <?php echo $total_networks; ?>;
 
+    // Função para sanitizar e resolver URL de teste dinamicamente
+    function resolveTestUrl(key, rawVal) {
+        var val = rawVal.trim();
+        if (!val) return '#';
+        if (key.toLowerCase() === 'whatsapp') {
+            if (/^https?:\/\//i.test(val)) return val;
+            var digits = val.replace(/\D/g, '');
+            if (digits.length > 0) {
+                if (digits.length <= 11 && !digits.startsWith('55')) {
+                    digits = '55' + digits;
+                }
+                return 'https://wa.me/' + digits;
+            }
+            return val;
+        }
+        if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//i.test(val)) {
+            return 'https://' + val.replace(/^\/+/, '');
+        }
+        return val;
+    }
+
     // Atualiza badges e métricas em tempo real enquanto o usuário digita
     function updateMetrics() {
         var activeCount = 0;
         document.querySelectorAll('.social-input').forEach(function(input) {
             var val = input.value.trim();
             var card = input.closest('.social-card');
+            var key = card ? (card.getAttribute('data-key') || '') : '';
             var badge = card.querySelector('.social-badge');
             var testBtn = card.querySelector('.btn-test-link');
 
@@ -533,7 +585,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 badge.textContent = '● Ativa';
                 if (testBtn) {
                     testBtn.classList.remove('disabled');
-                    testBtn.setAttribute('href', val);
+                    testBtn.setAttribute('href', resolveTestUrl(key, val));
                 }
             } else {
                 badge.className = 'badge social-badge bg-secondary-subtle text-body-tertiary border rounded-pill small';

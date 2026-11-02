@@ -312,7 +312,40 @@ if (!function_exists('pronto_is_page_active')) {
     }
 }
 
-if (!function_exists('pronto_is_menu_active')) {
+if (!function_exists('pronto_format_social_url')) {
+    /**
+     * Formata URLs de redes sociais com tratamento inteligente para WhatsApp e links sem protocolo
+     */
+    function pronto_format_social_url($key, $raw_url) {
+        $val = trim((string)$raw_url);
+        if ($val === '') return '';
+
+        // Tratamento especial para WhatsApp
+        if (strtolower($key) === 'whatsapp') {
+            // Se já for uma URL completa (ex: https://wa.me/... ou https://api.whatsapp.com/...)
+            if (preg_match('/^https?:\/\//i', $val)) {
+                return $val;
+            }
+            // Se for número de telefone ou formato com texto
+            $digits = preg_replace('/\D/', '', $val);
+            if (!empty($digits)) {
+                if (strlen($digits) <= 11 && substr($digits, 0, 2) !== '55') {
+                    $digits = '55' . $digits;
+                }
+                return 'https://wa.me/' . $digits;
+            }
+            return $val;
+        }
+
+        // Para outras redes, se não começar com protocolo, adiciona https://
+        if (!preg_match('/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//', $val)) {
+            return 'https://' . ltrim($val, '/');
+        }
+
+        return $val;
+    }
+}
+
     /**
      * Valida se um item de menu deve ser exibido baseado no status da página de destino
      */

@@ -4,6 +4,14 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.32.0] - 2026-11-02
+
+### Adicionado & Aprimorado
+- **Tratamento Inteligente e Resiliente de Links Sociais e WhatsApp (`admin/social-media.php`, `admin/functions.php`, `header.php`, `footer.php`)**:
+  - **Resolução do Erro 404 ao Testar WhatsApp**: O botão "Testar Link" na aba principal de redes sociais agora formata dinamicamente telefones brutos (ex: `(21) 99088-2462` ou `21990882462`) convertendo-os automaticamente para o formato oficial `https://wa.me/55...`. Isso elimina requisições relativas inválidas que disparavam erro 404 no painel administrativo.
+  - **Nova Função Global `pronto_format_social_url()`**: Formatação automática com prefixo `https://` para links informados sem protocolo e conversão segura para URLs de mensageiro instantâneo.
+  - **Sincronização no Frontend**: Aplicada a formatação padronizada aos ícones de redes sociais presentes na barra superior (`header.php`) e rodapé (`footer.php`).
+
 ## [2.31.0] - 2026-11-02
 
 ### Adicionado & Aprimorado

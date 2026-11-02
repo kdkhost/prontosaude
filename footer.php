@@ -28,8 +28,13 @@ if (strlen($whats_clean) <= 11) {
                 <div class="d-flex gap-2">
                     <?php if(!empty($social_data)): ?>
                         <?php foreach ($social_data as $s_row): ?>
-                            <?php if(!empty($s_row['social_url'])): ?>
-                                <a href="<?= $s_row['social_url']; ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-light rounded-circle" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;">
+                            <?php if(!empty($s_row['social_url'])): 
+                                $s_href = $s_row['social_url'];
+                                if (function_exists('pronto_format_social_url')) {
+                                    $s_href = pronto_format_social_url($s_row['social_name'] ?? '', $s_href);
+                                }
+                            ?>
+                                <a href="<?= htmlspecialchars($s_href); ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-light rounded-circle" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;">
                                     <i class="<?= $s_row['social_icon']; ?>"></i>
                                 </a>
                             <?php endif; ?>

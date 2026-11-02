@@ -732,8 +732,12 @@ $email   = $row2['dep_email'] ?? '';
                                         $s_ico = 'fab ' . preg_replace('/^fa\s+fa-/', 'fa-', $s_ico);
                                         if ($s_ico === 'fab fa-facebook') $s_ico = 'fab fa-facebook-f';
                                     }
+                                    $s_href = $s_row['social_url'];
+                                    if (function_exists('pronto_format_social_url')) {
+                                        $s_href = pronto_format_social_url($s_row['social_name'] ?? '', $s_href);
+                                    }
                                 ?>
-                                    <a href="<?= $s_row['social_url']; ?>" target="_blank" rel="noopener noreferrer" title="Rede Social" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                    <a href="<?= htmlspecialchars($s_href); ?>" target="_blank" rel="noopener noreferrer" title="Rede Social" data-bs-toggle="tooltip" data-bs-placement="bottom">
                                         <i class="<?= $s_ico; ?>"></i>
                                     </a>
                                 <?php endif; ?>
