@@ -4,6 +4,15 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.33.0] - 2026-11-02
+
+### Adicionado & Aprimorado
+- **Exibição Global de Dimensões Recomendadas e Leitura em Tempo Real nos Uploads (`admin/js/pronto-uploader.js`, `admin/advertisement-*.php`)**:
+  - **Identificação Visual de Resolução na DropZone**: Adicionado badge azul com ícone de proporção e dimensão recomendada em todos os componentes de upload (Drag & Drop) do painel admin.
+  - **Mapeamento Contextual Inteligente**: O uploader agora detecta a página ativa e o campo de imagem e sugere o tamanho ideal (ex: `1920x800 px` para Sliders, `500x500 px` para Sidebar, `750x120 px` para Categorias, `349x144 px` para Topo da Home, `1200x630 px` para Capa/OpenGraph, `600x750 px` para Médicos, etc.).
+  - **Detecção em Tempo Real no Preview**: Ao carregar um arquivo ou exibir a imagem atual, o componente agora afere a largura e altura reais via `naturalWidth` / `naturalHeight` e apresenta ao usuário no preview (`L x A px`).
+  - **Badges Estáticos nos Formulários**: Inseridos badges informativos e textos de ajuda em `advertisement-home.php`, `advertisement-sidebar-add.php`, `advertisement-sidebar-edit.php`, `advertisement-category-add.php` e `advertisement-category-edit.php`.
+
 ## [2.32.0] - 2026-11-02
 
 ### Adicionado & Aprimorado

@@ -170,7 +170,11 @@ foreach ($result as $row) {
 							<div class="row mb-3">
 								<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Novo Banner</label>
 								<div class="col-12 col-sm-9 col-lg-6">
-									<input type="file" name="photo" class="form-control" accept="image/*">
+									<input type="file" name="photo" class="form-control" accept="image/*" data-dimension="349 x 144 px">
+									<div class="d-flex flex-wrap align-items-center gap-2 mt-1">
+										<span class="badge bg-primary text-white"><i class="bi bi-arrows-fullscreen me-1"></i> Tamanho Recomendado: 349 x 144 px</span>
+										<span class="badge bg-secondary-subtle text-body border">Topo Cabeçalho</span>
+									</div>
 									<small class="text-muted">Formatos: JPG, PNG, GIF, WEBP</small>
 								</div>
 							</div>
@@ -221,7 +225,11 @@ foreach ($result as $row) {
 							<div class="row mb-3">
 								<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Novo Banner</label>
 								<div class="col-12 col-sm-9 col-lg-6">
-									<input type="file" name="photo" class="form-control" accept="image/*">
+									<input type="file" name="photo" class="form-control" accept="image/*" data-dimension="960 x 250 px">
+									<div class="d-flex flex-wrap align-items-center gap-2 mt-1">
+										<span class="badge bg-primary text-white"><i class="bi bi-arrows-fullscreen me-1"></i> Tamanho Recomendado: 960 x 250 px</span>
+										<span class="badge bg-secondary-subtle text-body border">Abaixo de Notícias</span>
+									</div>
 									<small class="text-muted">Formatos: JPG, PNG, GIF, WEBP</small>
 								</div>
 							</div>

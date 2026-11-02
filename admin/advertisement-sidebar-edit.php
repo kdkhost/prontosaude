@@ -118,7 +118,12 @@ foreach ($result as $row) {
 						<div class="row mb-3">
 							<label class="col-sm-3 col-lg-2 col-form-label fw-semibold">Nova Foto <span class="text-danger">*</span></label>
 							<div class="col-12 col-sm-9 col-lg-6">
-								<input type="file" name="photo">
+								<input type="file" name="photo" class="form-control" accept="image/*" data-dimension="500 x 500 px">
+								<div class="d-flex flex-wrap align-items-center gap-2 mt-1">
+									<span class="badge bg-primary text-white"><i class="bi bi-arrows-fullscreen me-1"></i> Tamanho Recomendado: 500 x 500 px</span>
+									<span class="badge bg-secondary-subtle text-body border">Quadrado 1:1</span>
+								</div>
+								<div class="form-text small text-body-secondary">Banner publicitário para a barra lateral de notícias.</div>
 							</div>
 						</div>
 						<div class="row mb-3">

@@ -50,6 +50,119 @@
         }
       }
 
+      // Mapeamento automático inteligente de dimensões recomendadas por contexto/página
+      function getRecommendedDimension(el) {
+        // 1. Atributo explícito no próprio elemento ou container
+        if (el.dataset.dimension) return el.dataset.dimension;
+        const parentDim = el.closest('[data-dimension]');
+        if (parentDim && parentDim.dataset.dimension) return parentDim.dataset.dimension;
+
+        // 2. Extrai de badges ou textos de ajuda existentes no mesmo formulário/linha
+        const group = el.closest('.form-group, .mb-3, .row, .card-body');
+        if (group) {
+          const badgeDim = group.querySelector('.badge');
+          if (badgeDim && badgeDim.textContent.includes('px')) {
+            const m = badgeDim.textContent.match(/(\d+\s*x\s*\d+\s*px)/i);
+            if (m) return m[1];
+          }
+          const textHelp = group.querySelector('.form-text, small, .help-block');
+          if (textHelp) {
+            const m = textHelp.textContent.match(/(\d+\s*x\s*\d+\s*px)/i);
+            if (m) return m[1];
+          }
+        }
+
+        // 3. Resolução inteligente baseada no nome do arquivo PHP atual e no nome do campo
+        const currentPath = window.location.pathname.toLowerCase();
+        const fieldName = (el.getAttribute('name') || '').toLowerCase();
+
+        // Sliders Hero
+        if (currentPath.includes('slider')) return '1920 x 800 px';
+
+        // Banners Publicitários
+        if (currentPath.includes('advertisement-home')) {
+          const tabPane = el.closest('.tab-pane');
+          if (tabPane && tabPane.id === 'tab_1') return '349 x 144 px (Cabeçalho)';
+          return '960 x 250 px (Notícias)';
+        }
+        if (currentPath.includes('advertisement-sidebar')) return '500 x 500 px (Quadrado)';
+        if (currentPath.includes('advertisement-category')) return '750 x 120 px (Horizontal)';
+
+        // Logotipos e Identidade Visual
+        if (fieldName.includes('favicon')) return '32 x 32 px ou 64 x 64 px';
+        if (fieldName.includes('logo_dark') || fieldName.includes('logodark')) return '240 x 60 px (PNG Transparente)';
+        if (fieldName.includes('logo')) return '240 x 60 px (PNG Transparente)';
+        if (fieldName.includes('og_image') || fieldName.includes('ogimage')) return '1200 x 630 px (Redes Sociais)';
+
+        // Fotos de Equipe / Médicos
+        if (currentPath.includes('doctor') || fieldName.includes('doctor') || fieldName.includes('medico')) {
+          return '600 x 750 px (Retrato 4:5)';
+        }
+
+        // Notícias / Blog
+        if (currentPath.includes('news') || currentPath.includes('noticia')) {
+          return '1200 x 630 px (Proporção 1.91:1)';
+        }
+
+        // Serviços / Especialidades
+        if (currentPath.includes('service') || currentPath.includes('servico')) {
+          return '800 x 550 px (Paisagem)';
+        }
+
+        // Departamentos
+        if (currentPath.includes('department') || currentPath.includes('departamento')) {
+          return '800 x 550 px';
+        }
+
+        // Planos & Cartão Fidelidade
+        if (currentPath.includes('pricing-plan') || fieldName.includes('plan')) {
+          return '400 x 260 px (Cartão)';
+        }
+
+        // Convênios e Parceiros
+        if (currentPath.includes('partner') || currentPath.includes('convenio')) {
+          return '300 x 120 px (Logo c/ fundo transparente)';
+        }
+
+        // Depoimentos
+        if (currentPath.includes('testimonial')) {
+          return '300 x 300 px (Quadrado 1:1)';
+        }
+
+        // Galeria de Fotos
+        if (currentPath.includes('photo')) {
+          return '1000 x 650 px';
+        }
+
+        // PWA Ícones
+        if (currentPath.includes('pwa')) {
+          if (fieldName.includes('512')) return '512 x 512 px';
+          return '192 x 192 px';
+        }
+
+        // Pop-up Promocional
+        if (currentPath.includes('popup')) {
+          return '700 x 500 px';
+        }
+
+        // Usuários / Perfil
+        if (currentPath.includes('user') || currentPath.includes('profile')) {
+          return '400 x 400 px (Quadrado)';
+        }
+
+        // Banners gerais de páginas
+        if (fieldName.includes('banner')) {
+          return '1920 x 400 px (Panorâmico)';
+        }
+
+        return '';
+      }
+
+      const recommendedDim = getRecommendedDimension(input);
+      const dimensionBadgeHtml = recommendedDim 
+        ? `<div class="badge bg-primary text-white small px-2 py-1 shadow-xs"><i class="bi bi-arrows-fullscreen me-1"></i>Dimensão Recomendada: ${recommendedDim}</div>` 
+        : '';
+
       dropzone.innerHTML = `
         <div class="ps-dropzone-content">
           <div class="ps-dropzone-icon mb-2 text-primary fs-1">
@@ -57,7 +170,10 @@
           </div>
           <div class="fw-bold fs-6 mb-1 text-body">Arraste e solte sua imagem aqui</div>
           <p class="text-body-secondary small mb-2">ou <span class="text-primary text-decoration-underline fw-semibold">clique para selecionar do dispositivo</span></p>
-          <div class="badge bg-secondary-subtle text-secondary small">Formatos aceitos: JPG, PNG, GIF, WEBP</div>
+          <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 mt-2">
+            <div class="badge bg-secondary-subtle text-secondary small">Formatos aceitos: JPG, PNG, GIF, WEBP</div>
+            ${dimensionBadgeHtml}
+          </div>
         </div>
         <div class="ps-dropzone-preview d-none mt-2 position-relative">
           <div class="d-inline-block position-relative shadow-sm rounded-3 overflow-hidden border bg-body">
@@ -67,6 +183,7 @@
             </button>
           </div>
           <div class="ps-file-info small text-body-secondary mt-1 fw-semibold"></div>
+          ${recommendedDim ? `<div class="small text-primary mt-1 fw-semibold"><i class="bi bi-info-circle me-1"></i>Padrão recomendado: ${recommendedDim}</div>` : ''}
         </div>
       `;
 
@@ -94,7 +211,14 @@
       // Se já tinha imagem existente antes de qualquer alteração, exibe no preview
       if (existingImgSrc) {
         previewImg.src = existingImgSrc;
-        fileInfo.textContent = 'Imagem atualmente ativa no sistema';
+        const currentTemp = new Image();
+        currentTemp.onload = function () {
+          fileInfo.innerHTML = `Imagem ativa no sistema • <span class="badge bg-secondary-subtle text-secondary border">${this.naturalWidth} x ${this.naturalHeight} px</span>`;
+        };
+        currentTemp.onerror = function () {
+          fileInfo.textContent = 'Imagem atualmente ativa no sistema';
+        };
+        currentTemp.src = existingImgSrc;
         content.classList.add('d-none');
         preview.classList.remove('d-none');
       }
@@ -154,7 +278,16 @@
         reader.onload = (e) => {
           previewImg.src = e.target.result;
           const sizeKb = (file.size / 1024).toFixed(1);
-          fileInfo.textContent = `${file.name} (${sizeKb} KB)`;
+
+          // Obtém as dimensões reais da imagem carregada pelo usuário
+          const tempImg = new Image();
+          tempImg.onload = function () {
+            const actualW = this.naturalWidth;
+            const actualH = this.naturalHeight;
+            fileInfo.innerHTML = `<strong>${file.name}</strong> • ${sizeKb} KB • <span class="badge bg-info-subtle text-info border border-info-subtle">${actualW} x ${actualH} px</span>`;
+          };
+          tempImg.src = e.target.result;
+
           content.classList.add('d-none');
           preview.classList.remove('d-none');
           
