@@ -419,6 +419,8 @@ $default_preview_img = BASE_URL . 'assets/images/planos/top-saude.png';
     </div>
 </div>
 
+<!-- IMask: máscara de moeda para o campo de preço -->
+<script src="https://cdn.jsdelivr.net/npm/imask@7/dist/imask.min.js"></script>
 <script>
 function previewCard(input) {
     if (input.files && input.files[0]) {
@@ -442,6 +444,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const mockupPreco = document.getElementById('mockupPrecoNormal');
     const mockupBtnText = document.getElementById('mockupBtnText');
     const inputBtnText = document.getElementById('planBtnTextInput');
+
+    // Máscara de moeda brasileira via IMask
+    let priceMask = null;
+    if (inputPrice && typeof IMask !== 'undefined') {
+        priceMask = IMask(inputPrice, {
+            mask: Number,
+            scale: 2,
+            thousandsSeparator: '.',
+            padFractionalZeros: true,
+            normalizeZeros: true,
+            radix: ',',
+            mapToRadix: ['.'],
+            min: 0,
+            max: 99999
+        });
+        // Sincroniza mockup ao digitar
+        inputPrice.addEventListener('input', function() {
+            const mockupPriceVal = document.getElementById('mockupPriceVal');
+            if (mockupPriceVal) mockupPriceVal.textContent = priceMask.value || '0,00';
+        });
+    }
 
     function updateSobConsultaState(isSob) {
         const badgeStatus = document.getElementById('badgeValorStatus');
@@ -499,14 +522,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 mockupBadgeTag.style.display = 'none';
             }
-        });
-    }
-
-    const planPrice = document.getElementById('planPriceInput');
-    const mockupPriceVal = document.getElementById('mockupPriceVal');
-    if (planPrice && mockupPriceVal) {
-        planPrice.addEventListener('input', function() {
-            mockupPriceVal.textContent = this.value || '0,00';
         });
     }
 

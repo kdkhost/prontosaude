@@ -476,6 +476,8 @@ if (strtolower($clean_display_price) === 'sob consulta' || strtolower($clean_dis
     </div>
 </div>
 
+<!-- IMask: máscara de moeda para o campo de preço -->
+<script src="https://cdn.jsdelivr.net/npm/imask@7/dist/imask.min.js"></script>
 <script>
 function previewCard(input) {
     if (input.files && input.files[0]) {
@@ -493,6 +495,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const wrapPreco = document.getElementById('wrapPrecoNumerico');
     const inputPrice = document.getElementById('planPriceInput');
     const reqStar = document.getElementById('reqStar');
+
+    // Máscara de moeda brasileira (R$) via IMask
+    let priceMask = null;
+    if (inputPrice && typeof IMask !== 'undefined') {
+        priceMask = IMask(inputPrice, {
+            mask: Number,
+            scale: 2,
+            thousandsSeparator: '.',
+            padFractionalZeros: true,
+            normalizeZeros: true,
+            radix: ',',
+            mapToRadix: ['.'],
+            min: 0,
+            max: 99999
+        });
+        // Sincroniza mockup ao digitar
+        inputPrice.addEventListener('input', function() {
+            const mockupPriceVal = document.getElementById('mockupPriceVal');
+            if (mockupPriceVal) mockupPriceVal.textContent = priceMask.value || '0,00';
+        });
+    }
     const helpPrice = document.getElementById('helpPriceText');
 
     const mockupSob = document.getElementById('mockupSobConsulta');
@@ -552,18 +575,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 mockupBadgeText.textContent = this.value;
             } else {
                 mockupBadgeTag.style.display = 'none';
-            }
-        });
-    }
-
-    const planPrice = document.getElementById('planPriceInput');
-    const mockupPriceVal = document.getElementById('mockupPriceVal');
-    if (planPrice && mockupPriceVal) {
-        planPrice.addEventListener('input', function() {
-            mockupPriceVal.textContent = this.value || '0,00';
-            // Se o usuário digitar '0,00' ou '0', sugere Sob Consulta
-            if (this.value === '0,00' || this.value === '0' || this.value === '') {
-                // Mantém comportamento fluido
             }
         });
     }

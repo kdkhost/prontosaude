@@ -35,10 +35,6 @@ if($_SESSION['user']['role']=='Publisher') {
 	    && $cur_page != 'news-add.php' 
 	    && $cur_page != 'news-edit.php' 
 	    && $cur_page != 'news-delete.php' 
-	    && $cur_page != 'file.php'
-		&& $cur_page != 'file-add.php' 
-	    && $cur_page != 'file-edit.php' 
-	    && $cur_page != 'file-delete.php' 
 	    && $cur_page != 'photo.php'
 		&& $cur_page != 'photo-add.php' 
 	    && $cur_page != 'photo-edit.php' 
@@ -273,7 +269,7 @@ $logo_dark = !empty($row['logo_dark']) ? $row['logo_dark'] : (file_exists('../as
 						'photo-category.php', 'photo-category-add.php', 'photo-category-edit.php', 
 						'video.php', 'video-add.php', 'video-edit.php', 
 						'video-category.php', 'video-category-add.php', 'video-category-edit.php', 
-						'file.php', 'file-add.php', 'file-edit.php'
+						
 					];
 					$is_media_open = in_array($cur_page, $media_pages);
 
@@ -542,12 +538,7 @@ $logo_dark = !empty($row['logo_dark']) ? $row['logo_dark'] : (file_exists('../as
 									</a>
 								</li>
 								<?php endif; ?>
-								<li class="nav-item">
-									<a href="file.php" class="nav-link <?= in_array($cur_page, ['file.php', 'file-add.php', 'file-edit.php']) ? 'active' : '' ?>">
-										<i class="nav-icon bi bi-cloud-arrow-up-fill"></i>
-										<p>Upload de Arquivos</p>
-									</a>
-								</li>
+								
 							</ul>
 						</li>
 

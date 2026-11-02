@@ -4,6 +4,19 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.31.0] - 2026-11-02
+
+### Adicionado & Aprimorado
+- **Correção da Ordem de Avaliação de Variáveis em Fidelidade (`fidelidade.php`)**:
+  - Ajuste na ordem de declaração das variáveis no loop de renderização de planos: `$is_sob_consulta` agora é avaliado e calculado **antes** da definição de `$plan_btn_text`. Isso impede que o botão recebesse o estado da iteração anterior ou padrão inadequado.
+- **Formatação de Moeda Brasileira com IMask no Painel Admin (`admin/pricing-plan-edit.php`, `admin/pricing-plan-add.php`)**:
+  - Integração da biblioteca IMask nos formulários de criação e edição de planos.
+  - O campo de valor numérico agora conta com formatação monetária fluida em tempo real com separador de milhar (.) e decimal (,), além de sincronização instantânea com o Live Preview lateral.
+- **Desativação e Limpeza do Módulo Obsoleto "Upload de Arquivos" (`admin/header.php`, `admin/file*.php`)**:
+  - Removido do menu lateral sob *Galeria & Mídias* o item "Upload de Arquivos" (`file.php`), que se tratava de uma funcionalidade descontinuada do template base sem uso pelo portal.
+  - Limpeza dos filtros de sessão e array de mídias no cabeçalho administrativo.
+  - Implementado redirecionamento automático e transparente das rotas legadas `file.php`, `file-add.php`, `file-edit.php` e `file-delete.php` para a Galeria de Fotos (`photo.php`).
+
 ## [2.30.0] - 2026-11-01
 
 ### Adicionado & Aprimorado
