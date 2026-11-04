@@ -346,6 +346,7 @@ if (!function_exists('pronto_format_social_url')) {
     }
 }
 
+if (!function_exists('pronto_is_menu_active')) {
     /**
      * Valida se um item de menu deve ser exibido baseado no status da página de destino
      */

@@ -18,15 +18,15 @@
       // Verifica se é campo de imagem
       const name = (input.getAttribute('name') || '').toLowerCase();
       const accept = (input.getAttribute('accept') || '').toLowerCase();
-      const isImage = accept.includes('image') || 
-                      name.includes('photo') || 
-                      name.includes('foto') || 
-                      name.includes('logo') || 
-                      name.includes('favicon') || 
-                      name.includes('banner') || 
-                      name.includes('imagem') || 
-                      name.includes('img') || 
-                      name.includes('pic');
+      const isImage = accept.includes('image') ||
+        name.includes('photo') ||
+        name.includes('foto') ||
+        name.includes('logo') ||
+        name.includes('favicon') ||
+        name.includes('banner') ||
+        name.includes('imagem') ||
+        name.includes('img') ||
+        name.includes('pic');
 
       if (!isImage && !accept.includes('image')) return;
 
@@ -159,8 +159,8 @@
       }
 
       const recommendedDim = getRecommendedDimension(input);
-      const dimensionBadgeHtml = recommendedDim 
-        ? `<div class="badge bg-primary text-white small px-2 py-1 shadow-xs"><i class="bi bi-arrows-fullscreen me-1"></i>Dimensão Recomendada: ${recommendedDim}</div>` 
+      const dimensionBadgeHtml = recommendedDim
+        ? `<div class="badge bg-primary text-white small px-2 py-1 shadow-xs"><i class="bi bi-arrows-fullscreen me-1"></i>Dimensão Recomendada: ${recommendedDim}</div>`
         : '';
 
       dropzone.innerHTML = `
@@ -290,7 +290,7 @@
 
           content.classList.add('d-none');
           preview.classList.remove('d-none');
-          
+
           if (window.notificar) {
             window.notificar('info', `Imagem pronta: ${file.name}`, 'Preview Carregado');
           }
