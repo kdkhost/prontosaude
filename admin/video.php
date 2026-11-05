@@ -1,131 +1,655 @@
-<?php require_once('header.php'); ?>
+<?php
+require_once('header.php');
 
-<div class="app-content-header">
-	<div class="container-fluid">
-		<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-			<div>
-				<h3 class="mb-1 fw-bold">Visualizar Vídeos</h3>
-				<ol class="breadcrumb mb-0 small">
-					<li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
-					<li class="breadcrumb-item active" aria-current="page">Visualizar Vídeos</li>
-				</ol>
-			</div>
-			<div class="d-flex flex-wrap align-items-center gap-2">
-				<a href="video-add.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Adicionar Novo</a>
-			</div>
-		</div>
-	</div>
+// 1. Endpoint AJAX: Excluir Vídeo de Forma Segura
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_video') {
+    header('Content-Type: application/json; charset=utf-8');
+    $id = (int)($_POST['id'] ?? 0);
+
+    if ($id > 0) {
+        $stmt_find = $pdo->prepare("SELECT video_iframe FROM tbl_video WHERE video_id=?");
+        $stmt_find->execute([$id]);
+        $row_v = $stmt_find->fetch(PDO::FETCH_ASSOC);
+
+        if ($row_v) {
+            $v_code = trim($row_v['video_iframe'] ?? '');
+            if (!empty($v_code) && !preg_match('/<iframe|youtube|vimeo/i', $v_code)) {
+                $caminho_limpo = ltrim(str_replace(['../', './'], '', $v_code), '/');
+                $arquivo_fisico = __DIR__ . '/../' . $caminho_limpo;
+                if (file_exists($arquivo_fisico) && is_file($arquivo_fisico)) {
+                    @unlink($arquivo_fisico);
+                }
+            }
+        }
+
+        $stmt_del = $pdo->prepare("DELETE FROM tbl_video WHERE video_id=?");
+        $stmt_del->execute([$id]);
+        echo json_encode(['status' => 'success', 'message' => 'Vídeo removido com sucesso da galeria!']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Identificador de vídeo inválido.']);
+    }
+    exit;
+}
+
+// 2. Consulta de Vídeos com Categorias
+$statement = $pdo->prepare("SELECT 
+                                t1.video_id,
+                                t1.video_title,
+                                t1.video_iframe,
+                                t1.v_category_id,
+                                t1.status,
+                                t2.v_category_name
+                            FROM tbl_video t1
+                            LEFT JOIN tbl_category_video t2 ON t1.v_category_id = t2.v_category_id
+                            ORDER BY t1.video_id DESC");
+$statement->execute();
+$videos = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+// Métricas de KPIs
+$total_videos    = count($videos);
+$total_ativos    = 0;
+$total_inativos  = 0;
+$categorias_set  = [];
+
+foreach ($videos as $v) {
+    if (($v['status'] ?? 'Active') === 'Active') {
+        $total_ativos++;
+    } else {
+        $total_inativos++;
+    }
+    if (!empty($v['v_category_name'])) {
+        $categorias_set[$v['v_category_name']] = true;
+    }
+}
+$total_categorias_com_video = count($categorias_set);
+
+/**
+ * Função Auxiliar para Diagnosticar e Resolver Dados do Vídeo
+ */
+function pronto_resolver_midia_video($raw) {
+    $raw = trim((string)$raw);
+    $res = [
+        'type' => 'mp4',
+        'url' => '',
+        'thumb' => '',
+        'is_embed' => false
+    ];
+
+    if (empty($raw)) {
+        return $res;
+    }
+
+    // Caso 1: Código <iframe> colado
+    if (stripos($raw, '<iframe') !== false) {
+        $res['is_embed'] = true;
+        if (preg_match('/src=["\']([^"\']+)["\']/i', $raw, $m)) {
+            $res['url'] = $m[1];
+        } else {
+            $res['url'] = $raw;
+        }
+
+        if (preg_match('/(?:youtube\.com\/(?:embed\/|v\/)|youtu\.be\/)([\w\-]{11})/i', $res['url'], $ym)) {
+            $res['type'] = 'youtube';
+            $res['thumb'] = "https://img.youtube.com/vi/{$ym[1]}/mqdefault.jpg";
+            $res['url'] = "https://www.youtube.com/embed/{$ym[1]}?autoplay=1";
+        } elseif (preg_match('/vimeo\.com\/(?:video\/)?(\d+)/i', $res['url'], $vm)) {
+            $res['type'] = 'vimeo';
+            $res['url'] = "https://player.vimeo.com/video/{$vm[1]}?autoplay=1";
+        }
+        return $res;
+    }
+
+    // Caso 2: URL direta do YouTube
+    if (preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([\w\-]{11})/i', $raw, $ym)) {
+        $res['type'] = 'youtube';
+        $res['thumb'] = "https://img.youtube.com/vi/{$ym[1]}/mqdefault.jpg";
+        $res['url'] = "https://www.youtube.com/embed/{$ym[1]}?autoplay=1";
+        $res['is_embed'] = true;
+        return $res;
+    }
+
+    // Caso 3: URL direta do Vimeo
+    if (preg_match('/vimeo\.com\/(?:video\/)?(\d+)/i', $raw, $vm)) {
+        $res['type'] = 'vimeo';
+        $res['url'] = "https://player.vimeo.com/video/{$vm[1]}?autoplay=1";
+        $res['is_embed'] = true;
+        return $res;
+    }
+
+    // Caso 4: Arquivo MP4 ou caminho relativo
+    $caminho_limpo = ltrim(str_replace(['../', './'], '', $raw), '/');
+    $res['type'] = 'mp4';
+    $res['url'] = BASE_URL . $caminho_limpo;
+    $res['thumb'] = '';
+    return $res;
+}
+?>
+
+<!-- Cabeçalho da Página -->
+<div class="app-content-header pb-2 mb-3 border-bottom">
+    <div class="container-fluid">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h3 class="mb-1 fw-bold">Galeria de Vídeos</h3>
+                <ol class="breadcrumb mb-0 small">
+                    <li class="breadcrumb-item"><a href="index.php"><i class="bi bi-house-door"></i> Início</a></li>
+                    <li class="breadcrumb-item"><a href="video.php">Multimídia</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Vídeos</li>
+                </ol>
+            </div>
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <a href="<?= BASE_URL; ?>page.php?slug=videos" target="_blank" rel="noopener" class="btn btn-outline-info btn-sm shadow-xs" title="Ver galeria de vídeos no site público">
+                    <i class="bi bi-box-arrow-up-right me-1"></i> Ver no Site
+                </a>
+                <a href="video-category.php" class="btn btn-outline-secondary btn-sm shadow-xs" title="Gerenciar categorias de vídeos">
+                    <i class="bi bi-tags me-1"></i> Categorias
+                </a>
+                <a href="video-add.php" class="btn btn-primary btn-sm shadow-xs px-3">
+                    <i class="bi bi-plus-lg me-1"></i> Adicionar Vídeo
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-
 
 <div class="app-content">
-<div class="container-fluid">
+    <div class="container-fluid">
 
-  <div class="row">
-    <div class="col-md-12">
+        <!-- Mensagens Tradicionais de Sessão (Fallback) -->
+        <?php if (!empty($_SESSION['sucesso'])): ?>
+            <div class="alert alert-success alert-dismissible fade show shadow-xs mb-4" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill fs-5 me-2"></i>
+                    <div><?= $_SESSION['sucesso']; ?></div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+            <?php unset($_SESSION['sucesso']); ?>
+        <?php endif; ?>
 
+        <?php if (!empty($_SESSION['erro'])): ?>
+            <div class="alert alert-danger alert-dismissible fade show shadow-xs mb-4" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+                    <div><?= $_SESSION['erro']; ?></div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+            <?php unset($_SESSION['erro']); ?>
+        <?php endif; ?>
 
-      <div class="card card-outline card-primary shadow-sm mb-4">
-        
-        <div class="card-body table-responsive">
-          <table id="example1" class="table table-hover table-striped align-middle w-100">
-			<thead>
-			    <tr>
-			        <th>ID</th>
-			        <th>Título</th>
-			        <th style="width:300px;">Código (iframe)</th>
-			        <th>Categoria</th>
-			        <th class="text-center" width="110">Status</th>
-			        <th>Ação</th>
-			    </tr>
-			</thead>
-            <tbody>
-	            <?php
-	            	$i=0;
-	            	$statement = $pdo->prepare("SELECT 
-	            	                           
-												t1.video_id,
-												t1.video_title,
-												t1.video_iframe,
-												t1.v_category_id,
-												t1.status,
-
-												t2.v_category_id,
-												t2.v_category_name
-
-	            	                           	FROM tbl_video t1
-	            	                           	JOIN tbl_category_video t2
-	            	                           	ON t1.v_category_id = t2.v_category_id");
-	            	$statement->execute();
-	            	$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
-	            	foreach ($result as $row) {
-	            		$i++;
-		            	?>
-			            <tr>
-			                <td><?php echo $i; ?></td>
-			                <td><?php echo $row['video_title']; ?></td>
-			                <td>
-			                	<div class="video-iframe" autoplay="false" onloadeddata="this.play();this.muted=false;" muted>
-			                		<video width="240" height="auto" controls class="parado">
-                                      <source src="<?=$row['video_iframe']?>" type="video/mp4">
-                                        Seu navegador não suporta tags de vídeo.
-                                    </video>
-			                	</div>
-			                </td>
-			                <td><?php echo $row['v_category_name']; ?></td>
-			                <td class="text-center">
-			                	<div class="d-inline-flex align-items-center gap-2">
-			                		<div class="form-check form-switch mb-0">
-			                			<input class="form-check-input pronto-status-switch" type="checkbox" role="switch" data-entity="video" data-id="<?php echo $row['video_id']; ?>" data-name="<?php echo htmlspecialchars($row['video_title'] ?: 'Vídeo #' . $i); ?>" data-active-text="Visível" data-inactive-text="Oculto" <?php echo (($row['status'] ?? 'Active') == 'Active') ? 'checked' : ''; ?> title="Ativar ou desativar este vídeo na galeria">
-			                		</div>
-			                		<span class="badge status-badge <?php echo (($row['status'] ?? 'Active') == 'Active') ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle'; ?> rounded-pill small">
-			                			<?php echo (($row['status'] ?? 'Active') == 'Active') ? 'Visível' : 'Oculto'; ?>
-			                		</span>
-			                	</div>
-			                </td>
-			                <td class="text-nowrap"><div class="d-flex flex-wrap gap-1"><a href="video-edit.php?id=<?php echo $row['video_id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Editar</a>
-			                    <a href="#" class="btn btn-danger btn-sm" data-href="video-delete.php?id=<?php echo $row['video_id']; ?>" data-target="#confirm-delete-<?php echo $row['video_id']; ?>"><i class="bi bi-trash3"></i> Excluir</a></div></td>
-			            </tr>
-			            <div class="modal fade" id="confirm-delete-<?php echo $row['video_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="myModalLabel">Confirmação de Exclusão</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        Tem certeza de que deseja deletar este item?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <a href="video-delete.php?id=<?php echo $row['video_id']; ?>" class="btn btn-danger btn-ok">Deletar</a>
-                                    </div>
-                                </div>
-                            </div>
+        <!-- Cards de Indicadores (KPIs) com Adaptação Completa Dark/Light -->
+        <div class="row g-3 mb-4">
+            <!-- KPI 1: Total de Vídeos -->
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="card shadow-sm border-0 border-start border-primary border-4 h-100 bg-body">
+                    <div class="card-body d-flex align-items-center justify-content-between py-3">
+                        <div>
+                            <div class="text-body-secondary small text-uppercase fw-bold">Total no Acervo</div>
+                            <div class="fs-3 fw-bold text-body mt-1" id="kpiTotal"><?= $total_videos; ?></div>
                         </div>
-			     <?php } ?>
-            </tbody>
-          </table>
+                        <div class="p-3 bg-primary-subtle text-primary rounded-circle">
+                            <i class="bi bi-camera-reels-fill fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI 2: Vídeos Visíveis -->
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="card shadow-sm border-0 border-start border-success border-4 h-100 bg-body">
+                    <div class="card-body d-flex align-items-center justify-content-between py-3">
+                        <div>
+                            <div class="text-body-secondary small text-uppercase fw-bold">Visíveis no Site</div>
+                            <div class="fs-3 fw-bold text-success mt-1" id="kpiAtivos"><?= $total_ativos; ?></div>
+                        </div>
+                        <div class="p-3 bg-success-subtle text-success rounded-circle">
+                            <i class="bi bi-play-circle-fill fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI 3: Ocultos / Pausados -->
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="card shadow-sm border-0 border-start border-warning border-4 h-100 bg-body">
+                    <div class="card-body d-flex align-items-center justify-content-between py-3">
+                        <div>
+                            <div class="text-body-secondary small text-uppercase fw-bold">Ocultos / Pausados</div>
+                            <div class="fs-3 fw-bold text-warning mt-1" id="kpiInativos"><?= $total_inativos; ?></div>
+                        </div>
+                        <div class="p-3 bg-warning-subtle text-warning rounded-circle">
+                            <i class="bi bi-pause-circle-fill fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI 4: Categorias com Vídeos -->
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="card shadow-sm border-0 border-start border-info border-4 h-100 bg-body">
+                    <div class="card-body d-flex align-items-center justify-content-between py-3">
+                        <div>
+                            <div class="text-body-secondary small text-uppercase fw-bold">Categorias Ativas</div>
+                            <div class="fs-3 fw-bold text-info mt-1"><?= $total_categorias_com_video; ?></div>
+                        </div>
+                        <div class="p-3 bg-info-subtle text-info rounded-circle">
+                            <i class="bi bi-folder-check fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-  
 
+        <!-- Tabela Principal de Vídeos -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-outline card-primary shadow-sm mb-4">
+                    
+                    <div class="card-header bg-transparent py-3 d-flex flex-wrap align-items-center justify-content-between gap-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <h5 class="card-title fw-bold mb-0 text-body">
+                                <i class="bi bi-collection-play text-primary me-2"></i>Acervo de Vídeos &amp; Procedimentos
+                            </h5>
+                        </div>
 
-</div>
-</div>
-</div>
+                        <!-- Filtros Rápidos por Status (Pílulas) -->
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Filtrar por Status">
+                            <button type="button" class="btn btn-outline-secondary active filter-btn" data-filter="all">
+                                Todos <span class="badge bg-secondary-subtle text-body ms-1"><?= $total_videos; ?></span>
+                            </button>
+                            <button type="button" class="btn btn-outline-success filter-btn" data-filter="active">
+                                Visíveis <span class="badge bg-success-subtle text-success ms-1"><?= $total_ativos; ?></span>
+                            </button>
+                            <button type="button" class="btn btn-outline-warning filter-btn" data-filter="inactive">
+                                Ocultos <span class="badge bg-warning-subtle text-warning ms-1"><?= $total_inativos; ?></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-body table-responsive">
+                        <table id="tabelaVideos" class="table table-hover align-middle w-100">
+                            <thead>
+                                <tr>
+                                    <th width="45" class="text-center">#</th>
+                                    <th width="150" class="text-center">Mídia / Player</th>
+                                    <th>Título do Conteúdo</th>
+                                    <th width="170">Categoria</th>
+                                    <th width="150" class="text-center">Status</th>
+                                    <th width="140" class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $seq = 0;
+                                foreach ($videos as $row):
+                                    $seq++;
+                                    $v_id        = (int)$row['video_id'];
+                                    $v_title     = htmlspecialchars($row['video_title'] ?? 'Vídeo #' . $v_id);
+                                    $v_cat       = htmlspecialchars($row['v_category_name'] ?? 'Geral');
+                                    $v_status    = $row['status'] ?? 'Active';
+                                    $is_active   = ($v_status === 'Active');
+                                    $info_midia  = pronto_resolver_midia_video($row['video_iframe']);
+                                ?>
+                                <tr id="tr-video-<?= $v_id; ?>" data-status="<?= $is_active ? 'active' : 'inactive'; ?>">
+                                    <td class="text-center text-body-secondary fw-semibold"><?= $seq; ?></td>
+
+                                    <!-- Miniatura do Vídeo / Botão de Play Inteligente -->
+                                    <td class="text-center">
+                                        <div class="position-relative overflow-hidden rounded-3 border border-secondary-subtle shadow-xs mx-auto bg-dark d-flex align-items-center justify-content-center"
+                                             style="width: 130px; aspect-ratio: 16/9; cursor: pointer;"
+                                             onclick="abrirPlayerModal({id: <?= $v_id; ?>, title: '<?= addslashes($v_title); ?>', type: '<?= $info_midia['type']; ?>', url: '<?= addslashes($info_midia['url']); ?>', cat: '<?= addslashes($v_cat); ?>'})"
+                                             title="Assistir a este vídeo no player">
+                                            
+                                            <?php if (!empty($info_midia['thumb'])): ?>
+                                                <img src="<?= $info_midia['thumb']; ?>" alt="<?= $v_title; ?>" class="w-100 h-100 object-fit-cover opacity-75">
+                                            <?php else: ?>
+                                                <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center bg-black bg-gradient text-white-50">
+                                                    <i class="bi bi-file-earmark-play fs-4 text-primary"></i>
+                                                </div>
+                                            <?php endif; ?>
+
+                                            <!-- Ícone de Play Sobreposto -->
+                                            <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle bg-dark bg-opacity-75 text-white" style="width: 32px; height: 32px;">
+                                                <i class="bi bi-play-fill fs-5 text-white"></i>
+                                            </div>
+
+                                            <!-- Badge de Formato -->
+                                            <span class="position-absolute bottom-0 end-0 badge bg-dark bg-opacity-75 text-uppercase m-1" style="font-size: 0.65rem;">
+                                                <?= $info_midia['type']; ?>
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    <!-- Título do Vídeo -->
+                                    <td>
+                                        <div class="fw-bold text-body fs-6 mb-1 d-flex align-items-center gap-1">
+                                            <i class="bi bi-camera-video text-primary me-1"></i>
+                                            <span><?= $v_title; ?></span>
+                                        </div>
+                                        <small class="text-body-secondary">
+                                            <i class="bi bi-hash"></i>ID: <?= $v_id; ?> &bull; 
+                                            <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none small text-primary" onclick="abrirPlayerModal({id: <?= $v_id; ?>, title: '<?= addslashes($v_title); ?>', type: '<?= $info_midia['type']; ?>', url: '<?= addslashes($info_midia['url']); ?>', cat: '<?= addslashes($v_cat); ?>'})">
+                                                <i class="bi bi-play-circle me-1"></i>Reproduzir
+                                            </button>
+                                        </small>
+                                    </td>
+
+                                    <!-- Categoria -->
+                                    <td>
+                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle small fw-semibold">
+                                            <i class="bi bi-tag-fill me-1"></i><?= $v_cat; ?>
+                                        </span>
+                                    </td>
+
+                                    <!-- Status com Switch AJAX Global -->
+                                    <td class="text-center">
+                                        <div class="d-inline-flex align-items-center gap-2">
+                                            <div class="form-check form-switch mb-0" title="Ativar ou desativar este vídeo no site">
+                                                <input class="form-check-input pronto-status-switch" type="checkbox" role="switch"
+                                                       data-entity="video"
+                                                       data-id="<?= $v_id; ?>"
+                                                       data-name="<?= $v_title; ?>"
+                                                       data-active-text="Visível"
+                                                       data-inactive-text="Oculto"
+                                                       id="switch-video-<?= $v_id; ?>"
+                                                       <?= $is_active ? 'checked' : ''; ?>>
+                                            </div>
+                                            <span class="badge status-badge <?= $is_active ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-warning-subtle text-warning border border-warning-subtle'; ?> rounded-pill small" id="badge-status-<?= $v_id; ?>">
+                                                <?= $is_active ? 'Visível' : 'Oculto'; ?>
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    <!-- Ações Padronizadas -->
+                                    <td class="text-center text-nowrap">
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <!-- Botão Assistir / Modal -->
+                                            <button type="button" class="btn btn-outline-info btn-sm"
+                                                    onclick="abrirPlayerModal({id: <?= $v_id; ?>, title: '<?= addslashes($v_title); ?>', type: '<?= $info_midia['type']; ?>', url: '<?= addslashes($info_midia['url']); ?>', cat: '<?= addslashes($v_cat); ?>'})"
+                                                    title="Assistir no player">
+                                                <i class="bi bi-play-fill fs-6"></i>
+                                            </button>
+
+                                            <!-- Botão Editar -->
+                                            <a href="video-edit.php?id=<?= $v_id; ?>" class="btn btn-outline-primary btn-sm" title="Editar este vídeo">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+
+                                            <!-- Botão Excluir Seguro com SweetAlert2 -->
+                                            <button type="button" class="btn btn-outline-danger btn-sm btn-delete-video"
+                                                    data-id="<?= $v_id; ?>"
+                                                    data-title="<?= $v_title; ?>"
+                                                    title="Excluir este vídeo">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
-<script>  
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.jQuery) {
-        $('.parado').on('play', function() {
-            $(".rodando").each(function(){
-                $(this).removeClass('rodando').addClass('parado');
-                $(this).get(0).pause();
-            });
-            $(this).removeClass('parado').addClass('rodando');
-            $(this).get(0).play();
+<!-- ========================================== -->
+<!-- MODAL DINÂMICO: PLAYER WIDESCREEN          -->
+<!-- ========================================== -->
+<div class="modal fade" id="modalPlayerVideo" tabindex="-1" aria-labelledby="modalPlayerVideoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-body text-body border-0 shadow-lg rounded-3">
+            <div class="modal-header bg-body-tertiary py-3 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-primary rounded-pill p-2"><i class="bi bi-play-circle-fill"></i></span>
+                    <div>
+                        <h5 class="modal-title fw-bold text-body mb-0" id="mpvTitulo">Reproduzir Vídeo</h5>
+                        <small class="text-body-secondary" id="mpvCategoria">Galeria de Vídeos Pronto Saúde</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+
+            <div class="modal-body p-3 bg-black">
+                <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm" id="mpvContainerPlayer">
+                    <!-- Vídeo ou Iframe injetado dinamicamente via JavaScript -->
+                </div>
+            </div>
+
+            <div class="modal-footer bg-body-tertiary border-top border-secondary-subtle py-2 d-flex justify-content-between">
+                <div class="small text-body-secondary">
+                    <i class="bi bi-shield-check text-success me-1"></i> Visualização Oficial Pronto Saúde
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="#" id="mpvLinkEditar" class="btn btn-primary btn-sm px-3">
+                        <i class="bi bi-pencil-square me-1"></i> Editar Vídeo
+                    </a>
+                    <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // 1. DataTables com Tradução Completa
+    let table = null;
+    if (typeof window.jQuery !== 'undefined' && typeof window.jQuery.fn.DataTable !== 'undefined') {
+        table = $('#tabelaVideos').DataTable({
+            responsive: true,
+            language: {
+                search: "Buscar Vídeo:",
+                lengthMenu: "Mostrar _MENU_ registros",
+                info: "Exibindo _START_ a _END_ de _TOTAL_ vídeos",
+                infoEmpty: "Nenhum vídeo cadastrado",
+                infoFiltered: "(filtrado de _MAX_ no total)",
+                zeroRecords: "Nenhum vídeo encontrado",
+                paginate: {
+                    first: "Primeira",
+                    previous: "Anterior",
+                    next: "Próxima",
+                    last: "Última"
+                }
+            },
+            order: [[0, 'asc']]
+        });
+    }
+
+    // 2. Filtro Rápido por Pílulas (Todos, Visíveis, Ocultos)
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.dataset.filter;
+
+            if (table) {
+                if (filter === 'all') {
+                    table.column(4).search('').draw();
+                } else if (filter === 'active') {
+                    table.column(4).search('Visível').draw();
+                } else if (filter === 'inactive') {
+                    table.column(4).search('Oculto').draw();
+                }
+            }
+        });
+    });
+
+    // 3. Atualização Dinâmica de KPIs após Toggle de Status
+    document.addEventListener('change', function (e) {
+        if (e.target && e.target.classList.contains('pronto-status-switch')) {
+            const tr = e.target.closest('tr');
+            if (tr) {
+                tr.setAttribute('data-status', e.target.checked ? 'active' : 'inactive');
+                atualizarKPIs();
+            }
+        }
+    });
+
+    function atualizarKPIs() {
+        const rows = document.querySelectorAll('#tabelaVideos tbody tr[data-status]');
+        let total = rows.length;
+        let ativos = 0;
+        let inativos = 0;
+
+        rows.forEach(r => {
+            if (r.getAttribute('data-status') === 'active') ativos++;
+            else inativos++;
+        });
+
+        const kpiTotal = document.getElementById('kpiTotal');
+        const kpiAtivos = document.getElementById('kpiAtivos');
+        const kpiInativos = document.getElementById('kpiInativos');
+
+        if (kpiTotal) kpiTotal.textContent = total;
+        if (kpiAtivos) kpiAtivos.textContent = ativos;
+        if (kpiInativos) kpiInativos.textContent = inativos;
+    }
+
+    // 4. Exclusão Segura com SweetAlert2
+    const deleteButtons = document.querySelectorAll('.btn-delete-video');
+    deleteButtons.forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const id = this.dataset.id;
+            const title = this.dataset.title || 'este vídeo';
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Confirmar Exclusão',
+                    html: `Deseja realmente remover o vídeo <strong>"${title}"</strong> da galeria?<br><small class="text-danger">Os arquivos de mídia associados também serão excluídos.</small>`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: '<i class="bi bi-trash3 me-1"></i> Sim, excluir vídeo',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        executarExclusaoVideo(id);
+                    }
+                });
+            } else {
+                executarExclusaoVideo(id);
+            }
+        });
+    });
+
+    function executarExclusaoVideo(id) {
+        fetch('video.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: new URLSearchParams({
+                action: 'delete_video',
+                id: id
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Vídeo Removido!',
+                        text: data.message,
+                        timer: 1800,
+                        showConfirmButton: false
+                    }).then(() => {
+                        const tr = document.getElementById('tr-video-' + id);
+                        if (tr) {
+                            if (table) {
+                                table.row($(tr)).remove().draw();
+                            } else {
+                                tr.remove();
+                            }
+                            atualizarKPIs();
+                        } else {
+                            window.location.reload();
+                        }
+                    });
+                } else {
+                    window.location.reload();
+                }
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro ao excluir',
+                        text: data.message || 'Não foi possível excluir o vídeo.'
+                    });
+                } else {
+                    alert(data.message);
+                }
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Falha de comunicação',
+                    text: 'A página será recarregada para concluir a exclusão.'
+                }).then(() => {
+                    window.location.href = 'video-delete.php?id=' + id;
+                });
+            } else {
+                window.location.href = 'video-delete.php?id=' + id;
+            }
+        });
+    }
+
+    // 5. Modal Dinâmico do Player de Vídeo
+    window.abrirPlayerModal = function(data) {
+        document.getElementById('mpvTitulo').textContent = data.title || 'Reproduzir Vídeo';
+        document.getElementById('mpvCategoria').textContent = 'Categoria: ' + (data.cat || 'Geral');
+
+        const editLink = document.getElementById('mpvLinkEditar');
+        if (editLink) editLink.href = 'video-edit.php?id=' + data.id;
+
+        const container = document.getElementById('mpvContainerPlayer');
+        if (container) {
+            container.innerHTML = '';
+            if (data.type === 'youtube' || data.type === 'vimeo') {
+                const iframe = document.createElement('iframe');
+                iframe.src = data.url;
+                iframe.className = 'w-100 h-100 border-0';
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+                iframe.allowFullscreen = true;
+                container.appendChild(iframe);
+            } else {
+                const video = document.createElement('video');
+                video.src = data.url;
+                video.className = 'w-100 h-100';
+                video.controls = true;
+                video.autoplay = true;
+                container.appendChild(video);
+            }
+        }
+
+        const modalEl = document.getElementById('modalPlayerVideo');
+        if (modalEl && typeof bootstrap !== 'undefined') {
+            bootstrap.Modal.getOrCreateInstance(modalEl).show();
+        }
+    };
+
+    // Ao fechar o modal, encerra a reprodução do vídeo para não deixar áudio tocando
+    const modalPlayerEl = document.getElementById('modalPlayerVideo');
+    if (modalPlayerEl) {
+        modalPlayerEl.addEventListener('hidden.bs.modal', function () {
+            const container = document.getElementById('mpvContainerPlayer');
+            if (container) {
+                container.innerHTML = '';
+            }
         });
     }
 });
