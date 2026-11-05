@@ -9,3 +9,4 @@ Thumbs.db
 *.sqlite
 *.db
 scratch/
+tools/clean_odontologia.php
