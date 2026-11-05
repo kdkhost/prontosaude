@@ -292,9 +292,13 @@ function pronto_resolver_caminho_foto($photo_name) {
 
                                     <!-- Miniatura com Proporção Widescreen/Fotográfica -->
                                     <td class="text-center">
-                                        <div class="position-relative overflow-hidden rounded-3 border border-secondary-subtle shadow-xs mx-auto bg-body-secondary d-flex align-items-center justify-content-center photo-card-thumb"
+                                        <div class="position-relative overflow-hidden rounded-3 border border-secondary-subtle shadow-xs mx-auto bg-body-secondary d-flex align-items-center justify-content-center photo-card-thumb btn-view-photo"
                                              style="width: 120px; aspect-ratio: 4/3; cursor: pointer;"
-                                             onclick="abrirLightboxModal({id: <?= $p_id; ?>, title: '<?= addslashes($p_caption); ?>', url: '<?= addslashes($info_foto['url']); ?>', cat: '<?= addslashes($p_cat); ?>', file: '<?= addslashes($p_name); ?>'})"
+                                             data-id="<?= $p_id; ?>"
+                                             data-title="<?= htmlspecialchars($p_caption, ENT_QUOTES, 'UTF-8'); ?>"
+                                             data-url="<?= htmlspecialchars($info_foto['url'], ENT_QUOTES, 'UTF-8'); ?>"
+                                             data-cat="<?= htmlspecialchars($p_cat, ENT_QUOTES, 'UTF-8'); ?>"
+                                             data-file="<?= htmlspecialchars($p_name, ENT_QUOTES, 'UTF-8'); ?>"
                                              title="Clique para ampliar esta foto">
                                             
                                             <img src="<?= $info_foto['url']; ?>" alt="<?= $p_caption; ?>" class="w-100 h-100 object-fit-cover" loading="lazy">
@@ -321,7 +325,12 @@ function pronto_resolver_caminho_foto($photo_name) {
                                         </div>
                                         <small class="text-body-secondary d-block">
                                             <i class="bi bi-file-earmark-image me-1"></i><?= $p_name ?: 'sem arquivo'; ?> &bull; 
-                                            <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none small text-primary" onclick="abrirLightboxModal({id: <?= $p_id; ?>, title: '<?= addslashes($p_caption); ?>', url: '<?= addslashes($info_foto['url']); ?>', cat: '<?= addslashes($p_cat); ?>', file: '<?= addslashes($p_name); ?>'})">
+                                            <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none small text-primary btn-view-photo"
+                                                    data-id="<?= $p_id; ?>"
+                                                    data-title="<?= htmlspecialchars($p_caption, ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-url="<?= htmlspecialchars($info_foto['url'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-cat="<?= htmlspecialchars($p_cat, ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-file="<?= htmlspecialchars($p_name, ENT_QUOTES, 'UTF-8'); ?>">
                                                 <i class="bi bi-arrows-fullscreen me-1"></i>Ampliar
                                             </button>
                                         </small>
@@ -357,8 +366,12 @@ function pronto_resolver_caminho_foto($photo_name) {
                                     <td class="text-center text-nowrap">
                                         <div class="d-flex align-items-center justify-content-center gap-1">
                                             <!-- Botão Ampliar / Lightbox -->
-                                            <button type="button" class="btn btn-outline-info btn-sm"
-                                                    onclick="abrirLightboxModal({id: <?= $p_id; ?>, title: '<?= addslashes($p_caption); ?>', url: '<?= addslashes($info_foto['url']); ?>', cat: '<?= addslashes($p_cat); ?>', file: '<?= addslashes($p_name); ?>'})"
+                                            <button type="button" class="btn btn-outline-info btn-sm btn-view-photo"
+                                                    data-id="<?= $p_id; ?>"
+                                                    data-title="<?= htmlspecialchars($p_caption, ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-url="<?= htmlspecialchars($info_foto['url'], ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-cat="<?= htmlspecialchars($p_cat, ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-file="<?= htmlspecialchars($p_name, ENT_QUOTES, 'UTF-8'); ?>"
                                                     title="Ampliar foto em detalhes">
                                                 <i class="bi bi-zoom-in"></i>
                                             </button>
@@ -371,8 +384,8 @@ function pronto_resolver_caminho_foto($photo_name) {
                                             <!-- Botão Excluir Seguro com SweetAlert2 -->
                                             <button type="button" class="btn btn-outline-danger btn-sm btn-delete-photo"
                                                     data-id="<?= $p_id; ?>"
-                                                    data-title="<?= $p_caption; ?>"
-                                                    data-thumb="<?= $info_foto['url']; ?>"
+                                                    data-title="<?= htmlspecialchars($p_caption, ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-thumb="<?= htmlspecialchars($info_foto['url'], ENT_QUOTES, 'UTF-8'); ?>"
                                                     title="Excluir esta foto">
                                                 <i class="bi bi-trash3"></i>
                                             </button>
@@ -431,200 +444,236 @@ function pronto_resolver_caminho_foto($photo_name) {
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // 1. DataTables com Tradução Completa
-    let table = null;
-    if (typeof window.jQuery !== 'undefined' && typeof window.jQuery.fn.DataTable !== 'undefined') {
-        table = $('#tabelaFotos').DataTable({
-            responsive: true,
-            language: {
-                search: "Buscar Foto:",
-                lengthMenu: "Mostrar _MENU_ registros",
-                info: "Exibindo _START_ a _END_ de _TOTAL_ fotos",
-                infoEmpty: "Nenhuma foto cadastrada",
-                infoFiltered: "(filtrado de _MAX_ no total)",
-                zeroRecords: "Nenhuma foto encontrada",
-                paginate: {
-                    first: "Primeira",
-                    previous: "Anterior",
-                    next: "Próxima",
-                    last: "Última"
-                }
+// 1. Variável global da tabela
+var tabelaFotosDT = null;
+
+// 2. Funções Globais Independentes de DOMContentLoaded (Compatível com SPA e Reload)
+window.abrirLightboxModal = function(data) {
+    // Remove qualquer tooltip ativo na tela imediatamente
+    document.querySelectorAll('.tooltip').forEach(t => t.remove());
+
+    const tituloEl = document.getElementById('mlfTitulo');
+    if (tituloEl) tituloEl.textContent = data.title || 'Visualizar Foto';
+
+    const catEl = document.getElementById('mlfCategoria');
+    if (catEl) catEl.textContent = 'Categoria: ' + (data.cat || 'Geral');
+
+    const imgEl = document.getElementById('mlfImagem');
+    if (imgEl) imgEl.src = data.url || '';
+
+    const arqEl = document.getElementById('mlfArquivo');
+    if (arqEl) arqEl.innerHTML = `<i class="bi bi-file-earmark-image me-1"></i> ${data.file || 'imagem'}`;
+
+    const editLink = document.getElementById('mlfLinkEditar');
+    if (editLink) editLink.href = 'photo-edit.php?id=' + (data.id || '');
+
+    const modalEl = document.getElementById('modalLightboxFoto');
+    if (modalEl && typeof bootstrap !== 'undefined') {
+        const modalInst = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modalInst.show();
+    }
+};
+
+window.confirmarExclusaoFoto = function(id, title, thumb) {
+    // Remove qualquer tooltip ativo na tela imediatamente
+    document.querySelectorAll('.tooltip').forEach(t => t.remove());
+
+    let imgHtml = '';
+    if (thumb) {
+        imgHtml = `<div class="mb-3 mt-2 text-center">
+            <img src="${thumb}" alt="${title}" class="rounded-3 border border-secondary-subtle shadow-xs" style="max-height: 120px; width: auto; max-width: 100%;">
+        </div>`;
+    }
+
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: 'Confirmar Exclusão',
+            html: `${imgHtml}Deseja realmente remover <strong>"${title}"</strong> do acervo?<br><small class="text-danger">O arquivo físico da imagem também será excluído do servidor.</small>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="bi bi-trash3 me-1"></i> Sim, excluir foto',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                confirmButton: 'btn btn-danger px-3 me-2',
+                cancelButton: 'btn btn-secondary px-3'
             },
-            order: [[0, 'asc']]
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.executarExclusaoFoto(id);
+            }
         });
+    } else {
+        window.executarExclusaoFoto(id);
     }
+};
 
-    // 2. Filtro Rápido por Pílulas (Todos, Visíveis, Ocultas)
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-            filterButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            const filter = this.dataset.filter;
-
-            if (table) {
-                if (filter === 'all') {
-                    table.column(4).search('').draw();
-                } else if (filter === 'active') {
-                    table.column(4).search('Visível').draw();
-                } else if (filter === 'inactive') {
-                    table.column(4).search('Oculta').draw();
-                }
-            }
-        });
-    });
-
-    // 3. Atualização Dinâmica de KPIs após Toggle de Status
-    document.addEventListener('change', function (e) {
-        if (e.target && e.target.classList.contains('pronto-status-switch')) {
-            const tr = e.target.closest('tr');
-            if (tr) {
-                tr.setAttribute('data-status', e.target.checked ? 'active' : 'inactive');
-                atualizarKPIs();
-            }
-        }
-    });
-
-    function atualizarKPIs() {
-        const rows = document.querySelectorAll('#tabelaFotos tbody tr[data-status]');
-        let total = rows.length;
-        let ativos = 0;
-        let inativos = 0;
-
-        rows.forEach(r => {
-            if (r.getAttribute('data-status') === 'active') ativos++;
-            else inativos++;
-        });
-
-        const kpiTotal = document.getElementById('kpiTotal');
-        const kpiAtivos = document.getElementById('kpiAtivos');
-        const kpiInativos = document.getElementById('kpiInativos');
-
-        if (kpiTotal) kpiTotal.textContent = total;
-        if (kpiAtivos) kpiAtivos.textContent = ativos;
-        if (kpiInativos) kpiInativos.textContent = inativos;
-    }
-
-    // 4. Exclusão Segura com SweetAlert2
-    const deleteButtons = document.querySelectorAll('.btn-delete-photo');
-    deleteButtons.forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const id = this.dataset.id;
-            const title = this.dataset.title || 'esta foto';
-            const thumb = this.dataset.thumb || '';
-
-            let imgHtml = '';
-            if (thumb) {
-                imgHtml = `<div class="mb-3 mt-2 text-center">
-                    <img src="${thumb}" alt="${title}" class="rounded-3 border border-secondary-subtle shadow-xs" style="max-height: 120px; width: auto; max-width: 100%;">
-                </div>`;
-            }
-
+window.executarExclusaoFoto = function(id) {
+    fetch('photo.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: new URLSearchParams({
+            action: 'delete_photo',
+            id: id
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
-                    title: 'Confirmar Exclusão',
-                    html: `${imgHtml}Deseja realmente remover <strong>"${title}"</strong> do acervo?<br><small class="text-danger">O arquivo físico da imagem também será excluído do servidor.</small>`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc3545',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: '<i class="bi bi-trash3 me-1"></i> Sim, excluir foto',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        executarExclusaoFoto(id);
+                    icon: 'success',
+                    title: 'Foto Removida!',
+                    text: data.message,
+                    timer: 1600,
+                    showConfirmButton: false
+                }).then(() => {
+                    const tr = document.getElementById('tr-photo-' + id);
+                    if (tr) {
+                        if (tabelaFotosDT) {
+                            tabelaFotosDT.row($(tr)).remove().draw();
+                        } else {
+                            tr.remove();
+                        }
+                        window.atualizarKPIsFotos();
+                    } else {
+                        window.location.reload();
                     }
                 });
             } else {
-                executarExclusaoFoto(id);
+                window.location.reload();
             }
-        });
-    });
-
-    function executarExclusaoFoto(id) {
-        fetch('photo.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: new URLSearchParams({
-                action: 'delete_photo',
-                id: id
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Foto Removida!',
-                        text: data.message,
-                        timer: 1800,
-                        showConfirmButton: false
-                    }).then(() => {
-                        const tr = document.getElementById('tr-photo-' + id);
-                        if (tr) {
-                            if (table) {
-                                table.row($(tr)).remove().draw();
-                            } else {
-                                tr.remove();
-                            }
-                            atualizarKPIs();
-                        } else {
-                            window.location.reload();
-                        }
-                    });
-                } else {
-                    window.location.reload();
-                }
-            } else {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erro ao excluir',
-                        text: data.message || 'Não foi possível excluir a foto.'
-                    });
-                } else {
-                    alert(data.message);
-                }
-            }
-        })
-        .catch(err => {
-            console.error(err);
+        } else {
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Falha de comunicação',
-                    text: 'A página será recarregada para concluir a exclusão.'
-                }).then(() => {
-                    window.location.href = 'photo-delete.php?id=' + id;
+                    title: 'Erro ao excluir',
+                    text: data.message || 'Não foi possível excluir a foto.'
                 });
-            } else {
-                window.location.href = 'photo-delete.php?id=' + id;
             }
-        });
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        window.location.href = 'photo-delete.php?id=' + id;
+    });
+};
+
+window.atualizarKPIsFotos = function() {
+    const rows = document.querySelectorAll('#tabelaFotos tbody tr[data-status]');
+    let total = rows.length;
+    let ativos = 0;
+    let inativos = 0;
+
+    rows.forEach(r => {
+        if (r.getAttribute('data-status') === 'active') ativos++;
+        else inativos++;
+    });
+
+    const kpiTotal = document.getElementById('kpiTotal');
+    const kpiAtivos = document.getElementById('kpiAtivos');
+    const kpiInativos = document.getElementById('kpiInativos');
+
+    if (kpiTotal) kpiTotal.textContent = total;
+    if (kpiAtivos) kpiAtivos.textContent = ativos;
+    if (kpiInativos) kpiInativos.textContent = inativos;
+};
+
+// 3. Delegação Global de Cliques (Resistente a Paginação, Ordenação e SPA)
+document.addEventListener('click', function (e) {
+    // A. Botão Ampliar / Ver Foto
+    const btnView = e.target.closest('.btn-view-photo');
+    if (btnView) {
+        e.preventDefault();
+        const id    = btnView.getAttribute('data-id');
+        const title = btnView.getAttribute('data-title') || 'Foto';
+        const url   = btnView.getAttribute('data-url') || '';
+        const cat   = btnView.getAttribute('data-cat') || 'Geral';
+        const file  = btnView.getAttribute('data-file') || '';
+        window.abrirLightboxModal({ id, title, url, cat, file });
+        return;
     }
 
-    // 5. Modal Dinâmico Lightbox de Alta Resolução
-    window.abrirLightboxModal = function(data) {
-        document.getElementById('mlfTitulo').textContent = data.title || 'Visualizar Foto';
-        document.getElementById('mlfCategoria').textContent = 'Categoria: ' + (data.cat || 'Geral');
-        document.getElementById('mlfImagem').src = data.url;
-        document.getElementById('mlfArquivo').innerHTML = `<i class="bi bi-file-earmark-image me-1"></i> ${data.file || 'imagem'}`;
+    // B. Botão Excluir Foto
+    const btnDel = e.target.closest('.btn-delete-photo');
+    if (btnDel) {
+        e.preventDefault();
+        const id    = btnDel.getAttribute('data-id');
+        const title = btnDel.getAttribute('data-title') || 'esta foto';
+        const thumb = btnDel.getAttribute('data-thumb') || '';
+        window.confirmarExclusaoFoto(id, title, thumb);
+        return;
+    }
 
-        const editLink = document.getElementById('mlfLinkEditar');
-        if (editLink) editLink.href = 'photo-edit.php?id=' + data.id;
+    // C. Filtros de Status (Todos, Visíveis, Ocultas)
+    const filterBtn = e.target.closest('.filter-btn');
+    if (filterBtn) {
+        e.preventDefault();
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        filterBtn.classList.add('active');
+        const filter = filterBtn.getAttribute('data-filter');
 
-        const modalEl = document.getElementById('modalLightboxFoto');
-        if (modalEl && typeof bootstrap !== 'undefined') {
-            bootstrap.Modal.getOrCreateInstance(modalEl).show();
+        if (tabelaFotosDT) {
+            if (filter === 'all') {
+                tabelaFotosDT.column(4).search('').draw();
+            } else if (filter === 'active') {
+                tabelaFotosDT.column(4).search('Visível').draw();
+            } else if (filter === 'inactive') {
+                tabelaFotosDT.column(4).search('Oculta').draw();
+            }
         }
-    };
+        return;
+    }
 });
+
+// 4. Atualização de KPIs em Mudança de Switch
+document.addEventListener('change', function (e) {
+    if (e.target && e.target.classList.contains('pronto-status-switch')) {
+        const tr = e.target.closest('tr');
+        if (tr) {
+            tr.setAttribute('data-status', e.target.checked ? 'active' : 'inactive');
+            window.atualizarKPIsFotos();
+        }
+    }
+});
+
+// 5. Inicialização Única do DataTables
+function initTabelaFotos() {
+    if (typeof window.jQuery !== 'undefined' && typeof window.jQuery.fn.DataTable !== 'undefined') {
+        const $table = $('#tabelaFotos');
+        if ($table.length && !$.fn.DataTable.isDataTable('#tabelaFotos')) {
+            tabelaFotosDT = $table.DataTable({
+                responsive: true,
+                language: {
+                    search: "Buscar Foto:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Exibindo _START_ a _END_ de _TOTAL_ fotos",
+                    infoEmpty: "Nenhuma foto cadastrada",
+                    infoFiltered: "(filtrado de _MAX_ no total)",
+                    zeroRecords: "Nenhuma foto encontrada",
+                    paginate: {
+                        first: "Primeira",
+                        previous: "Anterior",
+                        next: "Próxima",
+                        last: "Última"
+                    }
+                },
+                order: [[0, 'asc']]
+            });
+        }
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTabelaFotos);
+} else {
+    initTabelaFotos();
+}
 </script>
 
 <?php require_once('footer.php'); ?>
