@@ -183,8 +183,8 @@ function pronto_resolver_caminho_foto($photo_name) {
                             <div class="text-body-secondary small text-uppercase fw-bold">Total no Acervo</div>
                             <div class="fs-3 fw-bold text-body mt-1" id="kpiTotal"><?= $total_photos; ?></div>
                         </div>
-                        <div class="p-3 bg-primary-subtle text-primary rounded-circle">
-                            <i class="bi bi-images fs-4"></i>
+                        <div class="kpi-icon-circle bg-primary-subtle text-primary rounded-circle">
+                            <i class="bi bi-images"></i>
                         </div>
                     </div>
                 </div>
@@ -198,8 +198,8 @@ function pronto_resolver_caminho_foto($photo_name) {
                             <div class="text-body-secondary small text-uppercase fw-bold">Visíveis no Site</div>
                             <div class="fs-3 fw-bold text-success mt-1" id="kpiAtivos"><?= $total_ativas; ?></div>
                         </div>
-                        <div class="p-3 bg-success-subtle text-success rounded-circle">
-                            <i class="bi bi-check-circle-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-success-subtle text-success rounded-circle">
+                            <i class="bi bi-check-circle-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -213,8 +213,8 @@ function pronto_resolver_caminho_foto($photo_name) {
                             <div class="text-body-secondary small text-uppercase fw-bold">Ocultas / Pausadas</div>
                             <div class="fs-3 fw-bold text-warning mt-1" id="kpiInativos"><?= $total_inativas; ?></div>
                         </div>
-                        <div class="p-3 bg-warning-subtle text-warning rounded-circle">
-                            <i class="bi bi-eye-slash-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-warning-subtle text-warning rounded-circle">
+                            <i class="bi bi-eye-slash-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -228,8 +228,8 @@ function pronto_resolver_caminho_foto($photo_name) {
                             <div class="text-body-secondary small text-uppercase fw-bold">Categorias Ativas</div>
                             <div class="fs-3 fw-bold text-info mt-1"><?= $total_categorias_com_foto; ?></div>
                         </div>
-                        <div class="p-3 bg-info-subtle text-info rounded-circle">
-                            <i class="bi bi-folder-check fs-4"></i>
+                        <div class="kpi-icon-circle bg-info-subtle text-info rounded-circle">
+                            <i class="bi bi-folder-check"></i>
                         </div>
                     </div>
                 </div>

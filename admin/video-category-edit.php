@@ -186,8 +186,8 @@ $is_active       = ($status === 'Active');
                                 <?= htmlspecialchars($category['v_category_name']); ?>
                             </small>
                         </div>
-                        <div class="p-3 bg-primary-subtle text-primary rounded-circle">
-                            <i class="bi bi-folder-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-primary-subtle text-primary rounded-circle">
+                            <i class="bi bi-folder-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -204,8 +204,8 @@ $is_active       = ($status === 'Active');
                                 <?= $videos_ativos_cat; ?> visíveis &bull; <?= $videos_inativos_cat; ?> ocultos
                             </small>
                         </div>
-                        <div class="p-3 bg-success-subtle text-success rounded-circle">
-                            <i class="bi bi-camera-reels-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-success-subtle text-success rounded-circle">
+                            <i class="bi bi-camera-reels-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -224,8 +224,8 @@ $is_active       = ($status === 'Active');
                                 </span>
                             </div>
                         </div>
-                        <div class="p-3 <?= $is_active ? 'bg-info-subtle text-info' : 'bg-warning-subtle text-warning'; ?> rounded-circle" id="iconBoxStatusTopo">
-                            <i class="bi <?= $is_active ? 'bi-eye-fill' : 'bi-eye-slash-fill'; ?> fs-4" id="iconStatusTopo"></i>
+                        <div class="kpi-icon-circle <?= $is_active ? 'bg-info-subtle text-info' : 'bg-warning-subtle text-warning'; ?> rounded-circle" id="iconBoxStatusTopo">
+                            <i class="bi <?= $is_active ? 'bi-eye-fill' : 'bi-eye-slash-fill'; ?>" id="iconStatusTopo"></i>
                         </div>
                     </div>
                 </div>
@@ -446,13 +446,13 @@ function initVideoCategoryEdit() {
             if (val === 'Active') {
                 badgeTopo.className = 'badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 fs-6';
                 badgeTopo.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i><span>Ativa no Site</span>';
-                iconBoxTopo.className = 'p-3 bg-info-subtle text-info rounded-circle';
-                iconTopo.className = 'bi bi-eye-fill fs-4';
+                iconBoxTopo.className = 'kpi-icon-circle bg-info-subtle text-info rounded-circle';
+                iconTopo.className = 'bi bi-eye-fill';
             } else {
                 badgeTopo.className = 'badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-3 py-1 fs-6';
                 badgeTopo.innerHTML = '<i class="bi bi-pause-circle-fill me-1"></i><span>Oculta / Pausada</span>';
-                iconBoxTopo.className = 'p-3 bg-warning-subtle text-warning rounded-circle';
-                iconTopo.className = 'bi bi-eye-slash-fill fs-4';
+                iconBoxTopo.className = 'kpi-icon-circle bg-warning-subtle text-warning rounded-circle';
+                iconTopo.className = 'bi bi-eye-slash-fill';
             }
         }
     }

@@ -180,8 +180,8 @@ $pre_cat_id = (int)($_GET['cat'] ?? 0);
                             <div class="text-body-secondary small text-uppercase fw-bold">Total de Fotos no Acervo</div>
                             <div class="fs-4 fw-bold text-body mt-1"><?= $total_fotos_existentes; ?> fotos</div>
                         </div>
-                        <div class="p-3 bg-primary-subtle text-primary rounded-circle">
-                            <i class="bi bi-camera-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-primary-subtle text-primary rounded-circle">
+                            <i class="bi bi-camera-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -194,8 +194,8 @@ $pre_cat_id = (int)($_GET['cat'] ?? 0);
                             <div class="text-body-secondary small text-uppercase fw-bold">Categorias Disponíveis</div>
                             <div class="fs-4 fw-bold text-info mt-1"><?= $total_categorias; ?> categorias</div>
                         </div>
-                        <div class="p-3 bg-info-subtle text-info rounded-circle">
-                            <i class="bi bi-tags-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-info-subtle text-info rounded-circle">
+                            <i class="bi bi-tags-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -213,8 +213,8 @@ $pre_cat_id = (int)($_GET['cat'] ?? 0);
                                 <span class="badge bg-secondary-subtle text-secondary border">GIF</span>
                             </div>
                         </div>
-                        <div class="p-3 bg-success-subtle text-success rounded-circle">
-                            <i class="bi bi-file-earmark-image-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-success-subtle text-success rounded-circle">
+                            <i class="bi bi-file-earmark-image-fill"></i>
                         </div>
                     </div>
                 </div>

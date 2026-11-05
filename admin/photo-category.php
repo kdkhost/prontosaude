@@ -139,8 +139,8 @@ $categorias_vazias = max(0, $total_categorias - $categorias_com_photo);
                             <div class="text-body-secondary small text-uppercase fw-bold">Total de Categorias</div>
                             <div class="fs-3 fw-bold text-body mt-1" id="kpiTotal"><?= $total_categorias; ?></div>
                         </div>
-                        <div class="p-3 bg-primary-subtle text-primary rounded-circle">
-                            <i class="bi bi-tags-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-primary-subtle text-primary rounded-circle">
+                            <i class="bi bi-tags-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -154,8 +154,8 @@ $categorias_vazias = max(0, $total_categorias - $categorias_com_photo);
                             <div class="text-body-secondary small text-uppercase fw-bold">Fotos no Acervo</div>
                             <div class="fs-3 fw-bold text-success mt-1" id="kpiPhotos"><?= $total_photos_geral; ?></div>
                         </div>
-                        <div class="p-3 bg-success-subtle text-success rounded-circle">
-                            <i class="bi bi-images fs-4"></i>
+                        <div class="kpi-icon-circle bg-success-subtle text-success rounded-circle">
+                            <i class="bi bi-images"></i>
                         </div>
                     </div>
                 </div>
@@ -169,8 +169,8 @@ $categorias_vazias = max(0, $total_categorias - $categorias_com_photo);
                             <div class="text-body-secondary small text-uppercase fw-bold">Com Fotos Ativas</div>
                             <div class="fs-3 fw-bold text-info mt-1" id="kpiComPhotos"><?= $categorias_com_photo; ?></div>
                         </div>
-                        <div class="p-3 bg-info-subtle text-info rounded-circle">
-                            <i class="bi bi-camera-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-info-subtle text-info rounded-circle">
+                            <i class="bi bi-camera-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -184,8 +184,8 @@ $categorias_vazias = max(0, $total_categorias - $categorias_com_photo);
                             <div class="text-body-secondary small text-uppercase fw-bold">Categorias Vazias</div>
                             <div class="fs-3 fw-bold text-warning mt-1" id="kpiVazias"><?= $categorias_vazias; ?></div>
                         </div>
-                        <div class="p-3 bg-warning-subtle text-warning rounded-circle">
-                            <i class="bi bi-folder-x fs-4"></i>
+                        <div class="kpi-icon-circle bg-warning-subtle text-warning rounded-circle">
+                            <i class="bi bi-folder-x"></i>
                         </div>
                     </div>
                 </div>

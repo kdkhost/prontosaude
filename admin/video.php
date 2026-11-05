@@ -240,8 +240,8 @@ function pronto_resolver_midia_video($raw) {
                             <div class="text-body-secondary small text-uppercase fw-bold">Total no Acervo</div>
                             <div class="fs-3 fw-bold text-body mt-1" id="kpiTotal"><?= $total_videos; ?></div>
                         </div>
-                        <div class="p-3 bg-primary-subtle text-primary rounded-circle">
-                            <i class="bi bi-camera-reels-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-primary-subtle text-primary rounded-circle">
+                            <i class="bi bi-camera-reels-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -255,8 +255,8 @@ function pronto_resolver_midia_video($raw) {
                             <div class="text-body-secondary small text-uppercase fw-bold">Visíveis no Site</div>
                             <div class="fs-3 fw-bold text-success mt-1" id="kpiAtivos"><?= $total_ativos; ?></div>
                         </div>
-                        <div class="p-3 bg-success-subtle text-success rounded-circle">
-                            <i class="bi bi-play-circle-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-success-subtle text-success rounded-circle">
+                            <i class="bi bi-play-circle-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -270,8 +270,8 @@ function pronto_resolver_midia_video($raw) {
                             <div class="text-body-secondary small text-uppercase fw-bold">Ocultos / Pausados</div>
                             <div class="fs-3 fw-bold text-warning mt-1" id="kpiInativos"><?= $total_inativos; ?></div>
                         </div>
-                        <div class="p-3 bg-warning-subtle text-warning rounded-circle">
-                            <i class="bi bi-pause-circle-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-warning-subtle text-warning rounded-circle">
+                            <i class="bi bi-pause-circle-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -285,8 +285,8 @@ function pronto_resolver_midia_video($raw) {
                             <div class="text-body-secondary small text-uppercase fw-bold">Categorias Ativas</div>
                             <div class="fs-3 fw-bold text-info mt-1"><?= $total_categorias_com_video; ?></div>
                         </div>
-                        <div class="p-3 bg-info-subtle text-info rounded-circle">
-                            <i class="bi bi-folder-check fs-4"></i>
+                        <div class="kpi-icon-circle bg-info-subtle text-info rounded-circle">
+                            <i class="bi bi-folder-check"></i>
                         </div>
                     </div>
                 </div>

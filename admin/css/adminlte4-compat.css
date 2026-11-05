@@ -1889,3 +1889,101 @@ img.existing-photo,
   opacity: 0 !important;
   display: none !important;
 }
+
+/* ==========================================================================
+   Ícones de KPIs Perfeitamente Circulares e Padronização Dark/Light
+   ========================================================================== */
+.card .rounded-circle.p-3,
+.kpi-icon-circle,
+.card-kpi-icon {
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  min-height: 52px !important;
+  max-width: 52px !important;
+  max-height: 52px !important;
+  aspect-ratio: 1 / 1 !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  flex-shrink: 0 !important;
+  transition: all 0.25s ease-in-out !important;
+}
+
+.card .rounded-circle.p-3 i,
+.kpi-icon-circle i,
+.card-kpi-icon i {
+  font-size: 1.55rem !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* --- Cores dos Círculos de KPI no Tema Light --- */
+[data-bs-theme="light"] .card .rounded-circle.bg-primary-subtle,
+.card .rounded-circle.bg-primary-subtle {
+  background-color: rgba(13, 110, 253, 0.12) !important;
+  color: #0d6efd !important;
+  border: 1px solid rgba(13, 110, 253, 0.22) !important;
+}
+[data-bs-theme="light"] .card .rounded-circle.bg-success-subtle,
+.card .rounded-circle.bg-success-subtle {
+  background-color: rgba(25, 135, 84, 0.12) !important;
+  color: #198754 !important;
+  border: 1px solid rgba(25, 135, 84, 0.22) !important;
+}
+[data-bs-theme="light"] .card .rounded-circle.bg-warning-subtle,
+.card .rounded-circle.bg-warning-subtle {
+  background-color: rgba(245, 158, 11, 0.14) !important;
+  color: #d97706 !important;
+  border: 1px solid rgba(245, 158, 11, 0.25) !important;
+}
+[data-bs-theme="light"] .card .rounded-circle.bg-info-subtle,
+.card .rounded-circle.bg-info-subtle {
+  background-color: rgba(13, 202, 240, 0.14) !important;
+  color: #0891b2 !important;
+  border: 1px solid rgba(13, 202, 240, 0.25) !important;
+}
+
+/* --- Cores dos Círculos de KPI no Tema Dark (Alta Visibilidade & Contraste) --- */
+[data-bs-theme="dark"] .card .rounded-circle.bg-primary-subtle {
+  background-color: rgba(14, 165, 233, 0.2) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.18) !important;
+}
+[data-bs-theme="dark"] .card .rounded-circle.bg-success-subtle {
+  background-color: rgba(34, 197, 94, 0.2) !important;
+  color: #4ade80 !important;
+  border: 1px solid rgba(74, 222, 128, 0.35) !important;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.18) !important;
+}
+[data-bs-theme="dark"] .card .rounded-circle.bg-warning-subtle {
+  background-color: rgba(245, 158, 11, 0.2) !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(251, 191, 36, 0.35) !important;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.18) !important;
+}
+[data-bs-theme="dark"] .card .rounded-circle.bg-info-subtle {
+  background-color: rgba(6, 182, 212, 0.2) !important;
+  color: #22d3ee !important;
+  border: 1px solid rgba(34, 211, 238, 0.35) !important;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.18) !important;
+}
+
+/* Destaque das Cores de Texto dos Valores de KPIs no Dark Mode */
+[data-bs-theme="dark"] .card .text-primary { color: #38bdf8 !important; }
+[data-bs-theme="dark"] .card .text-success { color: #4ade80 !important; }
+[data-bs-theme="dark"] .card .text-warning { color: #fbbf24 !important; }
+[data-bs-theme="dark"] .card .text-info    { color: #22d3ee !important; }
+
+/* Bordas Laterais dos Cards no Dark Mode */
+[data-bs-theme="dark"] .border-primary { border-color: #0284c7 !important; }
+[data-bs-theme="dark"] .border-success { border-color: #16a34a !important; }
+[data-bs-theme="dark"] .border-warning { border-color: #d97706 !important; }
+[data-bs-theme="dark"] .border-info    { border-color: #0891b2 !important; }

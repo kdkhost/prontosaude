@@ -216,8 +216,8 @@ $pre_cat_id = (int)($_GET['cat'] ?? 0);
                             <div class="text-body-secondary small text-uppercase fw-bold">Vídeos no Acervo</div>
                             <div class="fs-4 fw-bold text-body mt-1"><?= $total_videos_existentes; ?> vídeos</div>
                         </div>
-                        <div class="p-3 bg-primary-subtle text-primary rounded-circle">
-                            <i class="bi bi-camera-reels-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-primary-subtle text-primary rounded-circle">
+                            <i class="bi bi-camera-reels-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -230,8 +230,8 @@ $pre_cat_id = (int)($_GET['cat'] ?? 0);
                             <div class="text-body-secondary small text-uppercase fw-bold">Categorias Ativas</div>
                             <div class="fs-4 fw-bold text-info mt-1"><?= $total_categorias; ?> categorias</div>
                         </div>
-                        <div class="p-3 bg-info-subtle text-info rounded-circle">
-                            <i class="bi bi-tags-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-info-subtle text-info rounded-circle">
+                            <i class="bi bi-tags-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -248,8 +248,8 @@ $pre_cat_id = (int)($_GET['cat'] ?? 0);
                                 <span class="badge bg-primary-subtle text-primary border"><i class="bi bi-file-earmark-play me-1"></i>MP4 Direto</span>
                             </div>
                         </div>
-                        <div class="p-3 bg-success-subtle text-success rounded-circle">
-                            <i class="bi bi-play-btn-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-success-subtle text-success rounded-circle">
+                            <i class="bi bi-play-btn-fill"></i>
                         </div>
                     </div>
                 </div>

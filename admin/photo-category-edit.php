@@ -171,8 +171,8 @@ $is_active       = ($status === 'Active');
                                 <?= htmlspecialchars($category['p_category_name']); ?>
                             </small>
                         </div>
-                        <div class="p-3 bg-primary-subtle text-primary rounded-circle">
-                            <i class="bi bi-tag-fill fs-4"></i>
+                        <div class="kpi-icon-circle bg-primary-subtle text-primary rounded-circle">
+                            <i class="bi bi-tag-fill"></i>
                         </div>
                     </div>
                 </div>
@@ -189,8 +189,8 @@ $is_active       = ($status === 'Active');
                                 <?= $fotos_ativas_cat; ?> visíveis &bull; <?= $fotos_inativas_cat; ?> ocultas
                             </small>
                         </div>
-                        <div class="p-3 bg-success-subtle text-success rounded-circle">
-                            <i class="bi bi-images fs-4"></i>
+                        <div class="kpi-icon-circle bg-success-subtle text-success rounded-circle">
+                            <i class="bi bi-images"></i>
                         </div>
                     </div>
                 </div>
@@ -209,8 +209,8 @@ $is_active       = ($status === 'Active');
                                 </span>
                             </div>
                         </div>
-                        <div class="p-3 <?= $is_active ? 'bg-info-subtle text-info' : 'bg-warning-subtle text-warning'; ?> rounded-circle">
-                            <i class="bi <?= $is_active ? 'bi-eye-fill' : 'bi-eye-slash-fill'; ?> fs-4"></i>
+                        <div class="kpi-icon-circle <?= $is_active ? 'bg-info-subtle text-info' : 'bg-warning-subtle text-warning'; ?> rounded-circle">
+                            <i class="bi <?= $is_active ? 'bi-eye-fill' : 'bi-eye-slash-fill'; ?>"></i>
                         </div>
                     </div>
                 </div>
