@@ -88,3 +88,4 @@ if (!empty($banner_raw)) {
 </section>
 
 <?php require_once('footer.php'); ?>
+
