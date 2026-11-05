@@ -319,6 +319,44 @@
         try { history.replaceState(null, null, targetSelector); } catch (err) {}
       }
     }, true);
+
+    // ==========================================
+    // 5. LIMPEZA GLOBAL E IMEDIATA DE TOOLTIPS (NUNCA PRENDER NA TELA)
+    // ==========================================
+    const esconderTodosTooltips = () => {
+      if (window.bootstrap && window.bootstrap.Tooltip) {
+        document.querySelectorAll('[data-bs-toggle="tooltip"], [data-bs-original-title], [title], .btn, a').forEach(el => {
+          try {
+            const inst = bootstrap.Tooltip.getInstance(el);
+            if (inst) inst.hide();
+          } catch (e) {}
+        });
+      }
+      document.querySelectorAll('.tooltip').forEach(t => t.remove());
+    };
+
+    // Remove no clique em qualquer lugar do documento
+    document.addEventListener('click', function (e) {
+      const elWithTooltip = e.target.closest('[data-bs-toggle="tooltip"], [data-bs-original-title], [title], .btn, a');
+      if (elWithTooltip && window.bootstrap && window.bootstrap.Tooltip) {
+        try {
+          const inst = bootstrap.Tooltip.getInstance(elWithTooltip);
+          if (inst) inst.hide();
+          if (typeof elWithTooltip.blur === 'function') elWithTooltip.blur();
+        } catch (e) {}
+      }
+      esconderTodosTooltips();
+    }, true);
+
+    // Remove quando o cursor sai de qualquer elemento interativo
+    document.addEventListener('mouseleave', function (e) {
+      esconderTodosTooltips();
+    }, true);
+
+    // Remove imediatamente ao abrir qualquer modal ou SweetAlert2
+    document.addEventListener('show.bs.modal', esconderTodosTooltips, true);
+    document.addEventListener('shown.bs.modal', esconderTodosTooltips, true);
+    window.addEventListener('blur', esconderTodosTooltips);
   });
 
 })();

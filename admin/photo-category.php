@@ -280,8 +280,11 @@ $categorias_vazias = max(0, $total_categorias - $categorias_com_photo);
                                     <td class="text-center text-nowrap">
                                         <div class="d-flex align-items-center justify-content-center gap-1">
                                             <!-- Botão Detalhes -->
-                                            <button type="button" class="btn btn-outline-info btn-sm"
-                                                    onclick="abrirModalCat({id: <?= $cat_id; ?>, name: '<?= addslashes($cat_name); ?>', total: <?= $total_p; ?>, status: '<?= $is_active ? 'Ativo' : 'Inativo'; ?>'})"
+                                            <button type="button" class="btn btn-outline-info btn-sm btn-view-cat"
+                                                    data-id="<?= $cat_id; ?>"
+                                                    data-name="<?= htmlspecialchars($cat_name, ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-total="<?= $total_p; ?>"
+                                                    data-status="<?= $is_active ? 'Ativo' : 'Inativo'; ?>"
                                                     title="Visualizar detalhes da categoria">
                                                 <i class="bi bi-eye"></i>
                                             </button>
@@ -294,7 +297,7 @@ $categorias_vazias = max(0, $total_categorias - $categorias_com_photo);
                                             <!-- Botão Excluir Seguro com SweetAlert2 -->
                                             <button type="button" class="btn btn-outline-danger btn-sm btn-delete-cat"
                                                     data-id="<?= $cat_id; ?>"
-                                                    data-name="<?= $cat_name; ?>"
+                                                    data-name="<?= htmlspecialchars($cat_name, ENT_QUOTES, 'UTF-8'); ?>"
                                                     data-total="<?= $total_p; ?>"
                                                     title="Excluir categoria">
                                                 <i class="bi bi-trash3"></i>
@@ -366,148 +369,183 @@ $categorias_vazias = max(0, $total_categorias - $categorias_com_photo);
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // 1. DataTables com Tradução Completa
-    let table = null;
-    if (typeof window.jQuery !== 'undefined' && typeof window.jQuery.fn.DataTable !== 'undefined') {
-        table = $('#tabelaPhotoCat').DataTable({
-            responsive: true,
-            language: {
-                search: "Buscar Categoria:",
-                lengthMenu: "Mostrar _MENU_ registros",
-                info: "Exibindo _START_ a _END_ de _TOTAL_ categorias",
-                infoEmpty: "Nenhuma categoria cadastrada",
-                infoFiltered: "(filtrado de _MAX_ no total)",
-                zeroRecords: "Nenhuma categoria encontrada",
-                paginate: {
-                    first: "Primeira",
-                    previous: "Anterior",
-                    next: "Próxima",
-                    last: "Última"
-                }
-            },
-            order: [[0, 'asc']]
-        });
+// Funções Globais Independentes de DOMContentLoaded (Suporte Completo a SPA e Reload)
+window.abrirModalCat = function(data) {
+    // Remove qualquer tooltip ativo na tela imediatamente
+    document.querySelectorAll('.tooltip').forEach(t => t.remove());
+
+    const badgeIdEl = document.getElementById('mpcBadgeId');
+    if (badgeIdEl) badgeIdEl.textContent = 'Categoria #' + (data.id || '0');
+
+    const nomeEl = document.getElementById('mpcNome');
+    if (nomeEl) nomeEl.textContent = data.name || 'Categoria';
+
+    const totalEl = document.getElementById('mpcTotalPhotos');
+    if (totalEl) {
+        const total = parseInt(data.total || '0', 10);
+        totalEl.textContent = total + (total === 1 ? ' foto cadastrada' : ' fotos cadastradas');
     }
 
-    // 2. Exclusão Segura com SweetAlert2
-    const deleteButtons = document.querySelectorAll('.btn-delete-cat');
-    deleteButtons.forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const id = this.dataset.id;
-            const name = this.dataset.name || 'esta categoria';
-            const total = parseInt(this.dataset.total || '0', 10);
-
-            let alertHtml = `Tem certeza de que deseja excluir a categoria <strong>"${name}"</strong>?`;
-            if (total > 0) {
-                alertHtml += `<div class="alert alert-warning border-0 mt-3 mb-0 text-start small">
-                    <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>
-                    <strong>Atenção:</strong> Esta categoria possui <strong>${total} foto(s)</strong> vinculadas. Ao confirmar, todas essas fotos e seus arquivos serão excluídos do sistema!
-                </div>`;
-            } else {
-                alertHtml += `<br><small class="text-body-secondary">Esta ação não poderá ser desfeita.</small>`;
-            }
-
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    title: 'Confirmar Exclusão',
-                    html: alertHtml,
-                    icon: total > 0 ? 'warning' : 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc3545',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: '<i class="bi bi-trash3 me-1"></i> Sim, excluir tudo',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        executarExclusao(id);
-                    }
-                });
-            } else {
-                executarExclusao(id);
-            }
-        });
-    });
-
-    function executarExclusao(id) {
-        fetch('photo-category.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: new URLSearchParams({
-                action: 'delete_photo_category',
-                id: id
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Excluído com sucesso!',
-                        text: data.message,
-                        timer: 1800,
-                        showConfirmButton: false
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                } else {
-                    window.location.reload();
-                }
-            } else {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erro ao excluir',
-                        text: data.message || 'Não foi possível excluir a categoria.'
-                    });
-                } else {
-                    alert(data.message);
-                }
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Falha de comunicação',
-                    text: 'Não foi possível concluir a solicitação. A página será recarregada.'
-                }).then(() => {
-                    window.location.href = 'photo-category-delete.php?id=' + id;
-                });
-            } else {
-                window.location.href = 'photo-category-delete.php?id=' + id;
-            }
-        });
-    }
-
-    // 3. Modal de Detalhes da Categoria
-    window.abrirModalCat = function(data) {
-        document.getElementById('mpcBadgeId').textContent = 'Categoria #' + data.id;
-        document.getElementById('mpcNome').textContent = data.name;
-        document.getElementById('mpcTotalPhotos').textContent = data.total + (data.total === 1 ? ' foto cadastrada' : ' fotos cadastradas');
-        
-        const badgeStatus = document.getElementById('mpcBadgeStatus');
+    const badgeStatus = document.getElementById('mpcBadgeStatus');
+    if (badgeStatus) {
         if (data.status === 'Ativo') {
             badgeStatus.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill small"><i class="bi bi-check-circle-fill me-1"></i> Ativo</span>';
         } else {
             badgeStatus.innerHTML = '<span class="badge bg-secondary-subtle text-body-secondary border border-secondary-subtle px-3 py-1 rounded-pill small"><i class="bi bi-pause-circle-fill me-1"></i> Inativo</span>';
         }
+    }
 
-        const editLink = document.getElementById('mpcLinkEditar');
-        if (editLink) editLink.href = 'photo-category-edit.php?id=' + data.id;
+    const editLink = document.getElementById('mpcLinkEditar');
+    if (editLink) editLink.href = 'photo-category-edit.php?id=' + (data.id || '');
 
-        const modalEl = document.getElementById('modalPhotoCatDetalhes');
-        if (modalEl && typeof bootstrap !== 'undefined') {
-            bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    const modalEl = document.getElementById('modalPhotoCatDetalhes');
+    if (modalEl && typeof bootstrap !== 'undefined') {
+        const modalInst = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modalInst.show();
+    }
+};
+
+window.confirmarExclusaoCat = function(id, name, total) {
+    // Remove qualquer tooltip ativo na tela imediatamente
+    document.querySelectorAll('.tooltip').forEach(t => t.remove());
+
+    let alertHtml = `Tem certeza de que deseja excluir a categoria <strong>"${name}"</strong>?`;
+    if (total > 0) {
+        alertHtml += `<div class="alert alert-warning border-0 mt-3 mb-0 text-start small">
+            <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>
+            <strong>Atenção:</strong> Esta categoria possui <strong>${total} foto(s)</strong> vinculadas. Ao confirmar, todas essas fotos e seus arquivos serão excluídos do sistema!
+        </div>`;
+    } else {
+        alertHtml += `<br><small class="text-body-secondary">Esta ação não poderá ser desfeita.</small>`;
+    }
+
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: 'Confirmar Exclusão',
+            html: alertHtml,
+            icon: total > 0 ? 'warning' : 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="bi bi-trash3 me-1"></i> Sim, excluir tudo',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                confirmButton: 'btn btn-danger px-3 me-2',
+                cancelButton: 'btn btn-secondary px-3'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                executarExclusaoCat(id);
+            }
+        });
+    } else {
+        executarExclusaoCat(id);
+    }
+};
+
+window.executarExclusaoCat = function(id) {
+    fetch('photo-category.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: new URLSearchParams({
+            action: 'delete_photo_category',
+            id: id
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Excluído com sucesso!',
+                    text: data.message,
+                    timer: 1600,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.reload();
+                });
+            } else {
+                window.location.reload();
+            }
+        } else {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao excluir',
+                    text: data.message || 'Não foi possível excluir a categoria.'
+                });
+            }
         }
-    };
+    })
+    .catch(err => {
+        console.error(err);
+        window.location.href = 'photo-category-delete.php?id=' + id;
+    });
+};
+
+// Delegação Global de Cliques (Resistente a Paginação, Ordenação e SPA)
+document.addEventListener('click', function (e) {
+    // 1. Botão Ver Detalhes
+    const btnView = e.target.closest('.btn-view-cat');
+    if (btnView) {
+        e.preventDefault();
+        const id     = btnView.getAttribute('data-id');
+        const name   = btnView.getAttribute('data-name');
+        const total  = parseInt(btnView.getAttribute('data-total') || '0', 10);
+        const status = btnView.getAttribute('data-status');
+        window.abrirModalCat({ id, name, total, status });
+        return;
+    }
+
+    // 2. Botão Excluir
+    const btnDel = e.target.closest('.btn-delete-cat');
+    if (btnDel) {
+        e.preventDefault();
+        const id    = btnDel.getAttribute('data-id');
+        const name  = btnDel.getAttribute('data-name') || 'esta categoria';
+        const total = parseInt(btnDel.getAttribute('data-total') || '0', 10);
+        window.confirmarExclusaoCat(id, name, total);
+        return;
+    }
 });
+
+// Inicialização Única do DataTables
+function initTabelaPhotoCat() {
+    if (typeof window.jQuery !== 'undefined' && typeof window.jQuery.fn.DataTable !== 'undefined') {
+        const $table = $('#tabelaPhotoCat');
+        if ($table.length && !$.fn.DataTable.isDataTable('#tabelaPhotoCat')) {
+            $table.DataTable({
+                responsive: true,
+                language: {
+                    search: "Buscar Categoria:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Exibindo _START_ a _END_ de _TOTAL_ categorias",
+                    infoEmpty: "Nenhuma categoria cadastrada",
+                    infoFiltered: "(filtrado de _MAX_ no total)",
+                    zeroRecords: "Nenhuma categoria encontrada",
+                    paginate: {
+                        first: "Primeira",
+                        previous: "Anterior",
+                        next: "Próxima",
+                        last: "Última"
+                    }
+                },
+                order: [[0, 'asc']]
+            });
+        }
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTabelaPhotoCat);
+} else {
+    initTabelaPhotoCat();
+}
 </script>
 
 <?php require_once('footer.php'); ?>

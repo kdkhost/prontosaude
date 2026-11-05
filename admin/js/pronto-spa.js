@@ -54,15 +54,16 @@
   function reinitAllComponents(container) {
     container = container || document.querySelector('.app-main') || document;
 
-    // A. Tooltips Bootstrap 5
+    // A. Tooltips Bootstrap 5 (Configuração Ultrarresponsiva apenas Hover)
     if (window.bootstrap && window.bootstrap.Tooltip) {
       const tooltipTriggerList = container.querySelectorAll('[data-bs-toggle="tooltip"], [title]:not([data-bs-toggle])');
       tooltipTriggerList.forEach(el => {
         try {
           if (!bootstrap.Tooltip.getInstance(el)) {
             new bootstrap.Tooltip(el, {
+              trigger: 'hover',
               boundary: document.body,
-              delay: { show: 100, hide: 50 }
+              delay: { show: 80, hide: 40 }
             });
           }
         } catch (e) {}

@@ -260,8 +260,11 @@ $categorias_vazias = max(0, $total_categorias - $categorias_com_video);
                                     <td class="text-center text-nowrap">
                                         <div class="d-flex align-items-center justify-content-center gap-1">
                                             <!-- Botão Detalhes -->
-                                            <button type="button" class="btn btn-outline-info btn-sm"
-                                                    onclick="abrirModalCat({id: <?= $cat_id; ?>, name: '<?= addslashes($cat_name); ?>', total: <?= $total_v; ?>, status: '<?= $is_active ? 'Ativo' : 'Inativo'; ?>'})"
+                                            <button type="button" class="btn btn-outline-info btn-sm btn-view-cat"
+                                                    data-id="<?= $cat_id; ?>"
+                                                    data-name="<?= htmlspecialchars($cat_name, ENT_QUOTES, 'UTF-8'); ?>"
+                                                    data-total="<?= $total_v; ?>"
+                                                    data-status="<?= $is_active ? 'Ativo' : 'Inativo'; ?>"
                                                     title="Visualizar detalhes da categoria">
                                                 <i class="bi bi-eye"></i>
                                             </button>
@@ -274,7 +277,7 @@ $categorias_vazias = max(0, $total_categorias - $categorias_com_video);
                                             <!-- Botão Excluir Seguro com SweetAlert2 -->
                                             <button type="button" class="btn btn-outline-danger btn-sm btn-delete-cat"
                                                     data-id="<?= $cat_id; ?>"
-                                                    data-name="<?= $cat_name; ?>"
+                                                    data-name="<?= htmlspecialchars($cat_name, ENT_QUOTES, 'UTF-8'); ?>"
                                                     data-total="<?= $total_v; ?>"
                                                     title="Excluir categoria">
                                                 <i class="bi bi-trash3"></i>
@@ -346,148 +349,183 @@ $categorias_vazias = max(0, $total_categorias - $categorias_com_video);
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // 1. DataTables com Tradução Completa
-    let table = null;
-    if (typeof window.jQuery !== 'undefined' && typeof window.jQuery.fn.DataTable !== 'undefined') {
-        table = $('#tabelaVideoCat').DataTable({
-            responsive: true,
-            language: {
-                search: "Buscar Categoria:",
-                lengthMenu: "Mostrar _MENU_ registros",
-                info: "Exibindo _START_ a _END_ de _TOTAL_ categorias",
-                infoEmpty: "Nenhuma categoria cadastrada",
-                infoFiltered: "(filtrado de _MAX_ no total)",
-                zeroRecords: "Nenhuma categoria encontrada",
-                paginate: {
-                    first: "Primeira",
-                    previous: "Anterior",
-                    next: "Próxima",
-                    last: "Última"
-                }
-            },
-            order: [[0, 'asc']]
-        });
+// Funções Globais Independentes de DOMContentLoaded (Suporte Completo a SPA e Reload)
+window.abrirModalCat = function(data) {
+    // Remove qualquer tooltip ativo na tela imediatamente
+    document.querySelectorAll('.tooltip').forEach(t => t.remove());
+
+    const badgeIdEl = document.getElementById('mcdBadgeId');
+    if (badgeIdEl) badgeIdEl.textContent = 'Categoria #' + (data.id || '0');
+
+    const nomeEl = document.getElementById('mcdNome');
+    if (nomeEl) nomeEl.textContent = data.name || 'Categoria';
+
+    const totalEl = document.getElementById('mcdTotalVideos');
+    if (totalEl) {
+        const total = parseInt(data.total || '0', 10);
+        totalEl.textContent = total + (total === 1 ? ' vídeo cadastrado' : ' vídeos cadastrados');
     }
 
-    // 2. Exclusão Segura com SweetAlert2
-    const deleteButtons = document.querySelectorAll('.btn-delete-cat');
-    deleteButtons.forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const id = this.dataset.id;
-            const name = this.dataset.name || 'esta categoria';
-            const total = parseInt(this.dataset.total || '0', 10);
-
-            let alertHtml = `Tem certeza de que deseja excluir a categoria <strong>"${name}"</strong>?`;
-            if (total > 0) {
-                alertHtml += `<div class="alert alert-warning border-0 mt-3 mb-0 text-start small">
-                    <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>
-                    <strong>Atenção:</strong> Esta categoria possui <strong>${total} vídeo(s)</strong> vinculados. Ao confirmar, todos esses vídeos também serão excluídos do sistema!
-                </div>`;
-            } else {
-                alertHtml += `<br><small class="text-body-secondary">Esta ação não poderá ser desfeita.</small>`;
-            }
-
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    title: 'Confirmar Exclusão',
-                    html: alertHtml,
-                    icon: total > 0 ? 'warning' : 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc3545',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: '<i class="bi bi-trash3 me-1"></i> Sim, excluir tudo',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        executarExclusao(id);
-                    }
-                });
-            } else {
-                executarExclusao(id);
-            }
-        });
-    });
-
-    function executarExclusao(id) {
-        fetch('video-category.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: new URLSearchParams({
-                action: 'delete_video_category',
-                id: id
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Excluído com sucesso!',
-                        text: data.message,
-                        timer: 1800,
-                        showConfirmButton: false
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                } else {
-                    window.location.reload();
-                }
-            } else {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erro ao excluir',
-                        text: data.message || 'Não foi possível excluir a categoria.'
-                    });
-                } else {
-                    alert(data.message);
-                }
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Falha de comunicação',
-                    text: 'Não foi possível concluir a solicitação. A página será recarregada.'
-                }).then(() => {
-                    window.location.href = 'video-category-delete.php?id=' + id;
-                });
-            } else {
-                window.location.href = 'video-category-delete.php?id=' + id;
-            }
-        });
-    }
-
-    // 3. Modal de Detalhes da Categoria
-    window.abrirModalCat = function(data) {
-        document.getElementById('mcdBadgeId').textContent = 'Categoria #' + data.id;
-        document.getElementById('mcdNome').textContent = data.name;
-        document.getElementById('mcdTotalVideos').textContent = data.total + (data.total === 1 ? ' vídeo cadastrado' : ' vídeos cadastrados');
-        
-        const badgeStatus = document.getElementById('mcdBadgeStatus');
+    const badgeStatus = document.getElementById('mcdBadgeStatus');
+    if (badgeStatus) {
         if (data.status === 'Ativo') {
             badgeStatus.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill small"><i class="bi bi-check-circle-fill me-1"></i> Ativo</span>';
         } else {
             badgeStatus.innerHTML = '<span class="badge bg-secondary-subtle text-body-secondary border border-secondary-subtle px-3 py-1 rounded-pill small"><i class="bi bi-pause-circle-fill me-1"></i> Inativo</span>';
         }
+    }
 
-        const editLink = document.getElementById('mcdLinkEditar');
-        if (editLink) editLink.href = 'video-category-edit.php?id=' + data.id;
+    const editLink = document.getElementById('mcdLinkEditar');
+    if (editLink) editLink.href = 'video-category-edit.php?id=' + (data.id || '');
 
-        const modalEl = document.getElementById('modalVideoCatDetalhes');
-        if (modalEl && typeof bootstrap !== 'undefined') {
-            bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    const modalEl = document.getElementById('modalVideoCatDetalhes');
+    if (modalEl && typeof bootstrap !== 'undefined') {
+        const modalInst = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modalInst.show();
+    }
+};
+
+window.confirmarExclusaoCat = function(id, name, total) {
+    // Remove qualquer tooltip ativo na tela imediatamente
+    document.querySelectorAll('.tooltip').forEach(t => t.remove());
+
+    let alertHtml = `Tem certeza de que deseja excluir a categoria <strong>"${name}"</strong>?`;
+    if (total > 0) {
+        alertHtml += `<div class="alert alert-warning border-0 mt-3 mb-0 text-start small">
+            <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>
+            <strong>Atenção:</strong> Esta categoria possui <strong>${total} vídeo(s)</strong> vinculados. Ao confirmar, todos esses vídeos também serão excluídos do sistema!
+        </div>`;
+    } else {
+        alertHtml += `<br><small class="text-body-secondary">Esta ação não poderá ser desfeita.</small>`;
+    }
+
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: 'Confirmar Exclusão',
+            html: alertHtml,
+            icon: total > 0 ? 'warning' : 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="bi bi-trash3 me-1"></i> Sim, excluir tudo',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                confirmButton: 'btn btn-danger px-3 me-2',
+                cancelButton: 'btn btn-secondary px-3'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                executarExclusaoCat(id);
+            }
+        });
+    } else {
+        executarExclusaoCat(id);
+    }
+};
+
+window.executarExclusaoCat = function(id) {
+    fetch('video-category.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: new URLSearchParams({
+            action: 'delete_video_category',
+            id: id
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Excluído com sucesso!',
+                    text: data.message,
+                    timer: 1600,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.reload();
+                });
+            } else {
+                window.location.reload();
+            }
+        } else {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao excluir',
+                    text: data.message || 'Não foi possível excluir a categoria.'
+                });
+            }
         }
-    };
+    })
+    .catch(err => {
+        console.error(err);
+        window.location.href = 'video-category-delete.php?id=' + id;
+    });
+};
+
+// Delegação Global de Cliques (Resistente a Paginação, Ordenação e SPA)
+document.addEventListener('click', function (e) {
+    // 1. Botão Ver Detalhes
+    const btnView = e.target.closest('.btn-view-cat');
+    if (btnView) {
+        e.preventDefault();
+        const id     = btnView.getAttribute('data-id');
+        const name   = btnView.getAttribute('data-name');
+        const total  = parseInt(btnView.getAttribute('data-total') || '0', 10);
+        const status = btnView.getAttribute('data-status');
+        window.abrirModalCat({ id, name, total, status });
+        return;
+    }
+
+    // 2. Botão Excluir
+    const btnDel = e.target.closest('.btn-delete-cat');
+    if (btnDel) {
+        e.preventDefault();
+        const id    = btnDel.getAttribute('data-id');
+        const name  = btnDel.getAttribute('data-name') || 'esta categoria';
+        const total = parseInt(btnDel.getAttribute('data-total') || '0', 10);
+        window.confirmarExclusaoCat(id, name, total);
+        return;
+    }
 });
+
+// Inicialização Única do DataTables
+function initTabelaVideoCat() {
+    if (typeof window.jQuery !== 'undefined' && typeof window.jQuery.fn.DataTable !== 'undefined') {
+        const $table = $('#tabelaVideoCat');
+        if ($table.length && !$.fn.DataTable.isDataTable('#tabelaVideoCat')) {
+            $table.DataTable({
+                responsive: true,
+                language: {
+                    search: "Buscar Categoria:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Exibindo _START_ a _END_ de _TOTAL_ categorias",
+                    infoEmpty: "Nenhuma categoria cadastrada",
+                    infoFiltered: "(filtrado de _MAX_ no total)",
+                    zeroRecords: "Nenhuma categoria encontrada",
+                    paginate: {
+                        first: "Primeira",
+                        previous: "Anterior",
+                        next: "Próxima",
+                        last: "Última"
+                    }
+                },
+                order: [[0, 'asc']]
+            });
+        }
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTabelaVideoCat);
+} else {
+    initTabelaVideoCat();
+}
 </script>
 
 <?php require_once('footer.php'); ?>

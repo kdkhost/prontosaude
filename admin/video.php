@@ -152,7 +152,7 @@ function pronto_resolver_midia_video($raw) {
 
     $thumb_url = '';
     if (file_exists($caminho_thumb_disco) && filesize($caminho_thumb_disco) > 100) {
-        $thumb_url = '../assets/uploads/videos/thumbs/' . $thumb_file;
+        $thumb_url = BASE_URL . 'assets/uploads/videos/thumbs/' . $thumb_file;
     }
 
     $res['type'] = 'mp4';
@@ -576,36 +576,36 @@ document.addEventListener('DOMContentLoaded', function () {
         if (kpiInativos) kpiInativos.textContent = inativos;
     }
 
-    // 4. Exclusão Segura com SweetAlert2
-    const deleteButtons = document.querySelectorAll('.btn-delete-video');
-    deleteButtons.forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const id = this.dataset.id;
-            const title = this.dataset.title || 'este vídeo';
+    // 4. Exclusão Segura com SweetAlert2 (Delegação Global)
+    window.confirmarExclusaoVideo = function(id, title) {
+        document.querySelectorAll('.tooltip').forEach(t => t.remove());
 
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    title: 'Confirmar Exclusão',
-                    html: `Deseja realmente remover o vídeo <strong>"${title}"</strong> da galeria?<br><small class="text-danger">Os arquivos de mídia associados também serão excluídos.</small>`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc3545',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: '<i class="bi bi-trash3 me-1"></i> Sim, excluir vídeo',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        executarExclusaoVideo(id);
-                    }
-                });
-            } else {
-                executarExclusaoVideo(id);
-            }
-        });
-    });
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Confirmar Exclusão',
+                html: `Deseja realmente remover o vídeo <strong>"${title}"</strong> da galeria?<br><small class="text-danger">Os arquivos de mídia associados também serão excluídos.</small>`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="bi bi-trash3 me-1"></i> Sim, excluir vídeo',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    confirmButton: 'btn btn-danger px-3 me-2',
+                    cancelButton: 'btn btn-secondary px-3'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    executarExclusaoVideo(id);
+                }
+            });
+        } else {
+            executarExclusaoVideo(id);
+        }
+    };
 
-    function executarExclusaoVideo(id) {
+    window.executarExclusaoVideo = function(id) {
         fetch('video.php', {
             method: 'POST',
             headers: {
@@ -625,7 +625,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         icon: 'success',
                         title: 'Vídeo Removido!',
                         text: data.message,
-                        timer: 1800,
+                        timer: 1600,
                         showConfirmButton: false
                     }).then(() => {
                         const tr = document.getElementById('tr-video-' + id);
@@ -650,26 +650,25 @@ document.addEventListener('DOMContentLoaded', function () {
                         title: 'Erro ao excluir',
                         text: data.message || 'Não foi possível excluir o vídeo.'
                     });
-                } else {
-                    alert(data.message);
                 }
             }
         })
         .catch(err => {
             console.error(err);
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Falha de comunicação',
-                    text: 'A página será recarregada para concluir a exclusão.'
-                }).then(() => {
-                    window.location.href = 'video-delete.php?id=' + id;
-                });
-            } else {
-                window.location.href = 'video-delete.php?id=' + id;
-            }
+            window.location.href = 'video-delete.php?id=' + id;
         });
-    }
+    };
+
+    // Delegação de Clique para Botão de Exclusão de Vídeos
+    document.addEventListener('click', function(e) {
+        const btnDel = e.target.closest('.btn-delete-video');
+        if (btnDel) {
+            e.preventDefault();
+            const id = btnDel.getAttribute('data-id');
+            const title = btnDel.getAttribute('data-title') || 'este vídeo';
+            window.confirmarExclusaoVideo(id, title);
+        }
+    });
 
     // 5. Gerador Automático de Miniaturas em Alta Resolução para Vídeos MP4
     const thumbContainers = document.querySelectorAll('.auto-video-thumb-container');
