@@ -117,13 +117,31 @@ function pronto_resolver_midia_video($raw) {
     }
 
     // Caso 4: Arquivo MP4 ou caminho relativo
+    $caminho_rel = $raw;
+    if (strpos($caminho_rel, 'assets/') === 0) {
+        $caminho_rel = '../' . $caminho_rel;
+    }
     $caminho_limpo = ltrim(str_replace(['../', './'], '', $raw), '/');
     $res['type'] = 'mp4';
-    $res['url'] = BASE_URL . $caminho_limpo;
+    $res['url'] = $caminho_rel;
+    $res['full_url'] = BASE_URL . $caminho_limpo;
     $res['thumb'] = '';
     return $res;
 }
 ?>
+
+<style>
+.video-card-thumb .play-btn-circle {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.video-card-thumb:hover .play-overlay {
+    background-color: rgba(0, 0, 0, 0.45) !important;
+}
+.video-card-thumb:hover .play-btn-circle {
+    transform: scale(1.18);
+    background-color: var(--bs-primary) !important;
+}
+</style>
 
 <!-- Cabeçalho da Página -->
 <div class="app-content-header pb-2 mb-3 border-bottom">
@@ -296,26 +314,30 @@ function pronto_resolver_midia_video($raw) {
 
                                     <!-- Miniatura do Vídeo / Botão de Play Inteligente -->
                                     <td class="text-center">
-                                        <div class="position-relative overflow-hidden rounded-3 border border-secondary-subtle shadow-xs mx-auto bg-dark d-flex align-items-center justify-content-center"
-                                             style="width: 130px; aspect-ratio: 16/9; cursor: pointer;"
+                                        <div class="position-relative overflow-hidden rounded-3 border border-secondary-subtle shadow-xs mx-auto bg-dark d-flex align-items-center justify-content-center video-card-thumb"
+                                             style="width: 140px; aspect-ratio: 16/9; cursor: pointer;"
                                              onclick="abrirPlayerModal({id: <?= $v_id; ?>, title: '<?= addslashes($v_title); ?>', type: '<?= $info_midia['type']; ?>', url: '<?= addslashes($info_midia['url']); ?>', cat: '<?= addslashes($v_cat); ?>'})"
                                              title="Assistir a este vídeo no player">
                                             
-                                            <?php if (!empty($info_midia['thumb'])): ?>
-                                                <img src="<?= $info_midia['thumb']; ?>" alt="<?= $v_title; ?>" class="w-100 h-100 object-fit-cover opacity-75">
+                                            <?php if ($info_midia['type'] === 'youtube' && !empty($info_midia['thumb'])): ?>
+                                                <img src="<?= $info_midia['thumb']; ?>" alt="<?= $v_title; ?>" class="w-100 h-100 object-fit-cover">
+                                            <?php elseif ($info_midia['type'] === 'mp4' && !empty($info_midia['url'])): ?>
+                                                <video src="<?= $info_midia['url']; ?>#t=0.5" preload="metadata" muted playsinline class="w-100 h-100 object-fit-cover video-thumb-preview" style="pointer-events: none;"></video>
                                             <?php else: ?>
                                                 <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center bg-black bg-gradient text-white-50">
                                                     <i class="bi bi-file-earmark-play fs-4 text-primary"></i>
                                                 </div>
                                             <?php endif; ?>
 
-                                            <!-- Ícone de Play Sobreposto -->
-                                            <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle bg-dark bg-opacity-75 text-white" style="width: 32px; height: 32px;">
-                                                <i class="bi bi-play-fill fs-5 text-white"></i>
+                                            <!-- Overlay com Ícone de Play Sobreposto -->
+                                            <div class="position-absolute w-100 h-100 top-0 start-0 bg-dark bg-opacity-25 d-flex align-items-center justify-content-center play-overlay">
+                                                <div class="d-flex align-items-center justify-content-center rounded-circle bg-dark bg-opacity-75 text-white shadow-sm play-btn-circle" style="width: 36px; height: 36px;">
+                                                    <i class="bi bi-play-fill fs-5 text-white"></i>
+                                                </div>
                                             </div>
 
                                             <!-- Badge de Formato -->
-                                            <span class="position-absolute bottom-0 end-0 badge bg-dark bg-opacity-75 text-uppercase m-1" style="font-size: 0.65rem;">
+                                            <span class="position-absolute bottom-0 end-0 badge bg-dark bg-opacity-75 text-uppercase m-1 border border-secondary border-opacity-50" style="font-size: 0.65rem;">
                                                 <?= $info_midia['type']; ?>
                                             </span>
                                         </div>
@@ -608,7 +630,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 5. Modal Dinâmico do Player de Vídeo
+    // 5. Garante a renderização do primeiro frame nos previews de vídeo MP4
+    document.querySelectorAll('video.video-thumb-preview').forEach(v => {
+        v.addEventListener('loadedmetadata', function () {
+            this.currentTime = 0.5;
+        });
+        // Se já tiver metadados em cache
+        if (v.readyState >= 1) {
+            v.currentTime = 0.5;
+        }
+    });
+
+    // 6. Modal Dinâmico do Player de Vídeo
     window.abrirPlayerModal = function(data) {
         document.getElementById('mpvTitulo').textContent = data.title || 'Reproduzir Vídeo';
         document.getElementById('mpvCategoria').textContent = 'Categoria: ' + (data.cat || 'Geral');
