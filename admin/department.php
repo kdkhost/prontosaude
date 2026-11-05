@@ -234,7 +234,12 @@ foreach ($departments as $d) {
                                 $dep_phone  = htmlspecialchars($row['dep_phone'] ?? '', ENT_QUOTES, 'UTF-8');
                                 $dep_fax    = htmlspecialchars($row['dep_fax'] ?? '', ENT_QUOTES, 'UTF-8');
                                 $dep_email  = htmlspecialchars($row['dep_email'] ?? '', ENT_QUOTES, 'UTF-8');
-                                $dep_addr   = htmlspecialchars($row['dep_address'] ?? '', ENT_QUOTES, 'UTF-8');
+                                
+                                // Limpeza de tags HTML no endereço para exibição na linha da tabela
+                                $dep_addr_raw   = $row['dep_address'] ?? '';
+                                $dep_addr_clean = strip_tags(str_replace(['<br>', '<br/>', '<br />', '&nbsp;'], ' - ', $dep_addr_raw));
+                                $dep_addr_clean = preg_replace('/\s+/', ' ', trim($dep_addr_clean));
+
                                 $dep_photo  = trim($row['dep_photo'] ?? '');
                                 $dep_banner = trim($row['dep_banner'] ?? '');
 
@@ -335,9 +340,9 @@ foreach ($departments as $d) {
                                             <span class="text-body-tertiary fst-italic">Nenhum canal informado</span>
                                         <?php endif; ?>
 
-                                        <?php if (!empty($dep_addr)): ?>
-                                            <div class="text-body-tertiary text-truncate mt-1" style="max-width: 220px;" title="<?= $dep_addr; ?>">
-                                                <i class="bi bi-geo-alt me-1 text-danger"></i><?= $dep_addr; ?>
+                                        <?php if (!empty($dep_addr_clean)): ?>
+                                            <div class="text-body-tertiary text-truncate mt-1" style="max-width: 260px;" title="<?= htmlspecialchars($dep_addr_clean, ENT_QUOTES, 'UTF-8'); ?>">
+                                                <i class="bi bi-geo-alt me-1 text-danger"></i><?= htmlspecialchars($dep_addr_clean, ENT_QUOTES, 'UTF-8'); ?>
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -509,18 +514,8 @@ foreach ($departments as $d) {
 
                     <!-- ABA 2: Horários de Funcionamento -->
                     <div class="tab-pane fade" id="tab-horarios" role="tabpanel" aria-labelledby="tab-horarios-btn">
-                        <div class="table-responsive border rounded-3 overflow-hidden">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 50%;">Dia da Semana</th>
-                                        <th style="width: 50%;">Horário de Atendimento</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="mDepHorariosList">
-                                    <!-- Preenchido dinamicamente via JS -->
-                                </tbody>
-                            </table>
+                        <div class="row g-2" id="mDepHorariosList">
+                            <!-- Preenchido dinamicamente via JS com cards modernos -->
                         </div>
                         <div id="mDepHorariosEmpty" class="text-center py-4 text-body-secondary d-none">
                             <i class="bi bi-clock-slash fs-2 d-block mb-2 text-body-tertiary"></i>
@@ -653,13 +648,17 @@ window.abrirModalDepartamento = function(id) {
     document.getElementById('mDepFax').textContent = data.fax || 'Não informado';
     document.getElementById('mDepPhone').textContent = data.phone || 'Não informado';
     document.getElementById('mDepEmail').innerHTML = data.email ? `<a href="mailto:${data.email}" class="text-decoration-none">${data.email}</a>` : 'Não informado';
-    document.getElementById('mDepAddress').textContent = data.address || 'Endereço não informado.';
+    
+    // Tratamento de endereço com quebras de linha limpas
+    const endRaw = data.address || '';
+    const endFormatado = endRaw.replace(/<br\s*[\/]?>/gi, '\n').replace(/\n+/g, '<br>');
+    document.getElementById('mDepAddress').innerHTML = endFormatado ? endFormatado : 'Endereço não informado.';
     
     // Detalhes HTML
     const detailBox = document.getElementById('mDepDetail');
     detailBox.innerHTML = (data.detail && data.detail.trim() !== '') ? data.detail : '<span class="text-body-secondary fst-italic">Sem descrição informada.</span>';
 
-    // Horários de Atendimento
+    // Horários de Atendimento (Cards Modernos)
     const horariosList = document.getElementById('mDepHorariosList');
     const horariosEmpty = document.getElementById('mDepHorariosEmpty');
     const badgeHorarios = document.getElementById('mBadgeHorarios');
@@ -671,12 +670,18 @@ window.abrirModalDepartamento = function(id) {
     if (hours.length > 0) {
         horariosEmpty.classList.add('d-none');
         hours.forEach(h => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td class="fw-semibold text-body"><i class="bi bi-calendar3 me-2 text-primary"></i>${h.oh_day || ''}</td>
-                <td><span class="badge bg-body-secondary text-body border px-2 py-1 font-monospace">${h.oh_time || ''}</span></td>
+            const isFechado = (h.oh_time || '').toLowerCase().includes('fechado');
+            const col = document.createElement('div');
+            col.className = 'col-12 col-sm-6';
+            col.innerHTML = `
+                <div class="p-3 rounded-3 bg-body-tertiary border d-flex align-items-center justify-content-between h-100">
+                    <span class="fw-semibold text-body"><i class="bi bi-calendar3 me-2 text-primary"></i>${h.oh_day || ''}</span>
+                    <span class="badge ${isFechado ? 'bg-danger-subtle text-danger border border-danger-subtle' : 'bg-primary-subtle text-primary border border-primary-subtle'} px-2 py-1 font-monospace">
+                        ${h.oh_time || ''}
+                    </span>
+                </div>
             `;
-            horariosList.appendChild(tr);
+            horariosList.appendChild(col);
         });
     } else {
         horariosEmpty.classList.remove('d-none');
