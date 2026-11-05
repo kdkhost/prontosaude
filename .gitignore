@@ -10,3 +10,4 @@ Thumbs.db
 *.db
 scratch/
 tools/clean_odontologia.php
+tools/set_about_text.php
