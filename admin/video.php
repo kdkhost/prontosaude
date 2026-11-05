@@ -31,6 +31,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit;
 }
 
+// 1.1 Endpoint AJAX: Salvar Miniatura de Vídeo MP4 em Alta Resolução
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_video_thumb') {
+    header('Content-Type: application/json; charset=utf-8');
+    $thumb_name = basename($_POST['thumb_name'] ?? '');
+    $image_data = $_POST['image_data'] ?? '';
+
+    if (!empty($thumb_name) && preg_match('/^[a-zA-Z0-9_\-\.]+\.jpg$/i', $thumb_name) && strpos($image_data, 'data:image/') === 0) {
+        $parts = explode(',', $image_data, 2);
+        if (isset($parts[1])) {
+            $binary = base64_decode($parts[1]);
+            $dir = __DIR__ . '/../assets/uploads/videos/thumbs/';
+            if (!is_dir($dir)) {
+                @mkdir($dir, 0777, true);
+            }
+            @file_put_contents($dir . $thumb_name, $binary);
+            echo json_encode(['status' => 'success', 'file' => $thumb_name]);
+            exit;
+        }
+    }
+    echo json_encode(['status' => 'error', 'message' => 'Dados inválidos']);
+    exit;
+}
+
 // 2. Consulta de Vídeos com Categorias
 $statement = $pdo->prepare("SELECT 
                                 t1.video_id,
@@ -122,10 +145,21 @@ function pronto_resolver_midia_video($raw) {
         $caminho_rel = '../' . $caminho_rel;
     }
     $caminho_limpo = ltrim(str_replace(['../', './'], '', $raw), '/');
+    $nome_arquivo  = basename($caminho_limpo);
+    $nome_base     = pathinfo($nome_arquivo, PATHINFO_FILENAME);
+    $thumb_file    = $nome_base . '.jpg';
+    $caminho_thumb_disco = __DIR__ . '/../assets/uploads/videos/thumbs/' . $thumb_file;
+
+    $thumb_url = '';
+    if (file_exists($caminho_thumb_disco) && filesize($caminho_thumb_disco) > 100) {
+        $thumb_url = '../assets/uploads/videos/thumbs/' . $thumb_file;
+    }
+
     $res['type'] = 'mp4';
     $res['url'] = $caminho_rel;
     $res['full_url'] = BASE_URL . $caminho_limpo;
-    $res['thumb'] = '';
+    $res['thumb'] = $thumb_url;
+    $res['thumb_file'] = $thumb_file;
     return $res;
 }
 ?>
@@ -319,10 +353,17 @@ function pronto_resolver_midia_video($raw) {
                                              onclick="abrirPlayerModal({id: <?= $v_id; ?>, title: '<?= addslashes($v_title); ?>', type: '<?= $info_midia['type']; ?>', url: '<?= addslashes($info_midia['url']); ?>', cat: '<?= addslashes($v_cat); ?>'})"
                                              title="Assistir a este vídeo no player">
                                             
-                                            <?php if ($info_midia['type'] === 'youtube' && !empty($info_midia['thumb'])): ?>
+                                            <?php if (!empty($info_midia['thumb'])): ?>
                                                 <img src="<?= $info_midia['thumb']; ?>" alt="<?= $v_title; ?>" class="w-100 h-100 object-fit-cover">
                                             <?php elseif ($info_midia['type'] === 'mp4' && !empty($info_midia['url'])): ?>
-                                                <video src="<?= $info_midia['url']; ?>#t=0.5" preload="metadata" muted playsinline class="w-100 h-100 object-fit-cover video-thumb-preview" style="pointer-events: none;"></video>
+                                                <div class="w-100 h-100 position-relative d-flex align-items-center justify-content-center bg-black auto-video-thumb-container"
+                                                     data-video-url="<?= htmlspecialchars($info_midia['url']); ?>"
+                                                     data-thumb-name="<?= htmlspecialchars($info_midia['thumb_file']); ?>">
+                                                    <div class="spinner-border spinner-border-sm text-primary thumb-loader" role="status" style="width: 1.25rem; height: 1.25rem;">
+                                                        <span class="visually-hidden">Carregando...</span>
+                                                    </div>
+                                                    <img src="" class="w-100 h-100 object-fit-cover d-none thumb-target-img" alt="<?= $v_title; ?>">
+                                                </div>
                                             <?php else: ?>
                                                 <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center bg-black bg-gradient text-white-50">
                                                     <i class="bi bi-file-earmark-play fs-4 text-primary"></i>
@@ -630,16 +671,82 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 5. Garante a renderização do primeiro frame nos previews de vídeo MP4
-    document.querySelectorAll('video.video-thumb-preview').forEach(v => {
-        v.addEventListener('loadedmetadata', function () {
-            this.currentTime = 0.5;
+    // 5. Gerador Automático de Miniaturas em Alta Resolução para Vídeos MP4
+    const thumbContainers = document.querySelectorAll('.auto-video-thumb-container');
+    if (thumbContainers.length > 0) {
+        thumbContainers.forEach(container => {
+            const videoUrl  = container.getAttribute('data-video-url');
+            const thumbName = container.getAttribute('data-thumb-name');
+            const loader    = container.querySelector('.thumb-loader');
+            const imgTarget = container.querySelector('.thumb-target-img');
+
+            if (!videoUrl) return;
+
+            const video = document.createElement('video');
+            video.crossOrigin = 'anonymous';
+            video.muted = true;
+            video.playsInline = true;
+            video.preload = 'auto';
+            video.src = videoUrl;
+
+            let captured = false;
+
+            const captureFrame = function() {
+                if (captured) return;
+                try {
+                    if (video.videoWidth === 0 || video.videoHeight === 0) return;
+                    captured = true;
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.min(video.videoWidth, 640);
+                    canvas.height = Math.round(canvas.width * (video.videoHeight / video.videoWidth));
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+                    if (imgTarget) {
+                        imgTarget.src = dataUrl;
+                        imgTarget.classList.remove('d-none');
+                    }
+                    if (loader) {
+                        loader.remove();
+                    }
+
+                    // Envia silenciosamente para persistir a imagem gerada no servidor
+                    fetch('video.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams({
+                            action: 'save_video_thumb',
+                            thumb_name: thumbName,
+                            image_data: dataUrl
+                        })
+                    }).catch(() => {});
+
+                    video.src = '';
+                } catch (e) {
+                    if (loader) {
+                        loader.innerHTML = '<i class="bi bi-play-circle text-primary fs-5"></i>';
+                    }
+                }
+            };
+
+            video.addEventListener('loadedmetadata', function () {
+                video.currentTime = Math.min(1.0, (video.duration || 1) / 2);
+            });
+
+            video.addEventListener('seeked', function () {
+                captureFrame();
+            });
+
+            setTimeout(() => {
+                if (!captured && video.readyState >= 2) {
+                    captureFrame();
+                }
+            }, 3500);
         });
-        // Se já tiver metadados em cache
-        if (v.readyState >= 1) {
-            v.currentTime = 0.5;
-        }
-    });
+    }
 
     // 6. Modal Dinâmico do Player de Vídeo
     window.abrirPlayerModal = function(data) {
