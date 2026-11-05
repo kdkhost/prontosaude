@@ -92,7 +92,7 @@ if (strlen($whats_clean) <= 11) {
         <div class="foco-footer-bottom border-top border-secondary border-opacity-25 mt-4 pt-3 pb-2 text-secondary small">
             <div class="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2 text-center text-lg-start">
                 <div>
-                    <?= $footer_copyright ?: 'Copyright &copy; ' . date('Y') . '. Todos os Direitos Reservados.'; ?> &bull; <a href="<?= BASE_URL; ?>privacidade.php" class="text-secondary text-decoration-underline ms-1">Termos &amp; LGPD</a>
+                    <?= $footer_copyright ?: 'Copyright &copy; ' . date('Y') . '. Todos os Direitos Reservados.'; ?> &bull; <a href="<?= BASE_URL; ?>privacidade.php" class="text-secondary text-decoration-underline ms-1">Privacidade &amp; LGPD</a> &bull; <a href="<?= BASE_URL; ?>termos.php" class="text-secondary text-decoration-underline ms-1">Termos de Uso</a>
                 </div>
                 <div class="text-center text-lg-end">
                     <span>Desenvolvido por:  <a href="https://kdkhost.com.br" target="_blank" rel="noopener" class="text-white text-decoration-none fw-semibold">Marcelo Brad</a></span>
