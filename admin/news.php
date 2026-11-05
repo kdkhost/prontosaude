@@ -102,22 +102,23 @@ function pronto_resolver_capa_noticia($photo) {
     }
 
     $ext = strtoupper(pathinfo($arq, PATHINFO_EXTENSION)) ?: 'IMG';
-    $caminhos = [
-        __DIR__ . '/../assets/uploads/' . $arq,
-        __DIR__ . '/../assets/uploads/news/' . $arq
-    ];
 
-    foreach ($caminhos as $path) {
-        if (file_exists($path) && is_file($path)) {
-            $rel = (strpos($path, 'news') !== false) 
-                ? '../assets/uploads/news/' . $arq 
-                : '../assets/uploads/' . $arq;
-            return [
-                'url'    => $rel,
-                'exists' => true,
-                'ext'    => $ext
-            ];
-        }
+    // 1. Verifica diretamente na raiz de assets/uploads/
+    if (file_exists(__DIR__ . '/../assets/uploads/' . $arq) && is_file(__DIR__ . '/../assets/uploads/' . $arq)) {
+        return [
+            'url'    => '../assets/uploads/' . $arq,
+            'exists' => true,
+            'ext'    => $ext
+        ];
+    }
+
+    // 2. Verifica se está em subpasta de uploads (se existir)
+    if (file_exists(__DIR__ . '/../assets/uploads/news/' . $arq) && is_file(__DIR__ . '/../assets/uploads/news/' . $arq)) {
+        return [
+            'url'    => '../assets/uploads/news/' . $arq,
+            'exists' => true,
+            'ext'    => $ext
+        ];
     }
 
     return [
