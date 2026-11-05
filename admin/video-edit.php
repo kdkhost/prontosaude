@@ -723,8 +723,24 @@ document.addEventListener('DOMContentLoaded', function () {
             if (badgeFormato) badgeFormato.textContent = 'MP4 LOCAL';
             if (inputFile && inputFile.files && inputFile.files[0]) {
                 carregarPreviewArquivoLocal(inputFile.files[0]);
+            } else {
+                restaurarPlayerAtual();
             }
         });
+    }
+
+    function restaurarPlayerAtual() {
+        if (!playerContainer) return;
+        <?php if ($is_current_local_mp4): ?>
+            playerContainer.innerHTML = `
+                <video controls class="w-100 h-100" id="previewLocalVideo" preload="metadata">
+                    <source src="<?= htmlspecialchars($video_iframe, ENT_QUOTES, 'UTF-8'); ?>" type="video/mp4">
+                    Seu navegador não suporta a tag de vídeo HTML5.
+                </video>
+            `;
+        <?php else: ?>
+            playerContainer.innerHTML = '<div class="text-body-secondary small text-center p-4">Selecione um arquivo de vídeo MP4 para upload.</div>';
+        <?php endif; ?>
     }
 
     // 4. Renderização Dinâmica do Player para URLs (YouTube, Vimeo, Iframe)
@@ -767,6 +783,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function renderizarPreviewUrl() {
         if (!playerContainer || !inputIframe) return;
+        if (sourceTypeInput && sourceTypeInput.value === 'upload') return;
         playerContainer.innerHTML = extrairEmbedHtml(inputIframe.value);
     }
 
