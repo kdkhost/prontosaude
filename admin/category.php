@@ -363,7 +363,7 @@ foreach ($categories as $cat) {
         <div class="modal-content bg-body text-body border-0 shadow-lg rounded-3">
             <div class="modal-header bg-body-tertiary py-3 border-bottom d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-primary rounded-pill p-2"><i class="bi bi-tags"></i></span>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-circle p-2"><i class="bi bi-tags fs-5"></i></span>
                     <div>
                         <h5 class="modal-title fw-bold text-body mb-0" id="mvcTitulo">Visualizar Categoria</h5>
                         <small class="text-body-secondary">Editoria do Portal</small>
@@ -381,14 +381,14 @@ foreach ($categories as $cat) {
                 <div class="mb-3">
                     <label class="form-label small fw-bold text-uppercase text-body-secondary mb-1">URL Amigável (Slug)</label>
                     <div>
-                        <code class="bg-body-secondary px-2 py-1 rounded text-primary border" id="mvcSlug"></code>
+                        <code class="px-2 py-1 rounded" id="mvcSlug"></code>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold text-uppercase text-body-secondary mb-1">Notícias Cadastradas</label>
+                    <label class="form-label small fw-bold text-uppercase text-body-secondary mb-1">Artigos Vinculados</label>
                     <div>
-                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fs-6" id="mvcArtigos"></span>
+                        <span class="badge rounded-pill px-3 py-2 fs-6" id="mvcArtigos"></span>
                     </div>
                 </div>
 
@@ -398,16 +398,16 @@ foreach ($categories as $cat) {
                 <div class="p-3 bg-body-tertiary rounded-3 border">
                     <h6 class="fw-bold text-body mb-2 small"><i class="bi bi-google text-primary me-1"></i>Informações de SEO</h6>
                     <div class="mb-2">
-                        <small class="text-body-secondary d-block">Meta Título:</small>
-                        <span class="fw-semibold small" id="mvcMetaTitle">Padrão do sistema</span>
+                        <small class="text-body-secondary fw-semibold d-block">Meta Título:</small>
+                        <span class="fw-semibold small text-body" id="mvcMetaTitle">Padrão do sistema</span>
                     </div>
                     <div class="mb-2">
-                        <small class="text-body-secondary d-block">Palavras-chave:</small>
-                        <span class="small" id="mvcMetaKw">-</span>
+                        <small class="text-body-secondary fw-semibold d-block">Palavras-chave:</small>
+                        <span class="small text-body" id="mvcMetaKw">-</span>
                     </div>
                     <div>
-                        <small class="text-body-secondary d-block">Meta Descrição:</small>
-                        <span class="small" id="mvcMetaDesc">-</span>
+                        <small class="text-body-secondary fw-semibold d-block">Meta Descrição:</small>
+                        <span class="small text-body" id="mvcMetaDesc">-</span>
                     </div>
                 </div>
             </div>
@@ -445,7 +445,15 @@ window.abrirModalCategoria = function(data) {
 
     const artsEl = document.getElementById('mvcArtigos');
     const qtd = parseInt(data.news || 0);
-    if (artsEl) artsEl.innerHTML = `<i class="bi bi-newspaper me-1"></i> ${qtd} ${qtd === 1 ? 'artigo cadastrado' : 'artigos cadastrados'}`;
+    if (artsEl) {
+        if (qtd > 0) {
+            artsEl.className = 'badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fs-6';
+            artsEl.innerHTML = `<i class="bi bi-newspaper me-1"></i> ${qtd} ${qtd === 1 ? 'artigo cadastrado' : 'artigos cadastrados'}`;
+        } else {
+            artsEl.className = 'badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-3 py-2 fs-6';
+            artsEl.innerHTML = `<i class="bi bi-tag me-1"></i> Nenhum artigo vinculado`;
+        }
+    }
 
     const mtEl = document.getElementById('mvcMetaTitle');
     if (mtEl) mtEl.textContent = data.metaTitle || 'Padrão do sistema';
