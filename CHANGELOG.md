@@ -4,6 +4,19 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.35.0] - 2026-11-07
+
+### Adicionado & Aprimorado
+- **Padronização Global de Inputs e Elementos de Formulário no Painel Administrativo (`admin/css/adminlte4-compat.css`)**:
+  - **Dimensões e Altura Unificadas (44px)**: Todos os inputs de linha única (`input[type="text"]`, `email`, `password`, `number`, `tel`, `url`, `search`, `date`, `time`, `datetime-local`, `select.form-control`, `select.form-select`) passam a ter rigorosamente a mesma altura de 44px, border-radius suave de 0.5rem (8px), padding equilibrado (0.55rem 0.95rem) e tamanho de fonte de 0.9375rem (15px).
+  - **Sincronização Perfeita do Select2**: Ajuste da altura do `.select2-selection--single` de 28px para 44px, alinhamento vertical centralizado do texto renderizado e da seta, além de estilização completa do container, campo de busca interno e opções de resultados compatíveis com Dark Mode e Light Mode.
+  - **Input Groups Harmonizados**: Elementos `.input-group-text` (moeda R$, ícones, prefixos e sufixos) agora compartilham a mesma altura de 44px e bordas unificadas com os campos adjacentes, eliminando descompassos visuais.
+  - **Selects Nativos e Bootstrap Form-Select**: Ícone de seta dropdown padronizado via SVG tanto no modo claro quanto escuro, com padding seguro à direita.
+  - **Textareas Padronizados**: Altura mínima confortável de 110px, line-height espaçoso e mesmo raio de curvatura.
+  - **Upload de Arquivo (`input[type="file"]`)**: Botão de seleção de arquivo (`::file-selector-button`) estilizado com cantos arredondados, transições e cores correspondentes à identidade visual da plataforma.
+  - **Ícones de Calendário e Relógio no Dark Mode**: Aplicação de filtro de inversão calibrado para visibilidade nítida dos ícones de data e horário contra fundos escuros.
+  - **Labels e Placeholders Globais**: Padronização da tipografia dos rótulos de campos (`0.875rem`, `font-weight: 600`) e contraste harmônico dos placeholders.
+
 ## [2.34.0] - 2026-11-07
 
 ### Adicionado & Aprimorado
