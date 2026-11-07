@@ -121,8 +121,9 @@ function pronto_resolver_capa_noticia($photo) {
         ];
     }
 
+    // Fallback: Se o arquivo não existir fisicamente no disco, exibe placeholder limpo sem quebrar o layout
     return [
-        'url'    => '../assets/uploads/' . $arq,
+        'url'    => '../assets/images/no-image-found.png',
         'exists' => false,
         'ext'    => $ext
     ];
@@ -333,7 +334,7 @@ function pronto_resolver_capa_noticia($photo) {
                                              data-photo="<?= htmlspecialchars($info_foto['url'], ENT_QUOTES, 'UTF-8'); ?>"
                                              title="Visualizar detalhes da notícia">
                                             
-                                            <img src="<?= $info_foto['url']; ?>" alt="<?= $n_title; ?>" class="w-100 h-100 object-fit-cover" loading="lazy">
+                                            <img src="<?= $info_foto['url']; ?>" alt="<?= $n_title; ?>" class="w-100 h-100 object-fit-cover" loading="lazy" onerror="this.onerror=null;this.src='../assets/images/no-image-found.png';">
 
                                             <!-- Overlay de Zoom -->
                                             <div class="position-absolute w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center news-overlay">

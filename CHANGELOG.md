@@ -4,6 +4,29 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.34.0] - 2026-11-07
+
+### Adicionado & Aprimorado
+- **Ativação e Integração do Popup Promocional no Site Público (`inc/popup-promocional.php`, `footer.php`)**:
+  - Modal dinâmico Bootstrap 5 responsivo vinculado às configurações do painel em `/admin/popup.php`.
+  - Controle automático de abertura por delay configurável (`popup_delay`) e controle de reexibição via `localStorage` com cálculo de expiração em horas (`popup_expire_hours`).
+  - Compatibilidade com temas Claro e Escuro (Dark Mode).
+- **Reformulação Completa do Módulo de Escalas e Horários de Plantão (`admin/extra.php`, `admin/extra-add.php`, `admin/extra-edit.php`)**:
+  - KPIs informativos consolidados no topo, filtros rápidos por Dia da Semana e busca instantânea.
+  - Live Preview estilo Crachá de Plantão em tempo real no cadastro e edição.
+  - Seleção inteligente com auto-preenchimento de especialidade e unidade do médico ao selecioná-lo no `Select2`.
+  - Salvamento e exclusão 100% assíncronos via AJAX com feedback elegante por **SweetAlert2**.
+  - Remoção definitiva de blocos antigos de anúncios de terceiros que poluíam o sistema.
+- **Reformulação da Gestão de Especialidades Médicas (`admin/designation.php`)**:
+  - Mini cards de KPIs, modais AJAX de inclusão e edição rápida sem reload de tela.
+  - Modal de visualização dos médicos ativos vinculados a cada especialidade com avatar, CRM e status.
+  - Bloqueio preventivo na exclusão caso existam médicos associados, resguardando a integridade do banco.
+- **Modernização da Edição de Médicos (`admin/doctor-edit.php`)**:
+  - 4 abas organizadas, consulta de CEP com preenchimento automático ViaCEP, prévia SERP Google ao vivo e preview de foto de perfil e banner panorâmico.
+- **Tratamento Preventivo de Capas em Notícias (`admin/news.php`)**:
+  - Tratamento da função `pronto_resolver_capa_noticia` com fallback para `assets/images/no-image-found.png` e atributo `onerror` nativo, eliminando erros 404 e ícones quebrados.
+
+
 ## [2.33.0] - 2026-11-02
 
 ### Adicionado & Aprimorado

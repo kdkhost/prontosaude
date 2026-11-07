@@ -173,6 +173,11 @@ if (strlen($whats_clean) <= 11) {
     <?php require_once(__DIR__ . '/inc/pwa-install-banner.php'); ?>
 <?php endif; ?>
 
+<!-- Popup Promocional & Avisos da Clínica (Configurado no Admin) -->
+<?php if (($popup_status ?? 0) == 1): ?>
+    <?php require_once(__DIR__ . '/inc/popup-promocional.php'); ?>
+<?php endif; ?>
+
 <!-- ==============================================================================
      SCRIPTS MODERNOS BOOTSTRAP 5, JQUERY, TOASTR E SWEETALERT2
      ============================================================================== -->

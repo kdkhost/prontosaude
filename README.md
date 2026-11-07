@@ -239,6 +239,14 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
   - Painel de Ações Rápidas (Quick Actions) para acesso imediato a cadastros e suporte técnico.
 - **Gestão de Usuários e Permissões:** Perfis diferenciados (Super Admin, Admin, Publisher) com menu lateral categorizado e controle de acesso.
 - **CMS Integrado:** Gestão completa de notícias, banners, depoimentos, fotos e vídeos com confirmações personalizadas via **SweetAlert2**.
+- **Gestão de Escalas de Atendimento & Horários de Plantão (`admin/extra.php`, `admin/extra-add.php`, `admin/extra-edit.php`):**
+  - Controle completo dos turnos, especialidades, dias da semana e horários dos médicos com mini cards de KPIs, busca instantânea e filtros por dia.
+  - Prévia ao vivo estilo crachá de plantão (Live Preview em tempo real) e salvamento 100% assíncrono (AJAX) com SweetAlert2.
+- **Gestão de Especialidades Médicas & Designações (`admin/designation.php`):**
+  - Modais ágeis sem recarregar a tela para inclusão, renomeação e visualização dos médicos associados com fotos, CRM e status.
+  - Bloqueio inteligente de integridade referencial impedindo a exclusão de especialidades com médicos ativos.
+- **Popup Promocional & Avisos da Clínica (`admin/popup.php` e `inc/popup-promocional.php`):**
+  - Ativação dinâmica no site público com temporizador configurável (`popup_delay`), imagem, título, texto, botão CTA e controle inteligente de expiração via `localStorage` (`popup_expire_hours`) compatível com modo Claro e Escuro.
 
 ## 🛠️ Tecnologias e Linguagens
 
