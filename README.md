@@ -248,6 +248,10 @@ Sistema web completo para gestão e apresentação institucional de clínicas m�
 - **Popup Promocional & Avisos da Clínica (`admin/popup.php` e `inc/popup-promocional.php`):**
   - Ativação dinâmica no site público com temporizador configurável (`popup_delay`), imagem, título, texto, botão CTA e controle inteligente de expiração via `localStorage` (`popup_expire_hours`) compatível com modo Claro e Escuro.
 
+- **Padronização Global de Inputs e Formulários (`admin/css/adminlte4-compat.css`):**
+  - Altura unificada de 44px para todos os inputs de linha única (`text`, `email`, `password`, `number`, `tel`, `url`, `search`, `date`, `time`, `datetime-local`, `select` e `Select2`), com border-radius moderno de 8px (0.5rem), padding consistente (0.55rem 0.95rem) e foco padronizado.
+  - Sincronização e alinhamento milimétrico do Select2 (altura, setas, busca interna e dropdown), Input Groups com bordas contínuas e ícones de calendário/relógio adaptados com alto contraste no Dark Mode.
+
 ## 🛠️ Tecnologias e Linguagens
 
 - **Backend:** PHP 8.4 (PDO nativo com prepared statements reais e timezone configurado)
